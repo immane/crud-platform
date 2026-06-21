@@ -11,6 +11,10 @@
       
       
       
+        <link rel="prev" href="../../design/bundles/identity/">
+      
+      
+        <link rel="next" href="../huifu-payment-api/">
       
       
         
@@ -21,7 +25,7 @@
     
     
       
-        <title>EasyWeChat 6.x Usage Notes - CRUD Skeleton</title>
+        <title>EasyWeChat 6.x Usage - CRUD Skeleton</title>
       
     
     
@@ -108,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              EasyWeChat 6.x Usage Notes
+              EasyWeChat 6.x Usage
             
           </span>
         </div>
@@ -678,6 +682,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../design/bundles/wallet/" class="md-nav__link">
         
   
@@ -714,6 +746,480 @@
     
   
     Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-mini-program" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Mini Program
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Mini Program">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-install-and-instantiate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Install And Instantiate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-generic-api-calls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Generic API Calls
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-get-phone-number" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Get Phone Number
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-login-and-openid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Login And OpenID
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Login And OpenID">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-web-oauth-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Web OAuth Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-start-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Start Authorization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-handle-callback-and-get-openid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Handle Callback And Get OpenID
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-mini-program-login-note" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Mini Program Login Note
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-wechat-pay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. WeChat Pay
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. WeChat Pay">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-instantiate-pay-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Instantiate Pay Application
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-jsapi-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 JSAPI Order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-native-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Native Order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-query-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Query Order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-validate-api-response-signature" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 Validate API Response Signature
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-payment-notify-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 Payment Notify Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37-refund-notify-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.7 Refund Notify Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#38-read-raw-request-message" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.8 Read Raw Request Message
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-payment-frontend-config-helpers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Payment Frontend Config Helpers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Payment Frontend Config Helpers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-weixinjsbridge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 WeixinJSBridge
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-jssdk-wxchoosewxpay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 JSSDK wx.chooseWXPay
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-mini-program-wxrequestpayment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Mini Program wx.requestPayment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-app-pay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 APP Pay
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-sensitive-field-encryption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Sensitive Field Encryption
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-practical-integration-notes-for-this-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Practical Integration Notes For This Project
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-source-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Source Pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
   
 
     

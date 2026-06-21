@@ -11,6 +11,10 @@
       
       
       
+        <link rel="prev" href="../easywechat-6.x-usage/">
+      
+      
+        <link rel="next" href="../../ai/context/">
       
       
         
@@ -21,7 +25,7 @@
     
     
       
-        <title>Huifu (汇付斗拱) Payment API Research - CRUD Skeleton</title>
+        <title>Huifu Payment API - CRUD Skeleton</title>
       
     
     
@@ -108,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Huifu (汇付斗拱) Payment API Research
+              Huifu Payment API
             
           </span>
         </div>
@@ -678,6 +682,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../design/bundles/wallet/" class="md-nav__link">
         
   
@@ -722,6 +754,574 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Environment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-core-signing-rsa-sha256-from-official-sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Core Signing — RSA-SHA256 (from official SDK)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Core Signing — RSA-SHA256 (from official SDK)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-request-signing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Request signing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-response-notify-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Response / notify verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-sensitive-field-encryption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Sensitive field encryption
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-request-envelope-builder-from-official-sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Request envelope builder (from official SDK)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-sdk-init-merconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 SDK init / MerConfig
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-payment-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Payment APIs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Payment APIs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-unified-order-jsapiminiappnativeh5app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Unified Order (JSAPI/MiniApp/Native/H5/APP)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-scanpay-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Scanpay Query
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-close-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Close Order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-refund" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Refund
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-asynchronous-notification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Asynchronous Notification
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Asynchronous Notification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Format
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-notification-payload-resp_data-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Notification payload (resp_data JSON)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-status-codes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Status codes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-legacy-paystrategy-implementation-farm-neighbor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Legacy PayStrategy Implementation (farm-neighbor)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Legacy PayStrategy Implementation (farm-neighbor)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-paystrategy-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 PayStrategy interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-huifupaystrategy-full-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 HuifuPayStrategy — full implementation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-huifupospaystrategy-pos-variant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 HuifuPosPayStrategy (POS variant)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-invoicelistener-close-order-on-cancel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 InvoiceListener — close order on cancel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-huifuaccountservice-transfer-and-withdraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 HuifuAccountService — transfer and withdraw
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-invoiceclose-event-close-unpaid-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. InvoiceClose Event (close unpaid order)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-configuration-shape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Configuration Shape
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-integration-notes-for-crud-skeleton" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Integration Notes for crud-skeleton
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Integration Notes for crud-skeleton">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-amount-conversion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Amount conversion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-status-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Status mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-gateway-interface-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Gateway interface mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-notification-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 Notification response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-notification-body-parsing-critical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 Notification body parsing (CRITICAL)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86-key-idempotency-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6 Key idempotency pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#87-no-sdk-needed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.7 No SDK needed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#88-recommended-file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.8 Recommended file structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-all-legacy-api-endpoints-for-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. ALL Legacy API Endpoints (for reference)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
