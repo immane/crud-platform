@@ -1013,6 +1013,61 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#94-payment-pay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 Payment (Pay)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-fulfillment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 Fulfillment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-refund" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.6 Refund
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#97-user-cancel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.7 User Cancel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#98-view-items" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.8 View Items
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1030,10 +1085,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#11-database-migration" class="md-nav__link">
+  <a href="#11-database-migrations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        11. Database Migration
+        11. Database Migrations
       
     </span>
   </a>
@@ -1138,6 +1193,33 @@
     
   
     AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
   
 
     
@@ -1504,6 +1586,61 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#94-payment-pay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 Payment (Pay)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-fulfillment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 Fulfillment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-refund" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.6 Refund
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#97-user-cancel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.7 User Cancel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#98-view-items" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.8 View Items
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1521,10 +1658,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#11-database-migration" class="md-nav__link">
+  <a href="#11-database-migrations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        11. Database Migration
+        11. Database Migrations
       
     </span>
   </a>
@@ -1969,6 +2106,26 @@ order state machine.</p>
 </tr>
 <tr>
 <td>GET</td>
+<td><code>/api/v1/manage/orders/{id}/items</code></td>
+<td>View order items</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/manage/orders/{id}/pay</code></td>
+<td>Pay with wallet deduction</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/manage/orders/{id}/fulfill</code></td>
+<td>Fulfill with tracking info</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/manage/orders/{id}/refund</code></td>
+<td>Refund with wallet credit</td>
+</tr>
+<tr>
+<td>GET</td>
 <td><code>/api/v1/manage/orders/todo</code></td>
 <td>Orders with available transitions</td>
 </tr>
@@ -2014,6 +2171,26 @@ order state machine.</p>
 <td><code>/api/v1/app/orders</code></td>
 <td>List current user's orders</td>
 </tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/app/orders/{id}</code></td>
+<td>Order detail</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/app/orders</code></td>
+<td>Create order</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/app/orders/{id}/items</code></td>
+<td>View order items</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/app/orders/{id}/cancel</code></td>
+<td>Cancel own order</td>
+</tr>
 </tbody>
 </table>
 <hr />
@@ -2027,6 +2204,38 @@ order state machine.</p>
 <li><code>todo</code>: Lists all orders that have at least one enabled transition</li>
 <li><code>transitions</code>: Returns available transitions for a specific order</li>
 <li><code>do/{transition}</code>: Executes the named transition within a transaction, optionally accepting data to update the entity before transition</li>
+</ul>
+<h3 id="94-payment-pay">9.4 Payment (Pay)<a class="headerlink" href="#94-payment-pay" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>POST /manage/orders/{id}/pay</code> with <code>{systemWalletId, paymentMethod}</code></li>
+<li>Validates order is in <code>confirmed</code> status</li>
+<li>Deducts from user's wallet, credits to system wallet via <code>TransferService</code></li>
+<li>Sets <code>paidAt</code>, <code>paymentMethod</code>, applies <code>pay</code> transition</li>
+</ul>
+<h3 id="95-fulfillment">9.5 Fulfillment<a class="headerlink" href="#95-fulfillment" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>POST /manage/orders/{id}/fulfill</code> with <code>{trackingNumber, shippingAddress}</code></li>
+<li>Validates order is in <code>paid</code> status</li>
+<li>Sets <code>fulfilledAt</code>, <code>trackingNumber</code>, <code>shippingAddress</code></li>
+<li>Applies <code>fulfill</code> transition</li>
+</ul>
+<h3 id="96-refund">9.6 Refund<a class="headerlink" href="#96-refund" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>POST /manage/orders/{id}/refund</code> with <code>{systemWalletId, reason}</code></li>
+<li>Validates order is in <code>completed</code> status</li>
+<li>Transfers from system wallet back to user's wallet via <code>TransferService</code></li>
+<li>Sets <code>refundedAt</code>, <code>refundReason</code>, applies <code>refund</code> transition</li>
+</ul>
+<h3 id="97-user-cancel">9.7 User Cancel<a class="headerlink" href="#97-user-cancel" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>POST /app/orders/{id}/cancel</code> -- authenticated user cancels own order</li>
+<li>Allowed only when status is <code>draft</code>, <code>pending</code>, or <code>confirmed</code></li>
+<li>Sets status to <code>cancelled</code> (not via workflow, direct update)</li>
+</ul>
+<h3 id="98-view-items">9.8 View Items<a class="headerlink" href="#98-view-items" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>GET /manage/orders/{id}/items</code> -- admin view</li>
+<li><code>GET /app/orders/{id}/items</code> -- user view (ownership verified)</li>
 </ul>
 <hr />
 <h2 id="10-money-handling-contract">10. Money Handling Contract<a class="headerlink" href="#10-money-handling-contract" title="Permanent link">&para;</a></h2>
@@ -2065,9 +2274,11 @@ order state machine.</p>
 </tbody>
 </table>
 <hr />
-<h2 id="11-database-migration">11. Database Migration<a class="headerlink" href="#11-database-migration" title="Permanent link">&para;</a></h2>
+<h2 id="11-database-migrations">11. Database Migrations<a class="headerlink" href="#11-database-migrations" title="Permanent link">&para;</a></h2>
 <p><strong>Version</strong>: <code>Version20250620000000</code></p>
 <p>Creates 4 tables: <code>trade_product</code>, <code>trade_specification</code>, <code>trade_order</code>, <code>trade_order_item</code>.</p>
+<p><strong>Version</strong>: <code>Version20250621000000</code></p>
+<p>Adds columns to <code>trade_order</code>: <code>paid_at</code>, <code>refunded_at</code>, <code>fulfilled_at</code>, <code>payment_method</code>, <code>tracking_number</code>, <code>shipping_address</code>, <code>refund_reason</code>.</p>
 <hr />
 <h2 id="12-testing">12. Testing<a class="headerlink" href="#12-testing" title="Permanent link">&para;</a></h2>
 <table>
