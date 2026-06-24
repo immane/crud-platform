@@ -13,6 +13,10 @@
         <link rel="canonical" href="https://immane.github.io/crud-skeleton/design/bundles/wechat/">
       
       
+        <link rel="prev" href="../identity/">
+      
+      
+        <link rel="next" href="../../../research/easywechat-6.x-usage/">
       
       
         
@@ -27,7 +31,7 @@
     
     
       
-        <title>WeChat Bundle Design - CRUD Skeleton</title>
+        <title>Wechat (Login + Pay) - CRUD Skeleton</title>
       
     
     
@@ -114,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              WeChat Bundle Design
+              Wechat (Login + Pay)
             
           </span>
         </div>
@@ -569,8 +573,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -581,13 +587,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -608,7 +612,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -782,6 +786,764 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#directory-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Directory Structure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Directory Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#component-contracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Component Contracts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Component Contracts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dependency-graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency Graph
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对现有系统的侵入度
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#entity-wechatuser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entity: WechatUser
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Entity: WechatUser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#table-wechat_user" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table: wechat_user
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relationship" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relationship
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#service-wechatservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Service: WechatService
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Service: WechatService">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constructor-signature" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constructor Signature
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#method-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Method Contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apptype-constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AppType Constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#service-wechatauthservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Service: WechatAuthService
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Service: WechatAuthService">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constructor-signature_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constructor Signature
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#method-contract_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Method Contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#login-orchestration-internal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Login Orchestration (internal)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#controller-logincontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller: LoginController
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Controller: LoginController">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-declaration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class Declaration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constructor-signature_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constructor Signature
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Endpoints
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Endpoints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#post-apiwechatminiapplogin-public_access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        POST /api/wechat/miniapp/login — 小程序登录 (PUBLIC_ACCESS)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-apiwechatminiappphone-is_authenticated_fully" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        POST /api/wechat/miniapp/phone — 绑定手机号 (IS_AUTHENTICATED_FULLY)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiwechatoauthurl-oauth-url-public_access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/wechat/oauth/url — 获取公众号 OAuth 跳转 URL (PUBLIC_ACCESS)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-apiwechatoauthcallback-oauth-public_access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        POST /api/wechat/oauth/callback — 公众号 OAuth 回调 (PUBLIC_ACCESS)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#private-helpers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Private helpers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gateway-wechatpaygateway" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gateway: WechatPayGateway
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Gateway: WechatPayGateway">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#contract-implements-paymentgatewayinterface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contract: implements PaymentGatewayInterface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constructor-signature_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constructor Signature
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#method-implementations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Method Implementations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Method Implementations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#payinvoice-invoice-array-options-paymentresult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pay(Invoice $invoice, array $options = []): PaymentResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notifyrequest-request-paymentnotifyresult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        notify(Request $request): PaymentNotifyResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#refundinvoice-invoice-int-amount-string-reason-array-options-paymentrefundresult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        refund(Invoice $invoice, int $amount, string $reason, array $options = []): PaymentRefundResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getnotifysuccessresponsepaymentnotifyresult-result-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        getNotifySuccessResponse(PaymentNotifyResult $result): Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        自动注册
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API 端点汇总
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        需改动的现有文件
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="需改动的现有文件">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-composerjson" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. composer.json
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-configservicesyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. config/services.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-configroutesyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. config/routes.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-configpackagessecurityyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. config/packages/security.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-srcpaymententityinvoicephp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. src/Payment/Entity/Invoice.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-env" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. .env
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#services-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Services Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Services Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#services_wechatyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        services_wechat.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        网关自动注册（无需额外配置）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#repository-wechatuserrepository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repository: WechatUserRepository
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openapi-tags-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAPI Tags &amp; Documentation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OpenAPI Tags &amp; Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nelmioapidoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NelmioApiDoc 配置更新
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#login-flow-diagrams" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Login Flow Diagrams
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Login Flow Diagrams">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        小程序登录
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oauth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        公众号 OAuth
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementation Order
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-coverage-targets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Coverage Targets
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 

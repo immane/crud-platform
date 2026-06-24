@@ -902,6 +902,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1201,7 +1229,8 @@
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── Trade/      # E-Commerce (Product, Specification, Order, OrderItem, Pricing Pipeline)
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── Payment/    # Payments (Invoice, Gateway abstraction, Webhooks, Events)
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── Wallet/     # Wallet (Balance, Atomic Transfers, Idempotency)
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>└── Identity/   # Authentication (JWT RS256, OTP SMS, Refresh Token Rotation)
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>├── Wechat/     # WeChat (Mini Program/Official Account Login, WeChat Pay V3, Gateway)
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>└── Identity/   # Authentication (JWT RS256, OTP SMS, Refresh Token Rotation)
 </code></pre></div>
 <h2 id="tech-stack">Tech Stack<a class="headerlink" href="#tech-stack" title="Permanent link">&para;</a></h2>
 <table>
@@ -1238,7 +1267,7 @@
 </tr>
 <tr>
 <td>Testing</td>
-<td>PHPUnit 12.5 (80% coverage minimum)</td>
+<td>PHPUnit 12.5 (85% coverage minimum, currently 85.50%)</td>
 </tr>
 <tr>
 <td>Assets</td>
@@ -1252,7 +1281,9 @@
 <li><strong>Trait-based controller composition</strong>: 9 PHP traits (List, Detail, Create, Update, Delete, Workflow, etc.) assembled into controllers</li>
 <li><strong>Pluggable price calculation pipeline</strong>: Priority-ordered calculators for e-commerce order pricing</li>
 <li><strong>State machine</strong>: Symfony Workflow for order lifecycle (draft -&gt; completed) and invoice lifecycle (pending -&gt; paid/refunded)</li>
-<li><strong>Invoice-based payment framework</strong>: Gateway abstraction (mock/wallet), webhooks, provider-agnostic invoice events</li>
+<li><strong>Invoice-based payment framework</strong>: Gateway abstraction (mock/wallet/wechat), webhooks, provider-agnostic invoice events</li>
+<li><strong>WeChat integration</strong>: Mini Program and Official Account login, WeChat Pay V3 gateway, WechatUser entity (OneToOne→User)</li>
+<li><strong>System introspection</strong>: Entity metadata and route export via <code>/system/*</code> endpoints</li>
 <li><strong>Atomic wallet transfers</strong>: Deadlock prevention, optimistic locking, idempotency</li>
 <li><strong>Token rotation with reuse detection</strong>: Refresh tokens hashed (HMAC-SHA256), rotated on use</li>
 </ul>

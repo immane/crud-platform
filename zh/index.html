@@ -902,6 +902,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微信（登录+支付）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1201,7 +1229,8 @@
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── Trade/      # E-Commerce (Product, Specification, Order, OrderItem, Pricing Pipeline)
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── Payment/    # Payments (Invoice, Gateway abstraction, Webhooks, Events)
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── Wallet/     # Wallet (Balance, Atomic Transfers, Idempotency)
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>└── Identity/   # Authentication (JWT RS256, OTP SMS, Refresh Token Rotation)
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>├── Wechat/     # WeChat (Mini Program/Official Account Login, WeChat Pay V3, Gateway)
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>└── Identity/   # Authentication (JWT RS256, OTP SMS, Refresh Token Rotation)
 </code></pre></div>
 <h2 id="_2">技术堆栈<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <table>
@@ -1238,7 +1267,7 @@
 </tr>
 <tr>
 <td>测试</td>
-<td>PHPUnit 12.5（最低覆盖率 80%）</td>
+<td>PHPUnit 12.5（最低覆盖率 85%，当前为 85.50%）</td>
 </tr>
 <tr>
 <td>资产</td>
@@ -1252,7 +1281,9 @@
 <li><strong>基于特征的控制器组合</strong>：将 9 个 PHP 特征（列表、详细信息、创建、更新、删除、工作流等）组装到控制器中</li>
 <li><strong>可插拔的价格计算管道</strong>：用于电子商务订单定价的优先顺序计算器</li>
 <li><strong>状态机</strong>：订单生命周期（草稿 -&gt; 已完成）和发票生命周期（待处理 -&gt; 已付款/退款）的 Symfony 工作流</li>
-<li><strong>基于发票的支付框架</strong>：网关抽象（模拟/钱包）、webhooks、与提供商无关的发票事件</li>
+<li><strong>基于发票的支付框架</strong>：网关抽象（模拟/钱包/微信）、webhooks、与提供商无关的发票事件</li>
+<li><strong>微信集成</strong>：小程序和公众号登录、微信支付V3网关、WechatUser实体（OneToOne→User）</li>
+<li><strong>系统自省</strong>：通过 <code>/system/*</code> 端点导出实体元数据和路由</li>
 <li><strong>原子钱包转账</strong>：死锁预防、乐观锁定、幂等性</li>
 <li><strong>具有重用检测的令牌轮换</strong>：刷新哈希令牌 (HMAC-SHA256)，在使用时轮换</li>
 </ul>
