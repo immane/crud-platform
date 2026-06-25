@@ -885,6 +885,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#user-profile-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Profile (App)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user-management-manage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Management (Manage)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#userservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UserService
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#security-considerations" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -911,6 +944,17 @@
     <span class="md-ellipsis">
       
         Implementation notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Coverage
       
     </span>
   </a>
@@ -1225,6 +1269,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#user-profile-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Profile (App)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user-management-manage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Management (Manage)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#userservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UserService
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#security-considerations" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1251,6 +1328,17 @@
     <span class="md-ellipsis">
       
         Implementation notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Coverage
       
     </span>
   </a>
@@ -1290,17 +1378,22 @@
 
 <h1 id="identity-module-design">Identity Module Design<a class="headerlink" href="#identity-module-design" title="Permanent link">&para;</a></h1>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>This document describes the Identity module (src/Identity) we will add to the project. It implements:</p>
+<p>This document describes the Identity module (src/Identity). It implements:</p>
 <ul>
 <li>JWT access tokens (RS256) with a 7200s TTL</li>
 <li>server-stored refresh tokens (opaque, hashed) with 1 year TTL and rotation</li>
 <li>phone-based OTP login/verification, delivered via Alibaba Cloud SMS</li>
 <li>identifier-based login: identifier can be email, username or a verified phone</li>
+<li><strong>password-based user self-registration</strong> (<code>POST /api/auth/register</code>)</li>
+<li><strong>user profile management</strong> with password change and profile update</li>
+<li><strong>admin user CRUD</strong> with managed password changes</li>
 </ul>
 <h2 id="goals">Goals<a class="headerlink" href="#goals" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Keep existing identifier+password flow intact</li>
 <li>Add phone+OTP as an additional auth path</li>
+<li><strong>Add password registration</strong> as a self-service onboarding path</li>
+<li><strong>Add user controllers</strong> for profile management (App) and admin CRUD (Manage)</li>
 <li>Use Redis for OTP storage and rate-limiting</li>
 <li>Use RS256 for JWT signing and verify with public key</li>
 <li>Store refresh tokens hashed in MySQL (identity_refresh_token table)</li>
@@ -1343,6 +1436,13 @@
 - POST /api/auth/login { identifier, password }
 - identifier may be email, username or a phone (phone allowed only if phone_verified=true)
 - on success returns { access_token, refresh_token, expires_in }</p>
+<p>Register (password self-registration)
+- POST /api/auth/register { email, username, password, phone? }
+- Public endpoint (no auth required)
+- Validates uniqueness of email, username, and phone
+- Creates User with hashed password via UserService::register()
+- Returns JWT tokens directly (same format as login)
+- Password minimum 6 characters</p>
 <p>OTP Login / Verify
 - POST /api/auth/otp/request { phone, purpose }
   - generates OTP, stores hash in Redis, sends SMS via Aliyun
@@ -1354,6 +1454,122 @@
 <p>Logout
 - POST /api/auth/logout { refresh_token }
 - marks refresh token revoked</p>
+<h2 id="user-profile-app">User Profile (App)<a class="headerlink" href="#user-profile-app" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Auth</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/app/users/me</code></td>
+<td>ROLE_USER</td>
+<td>Get current user profile</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/api/v1/app/users/me</code></td>
+<td>ROLE_USER</td>
+<td>Update email, username, phone, optional password</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/app/users/change-password</code></td>
+<td>ROLE_USER</td>
+<td>Change own password (requires current password)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="user-management-manage">User Management (Manage)<a class="headerlink" href="#user-management-manage" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Auth</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/manage/users</code></td>
+<td>ROLE_ADMIN</td>
+<td>List all users</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/manage/users/{id}</code></td>
+<td>ROLE_ADMIN</td>
+<td>View user detail</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/manage/users</code></td>
+<td>ROLE_ADMIN</td>
+<td>Create user (with hashed password)</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/api/v1/manage/users/{id}</code></td>
+<td>ROLE_ADMIN</td>
+<td>Update user (email, username, password, phone, roles)</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/api/v1/manage/users/{id}</code></td>
+<td>ROLE_ADMIN</td>
+<td>Delete user</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/manage/users/{id}/change-password</code></td>
+<td>ROLE_ADMIN</td>
+<td>Admin change user password (no current pw required)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="userservice">UserService<a class="headerlink" href="#userservice" title="Permanent link">&para;</a></h2>
+<p><code>App\Identity\Service\UserService</code> extends <code>BaseService</code> and encapsulates all user business logic:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>register($email, $username, $password, $phone)</code></td>
+<td>Validate uniqueness, create User, hash password, persist</td>
+</tr>
+<tr>
+<td><code>verifyPassword($user, $password)</code></td>
+<td>Verify a plain password against a User</td>
+</tr>
+<tr>
+<td><code>changePassword($user, $currentPassword, $newPassword)</code></td>
+<td>Verify current password, hash and set new, persist</td>
+</tr>
+<tr>
+<td><code>adminChangePassword($user, $newPassword)</code></td>
+<td>Hash and set new password, persist (no current pw check)</td>
+</tr>
+<tr>
+<td><code>updateProfile($user, $data)</code></td>
+<td>Validate uniqueness of email/username/phone, update fields, optional password change</td>
+</tr>
+<tr>
+<td><code>update($object, $data)</code></td>
+<td>Auto-hashes password when present in data; skips empty passwords</td>
+</tr>
+</tbody>
+</table>
 <h2 id="security-considerations">Security Considerations<a class="headerlink" href="#security-considerations" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Use HTTPS only</li>
@@ -1374,8 +1590,40 @@
 <li>Namespace: App\Identity</li>
 <li>Paths: src/Identity/{Entity,Repository,Service,Sms,Security,Controller,Resources}</li>
 <li>Services registered under src/Identity/Resources/config/services_identity.yaml</li>
-<li>Tests: unit tests for TokenManager and OtpService; integration tests for endpoints</li>
+<li>Tests: unit tests for TokenManager, OtpService, and <strong>UserService</strong>; integration tests for all endpoints</li>
 </ul>
+<h2 id="test-coverage">Test Coverage<a class="headerlink" href="#test-coverage" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Type</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UserServiceTest</code></td>
+<td>Unit (28 tests)</td>
+<td>register, changePassword, adminChangePassword, updateProfile, update password hashing</td>
+</tr>
+<tr>
+<td><code>UserControllerTest</code></td>
+<td>Unit (3 tests)</td>
+<td>Unauthenticated access rejection for all actions</td>
+</tr>
+<tr>
+<td><code>UserApiIntegrationTest</code></td>
+<td>Integration (45 tests)</td>
+<td>Register flow, login, profile, change-password, update-profile, manage CRUD, manage change-password, specification browsing, wallet deposit, transfer, balance, reconcile, edge cases for all endpoints</td>
+</tr>
+<tr>
+<td><code>AuthControllerTest</code></td>
+<td>Unit (existing)</td>
+<td>Login, logout, refresh, OTP verification</td>
+</tr>
+</tbody>
+</table>
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <p>I will generate the code patch implementing the module (files, migrations, README) and post it for review. After you approve, I will commit the changes to the repository in small steps with tests and migrations.</p>
 

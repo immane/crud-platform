@@ -888,7 +888,7 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        安全考虑
+        用户资料（应用程序）
       
     </span>
   </a>
@@ -899,7 +899,7 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        阿里云短信集成
+        用户管理（管理）
       
     </span>
   </a>
@@ -910,7 +910,7 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        实施说明
+        用户服务
       
     </span>
   </a>
@@ -919,6 +919,50 @@
       
         <li class="md-nav__item">
   <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        安全考虑
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阿里云短信集成
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实施说明
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        测试覆盖率
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
     <span class="md-ellipsis">
       
         后续步骤
@@ -1228,7 +1272,7 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        安全考虑
+        用户资料（应用程序）
       
     </span>
   </a>
@@ -1239,7 +1283,7 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        阿里云短信集成
+        用户管理（管理）
       
     </span>
   </a>
@@ -1250,7 +1294,7 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        实施说明
+        用户服务
       
     </span>
   </a>
@@ -1259,6 +1303,50 @@
       
         <li class="md-nav__item">
   <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        安全考虑
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阿里云短信集成
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实施说明
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        测试覆盖率
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
     <span class="md-ellipsis">
       
         后续步骤
@@ -1290,17 +1378,22 @@
 
 <h1 id="_1">身份模块设计<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <h2 id="_2">概述<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>本文档描述了我们将添加到项目中的身份模块（src/Identity）。它实现：</p>
+<p>本文档描述了身份模块（src/Identity）。它实现：</p>
 <ul>
 <li>具有 7200 秒 TTL 的 JWT 访问令牌 (RS256)</li>
 <li>服务器存储的刷新令牌（不透明，散列），具有 1 年 TTL 和轮换</li>
 <li>基于手机的OTP登录/验证，通过阿里云短信发送</li>
 <li>基于标识符的登录：标识符可以是电子邮件、用户名或经过验证的电话</li>
+<li><strong>基于密码的用户自行注册</strong> (<code>POST /api/auth/register</code>)</li>
+<li><strong>用户配置文件管理</strong>，包括密码更改和配置文件更新</li>
+<li><strong>管理员用户 CRUD</strong> 具有托管密码更改</li>
 </ul>
 <h2 id="_3">目标<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
 <li>保持现有标识符+密码流程完整</li>
 <li>添加电话+OTP 作为附加身份验证路径</li>
+<li><strong>添加密码注册</strong>作为自助入职路径</li>
+<li><strong>添加用户控制器</strong>用于配置文件管理（应用程序）和管理 CRUD（管理）</li>
 <li>使用Redis进行OTP存储和速率限制</li>
 <li>使用RS256进行JWT签名并使用公钥进行验证</li>
 <li>在 MySQL 中存储散列的刷新令牌（identity_refresh_token 表）</li>
@@ -1343,6 +1436,13 @@
 - POST /api/auth/login { 标识符，密码 }
 - 标识符可以是电子邮件、用户名或电话（仅当phone_verified=true时才允许使用电话）
 - 成功时返回 { access_token、refresh_token、expires_in }</p>
+<p>注册（密码自行注册）
+- POST /api/auth/register { 电子邮件、用户名、密码、电话？ }
+- 公共端点（无需身份验证）
+- 验证电子邮件、用户名和电话的唯一性
+- 通过 UserService::register() 使用散列密码创建用户
+- 直接返回JWT令牌（与登录格式相同）
+- 密码至少 6 个字符</p>
 <p>OTP 登录/验证
 - POST /api/auth/otp/request { 电话，目的 }
   - 生成OTP，将哈希存储在Redis中，通过阿里云发送短信
@@ -1354,7 +1454,123 @@
 <p>退出
 - POST /api/auth/logout {刷新令牌}
 - 标记刷新令牌已撤销</p>
-<h2 id="_5">安全考虑<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h2 id="_5">用户资料（应用程序）<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>授权</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>获取</td>
+<td><code>/api/v1/app/users/me</code></td>
+<td>ROLE_USER</td>
+<td>获取当前用户个人资料</td>
+</tr>
+<tr>
+<td>放置</td>
+<td><code>/api/v1/app/users/me</code></td>
+<td>ROLE_USER</td>
+<td>更新电子邮件、用户名、电话、可选密码</td>
+</tr>
+<tr>
+<td>发布</td>
+<td><code>/api/v1/app/users/change-password</code></td>
+<td>ROLE_USER</td>
+<td>更改自己的密码（需要当前密码）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_6">用户管理（管理）<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>授权</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>获取</td>
+<td><code>/api/v1/manage/users</code></td>
+<td>角色管理员</td>
+<td>列出所有用户</td>
+</tr>
+<tr>
+<td>获取</td>
+<td><code>/api/v1/manage/users/{id}</code></td>
+<td>角色管理员</td>
+<td>查看用户详细信息</td>
+</tr>
+<tr>
+<td>发布</td>
+<td><code>/api/v1/manage/users</code></td>
+<td>角色管理员</td>
+<td>创建用户（使用散列密码）</td>
+</tr>
+<tr>
+<td>放置</td>
+<td><code>/api/v1/manage/users/{id}</code></td>
+<td>角色管理员</td>
+<td>更新用户（电子邮件、用户名、密码、电话、角色）</td>
+</tr>
+<tr>
+<td>删除</td>
+<td><code>/api/v1/manage/users/{id}</code></td>
+<td>角色管理员</td>
+<td>删除用户</td>
+</tr>
+<tr>
+<td>发布</td>
+<td><code>/api/v1/manage/users/{id}/change-password</code></td>
+<td>角色管理员</td>
+<td>管理员更改用户密码（无需当前密码）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_7">用户服务<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<p><code>App\Identity\Service\UserService</code>扩展了<code>BaseService</code>并封装了所有用户业务逻辑：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>register($email, $username, $password, $phone)</code></td>
+<td>验证唯一性、创建用户、散列密码、保留</td>
+</tr>
+<tr>
+<td><code>verifyPassword($user, $password)</code></td>
+<td>验证用户的纯密码</td>
+</tr>
+<tr>
+<td><code>changePassword($user, $currentPassword, $newPassword)</code></td>
+<td>验证当前密码、哈希值并设置新密码、保留</td>
+</tr>
+<tr>
+<td><code>adminChangePassword($user, $newPassword)</code></td>
+<td>散列并设置新密码，坚持（没有当前密码检查）</td>
+</tr>
+<tr>
+<td><code>updateProfile($user, $data)</code></td>
+<td>验证电子邮件/用户名/电话的唯一性、更新字段、可选密码更改</td>
+</tr>
+<tr>
+<td><code>update($object, $data)</code></td>
+<td>当数据中存在密码时自动散列密码；跳过空密码</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_8">安全考虑<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li>仅使用 HTTPS</li>
 <li>将私钥和秘密保留在回购协议之外；使用秘密管理器</li>
@@ -1363,20 +1579,52 @@
 <li>实施速率限制：每个电话、每个 IP 和每个帐户限制</li>
 <li>检测刷新令牌重用：如果使用撤销/替换的令牌，则撤销所有用户令牌</li>
 </ul>
-<h2 id="_6">阿里云短信集成<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h2 id="_9">阿里云短信集成<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>将使用阿里云SDK（alibabacloud/client）。提供者从 env 读取密钥。</li>
 <li>模板必须在阿里云控制台创建并审核。模板变量：{code}</li>
 <li>我们提供 ALIYUN_SMS_DRY_RUN 进行暂存以避免真正发送</li>
 </ul>
-<h2 id="_7">实施说明<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h2 id="_10">实施说明<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
 <ul>
 <li>命名空间：应用程序\身份</li>
 <li>路径：src/Identity/{Entity、Repository、Service、Sms、Security、Controller、Resources}</li>
 <li>在 src/Identity/Resources/config/services_identity.yaml 下注册的服务</li>
-<li>测试：TokenManager 和 OtpService 的单元测试；端点集成测试</li>
+<li>测试：TokenManager、OtpService 和 <strong>UserService</strong> 的单元测试；所有端点的集成测试</li>
 </ul>
-<h2 id="_8">后续步骤<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="_11">测试覆盖率<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>类型</th>
+<th>覆盖范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UserServiceTest</code></td>
+<td>单元（28 次测试）</td>
+<td>注册、更改密码、adminChangePassword、updateProfile、更新密码哈希</td>
+</tr>
+<tr>
+<td><code>UserControllerTest</code></td>
+<td>单元（3 次测试）</td>
+<td>拒绝所有未经身份验证的访问操作</td>
+</tr>
+<tr>
+<td><code>UserApiIntegrationTest</code></td>
+<td>集成（45 项测试）</td>
+<td>注册流程、登录、配置文件、更改密码、更新配置文件、管理 CRUD、管理更改密码、规范浏览、钱包存款、转账、余额、对账、所有端点的边缘情况</td>
+</tr>
+<tr>
+<td><code>AuthControllerTest</code></td>
+<td>单位（现有）</td>
+<td>登录、注销、刷新、OTP 验证</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_12">后续步骤<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
 <p>我将生成实现该模块的代码补丁（文件、迁移、自述文件）并将其发布以供审核。在您批准后，我将通过测试和迁移逐步将更改提交到存储库。</p>
 
 
