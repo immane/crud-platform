@@ -1386,10 +1386,71 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#17-console-commands" class="md-nav__link">
+  <a href="#17-docker-deployment" class="md-nav__link">
     <span class="md-ellipsis">
       
-        17. Console Commands
+        17. Docker Deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="17. Docker Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#171-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.1 Architecture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#172-development-zero-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.2 Development (zero-config)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#173-production" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3 Production
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#174-environment-variables-in-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.4 Environment Variables in Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18-console-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18. Console Commands
       
     </span>
   </a>
@@ -1397,10 +1458,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#18-service-container-wiring" class="md-nav__link">
+  <a href="#19-service-container-wiring" class="md-nav__link">
     <span class="md-ellipsis">
       
-        18. Service Container Wiring
+        19. Service Container Wiring
       
     </span>
   </a>
@@ -1845,10 +1906,71 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#17-console-commands" class="md-nav__link">
+  <a href="#17-docker-deployment" class="md-nav__link">
     <span class="md-ellipsis">
       
-        17. Console Commands
+        17. Docker Deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="17. Docker Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#171-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.1 Architecture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#172-development-zero-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.2 Development (zero-config)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#173-production" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3 Production
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#174-environment-variables-in-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.4 Environment Variables in Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18-console-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18. Console Commands
       
     </span>
   </a>
@@ -1856,10 +1978,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#18-service-container-wiring" class="md-nav__link">
+  <a href="#19-service-container-wiring" class="md-nav__link">
     <span class="md-ellipsis">
       
-        18. Service Container Wiring
+        19. Service Container Wiring
       
     </span>
   </a>
@@ -1888,17 +2010,17 @@
 
 <h1 id="crud-skeleton-full-codebase-context">CRUD Skeleton - Full Codebase Context<a class="headerlink" href="#crud-skeleton-full-codebase-context" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>Auto-generated context snapshot. Last updated: 2025-06-25</p>
+<p>Auto-generated context snapshot. Last updated: 2025-06-26</p>
 </blockquote>
 <hr />
 <h2 id="1-project-overview">1. Project Overview<a class="headerlink" href="#1-project-overview" title="Permanent link">&para;</a></h2>
 <p><strong>CRUD Skeleton</strong> is a Symfony 8.1 API backend skeleton with:
-- <strong>PHP 8.4+</strong>, Doctrine ORM 3.6, PostgreSQL 16
+- <strong>PHP 8.4+</strong>, Doctrine ORM 3.6, MySQL 8 (Docker), SQLite (tests)
 - JWT authentication (RS256), OTP/SMS login, WeChat Mini Program / Official Account login
 - Expression-based dynamic query engine (<code>@filter</code>, <code>@sort</code>, <code>@dql</code>)
 - Modular architecture: <strong>Core</strong> (framework), <strong>Common</strong> (CMS), <strong>Identity</strong> (auth), <strong>Trade</strong> (e-commerce), <strong>Payment</strong> (invoices), <strong>Wallet</strong> (balances), <strong>Wechat</strong> (login + pay)
 - EasyWeChat 6.x integration (Mini Program, Official Account OAuth, WeChat Pay V3)
-- NelmioApiDoc (Swagger at <code>/api/doc</code>), PHPUnit 12.5, Docker Compose
+- NelmioApiDoc (Swagger at <code>/api/doc</code>), PHPUnit 12.5, Docker Compose (5 services)
 - MkDocs Material + GitHub Pages documentation</p>
 <h2 id="2-directory-structure">2. Directory Structure<a class="headerlink" href="#2-directory-structure" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>├── public/index.php              # Front controller
@@ -1977,12 +2099,18 @@
 <a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>│   │   └── bundles/              # Per-module design docs (core, common, trade, wallet, identity, wechat)
 <a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>│   └── openapi/endpoints.yaml
 <a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>├── scripts/tests/                # Test scripts
-<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>├── tests/                        # ~917 PHPUnit tests, ~3150 assertions
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>├── tests/                        # ~922 PHPUnit tests, ~3177 assertions
 <a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>├── mkdocs.yml                    # MkDocs Material config
-<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>├── compose.yaml                  # PostgreSQL 16 + Mailpit via Docker
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>└── .github/workflows/
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>    ├── ci.yml                    # CI: PHP 8.4, 80% coverage
-<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>    └── docs.yml                  # GitHub Pages deploy
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>├── compose.yaml                  # Production deployment: app (PHP-FPM), nginx, MySQL, Redis, Mailpit
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports)
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>├── Dockerfile                    # PHP 8.4-FPM Alpine with openssl + JWT key entrypoint
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>├── .dockerignore                 # Build context exclusions (tests, docs, dev files)
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>├── docker/
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>│   ├── app/entrypoint.sh         # Dev key generation + prod key validation
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>│   └── nginx/default.conf        # nginx config (reverse proxy to PHP-FPM)
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>└── .github/workflows/
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>    ├── ci.yml                    # CI: PHP 8.4, 80% coverage
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>    └── docs.yml                  # GitHub Pages deploy
 </code></pre></div>
 <h2 id="3-request-lifecycle">3. Request Lifecycle<a class="headerlink" href="#3-request-lifecycle" title="Permanent link">&para;</a></h2>
 <ol>
@@ -2741,7 +2869,7 @@
 <li><strong>Framework</strong>: PHPUnit 12.5</li>
 <li><strong>DB</strong>: SQLite <code>var/test.db</code> in test environment</li>
 <li><strong>Coverage</strong>: 80% minimum (enforced in CI), currently 85.50% lines</li>
-<li><strong>Test count</strong>: 917 tests, ~3150 assertions</li>
+<li><strong>Test count</strong>: 922 tests, ~3177 assertions</li>
 <li><strong>Key test groups</strong>:</li>
 <li><code>tests/Wechat/</code>: 59 tests (Entity, Service, AuthService, Gateway, Controller, Repository)</li>
 <li><code>tests/Trade/</code>: 171 tests (Entity, Service, Pricing, Integration, EventListener, Workflow API)</li>
@@ -2771,14 +2899,14 @@
 </tr>
 <tr>
 <td><code>JWT_PRIVATE_KEY_PATH</code>, <code>JWT_PUBLIC_KEY_PATH</code></td>
-<td>RS256 key pair</td>
+<td>RS256 key pair (Docker dev: generated once under mounted <code>./var/jwt</code> if missing)</td>
 </tr>
 <tr>
 <td><code>JWT_PASSPHRASE</code></td>
 <td>Private key passphrase</td>
 </tr>
 <tr>
-<td><code>JWT_REFRESH_TOKEN_SECRET</code></td>
+<td><code>REFRESH_TOKEN_SECRET</code></td>
 <td>HMAC-SHA256 secret</td>
 </tr>
 <tr>
@@ -2815,7 +2943,24 @@
 </tr>
 </tbody>
 </table>
-<h2 id="17-console-commands">17. Console Commands<a class="headerlink" href="#17-console-commands" title="Permanent link">&para;</a></h2>
+<h2 id="17-docker-deployment">17. Docker Deployment<a class="headerlink" href="#17-docker-deployment" title="Permanent link">&para;</a></h2>
+<h3 id="171-architecture">17.1 Architecture<a class="headerlink" href="#171-architecture" title="Permanent link">&para;</a></h3>
+<p>5 services in <code>compose.yaml</code>: <strong>nginx</strong> (reverse proxy), <strong>app</strong> (PHP-FPM 8.4, built from <code>Dockerfile</code>), <strong>database</strong> (MySQL 8), <strong>redis</strong> (Redis 7 Alpine), <strong>mailer</strong> (Mailpit).</p>
+<h3 id="172-development-zero-config">17.2 Development (zero-config)<a class="headerlink" href="#172-development-zero-config" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">&#39;P@ssw0rd&#39;</span><span class="w"> </span>--admin
+</code></pre></div>
+<ul>
+<li><code>compose.override.yaml</code> auto-loads — sets <code>APP_ENV=dev</code>, <code>APP_DEBUG=1</code>, source mount</li>
+<li><code>docker/app/entrypoint.sh</code> creates development JWT keys once under mounted <code>./var/jwt</code> if missing; production fails fast when keys are missing</li>
+<li>All optional features (WeChat, SMS) default to empty — disabled gracefully</li>
+</ul>
+<h3 id="173-production">17.3 Production<a class="headerlink" href="#173-production" title="Permanent link">&para;</a></h3>
+<p>Requires <code>.env.prod.local</code> copied from <code>.env.prod.example</code> with <code>APP_SECRET</code>, <code>REFRESH_TOKEN_SECRET</code>, <code>MYSQL_PASSWORD</code>, and <code>MYSQL_ROOT_PASSWORD</code>. JWT keys are generated on the host at <code>./var/jwt/</code> and mounted into the container. Start production with <code>docker compose -f compose.yaml -f compose.prod.yaml --env-file .env.prod.local up -d --build</code>.</p>
+<h3 id="174-environment-variables-in-docker">17.4 Environment Variables in Docker<a class="headerlink" href="#174-environment-variables-in-docker" title="Permanent link">&para;</a></h3>
+<p><code>compose.yaml</code> provides defaults for <code>DATABASE_URL</code>, <code>MAILER_DSN</code>, <code>OTP_REDIS_DSN</code>, and JWT key paths. Required vars use <code>${VAR:?required}</code> which fails fast if missing. Optional vars use <code>${VAR:-}</code> which defaults to empty.</p>
+<h2 id="18-console-commands">18. Console Commands<a class="headerlink" href="#18-console-commands" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2832,7 +2977,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="18-service-container-wiring">18. Service Container Wiring<a class="headerlink" href="#18-service-container-wiring" title="Permanent link">&para;</a></h2>
+<h2 id="19-service-container-wiring">19. Service Container Wiring<a class="headerlink" href="#19-service-container-wiring" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Default: all <code>src/</code> classes autowired/autoconfigured</li>
 <li>Explicit exclusions: <code>FlatNormalizer</code>, EventListener classes (except <code>OpenApiEnricherListener</code>), Auth/Otp controllers, TokenManager, AliyunSmsProvider, RedisOtpStorage, <strong>WechatService, WechatPayGateway</strong></li>

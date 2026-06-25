@@ -3115,7 +3115,7 @@ validation, testing, and deployment. Every module, service, and controller MUST 
 </table>
 <h3 id="112-docker">11.2 Docker<a class="headerlink" href="#112-docker" title="Permanent link">&para;</a></h3>
 <ul>
-<li><code>compose.yaml</code>: PostgreSQL 16</li>
+<li><code>compose.yaml</code>: MySQL 8</li>
 <li><code>compose.override.yaml</code>: Port mapping + Mailpit</li>
 <li>All services health-checked before app starts</li>
 </ul>
@@ -3134,19 +3134,19 @@ validation, testing, and deployment. Every module, service, and controller MUST 
 <td>Production</td>
 <td><code>prod</code></td>
 <td><code>false</code></td>
-<td>PostgreSQL</td>
+<td>MySQL</td>
 </tr>
 <tr>
 <td>Staging</td>
 <td><code>staging</code></td>
 <td><code>false</code></td>
-<td>PostgreSQL</td>
+<td>MySQL</td>
 </tr>
 <tr>
 <td>Development</td>
 <td><code>dev</code></td>
 <td><code>true</code></td>
-<td>PostgreSQL (Docker)</td>
+<td>MySQL (Docker)</td>
 </tr>
 <tr>
 <td>Testing</td>
