@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/design/bundles/identity/">
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/issues/architecture-review-2026-06-26/">
       
       
-        <link rel="prev" href="../wallet/">
+        <link rel="prev" href="../../research/huifu-payment-api/">
       
       
-        <link rel="next" href="../wechat/">
+        <link rel="next" href="../../ai/context/">
       
       
         
@@ -26,19 +26,19 @@
         
       
       
-      <link rel="icon" href="../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>Identity (鉴权) - CRUD Skeleton</title>
+        <title>架构回顾 2026-06-26 - CRUD Skeleton</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -57,7 +57,7 @@
       
     
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#-2026-06-26" class="md-skip">
           跳转至
         </a>
       
@@ -98,7 +98,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="页眉">
-    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+    <a href="../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Identity (鉴权)
+              架构回顾 2026-06-26
             
           </span>
         </div>
@@ -262,7 +262,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+    <a href="../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -292,7 +292,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -373,7 +373,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system-architecture/" class="md-nav__link">
+      <a href="../../design/system-architecture/" class="md-nav__link">
         
   
   
@@ -401,7 +401,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api-design/" class="md-nav__link">
+      <a href="../../design/api-design/" class="md-nav__link">
         
   
   
@@ -429,7 +429,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../data-model/" class="md-nav__link">
+      <a href="../../design/data-model/" class="md-nav__link">
         
   
   
@@ -457,7 +457,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../module-design/" class="md-nav__link">
+      <a href="../../design/module-design/" class="md-nav__link">
         
   
   
@@ -485,7 +485,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../controller-design/" class="md-nav__link">
+      <a href="../../design/controller-design/" class="md-nav__link">
         
   
   
@@ -513,7 +513,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api-documentation/" class="md-nav__link">
+      <a href="../../design/api-documentation/" class="md-nav__link">
         
   
   
@@ -541,7 +541,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../system-contracts/" class="md-nav__link">
+      <a href="../../design/system-contracts/" class="md-nav__link">
         
   
   
@@ -573,8 +573,6 @@
       
   
   
-    
-  
   
   
     
@@ -587,11 +585,13 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -612,7 +612,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -630,7 +630,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../core/" class="md-nav__link">
+      <a href="../../design/bundles/core/" class="md-nav__link">
         
   
   
@@ -658,7 +658,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../common/" class="md-nav__link">
+      <a href="../../design/bundles/common/" class="md-nav__link">
         
   
   
@@ -686,7 +686,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../trade/" class="md-nav__link">
+      <a href="../../design/bundles/trade/" class="md-nav__link">
         
   
   
@@ -714,7 +714,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../payment/" class="md-nav__link">
+      <a href="../../design/bundles/payment/" class="md-nav__link">
         
   
   
@@ -742,7 +742,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../wallet/" class="md-nav__link">
+      <a href="../../design/bundles/wallet/" class="md-nav__link">
         
   
   
@@ -767,37 +767,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Identity (鉴权)
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../design/bundles/identity/" class="md-nav__link">
         
   
   
@@ -813,169 +786,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="目录">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      目录
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        概述
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        目标
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#envexample" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        环境变量（.env.example）
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mysql" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        数据库架构 (MySQL)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        代币流向
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        用户资料（应用程序）
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        用户管理（管理）
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        用户服务
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        安全考虑
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        阿里云短信集成
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        实施说明
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_11" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        测试覆盖率
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_12" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        后续步骤
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -988,7 +798,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../wechat/" class="md-nav__link">
+      <a href="../../design/bundles/wechat/" class="md-nav__link">
         
   
   
@@ -1077,7 +887,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+      <a href="../../research/easywechat-6.x-usage/" class="md-nav__link">
         
   
   
@@ -1105,7 +915,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+      <a href="../../research/huifu-payment-api/" class="md-nav__link">
         
   
   
@@ -1137,8 +947,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -1149,13 +961,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
@@ -1176,7 +986,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1191,10 +1001,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../../issues/architecture-review-2026-06-26/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构回顾 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1210,6 +1047,209 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        高优先级
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="高优先级">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.微信支付网关可能未注册
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. /system/* 内省端点实际上是公开的
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.动态查询功能对于默认的公共API使用来说太强大了
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.支付和钱包交易边界需要收紧
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        中优先级
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="中优先级">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.应用程序订单生命周期可能不完整
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-baseservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. BaseService 将服务逻辑与请求级关注点混合在一起
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-baseservicenew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. BaseService::new() 可以绕过实体构造函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.分页没有最大限制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.内存回退过滤可能会加载太多数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        低优先级/清理
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="低优先级/清理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#10-openapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 通用 OpenAPI 文档公开实现控制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. 服务接线具有重复的网关标记约定
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1229,7 +1269,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../ai/context/" class="md-nav__link">
+      <a href="../../ai/context/" class="md-nav__link">
         
   
   
@@ -1256,7 +1296,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
         
   
   
@@ -1303,13 +1343,74 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        概述
+        总结
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        高优先级
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="高优先级">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.微信支付网关可能未注册
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. /system/* 内省端点实际上是公开的
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.动态查询功能对于默认的公共API使用来说太强大了
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.支付和钱包交易边界需要收紧
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1317,32 +1418,71 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        目标
+        中优先级
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="中优先级">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.应用程序订单生命周期可能不完整
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#envexample" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#6-baseservice" class="md-nav__link">
     <span class="md-ellipsis">
       
-        环境变量（.env.example）
+        6. BaseService 将服务逻辑与请求级关注点混合在一起
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#mysql" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#7-baseservicenew" class="md-nav__link">
     <span class="md-ellipsis">
       
-        数据库架构 (MySQL)
+        7. BaseService::new() 可以绕过实体构造函数
       
     </span>
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.分页没有最大限制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.内存回退过滤可能会加载太多数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1350,98 +1490,38 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        代币流向
+        低优先级/清理
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="低优先级/清理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#10-openapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 通用 OpenAPI 文档公开实现控制
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
     <span class="md-ellipsis">
       
-        用户资料（应用程序）
+        11. 服务接线具有重复的网关标记约定
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        用户管理（管理）
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        用户服务
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        安全考虑
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        阿里云短信集成
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        实施说明
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_11" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        测试覆盖率
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_12" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        后续步骤
-      
-    </span>
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1465,256 +1545,135 @@
   
 
 
-<h1 id="_1">身份模块设计<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<h2 id="_2">概述<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>本文档描述了身份模块（src/Identity）。它实现：</p>
+<h1 id="-2026-06-26">架构审查问题 - 2026-06-26<a class="headerlink" href="#-2026-06-26" title="Permanent link">&para;</a></h1>
+<p>本文档记录了在审查 <code>docs/ai/context.md</code> 和当前代码库期间发现的架构和生产就绪性问题。</p>
+<h2 id="_1">总结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>整体模块化架构对于 Symfony API 框架来说是合理的。模块边界清晰，<code>Core</code>提供可重用的CRUD/API基础设施，业务模块按领域分开，支付网关、定价计算器、工作流程和领域事件等扩展点与项目目标很好地契合。</p>
+<p>主要风险不是结构性故障，而是默认暴露的过于广泛的通用功能、需要收紧的生产安全边界以及围绕支付流的交易边界。</p>
+<h2 id="_2">高优先级<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h3 id="1">1.微信支付网关可能未注册<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
+<p><strong>影响：</strong> 即使<code>WechatPayGateway</code>实现了<code>PaymentGatewayInterface</code>，<code>payment=wechat</code>也可能因<code>PaymentGatewayNotFoundException</code>而失败。</p>
+<p><strong>证据：</strong></p>
 <ul>
-<li>具有 7200 秒 TTL 的 JWT 访问令牌 (RS256)</li>
-<li>服务器存储的刷新令牌（不透明，散列），具有 1 年 TTL 和轮换</li>
-<li>基于手机的OTP登录/验证，通过阿里云短信发送</li>
-<li>基于标识符的登录：标识符可以是电子邮件、用户名或经过验证的电话</li>
-<li><strong>基于密码的用户自行注册</strong> (<code>POST /api/auth/register</code>)</li>
-<li><strong>用户配置文件管理</strong>，包括密码更改和配置文件更新</li>
-<li><strong>管理员用户 CRUD</strong> 具有托管密码更改</li>
+<li><code>PaymentGatewayRegistry</code>仅收集标记有<code>payment.gateway</code>：<code>src/Payment/Service/PaymentGatewayRegistry.php</code>的服务。</li>
+<li><code>config/services.yaml</code> 将 <code>src/Wechat/Service/Gateway/WechatPayGateway.php</code> 从全局 <code>App\</code> 服务资源中排除。</li>
+<li><code>src/Wechat/Resources/config/services_wechat.yaml</code>显式定义<code>WechatPayGateway</code>，但不添加<code>payment.gateway</code>标签。</li>
 </ul>
-<h2 id="_3">目标<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p><strong>推荐：</strong></p>
+<p>在 <code>services_wechat.yaml</code> 中添加显式标签：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">App\Wechat\Service\Gateway\WechatPayGateway</span><span class="p">:</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nt">arguments</span><span class="p">:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">        </span><span class="nt">$notifyUrl</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(WECHAT_PAY_NOTIFY_URL)%&#39;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;payment.gateway&#39;</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<p>或者，在 <code>PaymentGatewayInterface</code> 的微信服务配置中添加 <code>_instanceof</code> 规则。</p>
+<h3 id="2-system">2. <code>/system/*</code> 内省端点实际上是公开的<a class="headerlink" href="#2-system" title="Permanent link">&para;</a></h3>
+<p><strong>影响：</strong> 实体元数据和路由结构可以在生产中公开。</p>
+<p><strong>证据：</strong></p>
 <ul>
-<li>保持现有标识符+密码流程完整</li>
-<li>添加电话+OTP 作为附加身份验证路径</li>
-<li><strong>添加密码注册</strong>作为自助入职路径</li>
-<li><strong>添加用户控制器</strong>用于配置文件管理（应用程序）和管理 CRUD（管理）</li>
-<li>使用Redis进行OTP存储和速率限制</li>
-<li>使用RS256进行JWT签名并使用公钥进行验证</li>
-<li>在 MySQL 中存储散列的刷新令牌（identity_refresh_token 表）</li>
+<li>系统控制器在<code>/system</code>下路由，例如<code>src/Core/Controller/System/EntityController.php</code>。</li>
+<li>配置的API防火墙仅匹配<code>config/packages/security.yaml</code>中的<code>^/api</code>。</li>
+<li><code>access_control</code>规则仅限制<code>/api</code>路径，不覆盖<code>/system</code>。</li>
 </ul>
-<h2 id="envexample">环境变量（.env.example）<a class="headerlink" href="#envexample" title="Permanent link">&para;</a></h2>
-<p>有关所有变量，请参阅存储库根目录中的 .env.example。关键：</p>
+<p><strong>推荐：</strong></p>
+<p>选择以下方法之一：</p>
+<ol>
+<li>将系统路由移至 <code>/api/system</code> 下，以便应用 API 防火墙。</li>
+<li>为需要 <code>ROLE_ADMIN</code> 的 <code>^/system</code> 添加显式 <code>access_control</code> 规则。</li>
+<li>在生产中禁用系统路由并使其仅用于开发/测试。</li>
+</ol>
+<h3 id="3api">3.动态查询功能对于默认的公共API使用来说太强大了<a class="headerlink" href="#3api" title="Permanent link">&para;</a></h3>
+<p><strong>影响：</strong> 客户端可以提交原始或接近原始的查询控件，这会增加数据暴露和性能风险。</p>
+<p><strong>证据：</strong></p>
 <ul>
-<li>JWT_PRIVATE_KEY_PATH、JWT_PUBLIC_KEY_PATH、JWT_PASSPHRASE</li>
-<li>ACCESS_TOKEN_TTL (7200)</li>
-<li>REFRESH_TOKEN_TTL (31536000)</li>
-<li>REFRESH_TOKEN_SECRET</li>
-<li>OTP_TTL (300)</li>
-<li>OTP_REDIS_DSN</li>
-<li>ALIYUN_ACCESS_KEY_ID、ALIYUN_ACCESS_KEY_SECRET</li>
-<li>ALIYUN_SMS_SIGN_NAME</li>
-<li>ALIYUN_SMS_TEMPLATE_LOGIN_OTP</li>
-<li>ALIYUN_SMS_TEMPLATE_VERIFY_PHONE</li>
-<li>ALIYUN_SMS_DRY_RUN（开发安全标志）</li>
+<li><code>@dql</code> 从请求中读取并传递到 <code>BaseServiceReadListTrait</code> 中的 Doctrine 查询创建。</li>
+<li>请求参数还支持<code>@select</code>、<code>@groupBy</code>、<code>@hints</code>和<code>@showDQL</code>。</li>
+<li><code>ListApiViewMixin</code> 记录所有通用列表端点的这些参数。</li>
 </ul>
-<h2 id="mysql">数据库架构 (MySQL)<a class="headerlink" href="#mysql" title="Permanent link">&para;</a></h2>
-<p>我们将为刷新令牌添加下表（将提供迁移 SQL）：</p>
-<p>创建表identity_refresh_token（
-  id BIGINT NOT NULL AUTO_INCRMENT 主键，
-  user_id INT NOT NULL,
-  fresh_token_hash VARCHAR(128) NOT NULL,
-  jti VARCHAR(64) 默认为 NULL，
-  创建时间不为空，
-  expires_at DATETIME NOT NULL,
-  revoked_at DATETIME 默认为 NULL，
-  Replaced_by_token_id BIGINT 默认 NULL，
-  ip_address VARCHAR(45) 默认为 NULL，
-  用户代理文本，
-  索引（refresh_token_hash），
-  索引（用户 ID），
-  删除级联时外键 (user_id) 引用用户 (id)
-）；</p>
-<p>注意：users.phone 可以为 null；使用手机上的唯一索引。 MySQL 允许多个 NULL，这满足“可为空但存在时唯一”语义。</p>
-<h2 id="_4">代币流向<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<p>登录（用户名+密码）
-- POST /api/auth/login { 标识符，密码 }
-- 标识符可以是电子邮件、用户名或电话（仅当phone_verified=true时才允许使用电话）
-- 成功时返回 { access_token、refresh_token、expires_in }</p>
-<p>注册（密码自行注册）
-- POST /api/auth/register { 电子邮件、用户名、密码、电话？ }
-- 公共端点（无需身份验证）
-- 验证电子邮件、用户名和电话的唯一性
-- 通过 UserService::register() 使用散列密码创建用户
-- 直接返回JWT令牌（与登录格式相同）
-- 密码至少 6 个字符</p>
-<p>OTP 登录/验证
-- POST /api/auth/otp/request { 电话，目的 }
-  - 生成OTP，将哈希存储在Redis中，通过阿里云发送短信
-- POST /api/auth/otp/verify { 电话、otp、目的 }
-  - 验证 OTP；如果目的=登录发出令牌；如果目的=verify_phone 标记phone_verified</p>
-<p>令牌刷新
-- POST /api/auth/token/refresh { 刷新令牌 }
-- 服务器查找哈希刷新令牌、验证、轮换（创建新刷新令牌、撤销旧令牌）</p>
-<p>退出
-- POST /api/auth/logout {刷新令牌}
-- 标记刷新令牌已撤销</p>
-<h2 id="_5">用户资料（应用程序）<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>路径</th>
-<th>授权</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>获取</td>
-<td><code>/api/v1/app/users/me</code></td>
-<td>ROLE_USER</td>
-<td>获取当前用户个人资料</td>
-</tr>
-<tr>
-<td>放置</td>
-<td><code>/api/v1/app/users/me</code></td>
-<td>ROLE_USER</td>
-<td>更新电子邮件、用户名、电话、可选密码</td>
-</tr>
-<tr>
-<td>发布</td>
-<td><code>/api/v1/app/users/change-password</code></td>
-<td>ROLE_USER</td>
-<td>更改自己的密码（需要当前密码）</td>
-</tr>
-</tbody>
-</table>
-<h2 id="_6">用户管理（管理）<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>路径</th>
-<th>授权</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>获取</td>
-<td><code>/api/v1/manage/users</code></td>
-<td>角色管理员</td>
-<td>列出所有用户</td>
-</tr>
-<tr>
-<td>获取</td>
-<td><code>/api/v1/manage/users/{id}</code></td>
-<td>角色管理员</td>
-<td>查看用户详细信息</td>
-</tr>
-<tr>
-<td>发布</td>
-<td><code>/api/v1/manage/users</code></td>
-<td>角色管理员</td>
-<td>创建用户（使用散列密码）</td>
-</tr>
-<tr>
-<td>放置</td>
-<td><code>/api/v1/manage/users/{id}</code></td>
-<td>角色管理员</td>
-<td>更新用户（电子邮件、用户名、密码、电话、角色）</td>
-</tr>
-<tr>
-<td>删除</td>
-<td><code>/api/v1/manage/users/{id}</code></td>
-<td>角色管理员</td>
-<td>删除用户</td>
-</tr>
-<tr>
-<td>发布</td>
-<td><code>/api/v1/manage/users/{id}/change-password</code></td>
-<td>角色管理员</td>
-<td>管理员更改用户密码（无需当前密码）</td>
-</tr>
-</tbody>
-</table>
-<h2 id="_7">用户服务<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
-<p><code>App\Identity\Service\UserService</code>扩展了<code>BaseService</code>并封装了所有用户业务逻辑：</p>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>register($email, $username, $password, $phone)</code></td>
-<td>验证唯一性、创建用户、散列密码、保留</td>
-</tr>
-<tr>
-<td><code>verifyPassword($user, $password)</code></td>
-<td>验证用户的纯密码</td>
-</tr>
-<tr>
-<td><code>changePassword($user, $currentPassword, $newPassword)</code></td>
-<td>验证当前密码、哈希值并设置新密码、保留</td>
-</tr>
-<tr>
-<td><code>adminChangePassword($user, $newPassword)</code></td>
-<td>散列并设置新密码，坚持（没有当前密码检查）</td>
-</tr>
-<tr>
-<td><code>updateProfile($user, $data)</code></td>
-<td>验证电子邮件/用户名/电话的唯一性、更新字段、可选密码更改</td>
-</tr>
-<tr>
-<td><code>update($object, $data)</code></td>
-<td>当数据中存在密码时自动散列密码；跳过空密码</td>
-</tr>
-</tbody>
-</table>
-<h2 id="_8">安全考虑<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<p><strong>推荐：</strong></p>
+<p>引入查询参数的能力级别：</p>
 <ul>
-<li>仅使用 HTTPS</li>
-<li>将私钥和秘密保留在回购协议之外；使用秘密管理器</li>
-<li>使用 REFRESH_TOKEN_SECRET 通过 HMAC-SHA256 哈希刷新令牌</li>
-<li>OTP是6位数字，以散列形式存储在Redis中，一次性使用，TTL 5分钟</li>
-<li>实施速率限制：每个电话、每个 IP 和每个帐户限制</li>
-<li>检测刷新令牌重用：如果使用撤销/替换的令牌，则撤销所有用户令牌</li>
+<li>公共/应用程序端点：仅允许 <code>page</code>、<code>limit</code>、受限 <code>@order</code> 和安全 <code>@filter</code>。</li>
+<li>管理端点：可选择为管理员提供更丰富的查询功能。</li>
+<li>仅调试/开发：允许 <code>@dql</code>、<code>@hints</code> 和 <code>@showDQL</code>。</li>
 </ul>
-<h2 id="_9">阿里云短信集成<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<p>另请考虑从生成的公共 OpenAPI 文档中删除这些危险参数。</p>
+<h3 id="4">4.支付和钱包交易边界需要收紧<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
+<p><strong>影响：</strong> 数据库事务打开时可能会执行外部支付调用。如果没有明确的保存点支持，嵌套钱包交易可能不会按预期运行。</p>
+<p><strong>证据：</strong></p>
 <ul>
-<li>将使用阿里云SDK（alibabacloud/client）。提供者从 env 读取密钥。</li>
-<li>模板必须在阿里云控制台创建并审核。模板变量：{code}</li>
-<li>我们提供 ALIYUN_SMS_DRY_RUN 进行暂存以避免真正发送</li>
+<li><code>InvoiceService::pay()</code> 打开一个事务，然后在其中调用 <code>$gateway-&gt;pay()</code>。</li>
+<li><code>WechatPayGateway::pay()</code>执行出站微信API调用。</li>
+<li><code>TransferService</code>手动启动与<code>beginTransaction()</code>的事务。</li>
+<li><code>Trade\Controller\Manage\OrderController</code> 中的注释假设嵌套保存点行为，但未找到显式 Doctrine 保存点配置。</li>
 </ul>
-<h2 id="_10">实施说明<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<p><strong>推荐：</strong></p>
+<p>独立的本地和外部支付流程：</p>
 <ul>
-<li>命名空间：应用程序\身份</li>
-<li>路径：src/Identity/{Entity、Repository、Service、Sms、Security、Controller、Resources}</li>
-<li>在 src/Identity/Resources/config/services_identity.yaml 下注册的服务</li>
-<li>测试：TokenManager、OtpService 和 <strong>UserService</strong> 的单元测试；所有端点的集成测试</li>
+<li>钱包网关：保持本地余额移动和发票状态更新原子性。</li>
+<li>微信等外部网关：将发票保留为<code>paying</code>，提交，调用提供商，然后通过回调/通知完成。</li>
+<li>如果需要嵌套事务，请显式启用并测试保存点行为。</li>
 </ul>
-<h2 id="_11">测试覆盖率<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>文件</th>
-<th>类型</th>
-<th>覆盖范围</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>UserServiceTest</code></td>
-<td>单元（28 次测试）</td>
-<td>注册、更改密码、adminChangePassword、updateProfile、更新密码哈希</td>
-</tr>
-<tr>
-<td><code>UserControllerTest</code></td>
-<td>单元（3 次测试）</td>
-<td>拒绝所有未经身份验证的访问操作</td>
-</tr>
-<tr>
-<td><code>UserApiIntegrationTest</code></td>
-<td>集成（45 项测试）</td>
-<td>注册流程、登录、配置文件、更改密码、更新配置文件、管理 CRUD、管理更改密码、规范浏览、钱包存款、转账、余额、对账、所有端点的边缘情况</td>
-</tr>
-<tr>
-<td><code>AuthControllerTest</code></td>
-<td>单位（现有）</td>
-<td>登录、注销、刷新、OTP 验证</td>
-</tr>
-</tbody>
-</table>
-<h2 id="_12">后续步骤<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
-<p>我将生成实现该模块的代码补丁（文件、迁移、自述文件）并将其发布以供审核。在您批准后，我将通过测试和迁移逐步将更改提交到存储库。</p>
+<h2 id="_3">中优先级<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h3 id="5">5.应用程序订单生命周期可能不完整<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
+<p><strong>影响：</strong> 应用用户可以在<code>draft</code>中创建订单，但付款要求订单能够从<code>confirmed</code>转换为<code>paid</code>。</p>
+<p><strong>证据：</strong></p>
+<ul>
+<li><code>Order</code>初始状态为<code>draft</code>。</li>
+<li>工作流程需要<code>draft -&gt; pending -&gt; confirmed -&gt; paid</code>。</li>
+<li>应用程序付款操作检查<code>workflow-&gt;can($order, 'pay')</code>。</li>
+<li>未找到用于提交/确认的应用程序端点。</li>
+</ul>
+<p><strong>推荐：</strong></p>
+<p>明确预期的业务流程：</p>
+<ul>
+<li>如果需要管理员确认，请清楚地记录下来。</li>
+<li>如果用户需要立即付款，请直接创建订单作为<code>confirmed</code>，或添加应用程序提交流程，将订单移至应付状态。</li>
+</ul>
+<h3 id="6-baseservice">6. <code>BaseService</code> 将服务逻辑与请求级关注点混合在一起<a class="headerlink" href="#6-baseservice" title="Permanent link">&para;</a></h3>
+<p><strong>影响：</strong> 服务类变得更难在 HTTP 外部重用，并且更难在测试或 CLI 上下文中进行推理。</p>
+<p><strong>证据：</strong></p>
+<ul>
+<li><code>BaseService</code> 从令牌存储中捕获当前用户。</li>
+<li><code>BaseServiceReadListTrait::list()</code> 从当前请求中读取查询参数。</li>
+<li>查询语法、请求过滤、Doctrine、序列化和验证集中在基础服务层。</li>
+</ul>
+<p><strong>推荐：</strong></p>
+<p>随着时间的推移，将请求解析移向控制器或专用查询 DTO/查询构建器对象。让服务方法专注于显式输入和域操作。</p>
+<h3 id="7-baseservicenew">7. <code>BaseService::new()</code> 可以绕过实体构造函数<a class="headerlink" href="#7-baseservicenew" title="Permanent link">&para;</a></h3>
+<p><strong>影响：</strong> 具有所需构造函数不变量的实体可能会在无效状态下创建。</p>
+<p><strong>证据：</strong></p>
+<ul>
+<li>当实体构造函数具有必需参数时，<code>BaseServiceMutationTrait::new()</code> 使用<code>newInstanceWithoutConstructor()</code>。</li>
+<li><code>Wallet</code> 在其构造函数中需要 <code>User</code> 和货币。</li>
+</ul>
+<p><strong>推荐：</strong></p>
+<p>对具有所需不变量的实体使用专用工厂/创建方法。避免公开这些实体的通用创建端点，除非控制器安全地构造它们。</p>
+<h3 id="8">8.分页没有最大限制<a class="headerlink" href="#8" title="Permanent link">&para;</a></h3>
+<p><strong>影响：</strong> 客户端可能会请求非常大的 <code>limit</code>，从而导致大量数据库查询或大量序列化响应。</p>
+<p><strong>证据：</strong></p>
+<ul>
+<li><code>RestController::pagination()</code> 使用带有默认 <code>100</code> 的 <code>max(1, request limit)</code>，但不限制上限。</li>
+</ul>
+<p><strong>推荐：</strong></p>
+<p>添加全局最大值，例如 <code>min(200, max(1, $request-&gt;query-&gt;getInt('limit', 100)))</code>，或使最大值可配置。</p>
+<h3 id="9">9.内存回退过滤可能会加载太多数据<a class="headerlink" href="#9" title="Permanent link">&para;</a></h3>
+<p><strong>影响：</strong> 如果 DQL 编译失败，该服务会在 PHP 中加载完整的结果集和筛选器，这对于大型表来说可能会很昂贵。</p>
+<p><strong>证据：</strong></p>
+<ul>
+<li>当过滤器编译失败或使用 <code>@sort</code> 时，<code>BaseServiceReadListTrait::list()</code> 回退到 <code>$query-&gt;getResult()</code>，然后是 <code>array_filter()</code>。</li>
+</ul>
+<p><strong>推荐：</strong></p>
+<p>对于生产 API 端点，当过滤器编译失败时，使用 <code>400 Bad Request</code> 快速失败。仅针对开发/调试或显式较小的集合保留内存中回退。</p>
+<h2 id="_4">低优先级/清理<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h3 id="10-openapi">10. 通用 OpenAPI 文档公开实现控制<a class="headerlink" href="#10-openapi" title="Permanent link">&para;</a></h3>
+<p><strong>影响：</strong> 公共 API 文档宣传内部查询控件，例如 <code>@dql</code>、<code>@hints</code> 和 <code>@showDQL</code>。</p>
+<p><strong>推荐：</strong></p>
+<p>按端点类型拆分 OpenAPI 参数文档或从通用 mixin 文档中删除危险控件。</p>
+<h3 id="11">11. 服务接线具有重复的网关标记约定<a class="headerlink" href="#11" title="Permanent link">&para;</a></h3>
+<p><strong>影响：</strong> <code>src/Payment/Service/Gateway/</code>下的支付网关由根<code>_instanceof</code>规则和<code>services_payment.yaml</code>同时标记，而微信网关是单独定义的，目前没有标记。</p>
+<p><strong>推荐：</strong></p>
+<p>将网关标记集中在一个一致的约定中，最好是所有导入的模块服务配置的 <code>_instanceof PaymentGatewayInterface</code>。</p>
 
 
 
@@ -1770,10 +1729,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>
