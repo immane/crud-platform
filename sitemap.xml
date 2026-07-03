@@ -2,78 +2,82 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://immane.github.io/crud-skeleton/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/ai/context/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/design/api-design/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/design/api-documentation/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/design/controller-design/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/design/data-model/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/design/module-design/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/design/system-architecture/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/design/system-contracts/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/design/bundles/common/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/design/bundles/core/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/design/bundles/identity/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/design/bundles/payment/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
+    </url>
+    <url>
+         <loc>https://immane.github.io/crud-skeleton/design/bundles/storage/</loc>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/design/bundles/trade/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/design/bundles/wallet/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/design/bundles/wechat/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/issues/architecture-review-2026-06-26/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/research/easywechat-6.x-usage/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-skeleton/research/huifu-payment-api/</loc>
-         <lastmod>2026-07-02</lastmod>
+         <lastmod>2026-07-03</lastmod>
     </url>
 </urlset>

@@ -1310,6 +1310,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#821-payment-adjustment-providers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2.1 Payment Adjustment Providers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#822-first-phase-gateways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2.2 First-Phase Gateways
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#83-payment-endpoints" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1869,6 +1891,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#821-payment-adjustment-providers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2.1 Payment Adjustment Providers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#822-first-phase-gateways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2.2 First-Phase Gateways
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#83-payment-endpoints" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2177,7 +2221,7 @@
 
 <h1 id="crud-skeleton-full-codebase-context">CRUD Skeleton - Full Codebase Context<a class="headerlink" href="#crud-skeleton-full-codebase-context" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>Auto-generated context snapshot. Last updated: 2025-06-26</p>
+<p>Context snapshot. Last updated: 2026-07-02</p>
 </blockquote>
 <hr />
 <h2 id="1-project-overview">1. Project Overview<a class="headerlink" href="#1-project-overview" title="Permanent link">&para;</a></h2>
@@ -2185,7 +2229,7 @@
 - <strong>PHP 8.4+</strong>, Doctrine ORM 3.6, MySQL 8 (Docker), SQLite (tests)
 - JWT authentication (RS256), OTP/SMS login, WeChat Mini Program / Official Account login
 - Expression-based dynamic query engine (<code>@filter</code>, <code>@sort</code>, <code>@dql</code>)
-- Modular architecture: <strong>Core</strong> (framework), <strong>Common</strong> (CMS), <strong>Identity</strong> (auth), <strong>Trade</strong> (e-commerce), <strong>Payment</strong> (invoices), <strong>Wallet</strong> (balances), <strong>Wechat</strong> (login + pay)
+- Modular architecture: <strong>Core</strong> (framework), <strong>Common</strong> (CMS), <strong>Identity</strong> (auth), <strong>Trade</strong> (e-commerce), <strong>Payment</strong> (invoices), <strong>Wallet</strong> (balances), <strong>Wechat</strong> (login + pay), <strong>Storage</strong> (file upload drivers)
 - EasyWeChat 6.x integration (Mini Program, Official Account OAuth, WeChat Pay V3)
 - NelmioApiDoc (Swagger at <code>/api/doc</code>), PHPUnit 12.5, Docker Compose (5 services)
 - MkDocs Material + GitHub Pages documentation</p>
@@ -2228,60 +2272,69 @@
 <a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>│
 <a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>├── src/Payment/                  # Payment module
 <a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>│   ├── Entity/Invoice.php              # Payment invoice (pending→paying→paid→refunded)
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>│   ├── DTO/                            # PaymentResult, PaymentNotifyResult, PaymentRefundResult
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>│   ├── DTO/                            # PaymentResult, PaymentNotifyResult, PaymentRefundResult, PaymentAdjustmentContext, PaymentAdjustmentResult
 <a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>│   ├── Event/                          # InvoicePaidEvent, InvoiceRefundedEvent, etc.
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>│   ├── Service/PaymentGatewayInterface.php  # Gateway contract (pay, notify, refund)
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>│   ├── Service/Gateway/               # MockGateway, WalletGateway, WechatPayGateway (auto-registered)
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>│   ├── Service/PaymentGatewayRegistry.php  # #[AutowireIterator(&#39;payment.gateway&#39;)] registry
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>│   └── Controller/App/ + Manage/ + Webhook/
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>│
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>├── src/Wallet/                   # Wallet module
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>│   ├── Entity/                   # Wallet (balance, optimistic locking), WalletTransaction
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>│   ├── Service/TransferService.php     # Atomic transfer + deposit with deadlock prevention + idempotency
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>│   ├── Service/WalletService.php       # verifyBalance() + reconcile()
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>│   └── Controller/Manage/
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>│       ├── TransferController.php      # transfer + deposit endpoints
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>│       └── WalletController.php        # CRUD + balance + reconcile
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>│
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>├── src/Wechat/                   # WeChat module
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>│   ├── Entity/WechatUser.php           # OneToOne→User (openid, unionid, sessionKey, profile)
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>│   ├── Repository/WechatUserRepository.php
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>│   ├── Service/WechatService.php       # EasyWeChat factory (MiniApp, OfficialAccount, Pay)
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>│   ├── Service/WechatAuthService.php   # Login orchestration (code2Session/OAuth→User→JWT)
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>│   ├── Service/WechatUserService.php   # CRUD service (extends BaseService)
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>│   ├── Service/Gateway/WechatPayGateway.php  # implements PaymentGatewayInterface
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>│   └── Controller/
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>│       ├── LoginController.php         # /api/wechat/* (miniapp login, oauth, phone binding)
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>│       ├── App/WechatUserController.php      # User-scoped CRUD
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>│       └── Manage/WechatUserController.php   # Admin CRUD
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>│
-<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>├── config/
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>│   ├── services.yaml             # Service wiring + import src/Wechat/ + exclusions
-<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>│   ├── routes.yaml               # Route imports (wechat, wechat_app, wechat_manage added)
-<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>│   └── packages/
-<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>│       ├── nelmio_api_doc.yaml   # OpenAPI 3.1 config: System + Wechat tags
-<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>│       ├── security.yaml         # PUBLIC_ACCESS: /system/*, /api/wechat/miniapp/login, oauth/*
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>│       ├── workflow.yaml         # Order state machine (draft→completed)
-<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>│       └── ...
-<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>├── migrations/                   # 7 Doctrine migrations (latest added wechat_user, payment_invoice)
-<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>├── docs/
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>│   ├── ai/context.md             # This file
-<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>│   ├── design/                   # Design contracts
-<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>│   │   └── bundles/              # Per-module design docs (core, common, trade, wallet, identity, wechat)
-<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>│   └── openapi/endpoints.yaml
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>├── scripts/tests/                # Test scripts
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>├── tests/                        # ~922 PHPUnit tests, ~3177 assertions
-<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>├── mkdocs.yml                    # MkDocs Material config
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>├── compose.yaml                  # Production deployment: app (PHP-FPM), nginx, MySQL, Redis, Mailpit
-<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports)
-<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>├── Dockerfile                    # PHP 8.4-FPM Alpine with openssl + JWT key entrypoint
-<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>├── .dockerignore                 # Build context exclusions (tests, docs, dev files)
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>├── docker/
-<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>│   ├── app/entrypoint.sh         # Dev key generation + prod key validation
-<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>│   └── nginx/default.conf        # nginx config (reverse proxy to PHP-FPM)
-<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>└── .github/workflows/
-<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>    ├── ci.yml                    # CI: PHP 8.4, 80% coverage
-<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>    └── docs.yml                  # GitHub Pages deploy
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>│   ├── Service/PaymentGatewayInterface.php  # Gateway contract (pay(explicit amount), notify, refund(explicit amount))
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>│   ├── Service/Adjustment/PaymentAdjustmentProviderInterface.php  # Adjustments before gateway payment (implemented by Wallet)
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>│   ├── Service/Adjustment/PaymentAdjustmentRegistry.php  # #[AutowireIterator(&#39;payment.adjustment_provider&#39;)] registry
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>│   ├── Service/Gateway/MockGateway.php       # Deterministic test gateway (only gateway remaining in Payment)
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>│   ├── Service/PaymentGatewayRegistry.php    # #[AutowireIterator(&#39;payment.gateway&#39;)] registry
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>│   └── Controller/App/ + Manage/ + Webhook/
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>│
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>├── src/Wallet/                   # Wallet module
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>│   ├── Entity/                   # Wallet, WalletTransaction, WalletPaymentDeduction
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>│   ├── Repository/               # + WalletPaymentDeductionRepository
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>│   ├── Service/TransferService.php     # Atomic transfer + deposit
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>│   ├── Service/WalletService.php       # verifyBalance() + reconcile()
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>│   ├── Service/Payment/WalletGateway.php              # Implements PaymentGatewayInterface
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>│   ├── Service/Payment/WalletBalanceAdjustmentProvider.php  # Wallet deduction as Payment adjustment provider
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>│   ├── Service/Payment/WalletPaymentDeductionService.php    # Wallet-owned deduction lifecycle
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>│   ├── DTO/WalletPaymentDeductionRequest.php
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>│   └── Controller/Manage/
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>│
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>├── src/Wechat/                   # WeChat module
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>│   ├── Entity/WechatUser.php           # OneToOne→User
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>│   ├── Repository/WechatUserRepository.php
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>│   ├── Service/WechatService.php       # EasyWeChat factory
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>│   ├── Service/WechatAuthService.php   # Login orchestration
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>│   ├── Service/WechatUserService.php   # CRUD service
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>│   ├── Service/Payment/WechatPayGateway.php  # implements PaymentGatewayInterface
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>│   └── Controller/
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>│
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>├── src/Storage/                  # Storage module (pluggable file upload drivers)
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>│   ├── Service/MediaStorageInterface.php       # Driver contract (store/delete)
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>│   ├── Service/MediaStorageRegistry.php        # Tagged iterator collection
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>│   ├── Service/LocalStorage.php                # Local filesystem (public/uploads/)
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>│   ├── Service/QiniuStorage.php                # Qiniu Kodo cloud storage
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>│   └── Resources/config/services_storage.yaml
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>│
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>├── config/
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>│   ├── services.yaml             # Service wiring + import src/Wechat/ + exclusions
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>│   ├── routes.yaml               # Route imports (wechat, wechat_app, wechat_manage added)
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>│   └── packages/
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>│       ├── nelmio_api_doc.yaml   # OpenAPI 3.1 config: System + Wechat tags
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>│       ├── security.yaml         # PUBLIC_ACCESS: /system/*, /api/wechat/miniapp/login, oauth/*
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>│       ├── workflow.yaml         # Order state machine (draft→completed)
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>│       └── ...
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>├── migrations/                   # 7 Doctrine migrations (latest added wechat_user, payment_invoice)
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>├── docs/
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>│   ├── ai/context.md             # This file
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>│   ├── design/                   # Design contracts
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>│   │   └── bundles/              # Per-module design docs (core, common, trade, wallet, identity, wechat)
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>│   └── openapi/endpoints.yaml
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>├── scripts/tests/                # Test scripts
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>├── tests/                        # ~922 PHPUnit tests, ~3177 assertions
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>├── mkdocs.yml                    # MkDocs Material config
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>├── compose.yaml                  # Production deployment: app (PHP-FPM), nginx, MySQL, Redis, Mailpit
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports)
+<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>├── Dockerfile                    # PHP 8.4-FPM Alpine with openssl + JWT key entrypoint
+<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>├── .dockerignore                 # Build context exclusions (tests, docs, dev files)
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>├── docker/
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>│   ├── app/entrypoint.sh         # Dev key generation + prod key validation
+<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>│   └── nginx/default.conf        # nginx config (reverse proxy to PHP-FPM)
+<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>└── .github/workflows/
+<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>    ├── ci.yml                    # CI: PHP 8.4, 80% coverage
+<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>    └── docs.yml                  # GitHub Pages deploy
 </code></pre></div>
 <h2 id="3-request-lifecycle">3. Request Lifecycle<a class="headerlink" href="#3-request-lifecycle" title="Permanent link">&para;</a></h2>
 <ol>
@@ -2714,13 +2767,68 @@
 <h3 id="82-paymentgatewayinterface-gateway-registry-pattern">8.2 PaymentGatewayInterface — Gateway Registry Pattern<a class="headerlink" href="#82-paymentgatewayinterface-gateway-registry-pattern" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">interface PaymentGatewayInterface {</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">    static getName(): string;           // e.g. &#39;wallet&#39;, &#39;wechat&#39;, &#39;mock&#39;</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">    pay(Invoice, array $options): PaymentResult;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">    pay(Invoice, int $amount, array $options): PaymentResult;</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="x">    notify(Request $request): PaymentNotifyResult;</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="x">    refund(Invoice, int $amount, string $reason, array $options): PaymentRefundResult;</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="x">    refund(Invoice, int $amount, int $paidAmount, string $reason, array $options): PaymentRefundResult;</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="x">    getNotifySuccessResponse(PaymentNotifyResult $result): Response;</span>
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="x">}</span>
 </code></pre></div>
-<p>All implementations auto-tagged <code>payment.gateway</code> via <code>_instanceof</code> rule. <code>PaymentGatewayRegistry</code> uses <code>#[AutowireIterator('payment.gateway')]</code> for auto-discovery. Webhook route: <code>/api/payment/notify/{payment}</code> (PUBLIC_ACCESS, gateway validates own signature).</p>
+<p>Gateways receive <strong>explicit payment/refund amounts</strong> and MUST NOT inspect deduction or adjustment options. <code>Invoice::amount</code> remains the gross business payable amount; the gateway amount is computed by <code>InvoiceService</code> after applying payment adjustments.</p>
+<p>Gateways are auto-tagged <code>payment.gateway</code> via <code>_instanceof</code> rule. <code>PaymentGatewayRegistry</code> uses <code>#[AutowireIterator('payment.gateway')]</code> for auto-discovery.</p>
+<h3 id="821-payment-adjustment-providers">8.2.1 Payment Adjustment Providers<a class="headerlink" href="#821-payment-adjustment-providers" title="Permanent link">&para;</a></h3>
+<p>Payment defines <code>PaymentAdjustmentProviderInterface</code> — a pre-payment hook that reduces the amount a gateway must process. Implementations live in the owning module (e.g., Wallet provides <code>WalletBalanceAdjustmentProvider</code> for wallet balance deduction). Providers are auto-tagged <code>payment.adjustment_provider</code> and collected by <code>PaymentAdjustmentRegistry</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Module</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wallet_balance</code></td>
+<td>Wallet</td>
+<td>Wallet balance deduction before gateway payment</td>
+</tr>
+<tr>
+<td>(future) coupons / points</td>
+<td>Coupon / Loyalty modules</td>
+<td>Other deduction types through the same extension point</td>
+</tr>
+</tbody>
+</table>
+<p><code>InvoiceService</code> orchestrates adjustment providers and gateways without knowing deduction internals:
+1. Apply registered adjustments → total applied amount
+2. Compute <code>gatewayAmount = invoice.amount - adjustmentAmount</code>
+3. Call gateway with explicit amount</p>
+<h3 id="822-first-phase-gateways">8.2.2 First-Phase Gateways<a class="headerlink" href="#822-first-phase-gateways" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Gateway</th>
+<th>Module</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mock</code></td>
+<td>Payment (<code>Service/Gateway/MockGateway.php</code>)</td>
+<td>Deterministic test/development gateway</td>
+</tr>
+<tr>
+<td><code>wallet</code></td>
+<td>Wallet (<code>Service/Payment/WalletGateway.php</code>)</td>
+<td>Internal wallet balance payment</td>
+</tr>
+<tr>
+<td><code>wechat</code></td>
+<td>Wechat (<code>Service/Payment/WechatPayGateway.php</code>)</td>
+<td>WeChat Pay V3 adapter</td>
+</tr>
+</tbody>
+</table>
 <h3 id="83-payment-endpoints">8.3 Payment Endpoints<a class="headerlink" href="#83-payment-endpoints" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2783,9 +2891,10 @@
 <p>New users get random password (cannot password-login), synthetic email/username from openid.</p>
 <h3 id="93-wechatpaygateway">9.3 WechatPayGateway<a class="headerlink" href="#93-wechatpaygateway" title="Permanent link">&para;</a></h3>
 <p>Implements <code>PaymentGatewayInterface</code> with <code>getName() → 'wechat'</code>:
-- <strong>pay()</strong>: JSAPI (requires payer openid from WechatUser) or Native (QR code)
+- <strong>File</strong>: <code>src/Wechat/Service/Payment/WechatPayGateway.php</code>
+- <strong>pay()</strong>: JSAPI (requires payer openid from WechatUser) or Native (QR code) — receives explicit <code>$amount</code>
 - <strong>notify()</strong>: EasyWeChat server + validator, signature verification
-- <strong>refund()</strong>: Creates refund via WeChat Pay V3 API
+- <strong>refund()</strong>: Creates refund via WeChat Pay V3 API — receives explicit <code>$paidAmount</code> for <code>total</code>
 - Auto-registered as <code>payment.gateway</code> via <code>_instanceof</code> rule</p>
 <h3 id="94-wechatuser-crud-controllers">9.4 WechatUser CRUD Controllers<a class="headerlink" href="#94-wechatuser-crud-controllers" title="Permanent link">&para;</a></h3>
 <table>
@@ -2937,6 +3046,16 @@
 <td><code>#[AutowireIterator]</code> + <code>_instanceof</code> auto-tags all <code>PaymentGatewayInterface</code> implementations</td>
 </tr>
 <tr>
+<td><strong>Adjustment provider registry</strong></td>
+<td>Payment</td>
+<td><code>#[AutowireIterator]</code> + <code>_instanceof</code> for <code>PaymentAdjustmentProviderInterface</code> — wallet deduction is a Wallet-owned provider</td>
+</tr>
+<tr>
+<td><strong>Deduction owned by Wallet</strong></td>
+<td>Wallet</td>
+<td>Wallet balance deduction lives in Wallet (<code>WalletPaymentDeduction</code> entity, <code>WalletPaymentDeductionService</code>, <code>WalletBalanceAdjustmentProvider</code>). Payment owns only the generic adjustment contract</td>
+</tr>
+<tr>
 <td><strong>OneToOne extension</strong></td>
 <td>Wechat</td>
 <td><code>WechatUser</code> extends User identity without modifying User entity</td>
@@ -3064,6 +3183,10 @@
 <td>20250624223701</td>
 <td><code>payment_invoice</code>, <code>wechat_user</code>, <code>messenger_messages</code></td>
 </tr>
+<tr>
+<td>20260626000000</td>
+<td><code>wallet_payment_deduction</code> (wallet-owned deduction audit, scalar invoice references, FK to <code>wallet</code>)</td>
+</tr>
 </tbody>
 </table>
 <h2 id="14-documentation-assets">14. Documentation Assets<a class="headerlink" href="#14-documentation-assets" title="Permanent link">&para;</a></h2>
@@ -3128,6 +3251,14 @@
 <td>WeChat module design (Mini Program, Official Account, Pay)</td>
 </tr>
 <tr>
+<td><code>docs/design/bundles/payment.md</code></td>
+<td>Payment module design (invoice, gateway, adjustment providers, deduction)</td>
+</tr>
+<tr>
+<td><code>docs/design/bundles/storage.md</code></td>
+<td>Storage module design (pluggable file upload drivers)</td>
+</tr>
+<tr>
 <td><code>docs/ai/context.md</code></td>
 <td>This file — AI context snapshot</td>
 </tr>
@@ -3149,16 +3280,16 @@
 <ul>
 <li><strong>Framework</strong>: PHPUnit 12.5</li>
 <li><strong>DB</strong>: SQLite <code>var/test.db</code> in test environment</li>
-<li><strong>Coverage</strong>: 80% minimum (enforced in CI), currently <strong>86.64% lines</strong></li>
-<li><strong>Test count</strong>: <strong>1019 tests</strong>, <strong>~3489 assertions</strong></li>
+<li><strong>Coverage</strong>: 80% minimum (enforced in CI), currently <strong>87.83% lines</strong></li>
+<li><strong>Test count</strong>: <strong>1069 tests</strong>, <strong>~3666 assertions</strong></li>
 <li><strong>Local PHP note</strong>: default <code>php</code> may point to PHP 7.4; use Homebrew PHP 8.5 at <code>/opt/homebrew/opt/php/bin/php</code> for local Symfony/PHPUnit commands.</li>
 <li><strong>Key test groups</strong>:</li>
-<li><code>tests/Wechat/</code>: 59 tests (Entity, Service, AuthService, Gateway, Controller, Repository)</li>
+<li><code>tests/Wechat/</code>: 59 tests (Entity, Service, AuthService, Payment/Gateway, Controller, Repository)</li>
 <li><code>tests/Trade/</code>: 171 tests (Entity, Service, Pricing, Integration, EventListener, Workflow API)</li>
-<li><code>tests/Wallet/</code>: <strong>94 tests</strong> (Entity, Integration, Transfer Service, <strong>WalletService</strong>, API regression)</li>
+<li><code>tests/Wallet/</code>: ~105 tests (Entity, Integration, Transfer Service, WalletService, Payment/Gateway, API regression)</li>
 <li><code>tests/Common/</code>: 68 tests (Entity, Integration, Batch update)</li>
-<li><code>tests/Identity/</code>: <strong>92 tests</strong> (Auth, OTP, Token, Black box, <strong>UserService</strong>, <strong>UserController</strong>, <strong>UserApiIntegration</strong>)</li>
-<li><code>tests/Payment/</code>: Integration tests for Invoice + Gateway</li>
+<li><code>tests/Identity/</code>: 92 tests (Auth, OTP, Token, Black box, UserService, UserController, UserApiIntegration)</li>
+<li><code>tests/Payment/</code>: ~60 tests (Gateway, Registry, Adjustment/Provider, Invoice, Multi-gateway integration)</li>
 <li><code>tests/Integration/</code>: ~20 cross-module tests</li>
 <li><code>tests/Core/</code>: BaseService, RestController, Parser, Serializer, Utils, System controllers</li>
 </ul>
@@ -3262,12 +3393,16 @@
 <h2 id="19-service-container-wiring">19. Service Container Wiring<a class="headerlink" href="#19-service-container-wiring" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Default: all <code>src/</code> classes autowired/autoconfigured</li>
-<li>Explicit exclusions: <code>FlatNormalizer</code>, EventListener classes (except <code>OpenApiEnricherListener</code>), Auth/Otp controllers, TokenManager, AliyunSmsProvider, RedisOtpStorage, <strong>WechatService, WechatPayGateway</strong></li>
+<li>Explicit exclusions: <code>FlatNormalizer</code>, EventListener classes (except <code>OpenApiEnricherListener</code>), Auth/Otp controllers, TokenManager, AliyunSmsProvider, RedisOtpStorage, <strong>WechatService, <code>src/Wechat/Service/Payment/WechatPayGateway.php</code></strong></li>
 <li><code>OpenApiEnricherListener</code>: registered with <code>kernel.event_listener</code> tag on <code>kernel.response</code> (priority -10)</li>
 <li><code>RestController</code> subclasses get <code>RequestStack</code>, <code>SerializerInterface</code>, <code>TranslatorInterface</code> via <code>#[Required]</code> setter injection</li>
 <li><code>PaymentGatewayInterface</code> implementations auto-tagged <code>payment.gateway</code>, collected via <code>#[AutowireIterator]</code></li>
+<li><code>PaymentAdjustmentProviderInterface</code> implementations auto-tagged <code>payment.adjustment_provider</code>, collected via <code>#[AutowireIterator]</code></li>
+<li><code>MediaStorageInterface</code> implementations auto-tagged <code>media.storage</code>, collected via <code>#[AutowireIterator]</code></li>
 <li><code>PriceCalculatorInterface</code> implementations auto-tagged <code>trade.price_calculator</code>, sorted by <code>getPriority()</code></li>
 <li><code>WechatService</code> explicitly defined in <code>services_wechat.yaml</code> with <code>%env()</code> parameter bindings</li>
+<li><code>WechatPayGateway</code> explicitly defined in <code>services_wechat.yaml</code> (excluded from global autowiring scan)</li>
+<li><code>WalletGateway</code> autowired in Wallet via <code>PaymentGatewayInterface</code> tag (no explicit exclusion needed)</li>
 </ul>
 
 
