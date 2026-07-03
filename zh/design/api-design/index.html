@@ -584,10 +584,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#31-post-specializations" class="md-nav__link">
+  <a href="#31" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.1 POST Specializations
+        3.1 岗位专业化
       
     </span>
   </a>
@@ -662,10 +662,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#51-list-endpoint-parameters-get" class="md-nav__link">
+  <a href="#51-get" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5.1 List Endpoint Parameters (GET /)
+        5.1 列出端点参数(GET /)
       
     </span>
   </a>
@@ -673,10 +673,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#52-createupdate-parameters" class="md-nav__link">
+  <a href="#52" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5.2 Create/Update Parameters
+        5.2 创建/更新参数
       
     </span>
   </a>
@@ -1622,10 +1622,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#31-post-specializations" class="md-nav__link">
+  <a href="#31" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.1 POST Specializations
+        3.1 岗位专业化
       
     </span>
   </a>
@@ -1700,10 +1700,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#51-list-endpoint-parameters-get" class="md-nav__link">
+  <a href="#51-get" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5.1 List Endpoint Parameters (GET /)
+        5.1 列出端点参数(GET /)
       
     </span>
   </a>
@@ -1711,10 +1711,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#52-createupdate-parameters" class="md-nav__link">
+  <a href="#52" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5.2 Create/Update Parameters
+        5.2 创建/更新参数
       
     </span>
   </a>
@@ -2154,7 +2154,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="31-post-specializations">3.1 POST Specializations<a class="headerlink" href="#31-post-specializations" title="Permanent link">&para;</a></h3>
+<h3 id="31">3.1 岗位专业化<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2181,7 +2181,7 @@
 <td>批量更新插入</td>
 <td><code>POST /batch-update</code></td>
 <td><code>[{}, {}, ...]</code></td>
-<td>Idempotent bulk sync with <code>@basis</code> + <code>@mode=mixed</code></td>
+<td>与 <code>@basis</code> + <code>@mode=mixed</code> 幂等批量同步</td>
 </tr>
 <tr>
 <td>单例更新插入</td>
@@ -2197,7 +2197,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Authorization: Bearer {access_token}
 </code></pre></div>
 <ul>
-<li>Access token: RS256 JWT, 7200s TTL (default)</li>
+<li>访问令牌：RS256 JWT、7200s TTL（默认）</li>
 <li>刷新令牌：不透明的 HMAC-SHA256 哈希，存储在服务器端，1 年 TTL</li>
 </ul>
 <h3 id="42">4.2 公共端点（无需身份验证）<a class="headerlink" href="#42" title="Permanent link">&para;</a></h3>
@@ -2241,11 +2241,11 @@
 </code></pre></div>
 <ul>
 <li>Public <code>/api/v1/app/*</code>：不需要角色（可以是只读）</li>
-<li>Admin <code>/api/v1/manage/*</code>: <code>ROLE_ADMIN</code> required</li>
+<li>管理员<code>/api/v1/manage/*</code>：需要<code>ROLE_ADMIN</code></li>
 </ul>
 <hr />
 <h2 id="5">5.查询参数（动态查询系统）<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
-<h3 id="51-list-endpoint-parameters-get">5.1 List Endpoint Parameters (<code>GET /</code>)<a class="headerlink" href="#51-list-endpoint-parameters-get" title="Permanent link">&para;</a></h3>
+<h3 id="51-get">5.1 列出端点参数(<code>GET /</code>)<a class="headerlink" href="#51-get" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2268,22 +2268,22 @@
 <tr>
 <td><code>@filter</code></td>
 <td>字符串</td>
-<td>Expression-based WHERE condition</td>
+<td>基于表达式的 WHERE 条件</td>
 </tr>
 <tr>
 <td><code>@dql</code></td>
 <td>字符串</td>
-<td>Raw DQL WHERE sub-clause</td>
+<td>原始 DQL WHERE 子条款</td>
 </tr>
 <tr>
 <td><code>@order</code></td>
 <td>字符串</td>
-<td>Comma-separated <code>field|ASC</code> or <code>field|DESC</code></td>
+<td>以逗号分隔 <code>field|ASC</code> 或 <code>field|DESC</code></td>
 </tr>
 <tr>
 <td><code>@select</code></td>
 <td>字符串</td>
-<td>DQL SELECT clause override</td>
+<td>DQL SELECT 子句覆盖</td>
 </tr>
 <tr>
 <td><code>@groupBy</code></td>
@@ -2298,12 +2298,12 @@
 <tr>
 <td><code>@sort</code></td>
 <td>字符串</td>
-<td>In-memory sort expression (fallback)</td>
+<td>内存中排序表达式（后备）</td>
 </tr>
 <tr>
 <td><code>@expands</code></td>
 <td>字符串</td>
-<td>Comma-separated nested entity expansion</td>
+<td>逗号分隔的嵌套实体扩展</td>
 </tr>
 <tr>
 <td><code>@display</code></td>
@@ -2317,7 +2317,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="52-createupdate-parameters">5.2 Create/Update Parameters<a class="headerlink" href="#52-createupdate-parameters" title="Permanent link">&para;</a></h3>
+<h3 id="52">5.2 创建/更新参数<a class="headerlink" href="#52" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
