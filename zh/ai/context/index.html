@@ -1409,6 +1409,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#95-storage-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 Storage Module
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.5 Storage Module">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#951-drivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5.1 Drivers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#952-media-upload-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5.2 Media Upload Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#10-system-introspection-endpoints" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1492,10 +1531,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#13-database-tables-7-migrations" class="md-nav__link">
+  <a href="#13-database-tables-9-migrations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        13. Database Tables (7 Migrations)
+        13. Database Tables (9 Migrations)
       
     </span>
   </a>
@@ -1990,6 +2029,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#95-storage-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 Storage Module
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.5 Storage Module">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#951-drivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5.1 Drivers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#952-media-upload-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5.2 Media Upload Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#10-system-introspection-endpoints" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2073,10 +2151,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#13-database-tables-7-migrations" class="md-nav__link">
+  <a href="#13-database-tables-9-migrations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        13. Database Tables (7 Migrations)
+        13. Database Tables (9 Migrations)
       
     </span>
   </a>
@@ -2221,7 +2299,7 @@
 
 <h1 id="crud-skeleton-full-codebase-context">CRUD Skeleton - Full Codebase Context<a class="headerlink" href="#crud-skeleton-full-codebase-context" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>Context snapshot. Last updated: 2026-07-02</p>
+<p>Context snapshot. Last updated: 2026-07-03</p>
 </blockquote>
 <hr />
 <h2 id="1-project-overview">1. Project Overview<a class="headerlink" href="#1-project-overview" title="Permanent link">&para;</a></h2>
@@ -2256,7 +2334,7 @@
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│   └── Controller/App/ + Manage/
 <a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│
 <a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>├── src/Identity/                 # Authentication &amp; Identity
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│   ├── Entity/User.php, RefreshToken.php
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│   ├── Entity/User.php, RefreshToken.php     # User has __toString(): username fallback to email
 <a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>│   ├── Security/JwtAuthenticator.php, TokenManager.php
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│   ├── Service/OtpService.php, UserService.php, SMS providers
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>│   ├── Command/CreateUserCommand.php
@@ -2305,25 +2383,25 @@
 <a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>│   ├── Service/MediaStorageInterface.php       # Driver contract (store/delete)
 <a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>│   ├── Service/MediaStorageRegistry.php        # Tagged iterator collection
 <a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>│   ├── Service/LocalStorage.php                # Local filesystem (public/uploads/)
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>│   ├── Service/QiniuStorage.php                # Qiniu Kodo cloud storage
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>│   ├── Service/QiniuStorage.php                # Qiniu Kodo cloud storage (optional SDK)
 <a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>│   └── Resources/config/services_storage.yaml
 <a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>│
 <a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>├── config/
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>│   ├── services.yaml             # Service wiring + import src/Wechat/ + exclusions
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>│   ├── services.yaml             # Service wiring + imports src/*/Resources/config + exclusions
 <a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>│   ├── routes.yaml               # Route imports (wechat, wechat_app, wechat_manage added)
 <a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>│   └── packages/
 <a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>│       ├── nelmio_api_doc.yaml   # OpenAPI 3.1 config: System + Wechat tags
 <a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>│       ├── security.yaml         # PUBLIC_ACCESS: /system/*, /api/wechat/miniapp/login, oauth/*
 <a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>│       ├── workflow.yaml         # Order state machine (draft→completed)
 <a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>│       └── ...
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>├── migrations/                   # 7 Doctrine migrations (latest added wechat_user, payment_invoice)
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>├── migrations/                   # Doctrine migrations (latest adds media storage + owner)
 <a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>├── docs/
 <a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>│   ├── ai/context.md             # This file
 <a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>│   ├── design/                   # Design contracts
 <a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>│   │   └── bundles/              # Per-module design docs (core, common, trade, wallet, identity, wechat)
 <a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>│   └── openapi/endpoints.yaml
 <a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>├── scripts/tests/                # Test scripts
-<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>├── tests/                        # ~922 PHPUnit tests, ~3177 assertions
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>├── tests/                        # 1115 PHPUnit tests, ~3850 assertions
 <a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>├── mkdocs.yml                    # MkDocs Material config
 <a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>├── compose.yaml                  # Production deployment: app (PHP-FPM), nginx, MySQL, Redis, Mailpit
 <a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports)
@@ -2922,6 +3000,65 @@
 </tbody>
 </table>
 <p>When <code>$this-&gt;getUser()</code> returns null in App controllers, <code>commonFilter()</code> returns <code>['id' =&gt; -1]</code> to block all records (security: unauthenticated users see nothing).</p>
+<h2 id="95-storage-module">9.5 Storage Module<a class="headerlink" href="#95-storage-module" title="Permanent link">&para;</a></h2>
+<p>Storage is an infrastructure module under <code>src/Storage/</code>. Common/Media depends only on <code>MediaStorageInterface</code> and <code>MediaStorageRegistry</code>; Storage does not depend on Common entities or controllers.</p>
+<h3 id="951-drivers">9.5.1 Drivers<a class="headerlink" href="#951-drivers" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Driver</th>
+<th>Class</th>
+<th>Configuration</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>local</code></td>
+<td><code>App\Storage\Service\LocalStorage</code></td>
+<td><code>media.local.upload_path</code>, <code>media.local.base_url</code></td>
+<td>Always available. Stores under <code>public/uploads/{YYYYMM}/{random}.{ext}</code> and returns <code>/uploads/...</code> URLs.</td>
+</tr>
+<tr>
+<td><code>qiniu</code></td>
+<td><code>App\Storage\Service\QiniuStorage</code></td>
+<td><code>common_setting</code> keys</td>
+<td>Optional. Reads <code>qiniu.access_key</code>, <code>qiniu.secret_key</code>, <code>qiniu.bucket</code>, <code>qiniu.domain</code> at runtime.</td>
+</tr>
+</tbody>
+</table>
+<p>Qiniu SDK note: <code>qiniu/php-sdk</code> is intentionally not required by <code>composer.json</code> because v7.14 emits PHP 8.5 vendor deprecations. <code>QiniuStorage</code> checks for <code>Qiniu\Auth</code>, <code>Qiniu\Storage\UploadManager</code>, and <code>Qiniu\Storage\BucketManager</code> only when <code>storage=qiniu</code> is used; if missing, it throws a clear runtime error. Server deployments that need Qiniu may install it locally with <code>composer require qiniu/php-sdk</code>.</p>
+<h3 id="952-media-upload-flow">9.5.2 Media Upload Flow<a class="headerlink" href="#952-media-upload-flow" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Method</th>
+<th>Auth</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/api/v1/app/media/upload</code></td>
+<td>POST multipart</td>
+<td>ROLE_USER</td>
+<td>Upload current user's media. App media list/detail is scoped by <code>['user' =&gt; $this-&gt;getUser()]</code>.</td>
+</tr>
+<tr>
+<td><code>/api/v1/manage/media/upload</code></td>
+<td>POST multipart</td>
+<td>ROLE_ADMIN</td>
+<td>Admin upload endpoint, reuses App upload action via inheritance. Manage media CRUD uses no common filter.</td>
+</tr>
+</tbody>
+</table>
+<p>Multipart fields:
+- <code>file</code>: required uploaded file
+- <code>storage</code>: optional driver name, defaults to <code>MEDIA_STORAGE_DEFAULT</code> / <code>media.storage.default</code> (<code>local</code>)
+- <code>alt</code>, <code>title</code>, <code>width</code>, <code>height</code>: optional metadata</p>
+<p><code>MediaService::createFromUpload()</code> validates file presence/size/MIME, resolves the selected storage driver, stores the physical file, persists <code>Common\Entity\Media</code>, and assigns the current authenticated <code>User</code> when available. <code>MediaService::remove()</code> best-effort deletes the physical file via the media's stored driver before removing the entity.</p>
+<p><code>Media</code> now stores <code>storage</code> and nullable owner <code>user</code> (<code>ManyToOne User</code>, <code>ON DELETE SET NULL</code>).</p>
 <h2 id="10-system-introspection-endpoints">10. System Introspection Endpoints<a class="headerlink" href="#10-system-introspection-endpoints" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -3061,6 +3198,16 @@
 <td><code>WechatUser</code> extends User identity without modifying User entity</td>
 </tr>
 <tr>
+<td><strong>Storage driver registry</strong></td>
+<td>Storage</td>
+<td><code>MediaStorageInterface</code> implementations are tagged <code>media.storage</code>; callers select driver with multipart <code>storage</code> field</td>
+</tr>
+<tr>
+<td><strong>Media ownership</strong></td>
+<td>Common</td>
+<td>App media endpoints are user-scoped via <code>commonFilter()</code>. Manage media endpoints inherit App upload code but override <code>commonFilter()</code> to <code>[]</code></td>
+</tr>
+<tr>
 <td><strong>System introspection</strong></td>
 <td>Core</td>
 <td>Entity metadata + route export via <code>/system/*</code> endpoints</td>
@@ -3146,7 +3293,7 @@
 </table>
 <h3 id="124-schema-configuration-configpackagesnelmio_api_docyaml">12.4 Schema Configuration (<code>config/packages/nelmio_api_doc.yaml</code>)<a class="headerlink" href="#124-schema-configuration-configpackagesnelmio_api_docyaml" title="Permanent link">&para;</a></h3>
 <p>42+ named schemas across 11 tags (Auth, Products, Orders, Categories, Tags, Contents, Comments, Pages, Media, Settings, Wallet, System, Wechat). Each with field-level type, description, enum, and example values. <code>path_patterns</code> includes both <code>^/api</code> and <code>^/system</code>.</p>
-<h2 id="13-database-tables-7-migrations">13. Database Tables (7 Migrations)<a class="headerlink" href="#13-database-tables-7-migrations" title="Permanent link">&para;</a></h2>
+<h2 id="13-database-tables-9-migrations">13. Database Tables (9 Migrations)<a class="headerlink" href="#13-database-tables-9-migrations" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -3186,6 +3333,10 @@
 <tr>
 <td>20260626000000</td>
 <td><code>wallet_payment_deduction</code> (wallet-owned deduction audit, scalar invoice references, FK to <code>wallet</code>)</td>
+</tr>
+<tr>
+<td>20260703000000</td>
+<td>Added to <code>common_media</code>: <code>storage</code>, nullable <code>user_id</code> FK to <code>users</code></td>
 </tr>
 </tbody>
 </table>
@@ -3280,9 +3431,10 @@
 <ul>
 <li><strong>Framework</strong>: PHPUnit 12.5</li>
 <li><strong>DB</strong>: SQLite <code>var/test.db</code> in test environment</li>
-<li><strong>Coverage</strong>: 80% minimum (enforced in CI), currently <strong>87.83% lines</strong></li>
-<li><strong>Test count</strong>: <strong>1069 tests</strong>, <strong>~3666 assertions</strong></li>
-<li><strong>Local PHP note</strong>: default <code>php</code> may point to PHP 7.4; use Homebrew PHP 8.5 at <code>/opt/homebrew/opt/php/bin/php</code> for local Symfony/PHPUnit commands.</li>
+<li><strong>Coverage</strong>: 80% minimum (enforced in CI), currently <strong>88.37% lines</strong> (<code>4481/5071</code>) from latest local Xdebug run</li>
+<li><strong>Test count</strong>: <strong>1115 tests</strong>, <strong>~3850 assertions</strong></li>
+<li><strong>Local PHP note</strong>: default <code>php</code> may point to PHP 7.4; use Homebrew PHP 8.5 at <code>/opt/homebrew/opt/php@8.5/bin/php</code> for local Symfony/PHPUnit commands.</li>
+<li><strong>Storage/upload coverage</strong>: new Storage + Media upload functionality is covered by real local-upload integration tests (<code>POST /api/v1/manage/media/upload</code> writes to <code>public/uploads</code>, then delete removes the file). Related code coverage is ~97.5% lines.</li>
 <li><strong>Key test groups</strong>:</li>
 <li><code>tests/Wechat/</code>: 59 tests (Entity, Service, AuthService, Payment/Gateway, Controller, Repository)</li>
 <li><code>tests/Trade/</code>: 171 tests (Entity, Service, Pricing, Integration, EventListener, Workflow API)</li>
@@ -3354,8 +3506,13 @@
 <td><code>MAILER_DSN</code></td>
 <td>Mailer transport</td>
 </tr>
+<tr>
+<td><code>MEDIA_STORAGE_DEFAULT</code></td>
+<td>Default media storage driver (<code>local</code> by default)</td>
+</tr>
 </tbody>
 </table>
+<p>Qiniu configuration is intentionally <strong>not</strong> environment-variable based. Configure these records in <code>common_setting</code> when <code>storage=qiniu</code> is needed: <code>qiniu.access_key</code>, <code>qiniu.secret_key</code>, <code>qiniu.bucket</code>, <code>qiniu.domain</code>.</p>
 <h2 id="17-docker-deployment">17. Docker Deployment<a class="headerlink" href="#17-docker-deployment" title="Permanent link">&para;</a></h2>
 <h3 id="171-architecture">17.1 Architecture<a class="headerlink" href="#171-architecture" title="Permanent link">&para;</a></h3>
 <p>5 services in <code>compose.yaml</code>: <strong>nginx</strong> (reverse proxy), <strong>app</strong> (PHP-FPM 8.4, built from <code>Dockerfile</code>), <strong>database</strong> (MySQL 8), <strong>redis</strong> (Redis 7 Alpine), <strong>mailer</strong> (Mailpit).</p>
@@ -3393,12 +3550,12 @@
 <h2 id="19-service-container-wiring">19. Service Container Wiring<a class="headerlink" href="#19-service-container-wiring" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Default: all <code>src/</code> classes autowired/autoconfigured</li>
-<li>Explicit exclusions: <code>FlatNormalizer</code>, EventListener classes (except <code>OpenApiEnricherListener</code>), Auth/Otp controllers, TokenManager, AliyunSmsProvider, RedisOtpStorage, <strong>WechatService, <code>src/Wechat/Service/Payment/WechatPayGateway.php</code></strong></li>
+<li>Explicit exclusions: <code>FlatNormalizer</code>, EventListener classes (except <code>OpenApiEnricherListener</code>), Auth/Otp controllers, TokenManager, AliyunSmsProvider, RedisOtpStorage, <strong>Storage concrete drivers</strong>, <strong>WechatService, <code>src/Wechat/Service/Payment/WechatPayGateway.php</code></strong></li>
 <li><code>OpenApiEnricherListener</code>: registered with <code>kernel.event_listener</code> tag on <code>kernel.response</code> (priority -10)</li>
 <li><code>RestController</code> subclasses get <code>RequestStack</code>, <code>SerializerInterface</code>, <code>TranslatorInterface</code> via <code>#[Required]</code> setter injection</li>
 <li><code>PaymentGatewayInterface</code> implementations auto-tagged <code>payment.gateway</code>, collected via <code>#[AutowireIterator]</code></li>
 <li><code>PaymentAdjustmentProviderInterface</code> implementations auto-tagged <code>payment.adjustment_provider</code>, collected via <code>#[AutowireIterator]</code></li>
-<li><code>MediaStorageInterface</code> implementations auto-tagged <code>media.storage</code>, collected via <code>#[AutowireIterator]</code></li>
+<li><code>MediaStorageInterface</code> implementations tagged <code>media.storage</code>, collected via <code>#[AutowireIterator]</code>; <code>LocalStorage</code>/<code>QiniuStorage</code> are explicitly wired in <code>src/Storage/Resources/config/services_storage.yaml</code> because they need scalar/config/repository constructor arguments</li>
 <li><code>PriceCalculatorInterface</code> implementations auto-tagged <code>trade.price_calculator</code>, sorted by <code>getPriority()</code></li>
 <li><code>WechatService</code> explicitly defined in <code>services_wechat.yaml</code> with <code>%env()</code> parameter bindings</li>
 <li><code>WechatPayGateway</code> explicitly defined in <code>services_wechat.yaml</code> (excluded from global autowiring scan)</li>
