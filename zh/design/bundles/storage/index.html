@@ -1868,7 +1868,7 @@
 </tr>
 <tr>
 <td><code>MediaStorageRegistryTest</code></td>
-<td>按名称/未知驱动程序异常/名称列表解析</td>
+<td>resolve by name / unknown driver exception / names list</td>
 </tr>
 </tbody>
 </table>
@@ -1883,7 +1883,7 @@
 <tbody>
 <tr>
 <td><code>MediaUploadIntegrationTest</code></td>
-<td>完整上传→媒体实体→删除（本地驱动）</td>
+<td>Full upload → Media entity → delete (local driver)</td>
 </tr>
 <tr>
 <td><code>MediaStorageSwitchingTest</code></td>
@@ -1891,7 +1891,7 @@
 </tr>
 </tbody>
 </table>
-<p>当 <code>QINIU_ACCESS_KEY</code> 为空时应跳过七牛集成测试
+<p>Qiniu integration tests should be skipped when <code>QINIU_ACCESS_KEY</code> is empty
 （标记为 <code>@group qiniu</code> 或由 <code>setUp()</code> 中的环境变量检查保护）。</p>
 <hr />
 <h2 id="10">10. 错误处理<a class="headerlink" href="#10" title="Permanent link">&para;</a></h2>
@@ -1917,7 +1917,7 @@
 </tr>
 <tr>
 <td>驱动程序删除失败</td>
-<td>已记录但实体仍被删除（尽最大努力清理）</td>
+<td>Logged but entity is still removed (best-effort cleanup)</td>
 </tr>
 </tbody>
 </table>
