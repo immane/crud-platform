@@ -1342,6 +1342,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#84-wallet-app-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 Wallet App Endpoints
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1962,6 +1973,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#84-wallet-app-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 Wallet App Endpoints
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2299,7 +2321,7 @@
 
 <h1 id="crud-skeleton-full-codebase-context">CRUD Skeleton - Full Codebase Context<a class="headerlink" href="#crud-skeleton-full-codebase-context" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>Context snapshot. Last updated: 2026-07-03</p>
+<p>Context snapshot. Last updated: 2026-07-04</p>
 </blockquote>
 <hr />
 <h2 id="1-project-overview">1. Project Overview<a class="headerlink" href="#1-project-overview" title="Permanent link">&para;</a></h2>
@@ -2342,7 +2364,7 @@
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>│
 <a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>├── src/Trade/                    # E-commerce module
 <a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>│   ├── Entity/                   # Product, Specification, Order, OrderItem
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>│   ├── Service/OrderService.php        # pay(), refund(), fulfill() + price pipeline
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>│   ├── Service/OrderService.php        # createOrder(... metadata), pay(), refund(), fulfill() + price pipeline
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>│   ├── Service/Pricing/                # PriceCalculatorInterface (Base, Quantity, Total)
 <a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>│   ├── EventListener/OrderWorkflowListener.php
 <a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>│   ├── Exception/                      # OrderInvalidTransitionException, SpecificationNotFoundException
@@ -2368,7 +2390,7 @@
 <a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>│   ├── Service/Payment/WalletBalanceAdjustmentProvider.php  # Wallet deduction as Payment adjustment provider
 <a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>│   ├── Service/Payment/WalletPaymentDeductionService.php    # Wallet-owned deduction lifecycle
 <a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>│   ├── DTO/WalletPaymentDeductionRequest.php
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>│   └── Controller/Manage/
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>│   └── Controller/App/ + Manage/       # App list/detail/balance, Manage CRUD/audit/reconcile
 <a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>│
 <a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>├── src/Wechat/                   # WeChat module
 <a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>│   ├── Entity/WechatUser.php           # OneToOne→User
@@ -2399,9 +2421,9 @@
 <a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>│   ├── ai/context.md             # This file
 <a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>│   ├── design/                   # Design contracts
 <a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>│   │   └── bundles/              # Per-module design docs (core, common, trade, wallet, identity, wechat)
-<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>│   └── openapi/endpoints.yaml
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>│   └── openapi/                       # endpoints.yaml + order/payment frontend flow docs
 <a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>├── scripts/tests/                # Test scripts
-<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>├── tests/                        # 1115 PHPUnit tests, ~3850 assertions
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>├── tests/                        # 1130 PHPUnit tests, 3973 assertions
 <a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>├── mkdocs.yml                    # MkDocs Material config
 <a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>├── compose.yaml                  # Production deployment: app (PHP-FPM), nginx, MySQL, Redis, Mailpit
 <a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports)
@@ -2649,8 +2671,8 @@
 <td>Pipeline: BasePriceCalculator → QuantityCalculator → TotalAggregator</td>
 </tr>
 <tr>
-<td><code>createOrder(items, user, total, currency, notes)</code></td>
-<td>Create Order + OrderItems in transaction</td>
+<td><code>createOrder(items, user, total, currency, notes, metadata)</code></td>
+<td>Create Order + OrderItems in transaction. Optional <code>metadata</code> is saved as-is to <code>trade_order.metadata</code>.</td>
 </tr>
 <tr>
 <td><code>pay(Order, systemWalletId, paymentMethod)</code></td>
@@ -2710,6 +2732,11 @@
 <td><code>refundReason</code></td>
 <td>text</td>
 <td>On refund</td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td>json</td>
+<td>Optional request payload from app/manage order creation; useful for receiver/address snapshots</td>
 </tr>
 </tbody>
 </table>
@@ -2788,7 +2815,7 @@
 <tr>
 <td>POST</td>
 <td><code>/app/orders</code></td>
-<td>Create order (auto-assigns user)</td>
+<td>Create order (auto-assigns user). Accepts optional <code>metadata</code> JSON payload and persists it directly.</td>
 </tr>
 <tr>
 <td>GET</td>
@@ -2944,6 +2971,44 @@
 </tr>
 </tbody>
 </table>
+<h3 id="84-wallet-app-endpoints">8.4 Wallet App Endpoints<a class="headerlink" href="#84-wallet-app-endpoints" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/app/wallets</code></td>
+<td>Current user's wallets only</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/app/wallets/{id}</code></td>
+<td>Current user's wallet detail only</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/app/wallets/balance</code></td>
+<td>Current user's wallet balance audit: <code>totalBalance</code>, <code>totalDeposited</code>, <code>discrepancy</code>, <code>matches</code>, <code>walletCount</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/app/transactions</code></td>
+<td>Current user's wallet transactions only</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/app/transactions/{id}</code></td>
+<td>Current user's transaction detail only</td>
+</tr>
+</tbody>
+</table>
+<p>Manage keeps global audit endpoints: <code>GET /manage/wallets/balance</code> and <code>POST /manage/wallets/reconcile</code>.</p>
 <h2 id="9-wechat-module">9. Wechat Module<a class="headerlink" href="#9-wechat-module" title="Permanent link">&para;</a></h2>
 <h3 id="91-wechatuser-entity-onetoone-user">9.1 WechatUser Entity (OneToOne → User)<a class="headerlink" href="#91-wechatuser-entity-onetoone-user" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>WechatUser (wechat_user) ──OnetoOne──&gt; User (users)
@@ -3046,6 +3111,12 @@
 <td>Upload current user's media. App media list/detail is scoped by <code>['user' =&gt; $this-&gt;getUser()]</code>.</td>
 </tr>
 <tr>
+<td><code>/api/v1/app/media/{id}</code></td>
+<td>DELETE</td>
+<td>ROLE_USER</td>
+<td>Delete current user's own uploaded media. Uses app <code>commonFilter()</code> so other users' media returns 404; local files are best-effort removed.</td>
+</tr>
+<tr>
 <td><code>/api/v1/manage/media/upload</code></td>
 <td>POST multipart</td>
 <td>ROLE_ADMIN</td>
@@ -3070,7 +3141,7 @@
 - <code>storage</code>: optional driver name, defaults to <code>MEDIA_STORAGE_DEFAULT</code> / <code>media.storage.default</code> (<code>local</code>)
 - <code>category</code>: optional <code>common_category</code> id; invalid ids return <code>Category is not found</code>
 - <code>alt</code>, <code>title</code>, <code>width</code>, <code>height</code>: optional metadata</p>
-<p><code>MediaService::createFromUpload()</code> validates file presence/size/MIME, resolves the selected storage driver, stores the physical file, persists <code>Common\Entity\Media</code>, assigns the current authenticated <code>User</code> when available, and binds an optional <code>Category</code> from multipart <code>category</code>. <code>MediaService::remove()</code> best-effort deletes the physical file via the media's stored driver before removing the entity.</p>
+<p><code>MediaService::createFromUpload()</code> validates file presence/size/MIME, resolves the selected storage driver, stores the physical file, persists <code>Common\Entity\Media</code>, assigns the current authenticated <code>User</code> when available, and binds an optional <code>Category</code> from multipart <code>category</code>. <code>MediaService::remove()</code> best-effort deletes the physical file via the media's stored driver before removing the entity. App media delete now reuses <code>DeleteApiViewMixin</code>, scoped by owner.</p>
 <p><code>Media</code> stores <code>storage</code>, nullable owner <code>user</code> (<code>ManyToOne User</code>, <code>ON DELETE SET NULL</code>), and nullable <code>category</code> (<code>ManyToOne Category</code>, <code>ON DELETE SET NULL</code>). Manage media create/update accepts <code>category</code> ids. Public media uses a QueryBuilder <code>commonFilter()</code> with <code>media.user IS NULL</code> because array criteria cannot express SQL <code>IS NULL</code>.</p>
 <h2 id="10-system-introspection-endpoints">10. System Introspection Endpoints<a class="headerlink" href="#10-system-introspection-endpoints" title="Permanent link">&para;</a></h2>
 <table>
@@ -3141,6 +3212,11 @@
 <td><code>OrderItem</code> captures <code>specSnapshot</code>/<code>productSnapshot</code> at creation</td>
 </tr>
 <tr>
+<td><strong>Order metadata</strong></td>
+<td>Trade</td>
+<td>App order creation accepts optional <code>metadata</code> JSON and persists it as-is to <code>trade_order.metadata</code>, useful for receiver/address snapshots and frontend extension data</td>
+</tr>
+<tr>
 <td><strong>State machine</strong></td>
 <td>Trade</td>
 <td>Symfony Workflow for orders</td>
@@ -3183,7 +3259,7 @@
 <tr>
 <td><strong>Balance audit</strong></td>
 <td>Wallet</td>
-<td><code>GET /wallets/balance</code> checks <code>SUM(wallets) == SUM(deposits)</code>; <code>POST /wallets/reconcile</code> fixes per-wallet gaps with <code>TYPE_ADJUSTMENT</code></td>
+<td><code>GET /app/wallets/balance</code> audits only current user's wallets; <code>GET /manage/wallets/balance</code> is global; <code>POST /manage/wallets/reconcile</code> fixes per-wallet gaps with <code>TYPE_ADJUSTMENT</code></td>
 </tr>
 <tr>
 <td><strong>Idempotent deposit</strong></td>
@@ -3218,7 +3294,7 @@
 <tr>
 <td><strong>Media ownership</strong></td>
 <td>Common</td>
-<td>App media endpoints are user-scoped via <code>commonFilter()</code>. Manage media endpoints inherit App upload code but override <code>commonFilter()</code> to <code>[]</code>. Public media endpoints expose only ownerless media (<code>user IS NULL</code>) over anonymous GET.</td>
+<td>App media endpoints are user-scoped via <code>commonFilter()</code>, including delete. Manage media endpoints inherit App upload code but override <code>commonFilter()</code> to <code>[]</code>. Public media endpoints expose only ownerless media (<code>user IS NULL</code>) over anonymous GET.</td>
 </tr>
 <tr>
 <td><strong>System introspection</strong></td>
@@ -3427,6 +3503,14 @@
 <td>Storage module design (pluggable file upload drivers)</td>
 </tr>
 <tr>
+<td><code>docs/openapi/order-payment-flow.md</code></td>
+<td>Frontend order/payment/cancel/refund API integration guide, including WeChat Mini Program pay</td>
+</tr>
+<tr>
+<td><code>docs/openapi/order-payment-flow.zh.md</code></td>
+<td>Chinese translation of the frontend order/payment/cancel/refund API guide</td>
+</tr>
+<tr>
 <td><code>docs/ai/context.md</code></td>
 <td>This file — AI context snapshot</td>
 </tr>
@@ -3448,15 +3532,15 @@
 <ul>
 <li><strong>Framework</strong>: PHPUnit 12.5</li>
 <li><strong>DB</strong>: SQLite <code>var/test.db</code> in test environment</li>
-<li><strong>Coverage</strong>: 80% minimum (enforced in CI), currently <strong>88.37% lines</strong> (<code>4481/5071</code>) from latest local Xdebug run</li>
-<li><strong>Test count</strong>: <strong>1123 tests</strong>, <strong>~3900 assertions</strong></li>
+<li><strong>Coverage</strong>: 80% minimum (enforced in CI), currently <strong>88.80% lines</strong> (<code>4630/5214</code>) from latest local Xdebug run</li>
+<li><strong>Test count</strong>: <strong>1130 tests</strong>, <strong>3973 assertions</strong></li>
 <li><strong>Local PHP note</strong>: default <code>php</code> may point to PHP 7.4; use Homebrew PHP 8.5 at <code>/opt/homebrew/opt/php@8.5/bin/php</code> for local Symfony/PHPUnit commands.</li>
-<li><strong>Storage/upload coverage</strong>: Storage + Media upload functionality is covered by real local-upload integration tests (<code>POST /api/v1/manage/media/upload</code> writes to <code>public/uploads</code>, then delete removes the file). Current focused media coverage is 100% for <code>App\Common\Controller\App\MediaController</code>, <code>Manage\MediaController</code>, <code>Public\MediaController</code>, <code>Common\Entity\Media</code>, and <code>MediaService</code>.</li>
+<li><strong>Storage/upload coverage</strong>: Storage + Media upload/delete functionality is covered by real local-upload integration tests (<code>POST /api/v1/manage/media/upload</code> writes to <code>public/uploads</code>, delete removes the file; <code>DELETE /api/v1/app/media/{id}</code> deletes only the current user's own upload and returns 404 for other users' media). Current focused media coverage is 100% for <code>App\Common\Controller\App\MediaController</code>, <code>Manage\MediaController</code>, <code>Public\MediaController</code>, <code>Common\Entity\Media</code>, and <code>MediaService</code>.</li>
 <li><strong>Key test groups</strong>:</li>
 <li><code>tests/Wechat/</code>: 59 tests (Entity, Service, AuthService, Payment/Gateway, Controller, Repository)</li>
-<li><code>tests/Trade/</code>: 171 tests (Entity, Service, Pricing, Integration, EventListener, Workflow API)</li>
+<li><code>tests/Trade/</code>: 171+ tests (Entity, Service, Pricing, Integration, EventListener, Workflow API; app order creation persists optional metadata)</li>
 <li><code>tests/Wallet/</code>: ~105 tests (Entity, Integration, Transfer Service, WalletService, Payment/Gateway, API regression)</li>
-<li><code>tests/Common/</code>: 68 tests (Entity, Integration, Batch update)</li>
+<li><code>tests/Common/</code>: 69 tests (Entity, Integration, Batch update, media upload/delete)</li>
 <li><code>tests/Identity/</code>: 92 tests (Auth, OTP, Token, Black box, UserService, UserController, UserApiIntegration)</li>
 <li><code>tests/Payment/</code>: ~60 tests (Gateway, Registry, Adjustment/Provider, Invoice, Multi-gateway integration)</li>
 <li><code>tests/Integration/</code>: ~20 cross-module tests</li>
@@ -3561,6 +3645,11 @@
 <td><code>app:identity:user:create</code></td>
 <td>Identity</td>
 <td>Create user: email, username, password, --phone, --role, --admin, --phone-verified</td>
+</tr>
+<tr>
+<td><code>app:storage:qiniu:settings:init</code></td>
+<td>Storage</td>
+<td>Initialize missing Qiniu <code>common_setting</code> records (<code>qiniu.access_key</code>, <code>qiniu.secret_key</code>, <code>qiniu.bucket</code>, <code>qiniu.domain</code>) without overwriting existing values</td>
 </tr>
 </tbody>
 </table>
