@@ -1531,10 +1531,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#13-database-tables-9-migrations" class="md-nav__link">
+  <a href="#13-database-tables-10-migrations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        13. Database Tables (9 Migrations)
+        13. Database Tables (10 Migrations)
       
     </span>
   </a>
@@ -2151,10 +2151,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#13-database-tables-9-migrations" class="md-nav__link">
+  <a href="#13-database-tables-10-migrations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        13. Database Tables (9 Migrations)
+        13. Database Tables (10 Migrations)
       
     </span>
   </a>
@@ -2331,7 +2331,7 @@
 <a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│   ├── Entity/                   # 7 entities
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│   ├── Repository/
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│   ├── Service/
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│   └── Controller/App/ + Manage/
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│   └── Controller/App/ + Manage/ + Public/
 <a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│
 <a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>├── src/Identity/                 # Authentication &amp; Identity
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│   ├── Entity/User.php, RefreshToken.php     # User has __toString(): username fallback to email
@@ -2391,10 +2391,10 @@
 <a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>│   ├── routes.yaml               # Route imports (wechat, wechat_app, wechat_manage added)
 <a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>│   └── packages/
 <a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>│       ├── nelmio_api_doc.yaml   # OpenAPI 3.1 config: System + Wechat tags
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>│       ├── security.yaml         # PUBLIC_ACCESS: /system/*, /api/wechat/miniapp/login, oauth/*
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>│       ├── security.yaml         # PUBLIC_ACCESS: docs/auth/webhooks/wechat + GET /api/v1/public/*
 <a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>│       ├── workflow.yaml         # Order state machine (draft→completed)
 <a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>│       └── ...
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>├── migrations/                   # Doctrine migrations (latest adds media storage + owner)
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>├── migrations/                   # Doctrine migrations (latest adds media category relation)
 <a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>├── docs/
 <a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>│   ├── ai/context.md             # This file
 <a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>│   ├── design/                   # Design contracts
@@ -3051,14 +3051,27 @@
 <td>ROLE_ADMIN</td>
 <td>Admin upload endpoint, reuses App upload action via inheritance. Manage media CRUD uses no common filter.</td>
 </tr>
+<tr>
+<td><code>/api/v1/public/media</code></td>
+<td>GET</td>
+<td>PUBLIC</td>
+<td>Public read-only media list. Only returns media with nullable owner (<code>user IS NULL</code>).</td>
+</tr>
+<tr>
+<td><code>/api/v1/public/media/{id}</code></td>
+<td>GET</td>
+<td>PUBLIC</td>
+<td>Public read-only media detail. Only returns media with nullable owner (<code>user IS NULL</code>).</td>
+</tr>
 </tbody>
 </table>
 <p>Multipart fields:
 - <code>file</code>: required uploaded file
 - <code>storage</code>: optional driver name, defaults to <code>MEDIA_STORAGE_DEFAULT</code> / <code>media.storage.default</code> (<code>local</code>)
+- <code>category</code>: optional <code>common_category</code> id; invalid ids return <code>Category is not found</code>
 - <code>alt</code>, <code>title</code>, <code>width</code>, <code>height</code>: optional metadata</p>
-<p><code>MediaService::createFromUpload()</code> validates file presence/size/MIME, resolves the selected storage driver, stores the physical file, persists <code>Common\Entity\Media</code>, and assigns the current authenticated <code>User</code> when available. <code>MediaService::remove()</code> best-effort deletes the physical file via the media's stored driver before removing the entity.</p>
-<p><code>Media</code> now stores <code>storage</code> and nullable owner <code>user</code> (<code>ManyToOne User</code>, <code>ON DELETE SET NULL</code>).</p>
+<p><code>MediaService::createFromUpload()</code> validates file presence/size/MIME, resolves the selected storage driver, stores the physical file, persists <code>Common\Entity\Media</code>, assigns the current authenticated <code>User</code> when available, and binds an optional <code>Category</code> from multipart <code>category</code>. <code>MediaService::remove()</code> best-effort deletes the physical file via the media's stored driver before removing the entity.</p>
+<p><code>Media</code> stores <code>storage</code>, nullable owner <code>user</code> (<code>ManyToOne User</code>, <code>ON DELETE SET NULL</code>), and nullable <code>category</code> (<code>ManyToOne Category</code>, <code>ON DELETE SET NULL</code>). Manage media create/update accepts <code>category</code> ids. Public media uses a QueryBuilder <code>commonFilter()</code> with <code>media.user IS NULL</code> because array criteria cannot express SQL <code>IS NULL</code>.</p>
 <h2 id="10-system-introspection-endpoints">10. System Introspection Endpoints<a class="headerlink" href="#10-system-introspection-endpoints" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -3160,7 +3173,7 @@
 <tr>
 <td><strong>commonFilter</strong></td>
 <td>Controllers</td>
-<td>Array of WHERE criteria injected into all queries. <code>[]</code> = no filter (admin), <code>['user' =&gt; $user]</code> = user-scoped, <code>['id' =&gt; -1]</code> = block all</td>
+<td>Array criteria or QueryBuilder injected into all queries. <code>[]</code> = no filter (admin), <code>['user' =&gt; $user]</code> = user-scoped, <code>['id' =&gt; -1]</code> = block all, QueryBuilder required for <code>IS NULL</code> filters</td>
 </tr>
 <tr>
 <td><strong>Payment via wallet</strong></td>
@@ -3205,7 +3218,7 @@
 <tr>
 <td><strong>Media ownership</strong></td>
 <td>Common</td>
-<td>App media endpoints are user-scoped via <code>commonFilter()</code>. Manage media endpoints inherit App upload code but override <code>commonFilter()</code> to <code>[]</code></td>
+<td>App media endpoints are user-scoped via <code>commonFilter()</code>. Manage media endpoints inherit App upload code but override <code>commonFilter()</code> to <code>[]</code>. Public media endpoints expose only ownerless media (<code>user IS NULL</code>) over anonymous GET.</td>
 </tr>
 <tr>
 <td><strong>System introspection</strong></td>
@@ -3293,7 +3306,7 @@
 </table>
 <h3 id="124-schema-configuration-configpackagesnelmio_api_docyaml">12.4 Schema Configuration (<code>config/packages/nelmio_api_doc.yaml</code>)<a class="headerlink" href="#124-schema-configuration-configpackagesnelmio_api_docyaml" title="Permanent link">&para;</a></h3>
 <p>42+ named schemas across 11 tags (Auth, Products, Orders, Categories, Tags, Contents, Comments, Pages, Media, Settings, Wallet, System, Wechat). Each with field-level type, description, enum, and example values. <code>path_patterns</code> includes both <code>^/api</code> and <code>^/system</code>.</p>
-<h2 id="13-database-tables-9-migrations">13. Database Tables (9 Migrations)<a class="headerlink" href="#13-database-tables-9-migrations" title="Permanent link">&para;</a></h2>
+<h2 id="13-database-tables-10-migrations">13. Database Tables (10 Migrations)<a class="headerlink" href="#13-database-tables-10-migrations" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -3337,6 +3350,10 @@
 <tr>
 <td>20260703000000</td>
 <td>Added to <code>common_media</code>: <code>storage</code>, nullable <code>user_id</code> FK to <code>users</code></td>
+</tr>
+<tr>
+<td>20260703010000</td>
+<td>Added to <code>common_media</code>: nullable <code>category_id</code> FK to <code>common_category</code></td>
 </tr>
 </tbody>
 </table>
@@ -3432,9 +3449,9 @@
 <li><strong>Framework</strong>: PHPUnit 12.5</li>
 <li><strong>DB</strong>: SQLite <code>var/test.db</code> in test environment</li>
 <li><strong>Coverage</strong>: 80% minimum (enforced in CI), currently <strong>88.37% lines</strong> (<code>4481/5071</code>) from latest local Xdebug run</li>
-<li><strong>Test count</strong>: <strong>1115 tests</strong>, <strong>~3850 assertions</strong></li>
+<li><strong>Test count</strong>: <strong>1123 tests</strong>, <strong>~3900 assertions</strong></li>
 <li><strong>Local PHP note</strong>: default <code>php</code> may point to PHP 7.4; use Homebrew PHP 8.5 at <code>/opt/homebrew/opt/php@8.5/bin/php</code> for local Symfony/PHPUnit commands.</li>
-<li><strong>Storage/upload coverage</strong>: new Storage + Media upload functionality is covered by real local-upload integration tests (<code>POST /api/v1/manage/media/upload</code> writes to <code>public/uploads</code>, then delete removes the file). Related code coverage is ~97.5% lines.</li>
+<li><strong>Storage/upload coverage</strong>: Storage + Media upload functionality is covered by real local-upload integration tests (<code>POST /api/v1/manage/media/upload</code> writes to <code>public/uploads</code>, then delete removes the file). Current focused media coverage is 100% for <code>App\Common\Controller\App\MediaController</code>, <code>Manage\MediaController</code>, <code>Public\MediaController</code>, <code>Common\Entity\Media</code>, and <code>MediaService</code>.</li>
 <li><strong>Key test groups</strong>:</li>
 <li><code>tests/Wechat/</code>: 59 tests (Entity, Service, AuthService, Payment/Gateway, Controller, Repository)</li>
 <li><code>tests/Trade/</code>: 171 tests (Entity, Service, Pricing, Integration, EventListener, Workflow API)</li>
