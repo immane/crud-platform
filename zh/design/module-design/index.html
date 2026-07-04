@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#module-design-contract" class="md-skip">
           跳转至
         </a>
       
@@ -596,7 +596,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         应用程序控制器（公共只读）
@@ -1528,7 +1528,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         应用程序控制器（公共只读）
@@ -1757,14 +1757,14 @@
   
 
 
-<h1 id="_1">模块设计合同<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h1 id="module-design-contract">Module Design Contract<a class="headerlink" href="#module-design-contract" title="Permanent link">&para;</a></h1>
 <blockquote>
 <p>创建新业务模块的规则。 <code>src/</code>下的每个模块都必须遵循这个结构和契约。
 这是使用新域扩展系统的蓝图。</p>
 </blockquote>
 <hr />
 <h2 id="1">1. 模块骨架<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<p>创建新的业务模块<code>{Module}</code>时：</p>
+<p>When creating a new business module <code>{Module}</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>src/{Module}/
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>|-- Controller/
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>|   |-- App/{Entity}Controller.php         # Public read endpoints
@@ -1792,7 +1792,7 @@
 <ul>
 <li><strong>位置</strong>：<code>src/{Module}/Repository/{Name}Repository.php</code></li>
 <li><strong>命名空间</strong>：<code>App\{Module}\Repository</code></li>
-<li><strong>必须</strong>：扩展<code>ServiceEntityRepository</code></li>
+<li><strong>必须</strong>：扩展 <code>ServiceEntityRepository</code></li>
 <li><strong>必须</strong>：在构造函数中接受 <code>ManagerRegistry</code></li>
 <li><strong>五月</strong>：添加返回实体/数组/标量的自定义查询方法</li>
 <li><strong>不能</strong>：返回原始 <code>QueryBuilder</code> （这是服务层关心的问题）</li>
@@ -1815,9 +1815,9 @@
 <ul>
 <li><strong>位置</strong>：<code>src/{Module}/Service/{Name}Service.php</code></li>
 <li><strong>命名空间</strong>：<code>App\{Module}\Service</code></li>
-<li><strong>必须</strong>：扩展<code>App\Core\Service\BaseService</code></li>
-<li><strong>必须</strong>：实施<code>{Name}ServiceInterface</code></li>
-<li><strong>必须</strong>：接受 <code>ContainerInterface</code>、实体类 FQCN、可选定位器/表达式服务</li>
+<li><strong>必须</strong>：扩展 <code>App\Core\Service\BaseService</code></li>
+<li><strong>必须</strong>：实施 <code>{Name}ServiceInterface</code></li>
+<li><strong>Must</strong>: Accept <code>ContainerInterface</code>, entity class FQCN, optional locator/expression service</li>
 <li><strong>应该</strong>：包含所有业务逻辑、验证和事务管理</li>
 <li><strong>不得</strong>：直接访问请求（使用 <code>getCurrentRequest()</code>）</li>
 <li><strong>不得</strong>：返回原始 HTTP 响应（这是控制器的工作）</li>
@@ -1842,23 +1842,23 @@
 </code></pre></div>
 <h3 id="25">2.5 控制者合约<a class="headerlink" href="#25" title="Permanent link">&para;</a></h3>
 <p>控制器有两个角色。有关完整详细信息，请参阅<a href="../controller-design/">Controller Design Contract</a>。</p>
-<h4 id="_2">应用程序控制器（公共只读）<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h4>
+<h4 id="_1">应用程序控制器（公共只读）<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h4>
 <ul>
 <li><strong>位置</strong>：<code>src/{Module}/Controller/App/{Name}Controller.php</code></li>
 <li><strong>命名空间</strong>：<code>App\{Module}\Controller\App</code></li>
 <li><strong>必须</strong>：扩展 <code>RestController</code></li>
 <li><strong>必须</strong>：使用 <code>ApiView</code>、<code>DetailApiViewMixin</code>、<code>ListApiViewMixin</code> 特征</li>
 <li><strong>必须</strong>：设置 <code>$serviceClass</code> 属性</li>
-<li><strong>应该</strong>：覆盖<code>commonFilter()</code>以范围数据（例如，<code>enabled = true</code>）</li>
+<li><strong>Should</strong>: Override <code>commonFilter()</code> to scope data (e.g., <code>enabled = true</code>)</li>
 <li><strong>不得</strong>：创建、更新或删除实体</li>
 </ul>
 <h4 id="crud">管理控制器（管理员 CRUD）<a class="headerlink" href="#crud" title="Permanent link">&para;</a></h4>
 <ul>
 <li><strong>位置</strong>：<code>src/{Module}/Controller/Manage/{Name}Controller.php</code></li>
 <li><strong>命名空间</strong>：<code>App\{Module}\Controller\Manage</code></li>
-<li><strong>必须</strong>：扩展<code>RestController</code></li>
+<li><strong>必须</strong>：扩展 <code>RestController</code></li>
 <li><strong>必须</strong>：使用 <code>ApiView</code>、<code>ListApiViewMixin</code>、<code>DetailApiViewMixin</code>、<code>CreateApiViewMixin</code>、<code>UpdateApiViewMixin</code>、<code>DeleteApiViewMixin</code> 特征</li>
-<li><strong>必须</strong>：设置 <code>$serviceClass</code> 属性</li>
+<li><strong>Must</strong>: Set <code>$serviceClass</code> property</li>
 <li><strong>必须</strong>：在课堂上使用 <code>#[IsGranted('ROLE_ADMIN')]</code> 进行防护</li>
 <li><strong>应该</strong>：声明 <code>$requiredCreateProperties</code>、<code>$acceptedCreateProperties</code>、<code>$acceptedUpdateProperties</code></li>
 <li><strong>可能</strong>：覆盖自定义逻辑的钩子方法</li>
@@ -1934,7 +1934,7 @@
 <li>[ ] 模块导出至少一个<code>*ServiceInterface</code></li>
 <li>[ ] 模块不从其他模块导入具体服务（使用接口）</li>
 <li>[ ] 模块的实体不被其他模块中的控制器直接引用</li>
-<li>[ ] 模块的服务是独立的（不泄漏 DB 连接或 EM）</li>
+<li>[ ] Module's services are self-contained (do not leak DB connections or EMs)</li>
 </ul>
 <hr />
 <h2 id="5">5. 模块测试合同<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
@@ -1969,7 +1969,7 @@
 <table>
 <thead>
 <tr>
-<th>测试类型</th>
+<th>Test Type</th>
 <th>延伸</th>
 <th>目的</th>
 </tr>
@@ -1988,7 +1988,7 @@
 <tr>
 <td>网页测试</td>
 <td><code>IntegrationWebTestCase</code></td>
-<td>完整的 HTTP 请求/响应</td>
+<td>Full HTTP request/response</td>
 </tr>
 </tbody>
 </table>
