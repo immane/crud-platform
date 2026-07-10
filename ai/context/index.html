@@ -2563,7 +2563,7 @@
 <a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>│   ├── app/entrypoint.sh         # Dev key generation + prod key validation
 <a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>│   └── nginx/default.conf        # nginx config (reverse proxy to PHP-FPM)
 <a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>└── .github/workflows/
-<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>    ├── ci.yml                    # CI: PHP 8.4, 80% coverage
+<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>    ├── ci.yml                    # CI: PHP 8.4, 90% coverage
 <a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>    └── docs.yml                  # GitHub Pages deploy
 </code></pre></div>
 <h2 id="3-request-lifecycle">3. Request Lifecycle<a class="headerlink" href="#3-request-lifecycle" title="Permanent link">&para;</a></h2>
@@ -3790,7 +3790,7 @@
 <ul>
 <li><strong>Framework</strong>: PHPUnit 12.5</li>
 <li><strong>DB</strong>: SQLite <code>var/test.db</code> in test environment</li>
-<li><strong>Coverage</strong>: 85% minimum (enforced in CI), currently <strong>90.06% lines</strong> (<code>4795/5324</code>) from latest local Xdebug run</li>
+<li><strong>Coverage</strong>: 90% minimum (enforced in CI), currently <strong>90.06% lines</strong> (<code>4795/5324</code>) from latest local Xdebug run</li>
 <li><strong>Test count</strong>: <strong>1221 tests</strong>, <strong>4199 assertions</strong></li>
 <li><strong>Local PHP note</strong>: default <code>php</code> may point to PHP 7.4; use Homebrew PHP 8.5 at <code>/opt/homebrew/opt/php@8.5/bin/php</code> for local Symfony/PHPUnit commands.</li>
 <li><strong>HTML coverage report</strong>: <code>XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html var/coverage</code></li>
