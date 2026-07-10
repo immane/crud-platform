@@ -2068,7 +2068,7 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>        └── services_promotion.yaml           # Strategy registration (tagged)
 </code></pre></div>
 <p>Modified files:
-- <code>src/Trade/Service/Pricing/PriceCalculationContext.php</code> — add <code>$user</code>, <code>$storeCode</code>, <code>$appliedPromotions</code>
+- <code>src/Trade/Service/Pricing/PriceCalculationContext.php</code> — add <code>$user</code>, <code>$storeCode</code>
 - <code>src/Trade/Service/OrderService.php</code> — inject user + storeCode into context in <code>calculatePrices()</code>
 - <code>config/routes.yaml</code> — add <code>api_promotion</code> route group</p>
 <hr />
@@ -2211,11 +2211,6 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <td>Values for DSL <code>config.*</code> placeholders (threshold, amount, gift spec ID, etc.)</td>
 </tr>
 <tr>
-<td><code>specifications</code></td>
-<td>M2M → <code>App\Trade\Entity\Specification</code></td>
-<td>Which product specs this applies to (empty = all)</td>
-</tr>
-<tr>
 <td><code>conflictMode</code></td>
 <td>string(30) default <code>'stackable'</code></td>
 <td><code>stackable</code></td>
@@ -2232,6 +2227,7 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 </tr>
 </tbody>
 </table>
+<p>Specification targeting is done via DSL conditions (<code>item.spec.id in config.target_specs</code>), not via entity relationship.</p>
 <h3 id="43-conflict-modes">4.3 Conflict Modes<a class="headerlink" href="#43-conflict-modes" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2731,7 +2727,7 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>  ├─ Resolve strategy by template.type
 <a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>  ├─ Execute each action in order:
 <a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>  │   └─ Strategy::apply(actionAst, context, config)
-<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>  └─ Mark promotion as applied in context.appliedPromotions[]
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>  └─ Mark promotion as applied in context.meta[&#39;promotion&#39;]
 </code></pre></div>
 <h3 id="84-chaining-loop">8.4 Chaining (Loop)<a class="headerlink" href="#84-chaining-loop" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="x">class PromotionCalculator implements PriceCalculatorInterface</span>
@@ -2749,7 +2745,7 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <a id="__codelineno-25-13" name="__codelineno-25-13" href="#__codelineno-25-13"></a>
 <a id="__codelineno-25-14" name="__codelineno-25-14" href="#__codelineno-25-14"></a><span class="x">            $this-&gt;promotionService-&gt;apply($promotion, $context);</span>
 <a id="__codelineno-25-15" name="__codelineno-25-15" href="#__codelineno-25-15"></a>
-<a id="__codelineno-25-16" name="__codelineno-25-16" href="#__codelineno-25-16"></a><span class="x">            $context-&gt;appliedPromotions[] = [</span>
+<a id="__codelineno-25-16" name="__codelineno-25-16" href="#__codelineno-25-16"></a><span class="x">            $innerApplied[] = [</span>
 <a id="__codelineno-25-17" name="__codelineno-25-17" href="#__codelineno-25-17"></a><span class="x">                &#39;promotion_id&#39; =&gt; $promotion-&gt;getId(),</span>
 <a id="__codelineno-25-18" name="__codelineno-25-18" href="#__codelineno-25-18"></a><span class="x">                &#39;promotion_name&#39; =&gt; $promotion-&gt;getName(),</span>
 <a id="__codelineno-25-19" name="__codelineno-25-19" href="#__codelineno-25-19"></a><span class="x">                &#39;template_name&#39; =&gt; $promotion-&gt;getTemplate()-&gt;getName(),</span>
@@ -2775,7 +2771,7 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <a id="__codelineno-25-39" name="__codelineno-25-39" href="#__codelineno-25-39"></a><span class="x">        );</span>
 <a id="__codelineno-25-40" name="__codelineno-25-40" href="#__codelineno-25-40"></a><span class="x">        if ($outerPromotion) {</span>
 <a id="__codelineno-25-41" name="__codelineno-25-41" href="#__codelineno-25-41"></a><span class="x">            $this-&gt;promotionService-&gt;apply($outerPromotion, $context);</span>
-<a id="__codelineno-25-42" name="__codelineno-25-42" href="#__codelineno-25-42"></a><span class="x">            $context-&gt;appliedPromotions[] = [ /* ... */ ];</span>
+<a id="__codelineno-25-42" name="__codelineno-25-42" href="#__codelineno-25-42"></a><span class="x">            $context-&gt;meta[&#39;promotion&#39;] = [&#39;inner&#39; =&gt; $innerApplied, &#39;outer&#39; =&gt; [...]];</span>
 <a id="__codelineno-25-43" name="__codelineno-25-43" href="#__codelineno-25-43"></a><span class="x">        }</span>
 <a id="__codelineno-25-44" name="__codelineno-25-44" href="#__codelineno-25-44"></a><span class="x">    }</span>
 <a id="__codelineno-25-45" name="__codelineno-25-45" href="#__codelineno-25-45"></a>
@@ -2795,20 +2791,21 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a>
 <a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="x">    /** Store identifier for multi-store promotion filtering */</span>
 <a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a><span class="x">    public ?string $storeCode = null;</span>
-<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a>
-<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a><span class="x">    /** Promotions applied during calculation (for audit/display) */</span>
-<a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a><span class="x">    public array $appliedPromotions = [];</span>
-<a id="__codelineno-26-13" name="__codelineno-26-13" href="#__codelineno-26-13"></a><span class="x">}</span>
+<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a><span class="x">}</span>
+<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a>
+<a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a><span class="x">// Promotion results are written to context.meta[&#39;promotion&#39;] —</span>
+<a id="__codelineno-26-13" name="__codelineno-26-13" href="#__codelineno-26-13"></a><span class="x">// Trade never reads this structure, maintaining full decoupling.</span>
 </code></pre></div>
 <h3 id="92-orderservice-change">9.2 OrderService Change<a class="headerlink" href="#92-orderservice-change" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="x">public function calculatePrices(array $items, string $currency = &#39;CNY&#39;, ?string $storeCode = null): PriceCalculationResult</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="x">public function calculatePrices(array $items, string $currency = &#39;CNY&#39;, ?string $storeCode = null, array $meta = []): PriceCalculationResult</span>
 <a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="x">{</span>
 <a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="x">    $context = new PriceCalculationContext($items, $currency);</span>
 <a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="x">    $context-&gt;user = $this-&gt;user;</span>
 <a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="x">    $context-&gt;storeCode = $storeCode;</span>
-<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>
-<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="x">    // ... existing calculator chain ...</span>
-<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="x">}</span>
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="x">    $context-&gt;meta = $meta;    // ← bidirectional channel for calculators</span>
+<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>
+<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="x">    // ... existing calculator chain ...</span>
+<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="x">}</span>
 </code></pre></div>
 <h3 id="93-calculator-chain-final">9.3 Calculator Chain (Final)<a class="headerlink" href="#93-calculator-chain-final" title="Permanent link">&para;</a></h3>
 <table>
@@ -3133,7 +3130,7 @@ on <code>PromotionCalculator</code> handles the pipeline tag.</p>
 <li><code>getAvailable()</code> — query + filter + sort</li>
 <li><code>getFirstAvailable()</code> — top match</li>
 <li><code>apply()</code> — execute actions via strategy</li>
-<li>Add <code>$user</code>, <code>$storeCode</code>, <code>$appliedPromotions</code> to <code>PriceCalculationContext</code>.</li>
+<li>Add <code>$user</code>, <code>$storeCode</code> to <code>PriceCalculationContext</code>.</li>
 <li>Modify <code>OrderService::calculatePrices()</code> to inject user + storeCode.</li>
 <li>Create <code>PromotionCalculator</code> implementing <code>PriceCalculatorInterface</code>.</li>
 <li>Unit tests for Evaluator, engine, and each strategy.</li>
@@ -3147,7 +3144,7 @@ on <code>PromotionCalculator</code> handles the pipeline tag.</p>
 </ol>
 <h3 id="phase-5-observability-and-reporting">Phase 5: Observability and Reporting<a class="headerlink" href="#phase-5-observability-and-reporting" title="Permanent link">&para;</a></h3>
 <ol>
-<li><code>appliedPromotions</code> with before/after snapshots.</li>
+<li>Promotion results written to <code>context.meta['promotion']</code> with before/after snapshots.</li>
 <li>Promotion execution log for debugging.</li>
 <li>Endpoint: <code>/api/v1/app/promotions</code> with time-window + storeCode filtering.</li>
 </ol>
@@ -3171,7 +3168,7 @@ on <code>PromotionCalculator</code> handles the pipeline tag.</p>
 </tr>
 <tr>
 <td>Should <code>appliedPromotions</code> be persisted on Order?</td>
-<td>No for first phase: stored in calculation result only.</td>
+<td>No. Results stored in <code>context.meta['promotion']</code>, passed through <code>PriceCalculationResult.meta</code> to frontend.</td>
 </tr>
 <tr>
 <td>Max loop iterations?</td>

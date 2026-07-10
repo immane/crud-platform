@@ -2068,7 +2068,7 @@
 <a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>        └── services_promotion.yaml           # Strategy registration (tagged)
 </code></pre></div>
 <p>修改后的文件：
-- <code>src/Trade/Service/Pricing/PriceCalculationContext.php</code> — 添加<code>$user</code>、<code>$storeCode</code>、<code>$appliedPromotions</code>
+- <code>src/Trade/Service/Pricing/PriceCalculationContext.php</code> — 添加<code>$user</code>、<code>$storeCode</code>
 - <code>src/Trade/Service/OrderService.php</code> — 将 user + storeCode 注入到 <code>calculatePrices()</code> 中的上下文中
 - <code>config/routes.yaml</code> — 添加<code>api_promotion</code>路由组</p>
 <hr />
@@ -2211,11 +2211,6 @@
 <td>DSL <code>config.*</code> 占位符的值（阈值、金额、礼品规格 ID 等）</td>
 </tr>
 <tr>
-<td><code>specifications</code></td>
-<td>M2M → <code>App\Trade\Entity\Specification</code></td>
-<td>这适用于哪些产品规格（空=全部）</td>
-</tr>
-<tr>
 <td><code>conflictMode</code></td>
 <td>字符串(30) 默认 <code>'stackable'</code></td>
 <td><code>stackable</code></td>
@@ -2232,6 +2227,7 @@
 </tr>
 </tbody>
 </table>
+<p>规范定位是通过 DSL 条件 (<code>item.spec.id in config.target_specs</code>) 完成的，而不是通过实体关系完成的。</p>
 <h3 id="43">4.3 冲突模式<a class="headerlink" href="#43" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2731,7 +2727,7 @@
 <a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>  ├─ Resolve strategy by template.type
 <a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>  ├─ Execute each action in order:
 <a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>  │   └─ Strategy::apply(actionAst, context, config)
-<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>  └─ Mark promotion as applied in context.appliedPromotions[]
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>  └─ Mark promotion as applied in context.meta[&#39;promotion&#39;]
 </code></pre></div>
 <h3 id="84">8.4 链接（循环）<a class="headerlink" href="#84" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="x">class PromotionCalculator implements PriceCalculatorInterface</span>
@@ -2749,7 +2745,7 @@
 <a id="__codelineno-25-13" name="__codelineno-25-13" href="#__codelineno-25-13"></a>
 <a id="__codelineno-25-14" name="__codelineno-25-14" href="#__codelineno-25-14"></a><span class="x">            $this-&gt;promotionService-&gt;apply($promotion, $context);</span>
 <a id="__codelineno-25-15" name="__codelineno-25-15" href="#__codelineno-25-15"></a>
-<a id="__codelineno-25-16" name="__codelineno-25-16" href="#__codelineno-25-16"></a><span class="x">            $context-&gt;appliedPromotions[] = [</span>
+<a id="__codelineno-25-16" name="__codelineno-25-16" href="#__codelineno-25-16"></a><span class="x">            $innerApplied[] = [</span>
 <a id="__codelineno-25-17" name="__codelineno-25-17" href="#__codelineno-25-17"></a><span class="x">                &#39;promotion_id&#39; =&gt; $promotion-&gt;getId(),</span>
 <a id="__codelineno-25-18" name="__codelineno-25-18" href="#__codelineno-25-18"></a><span class="x">                &#39;promotion_name&#39; =&gt; $promotion-&gt;getName(),</span>
 <a id="__codelineno-25-19" name="__codelineno-25-19" href="#__codelineno-25-19"></a><span class="x">                &#39;template_name&#39; =&gt; $promotion-&gt;getTemplate()-&gt;getName(),</span>
@@ -2775,7 +2771,7 @@
 <a id="__codelineno-25-39" name="__codelineno-25-39" href="#__codelineno-25-39"></a><span class="x">        );</span>
 <a id="__codelineno-25-40" name="__codelineno-25-40" href="#__codelineno-25-40"></a><span class="x">        if ($outerPromotion) {</span>
 <a id="__codelineno-25-41" name="__codelineno-25-41" href="#__codelineno-25-41"></a><span class="x">            $this-&gt;promotionService-&gt;apply($outerPromotion, $context);</span>
-<a id="__codelineno-25-42" name="__codelineno-25-42" href="#__codelineno-25-42"></a><span class="x">            $context-&gt;appliedPromotions[] = [ /* ... */ ];</span>
+<a id="__codelineno-25-42" name="__codelineno-25-42" href="#__codelineno-25-42"></a><span class="x">            $context-&gt;meta[&#39;promotion&#39;] = [&#39;inner&#39; =&gt; $innerApplied, &#39;outer&#39; =&gt; [...]];</span>
 <a id="__codelineno-25-43" name="__codelineno-25-43" href="#__codelineno-25-43"></a><span class="x">        }</span>
 <a id="__codelineno-25-44" name="__codelineno-25-44" href="#__codelineno-25-44"></a><span class="x">    }</span>
 <a id="__codelineno-25-45" name="__codelineno-25-45" href="#__codelineno-25-45"></a>
@@ -2795,20 +2791,21 @@
 <a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a>
 <a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="x">    /** Store identifier for multi-store promotion filtering */</span>
 <a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a><span class="x">    public ?string $storeCode = null;</span>
-<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a>
-<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a><span class="x">    /** Promotions applied during calculation (for audit/display) */</span>
-<a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a><span class="x">    public array $appliedPromotions = [];</span>
-<a id="__codelineno-26-13" name="__codelineno-26-13" href="#__codelineno-26-13"></a><span class="x">}</span>
+<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a><span class="x">}</span>
+<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a>
+<a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a><span class="x">// Promotion results are written to context.meta[&#39;promotion&#39;] —</span>
+<a id="__codelineno-26-13" name="__codelineno-26-13" href="#__codelineno-26-13"></a><span class="x">// Trade never reads this structure, maintaining full decoupling.</span>
 </code></pre></div>
 <h3 id="92">9.2 订单服务变更<a class="headerlink" href="#92" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="x">public function calculatePrices(array $items, string $currency = &#39;CNY&#39;, ?string $storeCode = null): PriceCalculationResult</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="x">public function calculatePrices(array $items, string $currency = &#39;CNY&#39;, ?string $storeCode = null, array $meta = []): PriceCalculationResult</span>
 <a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="x">{</span>
 <a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="x">    $context = new PriceCalculationContext($items, $currency);</span>
 <a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="x">    $context-&gt;user = $this-&gt;user;</span>
 <a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="x">    $context-&gt;storeCode = $storeCode;</span>
-<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>
-<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="x">    // ... existing calculator chain ...</span>
-<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="x">}</span>
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="x">    $context-&gt;meta = $meta;    // ← bidirectional channel for calculators</span>
+<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>
+<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="x">    // ... existing calculator chain ...</span>
+<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="x">}</span>
 </code></pre></div>
 <h3 id="93">9.3 计算器链（最终）<a class="headerlink" href="#93" title="Permanent link">&para;</a></h3>
 <table>
@@ -3020,8 +3017,8 @@
 <a id="__codelineno-30-21" name="__codelineno-30-21" href="#__codelineno-30-21"></a><span class="x">}</span>
 </code></pre></div>
 <h3 id="123">12.3 应用程序/促销控制器<a class="headerlink" href="#123" title="Permanent link">&para;</a></h3>
-<p>只读；仅使用<code>ApiView</code>、<code>DetailApiViewMixin</code>、<code>ListApiViewMixin</code>。
-<code>commonFilter()</code> 限制为 <code>enabled = true</code> 且时间窗口处于活动状态，可通过 <code>?storeCode=</code> 进行过滤。</p>
+<p>只读；仅使用 <code>ApiView</code>、<code>DetailApiViewMixin</code>、<code>ListApiViewMixin</code>。
+<code>commonFilter()</code> 限制为 <code>enabled = true</code> 和时间窗口活动，可通过 <code>?storeCode=</code> 过滤。</p>
 <hr />
 <h2 id="13-dsl">13. DSL 更新流程<a class="headerlink" href="#13-dsl" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>PUT /manage/promotion-templates/{id}
@@ -3105,7 +3102,7 @@
 <h3 id="1-dsl">第 1 阶段：核心实体和 DSL 解析器<a class="headerlink" href="#1-dsl" title="Permanent link">&para;</a></h3>
 <ol>
 <li>创建具有属性、存储库的 <code>PromotionTemplate</code> 实体。</li>
-<li>创建具有属性、存储库的 <code>Promotion</code> 实体。</li>
+<li>创建具有属性、存储库的<code>Promotion</code>实体。</li>
 <li>实现 <code>Lexer</code> — 标记 DSL 文本。</li>
 <li>实现 <code>Parser</code> — tokens → AST，带有错误恢复。</li>
 <li>实现<code>AstNode</code>类。</li>
@@ -3133,8 +3130,8 @@
 <li><code>getAvailable()</code> — 查询+过滤+排序</li>
 <li><code>getFirstAvailable()</code> — 顶级匹配</li>
 <li><code>apply()</code> — 通过策略执行操作</li>
-<li>在<code>PriceCalculationContext</code>中添加<code>$user</code>、<code>$storeCode</code>、<code>$appliedPromotions</code>。
-6.修改<code>OrderService::calculatePrices()</code>注入user+storeCode。</li>
+<li>在<code>PriceCalculationContext</code>中添加<code>$user</code>、<code>$storeCode</code>。</li>
+<li>修改<code>OrderService::calculatePrices()</code>注入user + storeCode。</li>
 <li>创建实现 <code>PriceCalculatorInterface</code> 的 <code>PromotionCalculator</code>。</li>
 <li>Evaluator、引擎和每个策略的单元测试。</li>
 </ol>
@@ -3147,7 +3144,7 @@
 </ol>
 <h3 id="5">第 5 阶段：可观察性和报告<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
 <ol>
-<li><code>appliedPromotions</code> 带有之前/之后的快照。</li>
+<li>升级结果写入<code>context.meta['promotion']</code>，并带有之前/之后的快照。</li>
 <li>提升执行日志以供调试。</li>
 <li>端点：<code>/api/v1/app/promotions</code>，带有时间窗口+storeCode 过滤。</li>
 </ol>
@@ -3171,7 +3168,7 @@
 </tr>
 <tr>
 <td><code>appliedPromotions</code> 应该在订单上保留吗？</td>
-<td>第一阶段否：仅存储在计算结果中。</td>
+<td>否。结果存储在 <code>context.meta['promotion']</code> 中，通过 <code>PriceCalculationResult.meta</code> 传递到前端。</td>
 </tr>
 <tr>
 <td>最大循环迭代次数？</td>

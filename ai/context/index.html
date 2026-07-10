@@ -1155,10 +1155,32 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#42-user-management-manage" class="md-nav__link">
+  <a href="#42-profile-app" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.2 User Management (Manage)
+        4.2 Profile (App)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-user-management-manage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 User Management (Manage)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-profile-management-manage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Profile Management (Manage)
       
     </span>
   </a>
@@ -1603,10 +1625,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#15-database-tables-10-migrations" class="md-nav__link">
+  <a href="#15-database-tables-12-migrations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15. Database Tables (10 Migrations)
+        15. Database Tables (12 Migrations)
       
     </span>
   </a>
@@ -1847,10 +1869,32 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#42-user-management-manage" class="md-nav__link">
+  <a href="#42-profile-app" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.2 User Management (Manage)
+        4.2 Profile (App)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-user-management-manage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 User Management (Manage)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-profile-management-manage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Profile Management (Manage)
       
     </span>
   </a>
@@ -2295,10 +2339,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#15-database-tables-10-migrations" class="md-nav__link">
+  <a href="#15-database-tables-12-migrations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15. Database Tables (10 Migrations)
+        15. Database Tables (12 Migrations)
       
     </span>
   </a>
@@ -2451,7 +2495,7 @@
 - <strong>PHP 8.4+</strong>, Doctrine ORM 3.6, MySQL 8 (Docker), SQLite (tests)
 - JWT authentication (RS256), OTP/SMS login, WeChat Mini Program / Official Account login
 - Expression-based dynamic query engine (<code>@filter</code>, <code>@sort</code>, <code>@dql</code>)
-- Modular architecture: <strong>Core</strong> (framework), <strong>Common</strong> (CMS), <strong>Identity</strong> (auth), <strong>Trade</strong> (e-commerce), <strong>Payment</strong> (invoices), <strong>Wallet</strong> (balances), <strong>Wechat</strong> (login + pay), <strong>Storage</strong> (file upload drivers)
+- Modular architecture: <strong>Core</strong> (framework), <strong>Common</strong> (CMS), <strong>Promotion</strong> (DSL-driven promotions), <strong>Identity</strong> (auth), <strong>Trade</strong> (e-commerce), <strong>Payment</strong> (invoices), <strong>Wallet</strong> (balances), <strong>Wechat</strong> (login + pay), <strong>Storage</strong> (file upload drivers)
 - EasyWeChat 6.x integration (Mini Program, Official Account OAuth, WeChat Pay V3)
 - NelmioApiDoc (Swagger at <code>/api/doc</code>), PHPUnit 12.5, Docker Compose (5 services)
 - MkDocs Material + GitHub Pages documentation
@@ -2480,11 +2524,11 @@
 <a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│   └── Controller/App/ + Manage/ + Public/
 <a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>├── src/Identity/                 # Authentication &amp; Identity
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>│   ├── Entity/User.php, RefreshToken.php     # User has __toString(): username fallback to email
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>│   ├── Entity/User.php, RefreshToken.php, Profile.php     # User has __toString(): username fallback to email; User::$profile (OneToOne→Profile)
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│   ├── Security/JwtAuthenticator.php, TokenManager.php
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>│   ├── Service/OtpService.php, UserService.php, SMS providers
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>│   ├── Command/CreateUserCommand.php
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>│   └── Controller/AuthController.php, App/UserController.php, Manage/UserController.php
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>│   └── Controller/AuthController.php, App/UserController.php, App/ProfileController.php, Manage/UserController.php, Manage/ProfileController.php
 <a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>│
 <a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>├── src/Trade/                    # E-commerce module
 <a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>│   ├── Entity/                   # Product, Specification, Order, OrderItem
@@ -2532,44 +2576,54 @@
 <a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>│   ├── Service/QiniuStorage.php                # Qiniu Kodo cloud storage (optional SDK)
 <a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>│   └── Resources/config/services_storage.yaml
 <a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>│
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>├── config/
-<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>│   ├── services.yaml             # Service wiring + imports src/*/Resources/config + exclusions
-<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>│   ├── routes.yaml               # Route imports (wechat, wechat_app, wechat_manage added)
-<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>│   └── packages/
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>│       ├── nelmio_api_doc.yaml   # OpenAPI 3.1 config: System + Wechat tags
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>│       ├── security.yaml         # PUBLIC_ACCESS: docs/auth/webhooks/wechat + GET /api/v1/public/*
-<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>│       ├── translation.yaml      # Translator config: default_locale en, translations/ path
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>│       ├── workflow.yaml         # Order state machine (draft→completed)
-<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>│       └── ...
-<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>├── migrations/                   # Doctrine migrations (latest adds media category relation)
-<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>├── translations/                 # i18n translation files (messages.en/zh/zh_Hant/ja.yaml)
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>├── docs/
-<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>│   ├── ai/context.md             # This file
-<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>│   ├── design/                   # Design contracts
-<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>│   │   └── bundles/              # Per-module design docs (core, common, trade, wallet, identity, wechat)
-<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>│   └── openapi/                       # endpoints.yaml + order/payment frontend flow docs
-<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>├── scripts/tests/                # Test scripts
-<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>├── tests/                        # 1221 PHPUnit tests, 4199 assertions, 90%+ coverage
-<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>├── README.md                     # English README
-<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>├── README.zh-cn.md               # Chinese (Simplified) README
-<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>├── README.zh-hant.md             # Chinese (Traditional) README
-<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>├── README.ja.md                  # Japanese README
-<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>├── mkdocs.yml                    # MkDocs Material config
-<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>├── compose.yaml                  # Production deployment: app (PHP-FPM), nginx, MySQL, Redis, Mailpit
-<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports)
-<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>├── Dockerfile                    # PHP 8.4-FPM Alpine with openssl + JWT key entrypoint
-<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>├── .dockerignore                 # Build context exclusions (tests, docs, dev files)
-<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>├── docker/
-<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>│   ├── app/entrypoint.sh         # Dev key generation + prod key validation
-<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>│   └── nginx/default.conf        # nginx config (reverse proxy to PHP-FPM)
-<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>└── .github/workflows/
-<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>    ├── ci.yml                    # CI: PHP 8.4, 90% coverage
-<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>    └── docs.yml                  # GitHub Pages deploy
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>├── src/Promotion/                # Promotion module (DSL-driven promotion engine)
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>│   ├── Entity/                   # PromotionTemplate, Promotion
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>│   ├── Repository/
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>│   ├── Service/                  # PromotionService, PromotionTemplateService, PromotionCalculator
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>│   │   └── Dsl/                  # DSL lexer/parser/evaluator
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>│   ├── Strategy/                 # 7 strategies: FullReduction, Discount, Gift, NthItemDiscount, Tiered, FreeShipping, MemberDiscount
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>│   ├── Controller/App/           # Read-only endpoints
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>│   ├── Controller/Manage/        # Admin CRUD endpoints
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>│   └── Exception/
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>│
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>├── config/
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>│   ├── services.yaml             # Service wiring + imports src/*/Resources/config + exclusions
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>│   ├── routes.yaml               # Route imports (wechat, wechat_app, wechat_manage added)
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>│   └── packages/
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>│       ├── nelmio_api_doc.yaml   # OpenAPI 3.1 config: System + Wechat tags
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>│       ├── security.yaml         # PUBLIC_ACCESS: docs/auth/webhooks/wechat + GET /api/v1/public/*
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>│       ├── translation.yaml      # Translator config: default_locale en, translations/ path
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>│       ├── workflow.yaml         # Order state machine (draft→completed)
+<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>│       └── ...
+<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>├── migrations/                   # Doctrine migrations (latest adds media category relation)
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>├── translations/                 # i18n translation files (messages.en/zh/zh_Hant/ja.yaml)
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>├── docs/
+<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>│   ├── ai/context.md             # This file
+<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>│   ├── design/                   # Design contracts
+<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>│   │   └── bundles/              # Per-module design docs (core, common, trade, wallet, identity, wechat, payment, storage, promotion)
+<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>│   └── openapi/                       # endpoints.yaml + order/payment frontend flow docs
+<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>├── scripts/tests/                # Test scripts
+<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>├── tests/                        # 1589 PHPUnit tests, 5165 assertions, 91%+ coverage
+<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>├── README.md                     # English README
+<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>├── README.zh-cn.md               # Chinese (Simplified) README
+<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>├── README.zh-hant.md             # Chinese (Traditional) README
+<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>├── README.ja.md                  # Japanese README
+<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>├── mkdocs.yml                    # MkDocs Material config
+<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>├── compose.yaml                  # Production deployment: app (PHP-FPM), nginx, MySQL, Redis, Mailpit
+<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports)
+<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>├── Dockerfile                    # PHP 8.4-FPM Alpine with openssl + JWT key entrypoint
+<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>├── .dockerignore                 # Build context exclusions (tests, docs, dev files)
+<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>├── docker/
+<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>│   ├── app/entrypoint.sh         # Dev key generation + prod key validation
+<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>│   └── nginx/default.conf        # nginx config (reverse proxy to PHP-FPM)
+<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>└── .github/workflows/
+<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>    ├── ci.yml                    # CI: PHP 8.4, 90% coverage
+<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>    └── docs.yml                  # GitHub Pages deploy
 </code></pre></div>
 <h2 id="3-request-lifecycle">3. Request Lifecycle<a class="headerlink" href="#3-request-lifecycle" title="Permanent link">&para;</a></h2>
 <ol>
 <li><code>public/index.php</code> → <code>App\Kernel</code> (MicroKernelTrait)</li>
-<li><code>config/routes.yaml</code> imports: <code>/api/v1</code> (Common/Trade/Wallet/Payment/Wechat App+Manage), <code>/api/auth</code> (Identity), <code>/api/wechat</code> (Wechat login), <code>/system</code> (introspection), <code>/api/payment/notify</code> (webhook)</li>
+<li><code>config/routes.yaml</code> imports: <code>/api/v1</code> (Common/Trade/Wallet/Payment/Promotion/Wechat App+Manage), <code>/api/auth</code> (Identity), <code>/api/wechat</code> (Wechat login), <code>/system</code> (introspection), <code>/api/payment/notify</code> (webhook)</li>
 <li><code>JwtAuthenticator</code> intercepts all <code>/api</code> routes (except public paths listed in security.yaml)</li>
 <li>Controller action (trait mixin or custom method) → <code>BaseService</code> methods → Doctrine EntityManager → DB</li>
 <li><code>RestController::success()</code> / <code>warning()</code> → JSON <code>{data, code, message, paginator}</code></li>
@@ -2678,7 +2732,33 @@
 </tr>
 </tbody>
 </table>
-<h3 id="42-user-management-manage">4.2 User Management (Manage)<a class="headerlink" href="#42-user-management-manage" title="Permanent link">&para;</a></h3>
+<h3 id="42-profile-app">4.2 Profile (App)<a class="headerlink" href="#42-profile-app" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Auth</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/app/profiles</code></td>
+<td>ROLE_USER</td>
+<td>Current user profile (self-service: nickname, avatar, metadata)</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/api/v1/app/profiles</code></td>
+<td>ROLE_USER</td>
+<td>Update nickname, avatar, metadata (level is admin-only)</td>
+</tr>
+</tbody>
+</table>
+<p>Profile is auto-created on User registration via a Doctrine lifecycle listener. Points are delegated to Wallet (currency=POINTS). Formerly named Member.</p>
+<h3 id="43-user-management-manage">4.3 User Management (Manage)<a class="headerlink" href="#43-user-management-manage" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2700,6 +2780,25 @@
 <td><code>/api/v1/manage/users/{id}/change-password</code></td>
 <td>ROLE_ADMIN</td>
 <td>Admin change user password</td>
+</tr>
+</tbody>
+</table>
+<h3 id="44-profile-management-manage">4.4 Profile Management (Manage)<a class="headerlink" href="#44-profile-management-manage" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Auth</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET/POST/PUT/DELETE</td>
+<td><code>/api/v1/manage/profiles/*</code></td>
+<td>ROLE_ADMIN</td>
+<td>Admin profile CRUD (including level)</td>
 </tr>
 </tbody>
 </table>
@@ -2798,8 +2897,8 @@
 </thead>
 <tbody>
 <tr>
-<td><code>calculatePrices(items, currency)</code></td>
-<td>Pipeline: BasePriceCalculator → QuantityCalculator → TotalAggregator</td>
+<td><code>calculatePrices(items, currency, storeCode?, meta?)</code></td>
+<td>Pipeline: BasePriceCalculator → QuantityCalculator → <strong>TotalAggregator (subtotal, priority 55)</strong> → <strong>PromotionCalculator (priority 60)</strong>. <code>meta</code> is an opaque bidirectional channel for calculators.</td>
 </tr>
 <tr>
 <td><code>createOrder(items, user, total, currency, notes, metadata)</code></td>
@@ -2887,6 +2986,11 @@
 <td>Create with price calculation</td>
 </tr>
 <tr>
+<td><strong>POST</strong></td>
+<td><strong><code>/manage/orders/quote</code></strong></td>
+<td><strong>Price preview without creating order</strong></td>
+</tr>
+<tr>
 <td>PUT</td>
 <td><code>/manage/orders/{id}</code></td>
 <td>Update draft only</td>
@@ -2947,6 +3051,16 @@
 <td>POST</td>
 <td><code>/app/orders</code></td>
 <td>Create order (auto-assigns user). Accepts optional <code>metadata</code> JSON payload and persists it directly.</td>
+</tr>
+<tr>
+<td><strong>POST</strong></td>
+<td><strong><code>/app/orders/quote</code></strong></td>
+<td><strong>Price preview without creating order</strong></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/app/orders/{id}/items</code></td>
+<td>View own order items</td>
 </tr>
 <tr>
 <td>GET</td>
@@ -3480,6 +3594,11 @@
 <td><code>PriceCalculatorInterface</code> with priority ordering</td>
 </tr>
 <tr>
+<td><strong>Meta channel</strong></td>
+<td>Trade</td>
+<td><code>PriceCalculationContext.meta</code> / <code>PriceCalculationResult.meta</code> — bidirectional opaque channel. Calculators read/write module-specific keys (<code>meta['promotion']</code>, <code>meta['coupon']</code>). Trade never inspects content.</td>
+</tr>
+<tr>
 <td><strong>Optimistic locking</strong></td>
 <td>Wallet</td>
 <td><code>#[ORM\Version]</code> on Wallet</td>
@@ -3559,6 +3678,31 @@
 <td>Core</td>
 <td>Entity metadata + route export via <code>/system/*</code> endpoints</td>
 </tr>
+<tr>
+<td><strong>Promotion DSL</strong></td>
+<td>Promotion</td>
+<td>Custom lexer/parser/evaluator for human-readable promotion rules</td>
+</tr>
+<tr>
+<td><strong>Promotion strategy tag</strong></td>
+<td>Promotion</td>
+<td><code>promotion.strategy</code> auto-tag for strategy implementations, collected via <code>#[AutowireIterator]</code></td>
+</tr>
+<tr>
+<td><strong>Promotion calculator pipeline</strong></td>
+<td>Promotion</td>
+<td><code>PromotionCalculator</code> tagged <code>trade.price_calculator</code> (priority 60). TotalAggregator runs at priority 55 to establish the subtotal before promotion evaluation.</td>
+</tr>
+<tr>
+<td><strong>Profile auto-creation</strong></td>
+<td>Identity</td>
+<td><code>Profile</code> entity created on User registration via Doctrine lifecycle listener; user has <code>$profile</code> (OneToOne) instead of <code>$member</code></td>
+</tr>
+<tr>
+<td><strong>Points delegated to Wallet</strong></td>
+<td>Identity</td>
+<td>Profile points use Wallet with currency=POINTS</td>
+</tr>
 </tbody>
 </table>
 <h2 id="14-api-documentation-system">14. API Documentation System<a class="headerlink" href="#14-api-documentation-system" title="Permanent link">&para;</a></h2>
@@ -3629,6 +3773,14 @@
 <td>Settings</td>
 </tr>
 <tr>
+<td><code>manage-promotions-*</code>, <code>app-promotions-*</code></td>
+<td>Promotions</td>
+</tr>
+<tr>
+<td><code>manage-promotion-templates-*</code>, <code>app-promotion-templates-*</code></td>
+<td>PromotionTemplates</td>
+</tr>
+<tr>
 <td><code>manage-wallets-*</code>, <code>manage-transactions-*</code>, <code>manage-transfers-*</code></td>
 <td>Wallet</td>
 </tr>
@@ -3639,8 +3791,8 @@
 </tbody>
 </table>
 <h3 id="144-schema-configuration-configpackagesnelmio_api_docyaml">14.4 Schema Configuration (<code>config/packages/nelmio_api_doc.yaml</code>)<a class="headerlink" href="#144-schema-configuration-configpackagesnelmio_api_docyaml" title="Permanent link">&para;</a></h3>
-<p>42+ named schemas across 11 tags (Auth, Products, Orders, Categories, Tags, Contents, Comments, Pages, Media, Settings, Wallet, System, Wechat). Each with field-level type, description, enum, and example values. <code>path_patterns</code> includes both <code>^/api</code> and <code>^/system</code>.</p>
-<h2 id="15-database-tables-10-migrations">15. Database Tables (10 Migrations)<a class="headerlink" href="#15-database-tables-10-migrations" title="Permanent link">&para;</a></h2>
+<p>44+ named schemas across 13 tags (Auth, Products, Orders, Categories, Tags, Contents, Comments, Pages, Media, Settings, Promotions, PromotionTemplates, Wallet, System, Wechat). Each with field-level type, description, enum, and example values. <code>path_patterns</code> includes both <code>^/api</code> and <code>^/system</code>.</p>
+<h2 id="15-database-tables-12-migrations">15. Database Tables (12 Migrations)<a class="headerlink" href="#15-database-tables-12-migrations" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -3688,6 +3840,14 @@
 <tr>
 <td>20260703010000</td>
 <td>Added to <code>common_media</code>: nullable <code>category_id</code> FK to <code>common_category</code></td>
+</tr>
+<tr>
+<td>20260703020000</td>
+<td><code>identity_profile</code> (replaces <code>member</code> table; level, nickname, avatar, metadata; FK to <code>users</code>)</td>
+</tr>
+<tr>
+<td>20260704000000</td>
+<td><code>promotion_template</code>, <code>promotion</code> (DSL text, AST cache, per-store config, time range, <code>IDX_PROMOTION_ACTIVE_STORE</code> composite index)</td>
 </tr>
 </tbody>
 </table>
@@ -3761,6 +3921,10 @@
 <td>Storage module design (pluggable file upload drivers)</td>
 </tr>
 <tr>
+<td><code>docs/design/bundles/promotion.md</code></td>
+<td>Promotion module design (DSL engine, 7 strategy types, tagged calculator)</td>
+</tr>
+<tr>
 <td><code>docs/openapi/order-payment-flow.md</code></td>
 <td>Frontend order/payment/cancel/refund API integration guide, including WeChat Mini Program pay</td>
 </tr>
@@ -3790,18 +3954,20 @@
 <ul>
 <li><strong>Framework</strong>: PHPUnit 12.5</li>
 <li><strong>DB</strong>: SQLite <code>var/test.db</code> in test environment</li>
-<li><strong>Coverage</strong>: 90% minimum (enforced in CI), currently <strong>90.06% lines</strong> (<code>4795/5324</code>) from latest local Xdebug run</li>
-<li><strong>Test count</strong>: <strong>1221 tests</strong>, <strong>4199 assertions</strong></li>
+<li><strong>Coverage</strong>: 90% minimum (enforced in CI), currently <strong>91.12% lines</strong> from latest local Xdebug run</li>
+<li><strong>Test count</strong>: <strong>1589 tests</strong>, <strong>5165 assertions</strong></li>
 <li><strong>Local PHP note</strong>: default <code>php</code> may point to PHP 7.4; use Homebrew PHP 8.5 at <code>/opt/homebrew/opt/php@8.5/bin/php</code> for local Symfony/PHPUnit commands.</li>
 <li><strong>HTML coverage report</strong>: <code>XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html var/coverage</code></li>
 <li><strong>Key test groups</strong>:</li>
 <li><code>tests/Trade/</code>: 171+ tests + Controller/Manage/OrderControllerTest (16 tests for not-found, workflow guards, payment validation)</li>
 <li><code>tests/Wallet/</code>: ~105 tests (Entity, Integration, Transfer Service, WalletService, Payment/Gateway, API regression)</li>
 <li><code>tests/Common/</code>: 69 tests (Entity, Integration, Batch update, media upload/delete)</li>
-<li><code>tests/Identity/</code>: 92 tests (Auth, OTP, Token, Black box, UserService, UserController, UserApiIntegration)</li>
+<li><code>tests/Identity/</code>: 116+ tests (Auth, OTP, Token, Black box, UserService, UserController, UserApiIntegration, Profile entity, ProfileController)</li>
+<li><code>tests/Promotion/</code>: 320+ tests (Entity, DSL lexer/parser/evaluator, Strategies, Engine, Calculator, App/Manage controllers, real SQLite pipeline integration with Doctrine + OrderService)</li>
 <li><code>tests/Payment/</code>: ~60 tests (Gateway, Registry, Adjustment/Provider, Invoice, Multi-gateway integration)</li>
 <li><code>tests/Wechat/</code>: 59 tests (Entity, Service, AuthService, Payment/Gateway, Controller, Repository)</li>
 <li><code>tests/Core/</code>: 70+ tests (BaseService, RestController, Parser, Serializer, LocaleListener, MutationTrait, Utils, System controllers)</li>
+<li><code>tests/Promotion/Integration/</code>: 8 real SQLite quote pipeline tests (store isolation, global campaigns, member-targeted item discounts, stacking, best-price conflict, Nth-item, multi-SKU, expiry, mixed rules)</li>
 <li><code>tests/Integration/</code>: ~20 cross-module tests</li>
 </ul>
 <h2 id="18-environment-variables-key">18. Environment Variables (Key)<a class="headerlink" href="#18-environment-variables-key" title="Permanent link">&para;</a></h2>
@@ -3922,7 +4088,9 @@
 <li><code>PaymentGatewayInterface</code> implementations auto-tagged <code>payment.gateway</code>, collected via <code>#[AutowireIterator]</code></li>
 <li><code>PaymentAdjustmentProviderInterface</code> implementations auto-tagged <code>payment.adjustment_provider</code>, collected via <code>#[AutowireIterator]</code></li>
 <li><code>MediaStorageInterface</code> implementations tagged <code>media.storage</code>, collected via <code>#[AutowireIterator]</code>; <code>LocalStorage</code>/<code>QiniuStorage</code> are explicitly wired in <code>src/Storage/Resources/config/services_storage.yaml</code> because they need scalar/config/repository constructor arguments</li>
-<li><code>PriceCalculatorInterface</code> implementations auto-tagged <code>trade.price_calculator</code>, sorted by <code>getPriority()</code></li>
+<li><code>PriceCalculatorInterface</code> implementations auto-tagged <code>trade.price_calculator</code>, sorted by <code>getPriority()</code> — pipeline: BasePriceCalculator(-100) → QuantityCalculator(50) → <strong>TotalAggregator(55)</strong> (establishes subtotal) → <strong>PromotionCalculator(60)</strong> (applies order-level adjustments on the real subtotal)</li>
+<li><code>PromotionCalculator</code> (<code>App\Promotion\Service\PromotionCalculator</code>) implements <code>PriceCalculatorInterface</code>, tagged <code>trade.price_calculator</code> at priority 60, applies promotions after the subtotal is aggregated</li>
+<li>Promotion strategies auto-tagged <code>promotion.strategy</code> via <code>_instanceof</code> rule, collected by <code>#[AutowireIterator]</code> in the strategy registry</li>
 <li><code>WechatService</code> explicitly defined in <code>services_wechat.yaml</code> with <code>%env()</code> parameter bindings</li>
 <li><code>WechatPayGateway</code> explicitly defined in <code>services_wechat.yaml</code> (excluded from global autowiring scan)</li>
 <li><code>WalletGateway</code> autowired in Wallet via <code>PaymentGatewayInterface</code> tag (no explicit exclusion needed)</li>

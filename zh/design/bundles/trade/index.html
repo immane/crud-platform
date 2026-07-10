@@ -902,10 +902,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#54-dto" class="md-nav__link">
+  <a href="#54" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5.4 DTO
+        5.4 管道执行
       
     </span>
   </a>
@@ -913,10 +913,32 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#55" class="md-nav__link">
+  <a href="#55-dto" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5.5 注册
+        5.5 个 DTO
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56-meta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6 meta 渠道合约
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#57" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7 注册
       
     </span>
   </a>
@@ -986,6 +1008,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="7. 订单创建流程">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 报价流程（订单预览）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1737,10 +1776,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#54-dto" class="md-nav__link">
+  <a href="#54" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5.4 DTO
+        5.4 管道执行
       
     </span>
   </a>
@@ -1748,10 +1787,32 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#55" class="md-nav__link">
+  <a href="#55-dto" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5.5 注册
+        5.5 个 DTO
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56-meta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6 meta 渠道合约
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#57" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7 注册
       
     </span>
   </a>
@@ -1821,6 +1882,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="7. 订单创建流程">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 报价流程（订单预览）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2108,7 +2186,7 @@
 <a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>|       |-- PriceCalculationResult.php     # Result DTO
 <a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>|       |-- BasePriceCalculator.php        # Resolves specs, extracts unit price
 <a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>|       |-- QuantityCalculator.php         # Computes price = unitPrice * quantity
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>|       |-- TotalAggregator.php            # Sums all items into totalAmount
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>|       |-- TotalAggregator.php            # Establishes subtotal (priority 55)
 </code></pre></div>
 <hr />
 <h2 id="3">3. 实体关系<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
@@ -2162,7 +2240,7 @@
 <li><code>unitPrice</code>：订购时规格价格的快照（美分）</li>
 <li><code>price</code>：<code>unitPrice * quantity</code>，在<code>#[ORM\PrePersist]</code>中自动计算</li>
 <li><code>cost</code>、<code>profit</code>：用于保证金跟踪</li>
-<li><code>specSnapshot</code>、<code>productSnapshot</code>：创建时捕获的 JSON 快照以用于历史记录</li>
+<li><code>specSnapshot</code>、<code>productSnapshot</code>：创建历史记录时捕获的 JSON 快照</li>
 </ul>
 <hr />
 <h2 id="5">5. 价格计算管道<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
@@ -2179,6 +2257,7 @@
 <tr>
 <th>优先</th>
 <th>计算器</th>
+<th>模块</th>
 <th>责任</th>
 </tr>
 </thead>
@@ -2186,20 +2265,30 @@
 <tr>
 <td>-100</td>
 <td>-100 <code>BasePriceCalculator</code></td>
+<td>贸易</td>
 <td>解析规范实体、验证活动/未删除、提取单价、捕获快照</td>
 </tr>
 <tr>
 <td>50</td>
 <td>50 <code>QuantityCalculator</code></td>
+<td>贸易</td>
 <td>计算每个项目的 <code>price = unitPrice * quantity</code></td>
 </tr>
 <tr>
-<td>100</td>
-<td>100 <code>TotalAggregator</code></td>
-<td>将所有商品价格汇总到 <code>context.totalAmount</code></td>
+<td><strong>55</strong></td>
+<td><strong><code>TotalAggregator</code></strong></td>
+<td><strong>贸易</strong></td>
+<td><strong>在促销评估之前建立小计</strong></td>
+</tr>
+<tr>
+<td><strong>60</strong></td>
+<td><strong><code>PromotionCalculator</code></strong></td>
+<td><strong>促销</strong></td>
+<td><strong>DSL 评估 → 匹配 → 应用（最多 20 次迭代、应用 ID 跟踪、独占/锁定项目/最佳价格冲突模式）</strong></td>
 </tr>
 </tbody>
 </table>
+<p>外部模块（例如，<code>Promotion</code>、未来的<code>Coupon</code>）通过实现<code>PriceCalculatorInterface</code>并使用<code>#[AutoconfigureTag('trade.price_calculator')]</code>进行标记来挂钩到管道中。贸易对这些模块的认知度为零。</p>
 <h3 id="53">5.3 管道执行<a class="headerlink" href="#53" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>OrderService::calculatePrices($items, $currency)
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  -&gt; Collect all PriceCalculatorInterface implementations (auto-tagged)
@@ -2207,59 +2296,105 @@
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  -&gt; Execute each in sequence on PriceCalculationContext
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>  -&gt; Return PriceCalculationResult (items, totalAmount, currency)
 </code></pre></div>
-<h3 id="54-dto">5.4 DTO<a class="headerlink" href="#54-dto" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">class PriceCalculationContext</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">{</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">    public array $inputItems;     // Raw input from request</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="x">    public array $items;          // Mutated by calculators</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="x">    public int $totalAmount;      // Final total in cents</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="x">    public string $currency;      // e.g., &#39;CNY&#39;</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="x">    public array $meta;           // Extensible metadata</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="x">}</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="x">class PriceCalculationResult</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="x">{</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="x">    public int $totalAmount;</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="x">    public string $currency;</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="x">    public array $items;          // Calculated order items</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="x">}</span>
+<h3 id="54">5.4 管道执行<a class="headerlink" href="#54" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>OrderService::calculatePrices($items, $currency, $storeCode = null, $meta = [])
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  -&gt; Create PriceCalculationContext with items, currency, user, storeCode, meta
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>  -&gt; Collect all PriceCalculatorInterface implementations (auto-tagged)
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>  -&gt; Sort by getPriority() ascending
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>  -&gt; Execute each in sequence on PriceCalculationContext
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>     (BasePriceCalculator → QuantityCalculator → TotalAggregator → PromotionCalculator)
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>  -&gt; Return PriceCalculationResult (items, totalAmount, currency, meta)
 </code></pre></div>
-<h3 id="55">5.5 注册<a class="headerlink" href="#55" title="Permanent link">&para;</a></h3>
+<h3 id="55-dto">5.5 个 DTO<a class="headerlink" href="#55-dto" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">class PriceCalculationContext</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">{</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="x">    public array $inputItems;     // Raw input from request</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="x">    public array $items;          // Mutated by calculators</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="x">    public int $totalAmount;      // Final total in cents</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="x">    public string $currency;      // e.g., &#39;CNY&#39;</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="x">    public array $meta = [];      // Bidirectional opaque channel for calculators</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="x">    public ?object $user = null;  // Current user (for member-level conditions)</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="x">    public ?string $storeCode = null; // Multi-store routing</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="x">}</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="x">class PriceCalculationResult</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="x">{</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="x">    public int $totalAmount;</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="x">    public string $currency;</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="x">    public array $items;          // Calculated order items</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="x">    public array $meta;           // From context.meta (carries promotion/coupon results)</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="x">}</span>
+</code></pre></div>
+<h3 id="56-meta">5.6 <code>meta</code> 渠道合约<a class="headerlink" href="#56-meta" title="Permanent link">&para;</a></h3>
+<p><code>meta</code> 是 Trade 从不检查的不透明数组。计算器从中读取作为输入
+并将其写入作为输出。合同是：</p>
+<table>
+<thead>
+<tr>
+<th>方向</th>
+<th>示例</th>
+<th>设置者</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>客户端→计算器</td>
+<td><code>{coupon: {code: "ABC123"}}</code></td>
+<td>请求正文 → <code>calculatePrices($items, $currency, $storeCode, $meta)</code></td>
+</tr>
+<tr>
+<td>计算器 → 客户端</td>
+<td><code>{promotion: {inner: [...], outer: {...}}}</code></td>
+<td><code>PromotionCalculator</code> 写入 <code>context.meta['promotion']</code></td>
+</tr>
+<tr>
+<td>任意键均可共存</td>
+<td><code>{promotion: {...}, coupon: {...}, existing: "..."}</code></td>
+<td>多种计算器</td>
+</tr>
+</tbody>
+</table>
+<p><strong>保证</strong>：
+- Trade 永远不会读取或改变 <code>meta</code> 内容 - 它会保持不变。
+- <code>PriceCalculationResult::fromContext()</code> 将 <code>context.meta</code> 逐字复制到结果中。
+- 新模块（例如优惠券）遵循相同的模式：实现<code>PriceCalculatorInterface</code>，
+  从<code>context.meta['coupon']</code>读取，写入<code>context.meta['coupon']</code>。</p>
+<h3 id="57">5.7 注册<a class="headerlink" href="#57" title="Permanent link">&para;</a></h3>
 <p>计算器通过 <code>config/services.yaml</code> 自动发现和标记：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">services</span><span class="p">:</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">App\Trade\Service\Pricing\</span><span class="p">:</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;../src/Trade/Service/Pricing/&#39;</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;trade.price_calculator&#39;</span><span class="p p-Indicator">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">App\Trade\Service\Pricing\</span><span class="p">:</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;../src/Trade/Service/Pricing/&#39;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;trade.price_calculator&#39;</span><span class="p p-Indicator">]</span>
 </code></pre></div>
 <p>可以通过实现该接口来添加新的计算器——无需更改其他代码。</p>
 <hr />
 <h2 id="6">6. 订单状态机<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
 <h3 id="61">6.1 配置<a class="headerlink" href="#61" title="Permanent link">&para;</a></h3>
 <p><strong>文件</strong>：<code>config/packages/workflow.yaml</code></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">framework</span><span class="p">:</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">workflows</span><span class="p">:</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nt">order</span><span class="p">:</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state_machine</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">      </span><span class="nt">marking_store</span><span class="p">:</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">method</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">        </span><span class="nt">property</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">status</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">      </span><span class="nt">places</span><span class="p">:</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">draft</span>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pending</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">confirmed</span>
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">paid</span>
-<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fulfilled</span>
-<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">completed</span>
-<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cancelled</span>
-<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">refunded</span>
-<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">      </span><span class="nt">transitions</span><span class="p">:</span>
-<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="w">        </span><span class="nt">submit</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">draft -&gt; pending</span>
-<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">        </span><span class="nt">confirm</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">pending -&gt; confirmed</span>
-<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="w">        </span><span class="nt">pay</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">confirmed -&gt; paid</span>
-<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="w">        </span><span class="nt">fulfill</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">paid -&gt; fulfilled</span>
-<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="w">        </span><span class="nt">complete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fulfilled -&gt; completed</span>
-<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="w">        </span><span class="nt">cancel</span><span class="p">:</span><span class="w">   </span><span class="p p-Indicator">[</span><span class="nv">draft</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pending</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">confirmed</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-&gt; cancelled</span>
-<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="w">        </span><span class="nt">refund</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">completed -&gt; refunded</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">framework</span><span class="p">:</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">workflows</span><span class="p">:</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="nt">order</span><span class="p">:</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state_machine</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">      </span><span class="nt">marking_store</span><span class="p">:</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">method</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">        </span><span class="nt">property</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">status</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">      </span><span class="nt">places</span><span class="p">:</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">draft</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pending</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">confirmed</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">paid</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fulfilled</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">completed</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cancelled</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">refunded</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">      </span><span class="nt">transitions</span><span class="p">:</span>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">        </span><span class="nt">submit</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">draft -&gt; pending</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">        </span><span class="nt">confirm</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">pending -&gt; confirmed</span>
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="w">        </span><span class="nt">pay</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">confirmed -&gt; paid</span>
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="w">        </span><span class="nt">fulfill</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">paid -&gt; fulfilled</span>
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="w">        </span><span class="nt">complete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fulfilled -&gt; completed</span>
+<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a><span class="w">        </span><span class="nt">cancel</span><span class="p">:</span><span class="w">   </span><span class="p p-Indicator">[</span><span class="nv">draft</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pending</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">confirmed</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-&gt; cancelled</span>
+<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a><span class="w">        </span><span class="nt">refund</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">completed -&gt; refunded</span>
 </code></pre></div>
 <h3 id="62">6.2 有效转换<a class="headerlink" href="#62" title="Permanent link">&para;</a></h3>
 <table>
@@ -2319,31 +2454,54 @@
 </tbody>
 </table>
 <h3 id="63">6.3 工作流监听器<a class="headerlink" href="#63" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="x">class OrderWorkflowListener</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="x">{</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="x">    // On cancel transition -&gt; set cancelledAt = now</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="x">    // On complete transition -&gt; set completedAt = now</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="x">class OrderWorkflowListener</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="x">{</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="x">    // On cancel transition -&gt; set cancelledAt = now</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="x">    // On complete transition -&gt; set completedAt = now</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="x">}</span>
 </code></pre></div>
 <hr />
 <h2 id="7">7. 订单创建流程<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>POST /api/v1/manage/orders
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  Body: {items: [{specification: {id: N}, quantity: N}, ...], currency: &quot;CNY&quot;, notes: &quot;...&quot;}
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>  |
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>  v
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>OrderService::calculatePrices($items, $currency)
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>  -&gt; Price Calculation Pipeline
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>  -&gt; Returns PriceCalculationResult
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>  |
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>  v
-<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>OrderService::createOrder($calculatedItems, $user, $totalAmount, $currency, $notes)
-<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>  -&gt; Within transaction:
-<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>     -&gt; Create Order entity
-<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>     -&gt; For each calculated item: create OrderItem
-<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>        -&gt; Snapshot spec + product data
-<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>        -&gt; Auto-calculate price = unitPrice * quantity (PrePersist)
-<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>     -&gt; Persist + flush
-<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>  -&gt; Returns Order entity
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>POST /api/v1/manage/orders
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  Body: {items: [{specification: {id: N}, quantity: N}, ...], currency: &quot;CNY&quot;, notes: &quot;...&quot;, meta: {coupon: {...}}}
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  |
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>  v
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>OrderService::calculatePrices($items, $currency, $storeCode, $meta)
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>  -&gt; Create PriceCalculationContext(items, currency)
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>  -&gt; Set context.user, context.storeCode, context.meta = $meta
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>   -&gt; Price Calculation Pipeline (Base → Quantity → TotalAggregator [subtotal] → Promotion)
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>   -&gt; Returns PriceCalculationResult (items, totalAmount, currency, meta)
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>  |
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>  v
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>OrderService::createOrder($calculatedItems, $user, $totalAmount, $currency, $notes)
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>  -&gt; Within transaction:
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>     -&gt; Create Order entity
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>     -&gt; For each calculated item: create OrderItem
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>        -&gt; Snapshot spec + product data
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>        -&gt; Auto-calculate price = unitPrice * quantity (PrePersist)
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>     -&gt; Persist + flush
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>  -&gt; Returns Order entity
+</code></pre></div>
+<h3 id="71">7.1 报价流程（订单预览）<a class="headerlink" href="#71" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>POST /api/v1/app/orders/quote
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>  Body: {items: [{specificationId: N, quantity: N}, ...], meta: {coupon: {code: &quot;ABC&quot;}}}
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>  |
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>  v
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>OrderService::calculatePrices($items, $currency, $storeCode, $meta)
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>  -&gt; Returns PriceCalculationResult (items, totalAmount, currency, meta)
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>  -&gt; No Order is persisted — pure pricing preview
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>Response:
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>{
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>  data: {
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>    items: [{specificationId: 1, unitPrice: 10000, price: 10000, ...}],
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>    totalAmount: 8000,
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>    currency: &quot;CNY&quot;,
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>    meta: {
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>      promotion: { inner: [{promotionId: 1, promotionName: &quot;满减&quot;, ...}] }
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>    }
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>  }
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>}
 </code></pre></div>
 <hr />
 <h2 id="8-api">8. API 端点<a class="headerlink" href="#8-api" title="Permanent link">&para;</a></h2>
@@ -2421,6 +2579,11 @@
 <td>发布</td>
 <td><code>/api/v1/manage/orders</code></td>
 <td>创建订单（自定义逻辑）</td>
+</tr>
+<tr>
+<td><strong>发布</strong></td>
+<td><strong><code>/api/v1/manage/orders/quote</code></strong></td>
+<td><strong>无需创建订单即可计算价格</strong></td>
 </tr>
 <tr>
 <td>放置</td>
@@ -2525,6 +2688,11 @@
 <td>创建订单</td>
 </tr>
 <tr>
+<td><strong>发布</strong></td>
+<td><strong><code>/api/v1/app/orders/quote</code></strong></td>
+<td><strong>无需创建订单即可计算价格</strong></td>
+</tr>
+<tr>
 <td>获取</td>
 <td><code>/api/v1/app/orders/{id}/items</code></td>
 <td>查看订单项目</td>
@@ -2546,7 +2714,7 @@
 <ul>
 <li><code>todo</code>：列出至少有一个已启用转换的所有订单</li>
 <li><code>transitions</code>：返回特定订单的可用转换</li>
-<li><code>do/{transition}</code>：在事务中执行指定的转换，可以选择在转换之前接受数据来更新实体</li>
+<li><code>do/{transition}</code>：在事务中执行指定的转换，可以选择接受数据以在转换之前更新实体</li>
 </ul>
 <h3 id="94">9.4 付款（支付）<a class="headerlink" href="#94" title="Permanent link">&para;</a></h3>
 <ul>
@@ -2592,7 +2760,7 @@
 <tbody>
 <tr>
 <td>存储</td>
-<td><code>bigint</code> 数据库中的（分）</td>
+<td>数据库中的<code>bigint</code>（分）</td>
 </tr>
 <tr>
 <td>PHP 类型</td>
@@ -2642,11 +2810,19 @@
 </tr>
 <tr>
 <td><code>tests/Trade/Pricing/</code></td>
-<td>基本价格计算器、数量计算器、总计聚合器</td>
+<td>BasePriceCalculator、QuantityCalculator、TotalAggregator、PriceCalculationResult</td>
+</tr>
+<tr>
+<td><code>tests/Trade/Controller/</code></td>
+<td>OrderController 创建/报价/列表/详细信息</td>
 </tr>
 <tr>
 <td><code>tests/Trade/Integration/</code></td>
 <td>产品存储库、订单存储库集成</td>
+</tr>
+<tr>
+<td><code>tests/Promotion/Integration/</code></td>
+<td>使用 Doctrine + 实际 OrderService 进行 8 个真实 SQLite 管道测试</td>
 </tr>
 </tbody>
 </table>
