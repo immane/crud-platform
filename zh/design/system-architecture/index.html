@@ -1857,7 +1857,7 @@
 <td>R1</td>
 <td>控制器</td>
 <td>服务</td>
-<td><strong>YES</strong></td>
+<td><strong>是</strong></td>
 </tr>
 <tr>
 <td>R2</td>
@@ -1916,7 +1916,7 @@
 <tr>
 <td>R11</td>
 <td>实体</td>
-<td>EntityManager</td>
+<td>实体管理器</td>
 <td><strong>不</strong></td>
 </tr>
 </tbody>
@@ -1955,7 +1955,7 @@
 </tr>
 <tr>
 <td>服务类别</td>
-<td>Extends <code>BaseService</code>, implements <code>{Name}ServiceInterface</code></td>
+<td>扩展 <code>BaseService</code>，实现 <code>{Name}ServiceInterface</code></td>
 </tr>
 <tr>
 <td>服务接口</td>
@@ -1994,7 +1994,7 @@
 <td>DI（自动装配B的服务<strong>接口</strong>）</td>
 </tr>
 <tr>
-<td>Any Module</td>
+<td>任何模块</td>
 <td>身份</td>
 <td>DI（当前用户的TokenStorage）</td>
 </tr>
@@ -2031,7 +2031,7 @@
 <ul>
 <li>每个模块<strong>导出</strong>服务接口（例如，<code>CategoryServiceInterface</code>）</li>
 <li>其他模块<strong>仅使用</strong>那些接口，从不具体实现</li>
-<li>Interfaces are auto-discovered via <code>services.yaml</code></li>
+<li>通过<code>services.yaml</code>自动发现接口</li>
 </ul>
 <hr />
 <h2 id="4-srccore">4. 核心框架（<code>src/Core/</code>）<a class="headerlink" href="#4-srccore" title="Permanent link">&para;</a></h2>
@@ -2053,7 +2053,7 @@
 </tr>
 <tr>
 <td><code>BaseService</code></td>
-<td>Abstract class</td>
+<td>抽象类</td>
 <td>所有服务</td>
 </tr>
 <tr>
@@ -2082,7 +2082,7 @@
 <td>所有控制器模板</td>
 </tr>
 <tr>
-<td>Utility classes</td>
+<td>实用类</td>
 <td>静态助手</td>
 <td>任何地方</td>
 </tr>
@@ -2102,7 +2102,7 @@
 <li>显式排除（在 <code>services.yaml</code> 中手动连接）：</li>
 <li>装饰器（例如，<code>FlatNormalizer</code>装饰<code>serializer.normalizer.object</code>）</li>
 <li>安全组件（JwtAuthenticator、TokenManager）</li>
-<li>SMS/OTP infrastructure adapters</li>
+<li>SMS/OTP 基础设施适配器</li>
 <li>事件监听器（用于排序）</li>
 </ul>
 <h3 id="52-setter">5.2 控制器的 Setter 注入<a class="headerlink" href="#52-setter" title="Permanent link">&para;</a></h3>
@@ -2167,7 +2167,7 @@
 </tr>
 <tr>
 <td>业务 API 路由 (<code>/api/v1/*</code>)</td>
-<td><code>config/routes.yaml</code> prefix + namespace scan</td>
+<td><code>config/routes.yaml</code> 前缀 + 命名空间扫描</td>
 </tr>
 <tr>
 <td>API 文档 (<code>/api/doc</code>)</td>

@@ -526,7 +526,7 @@
   <a href="#22" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2 列名
+        2.2 列名称
       
     </span>
   </a>
@@ -1580,7 +1580,7 @@
   <a href="#22" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2 列名
+        2.2 列名称
       
     </span>
   </a>
@@ -2042,7 +2042,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="22">2.2 列名<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
+<h3 id="22">2.2 列名称<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2390,7 +2390,7 @@
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">private bool $isDeleted = false;</span>
 </code></pre></div>
 <p><strong>使用时间</strong>：实体永远不应该被硬删除（审计跟踪、法律要求）。</p>
-<p><strong>Consequence</strong>: All queries MUST filter <code>isDeleted = false</code> (via <code>commonFilter()</code> in controller).</p>
+<p><strong>结果</strong>：所有查询必须过滤 <code>isDeleted = false</code> （通过控制器中的 <code>commonFilter()</code>）。</p>
 <h3 id="73">7.3 价值快照<a class="headerlink" href="#73" title="Permanent link">&para;</a></h3>
 <p>当一个实体捕获另一个实体状态的时间点副本时：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">#[ORM\Column(type: &#39;json&#39;, nullable: true)]</span>
@@ -2404,7 +2404,7 @@
 </code></pre></div>
 <p><strong>使用时间</strong>：对同一记录的并发更新存在数据损坏的风险（例如钱包余额）。</p>
 <h3 id="75">7.5 多态关联<a class="headerlink" href="#75" title="Permanent link">&para;</a></h3>
-<p>For comments/reactions referencing different entity types:</p>
+<p>对于引用不同实体类型的评论/反应：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">#[ORM\Column(length: 100)]</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">private string $entityType;  // e.g., &#39;App\Common\Entity\Content&#39;</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
@@ -2449,7 +2449,7 @@
 </ul>
 <hr />
 <h2 id="9">9. 验证合约<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
-<p>Entities define validation rules via attributes or annotations:</p>
+<p>实体通过属性或注释定义验证规则：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="x">use Symfony\Component\Validator\Constraints as Assert;</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="x">#[Assert\NotBlank]</span>
@@ -2470,7 +2470,7 @@
 <thead>
 <tr>
 <th>反模式</th>
-<th>What to Do Instead</th>
+<th>该怎么办？</th>
 </tr>
 </thead>
 <tbody>
@@ -2495,7 +2495,7 @@
 <td>使用 <code>DateTimeImmutable</code></td>
 </tr>
 <tr>
-<td>Exposing internal IDs as external identifiers</td>
+<td>将内部 ID 公开为外部标识符</td>
 <td>使用 UUID 进行面向外部的引用</td>
 </tr>
 <tr>
