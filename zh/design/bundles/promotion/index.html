@@ -1664,10 +1664,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#102-app-public" class="md-nav__link">
+  <a href="#102" class="md-nav__link">
     <span class="md-ellipsis">
       
-        10.2 App (Public)
+        10.2 应用程序（公共）
       
     </span>
   </a>
@@ -1691,15 +1691,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#12-controller-design" class="md-nav__link">
+  <a href="#12" class="md-nav__link">
     <span class="md-ellipsis">
       
-        12. Controller Design
+        12. 控制器设计
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="12. Controller Design">
+    <nav class="md-nav" aria-label="12. 控制器设计">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2862,7 +2862,7 @@
 <tr>
 <td>获取</td>
 <td><code>/api/v1/manage/promotion-templates</code></td>
-<td>List templates</td>
+<td>列表模板</td>
 </tr>
 <tr>
 <td>获取</td>
@@ -2902,26 +2902,26 @@
 <tr>
 <td>获取</td>
 <td><code>/api/v1/manage/promotions/{id}</code></td>
-<td>Promotion detail</td>
+<td>促销详情</td>
 </tr>
 <tr>
 <td>发布</td>
 <td><code>/api/v1/manage/promotions</code></td>
-<td>Create promotion</td>
+<td>创建促销</td>
 </tr>
 <tr>
 <td>放置</td>
 <td><code>/api/v1/manage/promotions/{id}</code></td>
-<td>Update promotion</td>
+<td>更新促销</td>
 </tr>
 <tr>
 <td>删除</td>
 <td><code>/api/v1/manage/promotions/{id}</code></td>
-<td>Delete promotion</td>
+<td>删除促销</td>
 </tr>
 </tbody>
 </table>
-<h3 id="102-app-public">10.2 App (Public)<a class="headerlink" href="#102-app-public" title="Permanent link">&para;</a></h3>
+<h3 id="102">10.2 应用程序（公共）<a class="headerlink" href="#102" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2954,7 +2954,7 @@
 <a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attribute</span>
 </code></pre></div>
 <hr />
-<h2 id="12-controller-design">12. Controller Design<a class="headerlink" href="#12-controller-design" title="Permanent link">&para;</a></h2>
+<h2 id="12">12. 控制器设计<a class="headerlink" href="#12" title="Permanent link">&para;</a></h2>
 <h3 id="121">12.1 升级模板控制器<a class="headerlink" href="#121" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="x">#[Route(&#39;/manage/promotion-templates&#39;, name: &#39;manage-promotion-templates-&#39;)]</span>
 <a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="x">#[IsGranted(&#39;ROLE_ADMIN&#39;)]</span>
