@@ -910,7 +910,7 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        用户服务
+        档案管理（管理）
       
     </span>
   </a>
@@ -921,7 +921,7 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        安全考虑
+        个人资料应用程序自助服务（应用程序）
       
     </span>
   </a>
@@ -932,7 +932,7 @@
   <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        阿里云短信集成
+        档案服务
       
     </span>
   </a>
@@ -943,7 +943,7 @@
   <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
-        实施说明
+        安全考虑
       
     </span>
   </a>
@@ -954,7 +954,7 @@
   <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
-        测试覆盖率
+        阿里云短信集成
       
     </span>
   </a>
@@ -963,6 +963,28 @@
       
         <li class="md-nav__item">
   <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实施说明
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        测试覆盖率
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
     <span class="md-ellipsis">
       
         后续步骤
@@ -1383,7 +1405,7 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        用户服务
+        档案管理（管理）
       
     </span>
   </a>
@@ -1394,7 +1416,7 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        安全考虑
+        个人资料应用程序自助服务（应用程序）
       
     </span>
   </a>
@@ -1405,7 +1427,7 @@
   <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        阿里云短信集成
+        档案服务
       
     </span>
   </a>
@@ -1416,7 +1438,7 @@
   <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
-        实施说明
+        安全考虑
       
     </span>
   </a>
@@ -1427,7 +1449,7 @@
   <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
-        测试覆盖率
+        阿里云短信集成
       
     </span>
   </a>
@@ -1436,6 +1458,28 @@
       
         <li class="md-nav__item">
   <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实施说明
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        测试覆盖率
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
     <span class="md-ellipsis">
       
         后续步骤
@@ -1476,6 +1520,7 @@
 <li><strong>基于密码的用户自行注册</strong> (<code>POST /api/auth/register</code>)</li>
 <li><strong>用户配置文件管理</strong>，包括密码更改和配置文件更新</li>
 <li><strong>管理员用户 CRUD</strong> 具有托管密码更改</li>
+<li><strong>个人资料管理</strong>：分级会员资格（青铜/白银/黄金/白金/钻石），与用户1:1自动创建，积分委托给钱包（货币=积分）。还携带昵称/头像/元数据作为用户配置文件数据。</li>
 </ul>
 <h2 id="_3">目标<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
@@ -1623,8 +1668,188 @@
 </tr>
 </tbody>
 </table>
-<h2 id="_7">用户服务<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
-<p><code>App\Identity\Service\UserService</code>扩展了<code>BaseService</code>并封装了所有用户业务逻辑：</p>
+<h2 id="_7">档案管理（管理）<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<p><code>Profile</code> 是身份配置文件实体：用户的 1:1 扩展，在用户保留时自动创建。
+它包含会员级别、个人资料字段（昵称/头像/元数据）和 joinAt。
+会员积分存储在钱包中（货币=积分），而不是存储在个人资料中。</p>
+<table>
+<thead>
+<tr>
+<th>实体</th>
+<th>表</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Profile</code></td>
+<td><code>identity_profile</code></td>
+<td>1:1 用户扩展：级别、昵称、头像、元数据、joinedAt</td>
+</tr>
+</tbody>
+</table>
+<p><strong>级别常数：</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">public const LEVEL_BRONZE = &#39;bronze&#39;;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">public const LEVEL_SILVER = &#39;silver&#39;;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">public const LEVEL_GOLD = &#39;gold&#39;;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="x">public const LEVEL_PLATINUM = &#39;platinum&#39;;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="x">public const LEVEL_DIAMOND = &#39;diamond&#39;;</span>
+</code></pre></div>
+<p><strong>级别层次结构（对于 <code>findByLevelOrAbove</code>）：</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>bronze (0) &lt; silver (1) &lt; gold (2) &lt; platinum (3) &lt; diamond (4)
+</code></pre></div>
+<p><strong>个人资料字段：</strong></p>
+<table>
+<thead>
+<tr>
+<th>领域</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nickname</code></td>
+<td>字符串（255）可为空</td>
+<td>显示名称（显示时优先于用户名）</td>
+</tr>
+<tr>
+<td><code>avatar</code></td>
+<td>字符串（500）可为空</td>
+<td>头像网址</td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td>json 可为空</td>
+<td>可扩展的首选项（主题、语言等）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>通过 Doctrine Listener 自动创建：</strong></p>
+<p><code>UserProfileListener</code> (<code>#[AsDoctrineListener(event: Events::postPersist)]</code>) 确保
+默认情况下，每个持久用户都有一个配置文件。在新的<code>EntityManager::flush()</code>之后
+用户，如果不存在配置文件，则会在 <code>LEVEL_BRONZE</code> 处自动创建一个。这涵盖
+所有用户创建路径：<code>UserService::register()</code>、管理 CRUD、编程创建。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>授权</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>获取</td>
+<td><code>/api/v1/manage/profiles</code></td>
+<td>角色管理员</td>
+<td>列出所有配置文件</td>
+</tr>
+<tr>
+<td>获取</td>
+<td><code>/api/v1/manage/profiles/{id}</code></td>
+<td>角色管理员</td>
+<td>查看个人资料详情</td>
+</tr>
+<tr>
+<td>发布</td>
+<td><code>/api/v1/manage/profiles</code></td>
+<td>角色管理员</td>
+<td>创建个人资料（用户、级别、昵称、头像、元数据、joinedAt）</td>
+</tr>
+<tr>
+<td>放置</td>
+<td><code>/api/v1/manage/profiles/{id}</code></td>
+<td>角色管理员</td>
+<td>更新个人资料（级别、昵称、头像、元数据、joinedAt）</td>
+</tr>
+<tr>
+<td>删除</td>
+<td><code>/api/v1/manage/profiles/{id}</code></td>
+<td>角色管理员</td>
+<td>删除个人资料</td>
+</tr>
+</tbody>
+</table>
+<p><strong>用户实体关系：</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">// User has inverse side OneToOne</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">#[ORM\OneToOne(mappedBy: &#39;user&#39;, targetEntity: Profile::class, cascade: [&#39;persist&#39;, &#39;remove&#39;])]</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">private ?Profile $profile = null;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="x">public function getProfile(): ?Profile;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="x">public function setProfile(?Profile $profile): self;  // syncs bidirectional</span>
+</code></pre></div>
+<p><strong>存储库方法：</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">ProfileRepository extends ServiceEntityRepository</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">  findById(int $id): ?Profile</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">  findByUser(User $user): ?Profile</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="x">  findByUserId(int $userId): ?Profile</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="x">  findByLevel(string $level): array              // exact level match</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="x">  findByLevelOrAbove(string $minLevel): array    // cumulative (&gt;= this level)</span>
+</code></pre></div>
+<p><strong>通过钱包积分：</strong></p>
+<p>个人资料点使用钱包模块。用户的积分存储为：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Wallet for user_id=X, currency=&quot;POINTS&quot;
+</code></pre></div>
+<p>个人资料上不存在积分字段。促销条件使用 <code>user.profile.level</code> 进行
+基于级别的规则和基于积分的规则的参考钱包。</p>
+<h2 id="_8">个人资料应用程序自助服务（应用程序）<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<p>App ProfileController 使用 <code>SingleDetailApiViewMixin</code> (GET) 和
+<code>SingleCreateAndUpdateApiViewMixin</code>（放置）。处理属性过滤
+通过 <code>acceptedCreateProperties</code> / <code>acceptedUpdateProperties</code> 进行 mixin：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">#[Route(&#39;/app/profiles&#39;, name: &#39;app-profiles-&#39;)]</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">#[IsGranted(&#39;ROLE_USER&#39;)]</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="x">class ProfileController extends RestController</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="x">{</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="x">    use ApiView, SingleDetailApiViewMixin, SingleCreateAndUpdateApiViewMixin;</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="x">    protected array $acceptedCreateProperties = [&#39;nickname&#39;, &#39;avatar&#39;, &#39;metadata&#39;];</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="x">    protected array $acceptedUpdateProperties = [&#39;nickname&#39;, &#39;avatar&#39;, &#39;metadata&#39;];</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="x">    protected function commonFilter(): array</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="x">    {</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="x">        $user = $this-&gt;getUser();</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="x">        return $user instanceof User ? [&#39;user&#39; =&gt; $user] : [&#39;id&#39; =&gt; -1];</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="x">    }</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="x">    protected function defaultCreateValues(): array</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="x">    {</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="x">        $user = $this-&gt;getUser();</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="x">        return [&#39;user&#39; =&gt; $user, &#39;level&#39; =&gt; Profile::LEVEL_BRONZE];</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="x">    }</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="x">}</span>
+</code></pre></div>
+<p><strong>用户只能修改<code>nickname</code>、<code>avatar</code>和<code>metadata</code>。</strong>级别更改需要通过<code>/manage/profiles</code>进行管理。
+<code>SingleCreateAndUpdateApiViewMixin</code> 现在支持 <code>acceptedCreateProperties</code>/<code>acceptedUpdateProperties</code>/
+<code>requiredCreateProperties</code>/<code>requiredUpdateProperties</code> — 与 <code>CreateApiViewMixin</code> 相同的合约
+<code>UpdateApiViewMixin</code>。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>授权</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>获取</td>
+<td><code>/api/v1/app/profiles</code></td>
+<td>ROLE_USER</td>
+<td>查看自己的个人资料</td>
+</tr>
+<tr>
+<td>放置</td>
+<td><code>/api/v1/app/profiles</code></td>
+<td>ROLE_USER</td>
+<td>更新自己的个人资料（仅限昵称、头像、元数据）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_9">档案服务<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<p><code>App\Identity\Service\ProfileService</code> 扩展了 <code>BaseService</code> 并添加了：</p>
 <table>
 <thead>
 <tr>
@@ -1634,32 +1859,12 @@
 </thead>
 <tbody>
 <tr>
-<td><code>register($email, $username, $password, $phone)</code></td>
-<td>验证唯一性、创建用户、散列密码、保留</td>
-</tr>
-<tr>
-<td><code>verifyPassword($user, $password)</code></td>
-<td>验证用户的纯密码</td>
-</tr>
-<tr>
-<td><code>changePassword($user, $currentPassword, $newPassword)</code></td>
-<td>验证当前密码、哈希值并设置新密码、保留</td>
-</tr>
-<tr>
-<td><code>adminChangePassword($user, $newPassword)</code></td>
-<td>散列并设置新密码，坚持（没有当前密码检查）</td>
-</tr>
-<tr>
-<td><code>updateProfile($user, $data)</code></td>
-<td>验证电子邮件/用户名/电话的唯一性、更新字段、可选密码更改</td>
-</tr>
-<tr>
-<td><code>update($object, $data)</code></td>
-<td>当数据中存在密码时自动散列密码；跳过空密码</td>
+<td><code>joinAsMember(User $user)</code></td>
+<td>在 LEVEL_BRONZE 处创建幂等配置文件。如果用户已有个人资料，则返回现有记录</td>
 </tr>
 </tbody>
 </table>
-<h2 id="_8">安全考虑<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="_10">安全考虑<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
 <ul>
 <li>仅使用 HTTPS</li>
 <li>将私钥和秘密保留在回购协议之外；使用秘密管理器</li>
@@ -1668,20 +1873,20 @@
 <li>实施速率限制：每个电话、每个 IP 和每个帐户限制</li>
 <li>检测刷新令牌重用：如果使用撤销/替换的令牌，则撤销所有用户令牌</li>
 </ul>
-<h2 id="_9">阿里云短信集成<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<h2 id="_11">阿里云短信集成<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
 <ul>
 <li>将使用阿里云SDK（alibabacloud/client）。提供者从 env 读取密钥。</li>
 <li>模板必须在阿里云控制台创建并审核。模板变量：{code}</li>
 <li>我们提供 ALIYUN_SMS_DRY_RUN 进行暂存以避免真正发送</li>
 </ul>
-<h2 id="_10">实施说明<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<h2 id="_12">实施说明<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
 <ul>
 <li>命名空间：应用程序\身份</li>
 <li>路径：src/Identity/{Entity、Repository、Service、Sms、Security、Controller、Resources}</li>
 <li>在 src/Identity/Resources/config/services_identity.yaml 下注册的服务</li>
 <li>测试：TokenManager、OtpService 和 <strong>UserService</strong> 的单元测试；所有端点的集成测试</li>
 </ul>
-<h2 id="_11">测试覆盖率<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
+<h2 id="_13">测试覆盖率<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -1691,6 +1896,46 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>UserTest</code></td>
+<td>单元（9 次测试）</td>
+<td>用户实体：接口、电子邮件/用户名规范化、电话、角色、密码、擦除、id、toString</td>
+</tr>
+<tr>
+<td><code>ProfileTest</code></td>
+<td>单元（21 次测试）</td>
+<td>配置文件实体：构造函数默认值、级别、UUID、用户/级别设置器、joinedAt、PrePersist、touch、toString / toStringPrefersNickname、昵称/头像/元数据访问器、默认 null</td>
+</tr>
+<tr>
+<td><code>UserProfileListenerTest</code></td>
+<td>单元（4 次测试）</td>
+<td>在用户持续时自动创建配置文件，存在时跳过，默认 LEVEL_BRONZE，忽略非用户实体</td>
+</tr>
+<tr>
+<td><code>ProfileRepositoryTest</code></td>
+<td>集成（9 项测试）</td>
+<td>findById、findByUser、findByUserId、findByLevel、findByLevelOrAbove、昵称存储、边缘情况</td>
+</tr>
+<tr>
+<td><code>ProfileServiceTest</code></td>
+<td>单元（11 次测试）</td>
+<td>new()、get() by id/criteria、update() persist/flush/fields + clear、remove()、joinAsMember 创建/幂等/默认</td>
+</tr>
+<tr>
+<td><code>ProfileControllerTest</code>（管理）</td>
+<td>单元（5 次测试）</td>
+<td>创建/列表/详细信息/更新/删除的未经身份验证的访问拒绝</td>
+</tr>
+<tr>
+<td><code>ProfileControllerTest</code>（应用程序）</td>
+<td>单元（10 次测试）</td>
+<td>获取未经身份验证/无配置文件/现有的； PUT 未经身份验证/创建/现有/级别拒绝/昵称/未知字段过滤/defaultCreateValues</td>
+</tr>
+<tr>
+<td><code>SingleCreateAndUpdateApiViewMixinTest</code></td>
+<td>单元（10 次测试）</td>
+<td>传递（无道具）、acceptedCreateProperties 过滤器、acceptedUpdateProperties 过滤器、requiredCreateProperties 抛出/传递、requiredUpdateProperties 抛出/传递、组合 required+accepted、空接受无操作</td>
+</tr>
 <tr>
 <td><code>UserServiceTest</code></td>
 <td>单元（28 次测试）</td>
@@ -1704,7 +1949,7 @@
 <tr>
 <td><code>UserApiIntegrationTest</code></td>
 <td>集成（45 项测试）</td>
-<td>注册流程、登录、配置文件、更改密码、更新配置文件、管理 CRUD、管理更改密码、规范浏览、钱包存款、转账、余额、对账、所有端点的边缘情况</td>
+<td>注册流程、登录、个人资料、更改密码、更新个人资料、管理 CRUD、钱包存款、转账、余额、对账</td>
 </tr>
 <tr>
 <td><code>AuthControllerTest</code></td>
@@ -1713,7 +1958,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="_12">后续步骤<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
+<h2 id="_14">后续步骤<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h2>
 <p>我将生成实现该模块的代码补丁（文件、迁移、自述文件）并将其发布以供审核。在您批准后，我将通过测试和迁移逐步将更改提交到存储库。</p>
 
 

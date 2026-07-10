@@ -907,10 +907,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#userservice" class="md-nav__link">
+  <a href="#profile-management-manage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        UserService
+        Profile Management (Manage)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#profile-app-self-service-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Profile App Self-Service (App)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#profileservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ProfileService
       
     </span>
   </a>
@@ -1380,10 +1402,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#userservice" class="md-nav__link">
+  <a href="#profile-management-manage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        UserService
+        Profile Management (Manage)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#profile-app-self-service-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Profile App Self-Service (App)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#profileservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ProfileService
       
     </span>
   </a>
@@ -1476,6 +1520,7 @@
 <li><strong>password-based user self-registration</strong> (<code>POST /api/auth/register</code>)</li>
 <li><strong>user profile management</strong> with password change and profile update</li>
 <li><strong>admin user CRUD</strong> with managed password changes</li>
+<li><strong>profile management</strong>: tiered membership (bronze/silver/gold/platinum/diamond), auto-created 1:1 with User, points delegated to Wallet (currency=POINTS). Also carries nickname/avatar/metadata as user profile data.</li>
 </ul>
 <h2 id="goals">Goals<a class="headerlink" href="#goals" title="Permanent link">&para;</a></h2>
 <ul>
@@ -1623,8 +1668,188 @@
 </tr>
 </tbody>
 </table>
-<h2 id="userservice">UserService<a class="headerlink" href="#userservice" title="Permanent link">&para;</a></h2>
-<p><code>App\Identity\Service\UserService</code> extends <code>BaseService</code> and encapsulates all user business logic:</p>
+<h2 id="profile-management-manage">Profile Management (Manage)<a class="headerlink" href="#profile-management-manage" title="Permanent link">&para;</a></h2>
+<p><code>Profile</code> is the identity profile entity: a 1:1 extension of User, auto-created on User persist.
+It carries membership level, profile fields (nickname/avatar/metadata), and joinedAt.
+Membership points are stored in Wallet (currency=POINTS), not on Profile.</p>
+<table>
+<thead>
+<tr>
+<th>Entity</th>
+<th>Table</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Profile</code></td>
+<td><code>identity_profile</code></td>
+<td>1:1 User extension: level, nickname, avatar, metadata, joinedAt</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Level Constants:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">public const LEVEL_BRONZE = &#39;bronze&#39;;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">public const LEVEL_SILVER = &#39;silver&#39;;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">public const LEVEL_GOLD = &#39;gold&#39;;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="x">public const LEVEL_PLATINUM = &#39;platinum&#39;;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="x">public const LEVEL_DIAMOND = &#39;diamond&#39;;</span>
+</code></pre></div>
+<p><strong>Level Hierarchy (for <code>findByLevelOrAbove</code>):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>bronze (0) &lt; silver (1) &lt; gold (2) &lt; platinum (3) &lt; diamond (4)
+</code></pre></div>
+<p><strong>Profile Fields:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nickname</code></td>
+<td>string(255) nullable</td>
+<td>Display name (takes precedence over username for display)</td>
+</tr>
+<tr>
+<td><code>avatar</code></td>
+<td>string(500) nullable</td>
+<td>Avatar URL</td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td>json nullable</td>
+<td>Extensible preferences (theme, language, etc.)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Auto-Creation via Doctrine Listener:</strong></p>
+<p>A <code>UserProfileListener</code> (<code>#[AsDoctrineListener(event: Events::postPersist)]</code>) ensures
+every persisted User has a Profile by default. After <code>EntityManager::flush()</code> on a new
+User, if no Profile exists, one is created at <code>LEVEL_BRONZE</code> automatically. This covers
+all User creation paths: <code>UserService::register()</code>, admin CRUD, programmatic creation.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Auth</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/manage/profiles</code></td>
+<td>ROLE_ADMIN</td>
+<td>List all profiles</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/manage/profiles/{id}</code></td>
+<td>ROLE_ADMIN</td>
+<td>View profile detail</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/manage/profiles</code></td>
+<td>ROLE_ADMIN</td>
+<td>Create profile (user, level, nickname, avatar, metadata, joinedAt)</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/api/v1/manage/profiles/{id}</code></td>
+<td>ROLE_ADMIN</td>
+<td>Update profile (level, nickname, avatar, metadata, joinedAt)</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/api/v1/manage/profiles/{id}</code></td>
+<td>ROLE_ADMIN</td>
+<td>Delete profile</td>
+</tr>
+</tbody>
+</table>
+<p><strong>User Entity Relationship:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">// User has inverse side OneToOne</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">#[ORM\OneToOne(mappedBy: &#39;user&#39;, targetEntity: Profile::class, cascade: [&#39;persist&#39;, &#39;remove&#39;])]</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">private ?Profile $profile = null;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="x">public function getProfile(): ?Profile;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="x">public function setProfile(?Profile $profile): self;  // syncs bidirectional</span>
+</code></pre></div>
+<p><strong>Repository Methods:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">ProfileRepository extends ServiceEntityRepository</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">  findById(int $id): ?Profile</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">  findByUser(User $user): ?Profile</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="x">  findByUserId(int $userId): ?Profile</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="x">  findByLevel(string $level): array              // exact level match</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="x">  findByLevelOrAbove(string $minLevel): array    // cumulative (&gt;= this level)</span>
+</code></pre></div>
+<p><strong>Points via Wallet:</strong></p>
+<p>Profile points use the Wallet module. A user's points are stored as:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Wallet for user_id=X, currency=&quot;POINTS&quot;
+</code></pre></div>
+<p>No points field exists on Profile. Promotion conditions use <code>user.profile.level</code> for
+level-based rules and reference Wallet for point-based rules.</p>
+<h2 id="profile-app-self-service-app">Profile App Self-Service (App)<a class="headerlink" href="#profile-app-self-service-app" title="Permanent link">&para;</a></h2>
+<p>The App ProfileController uses <code>SingleDetailApiViewMixin</code> (GET) and
+<code>SingleCreateAndUpdateApiViewMixin</code> (PUT). Property filtering is handled
+by the mixin via <code>acceptedCreateProperties</code> / <code>acceptedUpdateProperties</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">#[Route(&#39;/app/profiles&#39;, name: &#39;app-profiles-&#39;)]</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">#[IsGranted(&#39;ROLE_USER&#39;)]</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="x">class ProfileController extends RestController</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="x">{</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="x">    use ApiView, SingleDetailApiViewMixin, SingleCreateAndUpdateApiViewMixin;</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="x">    protected array $acceptedCreateProperties = [&#39;nickname&#39;, &#39;avatar&#39;, &#39;metadata&#39;];</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="x">    protected array $acceptedUpdateProperties = [&#39;nickname&#39;, &#39;avatar&#39;, &#39;metadata&#39;];</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="x">    protected function commonFilter(): array</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="x">    {</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="x">        $user = $this-&gt;getUser();</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="x">        return $user instanceof User ? [&#39;user&#39; =&gt; $user] : [&#39;id&#39; =&gt; -1];</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="x">    }</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="x">    protected function defaultCreateValues(): array</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="x">    {</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="x">        $user = $this-&gt;getUser();</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="x">        return [&#39;user&#39; =&gt; $user, &#39;level&#39; =&gt; Profile::LEVEL_BRONZE];</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="x">    }</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="x">}</span>
+</code></pre></div>
+<p><strong>Users can only modify <code>nickname</code>, <code>avatar</code>, and <code>metadata</code>.</strong> Level changes require admin via <code>/manage/profiles</code>.
+<code>SingleCreateAndUpdateApiViewMixin</code> now supports <code>acceptedCreateProperties</code>/<code>acceptedUpdateProperties</code>/
+<code>requiredCreateProperties</code>/<code>requiredUpdateProperties</code> — the same contract as <code>CreateApiViewMixin</code> and
+<code>UpdateApiViewMixin</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Auth</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/app/profiles</code></td>
+<td>ROLE_USER</td>
+<td>View own profile</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/api/v1/app/profiles</code></td>
+<td>ROLE_USER</td>
+<td>Update own profile (nickname, avatar, metadata only)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="profileservice">ProfileService<a class="headerlink" href="#profileservice" title="Permanent link">&para;</a></h2>
+<p><code>App\Identity\Service\ProfileService</code> extends <code>BaseService</code> and adds:</p>
 <table>
 <thead>
 <tr>
@@ -1634,28 +1859,8 @@
 </thead>
 <tbody>
 <tr>
-<td><code>register($email, $username, $password, $phone)</code></td>
-<td>Validate uniqueness, create User, hash password, persist</td>
-</tr>
-<tr>
-<td><code>verifyPassword($user, $password)</code></td>
-<td>Verify a plain password against a User</td>
-</tr>
-<tr>
-<td><code>changePassword($user, $currentPassword, $newPassword)</code></td>
-<td>Verify current password, hash and set new, persist</td>
-</tr>
-<tr>
-<td><code>adminChangePassword($user, $newPassword)</code></td>
-<td>Hash and set new password, persist (no current pw check)</td>
-</tr>
-<tr>
-<td><code>updateProfile($user, $data)</code></td>
-<td>Validate uniqueness of email/username/phone, update fields, optional password change</td>
-</tr>
-<tr>
-<td><code>update($object, $data)</code></td>
-<td>Auto-hashes password when present in data; skips empty passwords</td>
+<td><code>joinAsMember(User $user)</code></td>
+<td>Idempotent profile creation at LEVEL_BRONZE. Returns existing record if user already has a profile</td>
 </tr>
 </tbody>
 </table>
@@ -1692,6 +1897,46 @@
 </thead>
 <tbody>
 <tr>
+<td><code>UserTest</code></td>
+<td>Unit (9 tests)</td>
+<td>User entity: interfaces, email/username normalization, phone, roles, password, erase, id, toString</td>
+</tr>
+<tr>
+<td><code>ProfileTest</code></td>
+<td>Unit (21 tests)</td>
+<td>Profile entity: constructor defaults, levels, UUID, user/level setters, joinedAt, PrePersist, touch, toString / toStringPrefersNickname, nickname/avatar/metadata accessors, default nulls</td>
+</tr>
+<tr>
+<td><code>UserProfileListenerTest</code></td>
+<td>Unit (4 tests)</td>
+<td>Auto-creates Profile on User persist, skips when exists, default LEVEL_BRONZE, ignores non-User entities</td>
+</tr>
+<tr>
+<td><code>ProfileRepositoryTest</code></td>
+<td>Integration (9 tests)</td>
+<td>findById, findByUser, findByUserId, findByLevel, findByLevelOrAbove, nickname storage, edge cases</td>
+</tr>
+<tr>
+<td><code>ProfileServiceTest</code></td>
+<td>Unit (11 tests)</td>
+<td>new(), get() by id/criteria, update() persist/flush/fields + clear, remove(), joinAsMember create/idempotent/default</td>
+</tr>
+<tr>
+<td><code>ProfileControllerTest</code> (Manage)</td>
+<td>Unit (5 tests)</td>
+<td>Unauthenticated access rejection for create/list/detail/update/delete</td>
+</tr>
+<tr>
+<td><code>ProfileControllerTest</code> (App)</td>
+<td>Unit (10 tests)</td>
+<td>GET unauthenticated/no profile/existing; PUT unauthenticated/create/existing/level rejected/nickname/unknown fields filtered/defaultCreateValues</td>
+</tr>
+<tr>
+<td><code>SingleCreateAndUpdateApiViewMixinTest</code></td>
+<td>Unit (10 tests)</td>
+<td>Pass-through (no props), acceptedCreateProperties filter, acceptedUpdateProperties filter, requiredCreateProperties throw/pass, requiredUpdateProperties throw/pass, combined required+accepted, empty accepted no-op</td>
+</tr>
+<tr>
 <td><code>UserServiceTest</code></td>
 <td>Unit (28 tests)</td>
 <td>register, changePassword, adminChangePassword, updateProfile, update password hashing</td>
@@ -1704,7 +1949,7 @@
 <tr>
 <td><code>UserApiIntegrationTest</code></td>
 <td>Integration (45 tests)</td>
-<td>Register flow, login, profile, change-password, update-profile, manage CRUD, manage change-password, specification browsing, wallet deposit, transfer, balance, reconcile, edge cases for all endpoints</td>
+<td>Register flow, login, profile, change-password, update-profile, manage CRUD, wallet deposit, transfer, balance, reconcile</td>
 </tr>
 <tr>
 <td><code>AuthControllerTest</code></td>
