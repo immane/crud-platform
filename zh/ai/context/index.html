@@ -2487,7 +2487,7 @@
 
 <h1 id="crud-skeleton-full-codebase-context">CRUD Skeleton - Full Codebase Context<a class="headerlink" href="#crud-skeleton-full-codebase-context" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>Context snapshot. Last updated: 2026-07-10</p>
+<p>Context snapshot. Last updated: 2026-07-11</p>
 </blockquote>
 <hr />
 <h2 id="1-project-overview">1. Project Overview<a class="headerlink" href="#1-project-overview" title="Permanent link">&para;</a></h2>
@@ -2510,115 +2510,116 @@
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│   ├── Controller/RestController.php    # Base API controller (success/warning/pagination)
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│   ├── Controller/System/               # System introspection (EntityController, RouterController)
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│   ├── View/                     # PHP traits: List, Detail, Create, Update, Delete, Workflow, Single, Transform
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│   ├── Service/BaseService.php          # Abstract CRUD service
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│   ├── Service/Concern/                 # Traits: Infrastructure, ReadList, Mutation
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│   ├── Parser/ExpressionDqlParser.php   # Expression → DQL compiler
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   ├── Serializer/FlatNormalizer.php    # Custom object normalizer (Doctrine internal objects → class names)
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│   ├── EventListener/                   # ExceptionInterceptor, ControllerListener, OpenApiEnricherListener, LocaleListener, AccessLogListener
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   └── Utils/                           # UUID, Math, RSA, Location, Inflect, etc.
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>├── src/Common/                   # CMS module: Category, Tag, Content, Comment, Page, Media, Setting
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│   ├── Entity/                   # 7 entities
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│   ├── Repository/
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│   ├── Service/
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│   └── Controller/App/ + Manage/ + Public/
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>├── src/Identity/                 # Authentication &amp; Identity
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>│   ├── Entity/User.php, RefreshToken.php, Profile.php     # User has __toString(): username fallback to email; User::$profile (OneToOne→Profile)
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│   ├── Security/JwtAuthenticator.php, TokenManager.php
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>│   ├── Service/OtpService.php, UserService.php, SMS providers
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>│   ├── Command/CreateUserCommand.php
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>│   └── Controller/AuthController.php, App/UserController.php, App/ProfileController.php, Manage/UserController.php, Manage/ProfileController.php
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>│
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>├── src/Trade/                    # E-commerce module
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>│   ├── Entity/                   # Product, Specification, Order, OrderItem
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>│   ├── Service/OrderService.php        # createOrder(... metadata), pay(), refund(), fulfill() + price pipeline
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>│   ├── Service/Pricing/                # PriceCalculatorInterface (Base, Quantity, Total)
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>│   ├── EventListener/OrderWorkflowListener.php
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>│   ├── Exception/                      # OrderInvalidTransitionException, SpecificationNotFoundException
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>│   └── Controller/App/ + Manage/       # CRUD + workflow + pay/refund/fulfill + items + cancel + spec browse/v2
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>│
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>├── src/Payment/                  # Payment module
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>│   ├── Entity/Invoice.php              # Payment invoice (pending→paying→paid→refunded)
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>│   ├── DTO/                            # PaymentResult, PaymentNotifyResult, PaymentRefundResult, PaymentAdjustmentContext, PaymentAdjustmentResult
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>│   ├── Event/                          # InvoicePaidEvent, InvoiceRefundedEvent, etc.
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>│   ├── Service/PaymentGatewayInterface.php  # Gateway contract (pay(explicit amount), notify, refund(explicit amount))
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>│   ├── Service/Adjustment/PaymentAdjustmentProviderInterface.php  # Adjustments before gateway payment (implemented by Wallet)
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>│   ├── Service/Adjustment/PaymentAdjustmentRegistry.php  # #[AutowireIterator(&#39;payment.adjustment_provider&#39;)] registry
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>│   ├── Service/Gateway/MockGateway.php       # Deterministic test gateway (only gateway remaining in Payment)
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>│   ├── Service/PaymentGatewayRegistry.php    # #[AutowireIterator(&#39;payment.gateway&#39;)] registry
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>│   └── Controller/App/ + Manage/ + Webhook/
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>│
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>├── src/Wallet/                   # Wallet module
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>│   ├── Entity/                   # Wallet, WalletTransaction, WalletPaymentDeduction
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>│   ├── Repository/               # + WalletPaymentDeductionRepository
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>│   ├── Service/TransferService.php     # Atomic transfer + deposit
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>│   ├── Service/WalletService.php       # verifyBalance() + reconcile()
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>│   ├── Service/Payment/WalletGateway.php              # Implements PaymentGatewayInterface
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>│   ├── Service/Payment/WalletBalanceAdjustmentProvider.php  # Wallet deduction as Payment adjustment provider
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>│   ├── Service/Payment/WalletPaymentDeductionService.php    # Wallet-owned deduction lifecycle
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>│   ├── DTO/WalletPaymentDeductionRequest.php
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>│   └── Controller/App/ + Manage/       # App list/detail/balance, Manage CRUD/audit/reconcile
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>│
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>├── src/Wechat/                   # WeChat module
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>│   ├── Entity/WechatUser.php           # OneToOne→User
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>│   ├── Repository/WechatUserRepository.php
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>│   ├── Service/WechatService.php       # EasyWeChat factory
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>│   ├── Service/WechatAuthService.php   # Login orchestration
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>│   ├── Service/WechatUserService.php   # CRUD service
-<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>│   ├── Service/Payment/WechatPayGateway.php  # implements PaymentGatewayInterface
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>│   └── Controller/
-<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>│
-<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>├── src/Storage/                  # Storage module (pluggable file upload drivers)
-<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>│   ├── Service/MediaStorageInterface.php       # Driver contract (store/delete)
-<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>│   ├── Service/MediaStorageRegistry.php        # Tagged iterator collection
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>│   ├── Service/LocalStorage.php                # Local filesystem (public/uploads/)
-<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>│   ├── Service/QiniuStorage.php                # Qiniu Kodo cloud storage (optional SDK)
-<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>│   └── Resources/config/services_storage.yaml
-<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>│
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>├── src/Promotion/                # Promotion module (DSL-driven promotion engine)
-<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>│   ├── Entity/                   # PromotionTemplate, Promotion
-<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>│   ├── Repository/
-<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>│   ├── Service/                  # PromotionService, PromotionTemplateService, PromotionCalculator
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>│   │   └── Dsl/                  # DSL lexer/parser/evaluator
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>│   ├── Strategy/                 # 7 strategies: FullReduction, Discount, Gift, NthItemDiscount, Tiered, FreeShipping, MemberDiscount
-<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>│   ├── Controller/App/           # Read-only endpoints
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>│   ├── Controller/Manage/        # Admin CRUD endpoints
-<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>│   └── Exception/
-<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>│
-<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>├── config/
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>│   ├── services.yaml             # Service wiring + imports src/*/Resources/config + exclusions
-<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>│   ├── routes.yaml               # Route imports (wechat, wechat_app, wechat_manage added)
-<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>│   └── packages/
-<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>│       ├── nelmio_api_doc.yaml   # OpenAPI 3.1 config: System + Wechat tags
-<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>│       ├── security.yaml         # PUBLIC_ACCESS: docs/auth/webhooks/wechat + GET /api/v1/public/*
-<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>│       ├── translation.yaml      # Translator config: default_locale en, translations/ path
-<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>│       ├── workflow.yaml         # Order state machine (draft→completed)
-<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>│       └── ...
-<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>├── migrations/                   # Doctrine migrations (latest adds media category relation)
-<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>├── translations/                 # i18n translation files (messages.en/zh/zh_Hant/ja.yaml)
-<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>├── docs/
-<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>│   ├── ai/context.md             # This file
-<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>│   ├── design/                   # Design contracts
-<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>│   │   └── bundles/              # Per-module design docs (core, common, trade, wallet, identity, wechat, payment, storage, promotion)
-<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>│   └── openapi/                       # endpoints.yaml + order/payment frontend flow docs
-<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>├── scripts/tests/                # Test scripts
-<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>├── tests/                        # 1589 PHPUnit tests, 5165 assertions, 91%+ coverage
-<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>├── README.md                     # English README
-<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>├── README.zh-cn.md               # Chinese (Simplified) README
-<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>├── README.zh-hant.md             # Chinese (Traditional) README
-<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>├── README.ja.md                  # Japanese README
-<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>├── mkdocs.yml                    # MkDocs Material config
-<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>├── compose.yaml                  # Production deployment: app (PHP-FPM), nginx, MySQL, Redis, Mailpit
-<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports)
-<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>├── Dockerfile                    # PHP 8.4-FPM Alpine with openssl + JWT key entrypoint
-<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>├── .dockerignore                 # Build context exclusions (tests, docs, dev files)
-<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>├── docker/
-<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>│   ├── app/entrypoint.sh         # Dev key generation + prod key validation
-<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>│   └── nginx/default.conf        # nginx config (reverse proxy to PHP-FPM)
-<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>└── .github/workflows/
-<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>    ├── ci.yml                    # CI: PHP 8.4, 90% coverage
-<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>    └── docs.yml                  # GitHub Pages deploy
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│   ├── View/ApiViewMessages.php         # Extracted message constants for View traits (ENTITY_NOT_FOUND, SUCCESS, INVALID_JSON, propertyRequired(), etc.)
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│   ├── Service/BaseService.php          # Abstract CRUD service (@template TEntity generics)
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│   ├── Service/Concern/                 # Traits: Infrastructure, ReadList, Mutation (@template TEntity)
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   ├── Parser/ExpressionDqlParser.php   # Expression → DQL compiler
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│   ├── Serializer/FlatNormalizer.php    # Custom object normalizer (Doctrine internal objects → class names)
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   ├── EventListener/                   # ExceptionInterceptor, ControllerListener, OpenApiEnricherListener, LocaleListener, AccessLogListener
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│   └── Utils/                           # UUID, Math, RSA, Location, Inflect, etc.
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>├── src/Common/                   # CMS module: Category, Tag, Content, Comment, Page, Media, Setting
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│   ├── Entity/                   # 7 entities
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│   ├── Repository/
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│   ├── Service/
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│   └── Controller/App/ + Manage/ + Public/
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>├── src/Identity/                 # Authentication &amp; Identity
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│   ├── Entity/User.php, RefreshToken.php, Profile.php     # User has __toString(): username fallback to email; User::$profile (OneToOne→Profile)
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>│   ├── Security/JwtAuthenticator.php, TokenManager.php
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>│   ├── Service/OtpService.php, UserService.php, SMS providers
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>│   ├── Command/CreateUserCommand.php
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>│   └── Controller/AuthController.php, App/UserController.php, App/ProfileController.php, Manage/UserController.php, Manage/ProfileController.php
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>│
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>├── src/Trade/                    # E-commerce module
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>│   ├── Entity/                   # Product, Specification, Order, OrderItem
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>│   ├── Service/OrderService.php        # createOrder(... metadata), pay(), refund(), fulfill() + price pipeline
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>│   ├── Service/Pricing/                # PriceCalculatorInterface (Base, Quantity, Total)
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>│   ├── EventListener/OrderWorkflowListener.php
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>│   ├── Exception/                      # OrderInvalidTransitionException, SpecificationNotFoundException
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>│   └── Controller/App/ + Manage/       # CRUD + workflow + pay/refund/fulfill + items + cancel + spec browse/v2
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>│
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>├── src/Payment/                  # Payment module
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>│   ├── Entity/Invoice.php              # Payment invoice (pending→paying→paid→refunded)
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>│   ├── DTO/                            # PaymentResult, PaymentNotifyResult, PaymentRefundResult, PaymentAdjustmentContext, PaymentAdjustmentResult
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>│   ├── Event/                          # InvoicePaidEvent, InvoiceRefundedEvent, etc.
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>│   ├── Service/PaymentGatewayInterface.php  # Gateway contract (pay(explicit amount), notify, refund(explicit amount))
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>│   ├── Service/Adjustment/PaymentAdjustmentProviderInterface.php  # Adjustments before gateway payment (implemented by Wallet)
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>│   ├── Service/Adjustment/PaymentAdjustmentRegistry.php  # #[AutowireIterator(&#39;payment.adjustment_provider&#39;)] registry
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>│   ├── Service/Gateway/MockGateway.php       # Deterministic test gateway (only gateway remaining in Payment)
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>│   ├── Service/PaymentGatewayRegistry.php    # #[AutowireIterator(&#39;payment.gateway&#39;)] registry
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>│   └── Controller/App/ + Manage/ + Webhook/
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>│
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>├── src/Wallet/                   # Wallet module
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>│   ├── Entity/                   # Wallet, WalletTransaction, WalletPaymentDeduction
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>│   ├── Repository/               # + WalletPaymentDeductionRepository
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>│   ├── Service/TransferService.php     # Atomic transfer + deposit
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>│   ├── Service/WalletService.php       # verifyBalance() + reconcile()
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>│   ├── Service/Payment/WalletGateway.php              # Implements PaymentGatewayInterface
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>│   ├── Service/Payment/WalletBalanceAdjustmentProvider.php  # Wallet deduction as Payment adjustment provider
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>│   ├── Service/Payment/WalletPaymentDeductionService.php    # Wallet-owned deduction lifecycle
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>│   ├── DTO/WalletPaymentDeductionRequest.php
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>│   └── Controller/App/ + Manage/       # App list/detail/balance, Manage CRUD/audit/reconcile
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>│
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>├── src/Wechat/                   # WeChat module
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>│   ├── Entity/WechatUser.php           # OneToOne→User
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>│   ├── Repository/WechatUserRepository.php
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>│   ├── Service/WechatService.php       # EasyWeChat factory
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>│   ├── Service/WechatAuthService.php   # Login orchestration
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>│   ├── Service/WechatUserService.php   # CRUD service
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>│   ├── Service/Payment/WechatPayGateway.php  # implements PaymentGatewayInterface
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>│   └── Controller/
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>│
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>├── src/Storage/                  # Storage module (pluggable file upload drivers)
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>│   ├── Service/MediaStorageInterface.php       # Driver contract (store/delete)
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>│   ├── Service/MediaStorageRegistry.php        # Tagged iterator collection
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>│   ├── Service/LocalStorage.php                # Local filesystem (public/uploads/)
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>│   ├── Service/QiniuStorage.php                # Qiniu Kodo cloud storage (optional SDK)
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>│   └── Resources/config/services_storage.yaml
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>│
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>├── src/Promotion/                # Promotion module (DSL-driven promotion engine)
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>│   ├── Entity/                   # PromotionTemplate, Promotion
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>│   ├── Repository/
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>│   ├── Service/                  # PromotionService, PromotionTemplateService, PromotionCalculator
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>│   │   └── Dsl/                  # DSL lexer/parser/evaluator
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>│   ├── Strategy/                 # 7 strategies: FullReduction, Discount, Gift, NthItemDiscount, Tiered, FreeShipping, MemberDiscount
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>│   ├── Controller/App/           # Read-only endpoints
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>│   ├── Controller/Manage/        # Admin CRUD endpoints
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>│   └── Exception/
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>│
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>├── config/
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>│   ├── services.yaml             # Service wiring + imports src/*/Resources/config + exclusions
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>│   ├── routes.yaml               # Route imports (wechat, wechat_app, wechat_manage added)
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>│   └── packages/
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>│       ├── nelmio_api_doc.yaml   # OpenAPI 3.1 config: System + Wechat tags
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>│       ├── security.yaml         # PUBLIC_ACCESS: docs/auth/webhooks/wechat + GET /api/v1/public/*
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>│       ├── translation.yaml      # Translator config: default_locale en, translations/ path
+<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>│       ├── workflow.yaml         # Order state machine (draft→completed)
+<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>│       └── ...
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>├── migrations/                   # Doctrine migrations (latest adds media category relation)
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>├── translations/                 # i18n translation files (messages.en/zh/zh_Hant/ja.yaml)
+<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>├── docs/
+<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>│   ├── ai/context.md             # This file
+<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>│   ├── design/                   # Design contracts
+<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>│   │   └── bundles/              # Per-module design docs (core, common, trade, wallet, identity, wechat, payment, storage, promotion)
+<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>│   └── openapi/                       # endpoints.yaml + order/payment frontend flow docs
+<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>├── scripts/tests/                # Test scripts
+<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>├── tests/                        # 1589 PHPUnit tests, 5165 assertions, 91%+ coverage
+<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>├── README.md                     # English README
+<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>├── README.zh-cn.md               # Chinese (Simplified) README
+<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>├── README.zh-hant.md             # Chinese (Traditional) README
+<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>├── README.ja.md                  # Japanese README
+<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>├── mkdocs.yml                    # MkDocs Material config
+<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>├── compose.yaml                  # Production deployment: app (PHP-FPM), nginx, MySQL, Redis, Mailpit
+<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports)
+<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>├── Dockerfile                    # PHP 8.4-FPM Alpine with openssl + JWT key entrypoint
+<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>├── .dockerignore                 # Build context exclusions (tests, docs, dev files)
+<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>├── docker/
+<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>│   ├── app/entrypoint.sh         # Dev key generation + prod key validation
+<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>│   └── nginx/default.conf        # nginx config (reverse proxy to PHP-FPM)
+<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>└── .github/workflows/
+<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>    ├── ci.yml                    # CI: PHP 8.4, PHPStan Level 8, 90% coverage, Rector type-rule dry-run
+<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>    └── docs.yml                  # GitHub Pages deploy
 </code></pre></div>
 <h2 id="3-request-lifecycle">3. Request Lifecycle<a class="headerlink" href="#3-request-lifecycle" title="Permanent link">&para;</a></h2>
 <ol>
@@ -2870,18 +2871,19 @@
 </table>
 <p><strong>Expression syntax</strong>: <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>&amp;&amp;</code>, <code>||</code>, <code>!</code>, <code>matches</code>, chained attributes, <code>Math</code>, <code>ArrayCommon</code>, <code>FilterDateTime</code> functions. Falls back to in-memory <code>LegacyEvaluator</code> when DQL compilation fails.</p>
 <h2 id="6-baseservice-architecture">6. BaseService Architecture<a class="headerlink" href="#6-baseservice-architecture" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>BaseService (abstract)
+<p><code>BaseServiceInterface</code> and <code>BaseService</code> use <code>@template TEntity of object</code> to propagate entity types through the service layer. Concrete services declare <code>@extends BaseService&lt;Entity&gt;</code> and interfaces declare <code>@extends BaseServiceInterface&lt;Entity&gt;</code>. This enables PHPStan to infer return types from <code>get()</code>, <code>new()</code>, and <code>update()</code> at call sites.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>BaseService&lt;Order&gt; (abstract, @template TEntity, @implements BaseServiceInterface&lt;TEntity&gt;)
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── BaseServiceInfrastructureTrait    # EM, Logger, Serializer, Validator, Transactions
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├── BaseServiceReadListTrait          # get(), list() with dynamic queries
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>└── BaseServiceMutationTrait          # new(), update(), updateWithoutListener(), remove()
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├── BaseServiceReadListTrait&lt;TEntity&gt;          # get(mixed): TEntity|null, list(): mixed
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>└── BaseServiceMutationTrait&lt;TEntity&gt;          # new(): object, update(mixed): object|false, remove(): bool
 </code></pre></div>
-<ul>
-<li><strong><code>get(mixed $criteria)</code></strong>: QueryBuilder, entity, array criteria, or scalar ID</li>
-<li><strong><code>list(array $params)</code></strong>: Dynamic query + pagination</li>
-<li><strong><code>update()</code></strong>: Relation mapping (M:1, 1:M, M:M by ID), date fields, Serializer for scalars</li>
-<li><strong><code>remove()</code></strong>: Find → remove → flush</li>
-<li><strong><code>wrapInTransaction(callable $fn)</code></strong>: Transaction with commit/rollback</li>
-</ul>
+<p>Key PHPDoc contracts:
+- <strong><code>get(mixed $criteria)</code></strong>: Accepts <code>TEntity|int|string|array&lt;string, mixed&gt;|QueryBuilder</code> → returns <code>TEntity|null</code>
+- <strong><code>list(array $params)</code></strong>: Returns <code>mixed</code> (QueryBuilder, Entity[], or scalar arrays depending on @select/@groupBy)
+- <strong><code>new()</code></strong>: Returns <code>object</code> (native), <code>@return TEntity</code> (PHPDoc)
+- <strong><code>update(mixed $object, ?array $data)</code></strong>: Returns <code>object|false</code> — native <code>mixed</code> param with PHPDoc <code>@param mixed</code> for trait compatibility
+- <strong><code>remove($object)</code></strong>: Accepts <code>TEntity|int|string|array&lt;string, mixed&gt;</code>
+- <strong><code>wrapInTransaction(callable $fn)</code></strong>: Transaction with commit/rollback</p>
 <h2 id="7-trade-module-order-lifecycle">7. Trade Module — Order Lifecycle<a class="headerlink" href="#7-trade-module-order-lifecycle" title="Permanent link">&para;</a></h2>
 <h3 id="71-state-machine-workflowyaml">7.1 State Machine (workflow.yaml)<a class="headerlink" href="#71-state-machine-workflowyaml" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>draft → pending → confirmed → paid → fulfilled → completed → refunded
@@ -3544,6 +3546,16 @@
 <td>9 PHP traits composed into controllers</td>
 </tr>
 <tr>
+<td><strong>View message constants</strong></td>
+<td>Core/View</td>
+<td><code>ApiViewMessages</code> extracts all hardcoded strings from View traits into constants + formatters</td>
+</tr>
+<tr>
+<td><strong>Generic services</strong></td>
+<td>Core/Service</td>
+<td><code>@template TEntity</code> + <code>@extends BaseService&lt;Entity&gt;</code> enables static analysis inference across the service layer</td>
+</tr>
+<tr>
 <td><strong>Field whitelisting</strong></td>
 <td>Controllers</td>
 <td><code>$requiredCreateProperties</code>, <code>$acceptedCreateProperties</code>, <code>$acceptedUpdateProperties</code></td>
@@ -3955,7 +3967,8 @@
 <li><strong>Framework</strong>: PHPUnit 12.5</li>
 <li><strong>DB</strong>: SQLite <code>var/test.db</code> in test environment</li>
 <li><strong>Coverage</strong>: 90% minimum (enforced in CI), currently <strong>91.12% lines</strong> from latest local Xdebug run</li>
-<li><strong>Test count</strong>: <strong>1589 tests</strong>, <strong>5165 assertions</strong></li>
+<li><strong>Test count</strong>: <strong>1593 tests</strong>, <strong>5185 assertions</strong></li>
+<li><strong>Static analysis</strong>: PHPStan Level 8 with zero errors in its configured scope (<code>src/</code>, excluding optional SDK code, exception classes, and documented false-positive suppressions). Generic contract via <code>@template TEntity</code> on <code>BaseServiceInterface</code>/<code>BaseService</code> + <code>@extends</code> on 18 concrete service pairs. Rector automates Doctrine Collection/Repository PHPDoc with <code>composer rector:types</code>; CI enforces <code>composer rector:types:check</code> as a dry-run.</li>
 <li><strong>Local PHP note</strong>: default <code>php</code> may point to PHP 7.4; use Homebrew PHP 8.5 at <code>/opt/homebrew/opt/php@8.5/bin/php</code> for local Symfony/PHPUnit commands.</li>
 <li><strong>HTML coverage report</strong>: <code>XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html var/coverage</code></li>
 <li><strong>Key test groups</strong>:</li>
@@ -3966,7 +3979,7 @@
 <li><code>tests/Promotion/</code>: 320+ tests (Entity, DSL lexer/parser/evaluator, Strategies, Engine, Calculator, App/Manage controllers, real SQLite pipeline integration with Doctrine + OrderService)</li>
 <li><code>tests/Payment/</code>: ~60 tests (Gateway, Registry, Adjustment/Provider, Invoice, Multi-gateway integration)</li>
 <li><code>tests/Wechat/</code>: 59 tests (Entity, Service, AuthService, Payment/Gateway, Controller, Repository)</li>
-<li><code>tests/Core/</code>: 70+ tests (BaseService, RestController, Parser, Serializer, LocaleListener, MutationTrait, Utils, System controllers)</li>
+<li><code>tests/Core/</code>: 70+ tests (BaseService, RestController, Parser, Serializer, LocaleListener, MutationTrait, Utils, System controllers — all PHPStan Level 8 compliant)</li>
 <li><code>tests/Promotion/Integration/</code>: 8 real SQLite quote pipeline tests (store isolation, global campaigns, member-targeted item discounts, stacking, best-price conflict, Nth-item, multi-SKU, expiry, mixed rules)</li>
 <li><code>tests/Integration/</code>: ~20 cross-module tests</li>
 </ul>
