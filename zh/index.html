@@ -408,6 +408,17 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
+        质量检查
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
         许可证
       
     </span>
@@ -1282,6 +1293,17 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
+        质量检查
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
         许可证
       
     </span>
@@ -1356,7 +1378,11 @@
 </tr>
 <tr>
 <td>测试</td>
-<td>PHPUnit 12.5（最低覆盖率 90%，目前为 90.06%）</td>
+<td>PHPUnit 12.5（最低覆盖率 90%）</td>
+</tr>
+<tr>
+<td>静态分析</td>
+<td>PHPStan Level 8 + Rector 类型规则试运行</td>
 </tr>
 <tr>
 <td>资产</td>
@@ -1396,7 +1422,15 @@
 <li><strong><a href="design/bundles/core/">Bundles</a></strong> -- 每个模块的设计文档（Core、Common、Trade、Wallet、Identity）</li>
 <li><strong><a href="/api/doc">API Docs</a></strong> -- 交互式 Swagger UI（运行时）</li>
 </ul>
-<h2 id="_6">许可证<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h2 id="_6">质量检查<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p>使用 PHP 8.4 或更高版本，然后运行 CI 强制执行的检查：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>composer<span class="w"> </span>phpstan
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>composer<span class="w"> </span>rector:types:check
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>vendor/bin/phpunit<span class="w"> </span>--coverage-text
+</code></pre></div>
+<p>PHPStan 和 Rector 作业使用独立的 SQLite URL，因此 Composer 的缓存清除
+脚本可以在没有本地配置的开发数据库的情况下运行。</p>
+<h2 id="_7">许可证<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <p>阿帕奇-2.0</p>
 
 

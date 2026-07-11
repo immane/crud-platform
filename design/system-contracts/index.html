@@ -978,6 +978,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#75-static-analysis-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 Static Analysis Contract
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2181,6 +2192,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#75-static-analysis-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 Static Analysis Contract
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2927,6 +2949,13 @@ validation, testing, and deployment. Every module, service, and controller MUST 
 <li>Test data fixtures are inserted per-test or per-class</li>
 <li>Transactions are wrapped per test and rolled back (auto-rollback)</li>
 </ul>
+<h3 id="75-static-analysis-contract">7.5 Static Analysis Contract<a class="headerlink" href="#75-static-analysis-contract" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>PHPStan</strong>: Level 8 over the configured <code>src/</code> scope; run <code>composer phpstan</code></li>
+<li><strong>Rector</strong>: CI dry-runs <code>composer rector:types:check</code> for Doctrine Collection/Repository PHPDoc rules</li>
+<li><strong>Broader Rector</strong>: <code>composer rector</code> is opt-in and must be reviewed before applying changes</li>
+<li><strong>Runtime</strong>: Use PHP 8.4 or newer for Composer, Symfony, PHPUnit, PHPStan, and Rector commands</li>
+</ul>
 <hr />
 <h2 id="8-code-style-contract">8. Code Style Contract<a class="headerlink" href="#8-code-style-contract" title="Permanent link">&para;</a></h2>
 <h3 id="81-php">8.1 PHP<a class="headerlink" href="#81-php" title="Permanent link">&para;</a></h3>
@@ -3182,23 +3211,23 @@ validation, testing, and deployment. Every module, service, and controller MUST 
 </tr>
 <tr>
 <td>2</td>
-<td>Start PostgreSQL service</td>
-</tr>
-<tr>
-<td>3</td>
 <td>Install dependencies (<code>composer install</code>)</td>
 </tr>
 <tr>
+<td>3</td>
+<td>Run PHPStan Level 8 with an isolated SQLite URL</td>
+</tr>
+<tr>
 <td>4</td>
-<td>Run migrations (test DB)</td>
+<td>Run Rector type-rule dry-run with an isolated SQLite URL</td>
 </tr>
 <tr>
 <td>5</td>
-<td>Run PHPUnit with coverage</td>
+<td>Start PostgreSQL service and prepare the test database</td>
 </tr>
 <tr>
 <td>6</td>
-<td>Enforce 90% line coverage minimum</td>
+<td>Run PHPUnit with coverage and enforce 90% line coverage minimum</td>
 </tr>
 </tbody>
 </table>

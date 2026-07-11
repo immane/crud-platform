@@ -978,6 +978,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#75" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 静态分析合约
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2181,6 +2192,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#75" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 静态分析合约
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2927,6 +2949,13 @@
 <li>按测试或按类别插入测试数据装置</li>
 <li>每次测试都会包装事务并回滚（自动回滚）</li>
 </ul>
+<h3 id="75">7.5 静态分析合约<a class="headerlink" href="#75" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>PHPStan</strong>：配置的 <code>src/</code> 范围内的级别 8；运行<code>composer phpstan</code></li>
+<li><strong>Rector</strong>：CI 针对 Doctrine Collection/Repository PHPDoc 规则进行试运行 <code>composer rector:types:check</code></li>
+<li><strong>Broader Rector</strong>：<code>composer rector</code> 是选择加入的，必须在应用更改之前进行审核</li>
+<li><strong>运行时</strong>：对 Composer、Symfony、PHPUnit、PHPStan 和 Rector 命令使用 PHP 8.4 或更高版本</li>
+</ul>
 <hr />
 <h2 id="8">8. 代码风格契约<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
 <h3 id="81-php">8.1 PHP<a class="headerlink" href="#81-php" title="Permanent link">&para;</a></h3>
@@ -3182,23 +3211,23 @@
 </tr>
 <tr>
 <td>2</td>
-<td>启动 PostgreSQL 服务</td>
-</tr>
-<tr>
-<td>3</td>
 <td>安装依赖项 (<code>composer install</code>)</td>
 </tr>
 <tr>
+<td>3</td>
+<td>使用独立的 SQLite URL 运行 PHPStan Level 8</td>
+</tr>
+<tr>
 <td>4</td>
-<td>运行迁移（测试数据库）</td>
+<td>使用隔离的 SQLite URL 运行 Rector type-rule dry-run</td>
 </tr>
 <tr>
 <td>5</td>
-<td>运行 PHPUnit 并进行覆盖</td>
+<td>启动PostgreSQL服务并准备测试数据库</td>
 </tr>
 <tr>
 <td>6</td>
-<td>强制执行最低 90% 的线路覆盖率</td>
+<td>运行具有覆盖率的 PHPUnit 并强制执行最低 90% 的行覆盖率</td>
 </tr>
 </tbody>
 </table>

@@ -405,6 +405,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#quality-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quality Checks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#license" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1279,6 +1290,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#quality-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quality Checks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#license" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1356,7 +1378,11 @@
 </tr>
 <tr>
 <td>Testing</td>
-<td>PHPUnit 12.5 (90% coverage minimum, currently 90.06%)</td>
+<td>PHPUnit 12.5 (90% coverage minimum)</td>
+</tr>
+<tr>
+<td>Static analysis</td>
+<td>PHPStan Level 8 + Rector type-rule dry-run</td>
 </tr>
 <tr>
 <td>Assets</td>
@@ -1396,6 +1422,14 @@
 <li><strong><a href="design/bundles/core/">Bundles</a></strong> -- Per-module design documents (Core, Common, Trade, Wallet, Identity)</li>
 <li><strong><a href="/api/doc">API Docs</a></strong> -- Interactive Swagger UI (when running)</li>
 </ul>
+<h2 id="quality-checks">Quality Checks<a class="headerlink" href="#quality-checks" title="Permanent link">&para;</a></h2>
+<p>Use PHP 8.4 or newer, then run the checks enforced by CI:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>composer<span class="w"> </span>phpstan
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>composer<span class="w"> </span>rector:types:check
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>vendor/bin/phpunit<span class="w"> </span>--coverage-text
+</code></pre></div>
+<p>The PHPStan and Rector jobs use isolated SQLite URLs so Composer's cache-clear
+script can run without a locally configured development database.</p>
 <h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
 <p>Apache-2.0</p>
 
