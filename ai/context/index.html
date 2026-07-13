@@ -2518,8 +2518,8 @@
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   ├── EventListener/                   # ExceptionInterceptor, ControllerListener, OpenApiEnricherListener, LocaleListener, AccessLogListener
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│   └── Utils/                           # UUID, Math, RSA, Location, Inflect, etc.
 <a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>├── src/Common/                   # CMS module: Category, Tag, Content, Comment, Page, Media, Setting
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│   ├── Entity/                   # 7 entities
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>├── src/Common/                   # CMS module: Category, Tag, Content, Comment, Page, Media, Setting, Picture
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│   ├── Entity/                   # 8 entities
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│   ├── Repository/
 <a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│   ├── Service/
 <a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│   └── Controller/App/ + Manage/ + Public/
@@ -3860,6 +3860,10 @@
 <tr>
 <td>20260704000000</td>
 <td><code>promotion_template</code>, <code>promotion</code> (DSL text, AST cache, per-store config, time range, <code>IDX_PROMOTION_ACTIVE_STORE</code> composite index)</td>
+</tr>
+<tr>
+<td>20260713000000</td>
+<td><code>common_picture</code> (nullable <code>user_id</code> FK→<code>users</code> ON DELETE SET NULL, required <code>category_id</code> FK→<code>common_category</code> ON DELETE CASCADE, nullable <code>title</code>, required <code>image</code>, nullable <code>metadata</code> json)</td>
 </tr>
 </tbody>
 </table>
