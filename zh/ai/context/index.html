@@ -1625,10 +1625,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#15-database-tables-12-migrations" class="md-nav__link">
+  <a href="#15-database-tables-13-migrations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15. Database Tables (12 Migrations)
+        15. Database Tables (13 Migrations)
       
     </span>
   </a>
@@ -2339,10 +2339,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#15-database-tables-12-migrations" class="md-nav__link">
+  <a href="#15-database-tables-13-migrations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15. Database Tables (12 Migrations)
+        15. Database Tables (13 Migrations)
       
     </span>
   </a>
@@ -2487,7 +2487,7 @@
 
 <h1 id="crud-skeleton-full-codebase-context">CRUD Skeleton - Full Codebase Context<a class="headerlink" href="#crud-skeleton-full-codebase-context" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>Context snapshot. Last updated: 2026-07-11</p>
+<p>Context snapshot. Last updated: 2026-07-13</p>
 </blockquote>
 <hr />
 <h2 id="1-project-overview">1. Project Overview<a class="headerlink" href="#1-project-overview" title="Permanent link">&para;</a></h2>
@@ -2596,7 +2596,7 @@
 <a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>│       ├── translation.yaml      # Translator config: default_locale en, translations/ path
 <a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>│       ├── workflow.yaml         # Order state machine (draft→completed)
 <a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>│       └── ...
-<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>├── migrations/                   # Doctrine migrations (latest adds media category relation)
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>├── migrations/                   # 13 migrations (latest creates common_picture table)
 <a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>├── translations/                 # i18n translation files (messages.en/zh/zh_Hant/ja.yaml)
 <a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>├── docs/
 <a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>│   ├── ai/context.md             # This file
@@ -2604,7 +2604,7 @@
 <a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>│   │   └── bundles/              # Per-module design docs (core, common, trade, wallet, identity, wechat, payment, storage, promotion)
 <a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>│   └── openapi/                       # endpoints.yaml + order/payment frontend flow docs
 <a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>├── scripts/tests/                # Test scripts
-<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>├── tests/                        # 1593 PHPUnit tests, 5185 assertions, 91%+ coverage
+<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>├── tests/                        # 1635 PHPUnit tests, 5320 assertions, 91%+ coverage
 <a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>├── README.md                     # English README
 <a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>├── README.zh-cn.md               # Chinese (Simplified) README
 <a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>├── README.zh-hant.md             # Chinese (Traditional) README
@@ -3346,7 +3346,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>~280 translation keys</strong> per locale covering: entity names (18), field names (95), status/enum values (17), authentication/JWT messages, WeChat errors, Core framework errors (View mixins, Service traits), success messages, Wallet/Trade/Payment/media/Storage errors, expression parser errors, and more.</p>
+<p><strong>~280 translation keys</strong> per locale covering: entity names (19), field names (96), status/enum values (17), authentication/JWT messages, WeChat errors, Core framework errors (View mixins, Service traits), success messages, Wallet/Trade/Payment/media/Storage errors, expression parser errors, and more.</p>
 <h3 id="102-translation-flow">10.2 Translation Flow<a class="headerlink" href="#102-translation-flow" title="Permanent link">&para;</a></h3>
 <p>All user-facing messages pass through the translator:</p>
 <table>
@@ -3804,7 +3804,7 @@
 </table>
 <h3 id="144-schema-configuration-configpackagesnelmio_api_docyaml">14.4 Schema Configuration (<code>config/packages/nelmio_api_doc.yaml</code>)<a class="headerlink" href="#144-schema-configuration-configpackagesnelmio_api_docyaml" title="Permanent link">&para;</a></h3>
 <p>44+ named schemas across 13 tags (Auth, Products, Orders, Categories, Tags, Contents, Comments, Pages, Media, Settings, Promotions, PromotionTemplates, Wallet, System, Wechat). Each with field-level type, description, enum, and example values. <code>path_patterns</code> includes both <code>^/api</code> and <code>^/system</code>.</p>
-<h2 id="15-database-tables-12-migrations">15. Database Tables (12 Migrations)<a class="headerlink" href="#15-database-tables-12-migrations" title="Permanent link">&para;</a></h2>
+<h2 id="15-database-tables-13-migrations">15. Database Tables (13 Migrations)<a class="headerlink" href="#15-database-tables-13-migrations" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -3971,14 +3971,14 @@
 <li><strong>Framework</strong>: PHPUnit 12.5</li>
 <li><strong>DB</strong>: SQLite <code>var/test.db</code> in test environment</li>
 <li><strong>Coverage</strong>: 90% minimum (enforced in CI), currently <strong>91.12% lines</strong> from latest local Xdebug run</li>
-<li><strong>Test count</strong>: <strong>1593 tests</strong>, <strong>5185 assertions</strong></li>
+<li><strong>Test count</strong>: <strong>1635 tests</strong>, <strong>5320 assertions</strong></li>
 <li><strong>Static analysis</strong>: PHPStan Level 8 with zero errors in its configured scope (<code>src/</code>, excluding optional SDK code, exception classes, and documented false-positive suppressions). Generic contract via <code>@template TEntity</code> on <code>BaseServiceInterface</code>/<code>BaseService</code> + <code>@extends</code> on 18 concrete service pairs. Rector automates Doctrine Collection/Repository PHPDoc with <code>composer rector:types</code>; CI enforces <code>composer rector:types:check</code> as a dry-run.</li>
 <li><strong>Local PHP note</strong>: default <code>php</code> may point to PHP 7.4; use Homebrew PHP 8.5 at <code>/opt/homebrew/opt/php@8.5/bin/php</code> for local Symfony/PHPUnit commands.</li>
 <li><strong>HTML coverage report</strong>: <code>XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html var/coverage</code></li>
 <li><strong>Key test groups</strong>:</li>
-<li><code>tests/Trade/</code>: 171+ tests + Controller/Manage/OrderControllerTest (16 tests for not-found, workflow guards, payment validation)</li>
+<li><code>tests/Trade/</code>: 216+ tests + Controller/Manage/OrderControllerTest (16 tests for not-found, workflow guards, payment validation)</li>
 <li><code>tests/Wallet/</code>: ~105 tests (Entity, Integration, Transfer Service, WalletService, Payment/Gateway, API regression)</li>
-<li><code>tests/Common/</code>: 69 tests (Entity, Integration, Batch update, media upload/delete)</li>
+<li><code>tests/Common/</code>: 118 tests (Entity, Integration, Batch update, media upload/delete, Picture CRUD)</li>
 <li><code>tests/Identity/</code>: 116+ tests (Auth, OTP, Token, Black box, UserService, UserController, UserApiIntegration, Profile entity, ProfileController)</li>
 <li><code>tests/Promotion/</code>: 320+ tests (Entity, DSL lexer/parser/evaluator, Strategies, Engine, Calculator, App/Manage controllers, real SQLite pipeline integration with Doctrine + OrderService)</li>
 <li><code>tests/Payment/</code>: ~60 tests (Gateway, Registry, Adjustment/Provider, Invoice, Multi-gateway integration)</li>
