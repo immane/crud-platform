@@ -4088,6 +4088,10 @@
 <td>Async transport</td>
 </tr>
 <tr>
+<td><code>OUTBOX_PUBLISH_INTERVAL</code></td>
+<td>Seconds between automatic Trade/Store Outbox relay runs (default <code>5</code>)</td>
+</tr>
+<tr>
 <td><code>DEFAULT_URI</code></td>
 <td>Base URL for CLI contexts</td>
 </tr>
@@ -4104,7 +4108,7 @@
 <p>Qiniu configuration is intentionally <strong>not</strong> environment-variable based. Configure these records in <code>common_setting</code> when <code>storage=qiniu</code> is needed: <code>qiniu.access_key</code>, <code>qiniu.secret_key</code>, <code>qiniu.bucket</code>, <code>qiniu.domain</code>.</p>
 <h2 id="19-docker-deployment">19. Docker Deployment<a class="headerlink" href="#19-docker-deployment" title="Permanent link">&para;</a></h2>
 <h3 id="171-architecture">17.1 Architecture<a class="headerlink" href="#171-architecture" title="Permanent link">&para;</a></h3>
-<p>5 services in <code>compose.yaml</code>: <strong>nginx</strong> (reverse proxy), <strong>app</strong> (PHP-FPM 8.4, built from <code>Dockerfile</code>), <strong>database</strong> (MySQL 8), <strong>redis</strong> (Redis 7 Alpine), <strong>mailer</strong> (Mailpit).</p>
+<p>7 services in <code>compose.yaml</code>: <strong>nginx</strong> (reverse proxy), <strong>app</strong> (PHP-FPM 8.4), <strong>worker</strong> (Messenger async consumer), <strong>scheduler</strong> (Trade/Store Outbox relay), <strong>database</strong> (MySQL 8), <strong>redis</strong> (Redis 7 Alpine), <strong>mailer</strong> (Mailpit).</p>
 <h3 id="172-development-zero-config">17.2 Development (zero-config)<a class="headerlink" href="#172-development-zero-config" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction

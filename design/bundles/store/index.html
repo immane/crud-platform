@@ -869,6 +869,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#24-runtime-workers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Runtime Workers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#24-stable-scalar-references" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2132,6 +2143,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#24-runtime-workers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Runtime Workers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#24-stable-scalar-references" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3040,6 +3062,32 @@ transaction. A relay delivers events at least once. Consumers provide idempotenc
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  at least once + inbox deduplication + business unique keys
 </code></pre></div>
 <p>No component may assume an exactly-once message broker guarantee.</p>
+<h3 id="24-runtime-workers">2.4 Runtime Workers<a class="headerlink" href="#24-runtime-workers" title="Permanent link">&para;</a></h3>
+<p>The modular monolith starts asynchronous processing as Compose services, not inside the
+PHP-FPM request process:</p>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Command</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>worker</code></td>
+<td><code>messenger:consume async</code></td>
+<td>Consume Trade and Store integration messages with Messenger retry handling</td>
+</tr>
+<tr>
+<td><code>scheduler</code></td>
+<td>Trade/Store Outbox publisher loop</td>
+<td>Relay unpublished Outbox rows every <code>OUTBOX_PUBLISH_INTERVAL</code> seconds (default <code>5</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>The scheduler and worker use the same application image and environment as <code>app</code>. This
+keeps the Outbox pattern durable in SQL while making the monolith operationally automatic.</p>
 <h3 id="24-stable-scalar-references">2.4 Stable Scalar References<a class="headerlink" href="#24-stable-scalar-references" title="Permanent link">&para;</a></h3>
 <p>Cross-boundary references are UUIDs and scalar snapshots, never Doctrine associations.</p>
 <p>Examples:</p>

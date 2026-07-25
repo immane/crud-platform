@@ -872,6 +872,17 @@
   <a href="#24" class="md-nav__link">
     <span class="md-ellipsis">
       
+        2.4 运行时工作者
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
         2.4 稳定标量引用
       
     </span>
@@ -2135,6 +2146,17 @@
   <a href="#24" class="md-nav__link">
     <span class="md-ellipsis">
       
+        2.4 运行时工作者
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
         2.4 稳定标量引用
       
     </span>
@@ -3040,7 +3062,33 @@ Store 捆绑包 (<code>src/Store/</code>) 拥有多商店上下文、商店操�
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  at least once + inbox deduplication + business unique keys
 </code></pre></div>
 <p>任何组件都不能承担一次性消息代理保证。</p>
-<h3 id="24">2.4 稳定标量引用<a class="headerlink" href="#24" title="Permanent link">&para;</a></h3>
+<h3 id="24">2.4 运行时工作者<a class="headerlink" href="#24" title="Permanent link">&para;</a></h3>
+<p>模块化整体作为 Compose 服务启动异步处理，而不是在
+PHP-FPM请求流程：</p>
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>命令</th>
+<th>责任</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>worker</code></td>
+<td><code>messenger:consume async</code></td>
+<td>通过 Messenger 重试处理使用 Trade 和 Store 集成消息</td>
+</tr>
+<tr>
+<td><code>scheduler</code></td>
+<td>贸易/商店发件箱发布者循环</td>
+<td>每 <code>OUTBOX_PUBLISH_INTERVAL</code> 秒中继一次未发布的发件箱行（默认 <code>5</code>）</td>
+</tr>
+</tbody>
+</table>
+<p>调度程序和工作线程使用与 <code>app</code> 相同的应用程序映像和环境。这个
+保持发件箱模式在 SQL 中的持久性，同时使整体操作自动化。</p>
+<h3 id="24_1">2.4 稳定标量引用<a class="headerlink" href="#24_1" title="Permanent link">&para;</a></h3>
 <p>跨界引用是 UUID 和标量快照，而不是 Doctrine 关联。</p>
 <p>示例：</p>
 <ul>
@@ -3369,7 +3417,7 @@ Store端权威记录，集成事件也有同样的记录
 <ul>
 <li>独特的<code>(store_id, user_uuid)</code>。</li>
 <li>用于授权查找的索引<code>(user_uuid, status)</code>。</li>
-<li>会员角色是一个商店的本地成员角色，不得写入 <code>Identity\User.roles</code>。</li>
+<li>会员角色是一个商店的本地成员角色，不得写入<code>Identity\User.roles</code>。</li>
 <li><code>ROLE_ADMIN</code> 仍然是平台范围的覆盖；商店会员资格支持商店范围
   仅操作。</li>
 </ul>
@@ -3585,7 +3633,7 @@ Store端权威记录，集成事件也有同样的记录
 </tr>
 </tbody>
 </table>
-<p>Store 工作流程不得使用 <code>paid</code>、<code>refunded</code> 或 <code>completed</code> 作为其自己的状态
+<p>Store 工作流不得使用 <code>paid</code>、<code>refunded</code> 或 <code>completed</code> 作为其自己的状态
 名称。这些国家仍然是贸易商业国家。</p>
 <h3 id="55">5.5 发件箱和收件箱实体<a class="headerlink" href="#55" title="Permanent link">&para;</a></h3>
 <h4 id="_2">商店发件箱消息<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h4>
@@ -3730,7 +3778,7 @@ Store端权威记录，集成事件也有同样的记录
 4.存储接受/拒绝消费者是幂等的。</li>
 </ol>
 <h3 id="62">6.2 支付门<a class="headerlink" href="#62" title="Permanent link">&para;</a></h3>
-<p>贸易支付服务检查<code>order.status</code>是否符合付款条件。支付端点
+<p>贸易付款服务检查<code>order.status</code>是否符合付款条件。支付端点
 当订单等待商店接受时，必须返回冲突响应。这是一个
 业务门，而不是 UI 约定。</p>
 <h3 id="63">6.3 订单创建响应<a class="headerlink" href="#63" title="Permanent link">&para;</a></h3>
@@ -3768,7 +3816,7 @@ Store端权威记录，集成事件也有同样的记录
 </code></pre></div>
 <p>规则：</p>
 <ul>
-<li><code>eventId</code> 是不可变的且全局唯一的。</li>
+<li><code>eventId</code> 是不可变的并且全局唯一。</li>
 <li><code>aggregateId</code> 是聚合 UUID，而不是内部数据库 ID。</li>
 <li><code>correlationId</code>遵循跨服务的业务流程；对于这个流程，它开始于
   交易订单 UUID。</li>
@@ -3779,7 +3827,7 @@ Store端权威记录，集成事件也有同样的记录
 </ul>
 <h3 id="72-tradeordercreatedv1">7.2 <code>trade.order.created.v1</code><a class="headerlink" href="#72-tradeordercreatedv1" title="Permanent link">&para;</a></h3>
 <p><strong>发布者：</strong> 订单创建提交后进行交易发件箱转发。</p>
-<p><strong>消费者：</strong> 商店<code>TradeOrderCreatedConsumer</code>。</p>
+<p><strong>消费者：</strong> 存储<code>TradeOrderCreatedConsumer</code>。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">&quot;orderUuid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;trade-order-uuid&quot;</span><span class="p">,</span>
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">&quot;store&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -4227,7 +4275,7 @@ StoreOrder 的本地商店关系，而不是请求提供的商店标识符。</p
 <ul>
 <li><code>reservationId</code>：存储生成的幂等性/引用 UUID。</li>
 <li><code>storeUuid</code>。</li>
-<li><code>tradeOrderUuid</code>和<code>storeOrderUuid</code>。</li>
+<li><code>tradeOrderUuid</code> 和 <code>storeOrderUuid</code>。</li>
 <li>商品库存键、数量和不可变的关联 ID。</li>
 <li>预订到期/截止日期。</li>
 </ul>

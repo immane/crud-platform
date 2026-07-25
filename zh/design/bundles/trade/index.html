@@ -2207,7 +2207,7 @@
 <h3 id="12">1.2 商店范围内的订单<a class="headerlink" href="#12" title="Permanent link">&para;</a></h3>
 <p><code>POST /api/v1/app/orders</code> 仍然是唯一的客户订单入口点。值得信赖的
 <code>X-Store-Code</code> 由 Store 捆绑解析为 Trade-owned 标量
-<code>StoreContext</code>；贸易永远不会导入商店实体。订单收到 <code>_store</code>
+<code>StoreContext</code>;贸易永远不会导入商店实体。订单收到 <code>_store</code>
 元数据快照，输入<code>awaiting_store_acceptance</code>，写入
 <code>trade.order.created.v1</code> 在同一事务中。</p>
 <p><code>app:trade:outbox:publish</code> 通过 Messenger 调度事件。商店消耗它
