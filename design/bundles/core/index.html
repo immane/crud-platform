@@ -2236,7 +2236,7 @@ authorization shortcut.</p>
 <tr>
 <td><code>DetailApiViewMixin</code></td>
 <td><code>GET /{id}</code></td>
-<td>Single entity by numeric ID</td>
+<td>Single entity by numeric ID or UUID</td>
 </tr>
 <tr>
 <td><code>CreateApiViewMixin</code></td>
@@ -2246,12 +2246,22 @@ authorization shortcut.</p>
 <tr>
 <td><code>UpdateApiViewMixin</code></td>
 <td><code>PUT /{id}</code>, <code>POST /batch-update</code></td>
-<td>Single update + batch upsert</td>
+<td>Single update + batch upsert by numeric ID or UUID</td>
 </tr>
 <tr>
 <td><code>DeleteApiViewMixin</code></td>
 <td><code>DELETE /{id}</code></td>
-<td>Entity removal</td>
+<td>Entity removal by numeric ID or UUID</td>
+</tr>
+<tr>
+<td><code>ScopedListApiViewMixin</code></td>
+<td><code>GET /</code></td>
+<td>Collection scoped by a required parent route parameter</td>
+</tr>
+<tr>
+<td><code>ScopedDetailApiViewMixin</code></td>
+<td><code>GET /{id}</code></td>
+<td>Detail scoped by a required parent route parameter</td>
 </tr>
 <tr>
 <td><code>SingleCreateAndUpdateApiViewMixin</code></td>

@@ -2907,7 +2907,9 @@
 
 <h1 id="store-bundle-design">Store Bundle Design<a class="headerlink" href="#store-bundle-design" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>Status: proposed design, not implemented.</strong>
+<p><strong>Status: phase 1-3 implemented in the modular monolith.</strong> Store, membership,
+StoreOrder, Trade/Store Outbox-Inbox, Messenger consumers, and Store acceptance are
+implemented. Inventory reservation remains an intentionally deferred boundary.
 The Store bundle (<code>src/Store/</code>) owns multi-store context, store operations, and the
 store-side order projection. Trade remains the single commercial order entry point
 and the source of truth for order amount, payment, refund, and customer order status.</p>
@@ -3093,9 +3095,14 @@ and generic; Trade MUST NOT import Store entities, repositories, or services.</p
 </tr>
 </tbody>
 </table>
-<p>The current workflow is <code>draft -&gt; pending -&gt; confirmed -&gt; paid -&gt; fulfilled -&gt; completed</code>.
-It has no order-created event and no store acceptance state. This document defines the
-target workflow; it does not claim those states currently exist.</p>
+<p>The implemented Store-scoped workflow is <code>draft -&gt; awaiting_store_acceptance -&gt;
+store_accepted -&gt; confirmed -&gt; paid -&gt; fulfilled -&gt; completed</code>. Store rejection follows
+<code>awaiting_store_acceptance -&gt; store_rejected -&gt; cancelled</code>. Non-Store orders retain the
+existing Trade workflow.</p>
+<p>The current context transport is <code>X-Store-Code</code>, resolved only against an active Store
+by <code>StoreContextResolver</code>. A Store-scoped App order returns <code>202</code>. The Trade-order
+consumer currently auto-accepts eligible active Stores; Inventory reservation is the
+future decision boundary.</p>
 <h3 id="31-store-context-at-the-trade-entry-point">3.1 Store Context At The Trade Entry Point<a class="headerlink" href="#31-store-context-at-the-trade-entry-point" title="Permanent link">&para;</a></h3>
 <p>The Trade controller obtains a <code>StoreContext</code> before calculating a quote or creating
 an order. It MUST use a generic interface or DTO, never a Store entity type.</p>

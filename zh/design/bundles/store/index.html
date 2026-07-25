@@ -2907,7 +2907,9 @@
 
 <h1 id="_1">商店捆绑设计<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>状态：提议的设计，未实施。</strong>
+<p><strong>状态：在模块化整体中实现第 1-3 阶段。</strong> 商店、会员资格、
+商店订单、贸易/商店发件箱-收件箱、Messenger 消费者和商店接受
+已实施。库存保留仍然是一个有意推迟的界限。
 Store 捆绑包 (<code>src/Store/</code>) 拥有多商店上下文、商店操作和
 店方订单预测。贸易仍然是单一商业订单切入点
 以及订单金额、付款、退款和客户订单状态的真实来源。</p>
@@ -3093,9 +3095,14 @@ Trade拥有唯一的订单入口点。所需的改变有意缩小范围
 </tr>
 </tbody>
 </table>
-<p>当前的工作流程是<code>draft -&gt; pending -&gt; confirmed -&gt; paid -&gt; fulfilled -&gt; completed</code>。
-它没有订单创建事件，也没有商店接受状态。该文件定义了
-目标工作流程；它没有声称这些国家目前存在。</p>
+<p>实现的商店范围的工作流程是<code>draft -&gt; awaiting_store_acceptance -&gt;
+store_accepted -&gt; confirmed -&gt; paid -&gt; fulfilled -&gt; completed</code>。商店拒绝如下
+<code>awaiting_store_acceptance -&gt; store_rejected -&gt; cancelled</code>。非商店订单保留
+现有的贸易工作流程。</p>
+<p>当前上下文传输是 <code>X-Store-Code</code>，仅针对活动 Store 进行解析
+由<code>StoreContextResolver</code>。商店范围的应用程序订单返回 <code>202</code>。贸易秩序
+消费者目前自动接受符合条件的活跃商店；库存预留是
+未来的决策边界。</p>
 <h3 id="31">3.1 在交易入口点存储上下文<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
 <p>交易控制器在计算报价或创建之前获取 <code>StoreContext</code>
 一个订单。它必须使用通用接口或 DTO，而不是 Store 实体类型。</p>
@@ -3772,7 +3779,7 @@ Store端权威记录，集成事件也有同样的记录
 </ul>
 <h3 id="72-tradeordercreatedv1">7.2 <code>trade.order.created.v1</code><a class="headerlink" href="#72-tradeordercreatedv1" title="Permanent link">&para;</a></h3>
 <p><strong>发布者：</strong> 订单创建提交后进行交易发件箱转发。</p>
-<p><strong>消费者：</strong> 存储<code>TradeOrderCreatedConsumer</code>。</p>
+<p><strong>消费者：</strong> 商店<code>TradeOrderCreatedConsumer</code>。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">&quot;orderUuid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;trade-order-uuid&quot;</span><span class="p">,</span>
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">&quot;store&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -4220,7 +4227,7 @@ StoreOrder 的本地商店关系，而不是请求提供的商店标识符。</p
 <ul>
 <li><code>reservationId</code>：存储生成的幂等性/引用 UUID。</li>
 <li><code>storeUuid</code>。</li>
-<li><code>tradeOrderUuid</code> 和 <code>storeOrderUuid</code>。</li>
+<li><code>tradeOrderUuid</code>和<code>storeOrderUuid</code>。</li>
 <li>商品库存键、数量和不可变的关联 ID。</li>
 <li>预订到期/截止日期。</li>
 </ul>
@@ -4465,7 +4472,7 @@ StoreOrder 的本地商店关系，而不是请求提供的商店标识符。</p
 </ol>
 <h3 id="3_1">第 3 阶段：存储消费者和决策事件<a class="headerlink" href="#3_1" title="Permanent link">&para;</a></h3>
 <ol>
-<li>实现具有收件箱和业务幂等性的<code>TradeOrderCreatedConsumer</code>。</li>
+<li>实现<code>TradeOrderCreatedConsumer</code>，具有收件箱和业务幂等性。</li>
 <li>从不可变事件快照创建 StoreOrder。</li>
 <li>实施商店资格检查和接受/拒绝决定。</li>
 <li>将<code>store.order.accepted.v1</code> / <code>store.order.rejected.v1</code>写入存储发件箱。</li>

@@ -768,6 +768,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#12-store-scoped-orders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Store-Scoped Orders
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1670,6 +1681,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#12-store-scoped-orders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Store-Scoped Orders
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2143,6 +2165,7 @@ order state machine.</p>
 <li><strong>Price Calculation Pipeline</strong>: pluggable calculators with priority ordering</li>
 <li><strong>Soft Deletes</strong>: products and specifications use <code>isDeleted</code> flag</li>
 <li><strong>UUID v4</strong>: external identifiers for orders and items</li>
+<li><strong>Store integration</strong>: Store-scoped orders write a local Outbox event and await Store acceptance</li>
 </ul>
 <h3 id="11-entities">1.1 Entities<a class="headerlink" href="#11-entities" title="Permanent link">&para;</a></h3>
 <table>
@@ -2174,8 +2197,23 @@ order state machine.</p>
 <td><code>trade_order_item</code></td>
 <td>Line item with snapshot, quantity, unit price</td>
 </tr>
+<tr>
+<td><code>TradeOutboxMessage</code></td>
+<td><code>trade_outbox_message</code></td>
+<td>Transactional integration event relay record</td>
+</tr>
 </tbody>
 </table>
+<h3 id="12-store-scoped-orders">1.2 Store-Scoped Orders<a class="headerlink" href="#12-store-scoped-orders" title="Permanent link">&para;</a></h3>
+<p><code>POST /api/v1/app/orders</code> remains the sole customer order entry point. A trusted
+<code>X-Store-Code</code> is resolved by the Store bundle into the Trade-owned scalar
+<code>StoreContext</code>; Trade never imports a Store entity. The order receives an <code>_store</code>
+metadata snapshot, enters <code>awaiting_store_acceptance</code>, and writes
+<code>trade.order.created.v1</code> in the same transaction.</p>
+<p><code>app:trade:outbox:publish</code> dispatches the event through Messenger. Store consumes it
+idempotently, writes its StoreOrder and result Outbox event, and Trade consumers apply
+<code>store.order.accepted.v1</code> or <code>store.order.rejected.v1</code>. The status column is
+<code>VARCHAR(40)</code> to support these workflow states.</p>
 <hr />
 <h2 id="2-file-structure">2. File Structure<a class="headerlink" href="#2-file-structure" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>src/Trade/
@@ -2193,28 +2231,32 @@ order state machine.</p>
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>|   |-- OrderItem.php
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>|   |-- Product.php
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>|   |-- Specification.php
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>|-- EventListener/
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>|   |-- OrderWorkflowListener.php          # Post-transition timestamp setters
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>|-- Exception/
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>|   |-- OrderInvalidTransitionException.php
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>|   |-- SpecificationNotFoundException.php
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>|-- Repository/
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>|   |-- OrderItemRepository.php
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>|   |-- OrderRepository.php
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>|   |-- ProductRepository.php
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>|   |-- SpecificationRepository.php
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>|-- Service/
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>|   |-- OrderItemService.php
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>|   |-- OrderService.php                   # Order creation + price pipeline
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>|   |-- ProductService.php
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>|   |-- SpecificationService.php
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>|   |-- Pricing/
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>|       |-- PriceCalculatorInterface.php   # Plugin contract
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>|       |-- PriceCalculationContext.php    # Input/output DTO
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>|       |-- PriceCalculationResult.php     # Result DTO
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>|       |-- BasePriceCalculator.php        # Resolves specs, extracts unit price
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>|       |-- QuantityCalculator.php         # Computes price = unitPrice * quantity
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>|       |-- TotalAggregator.php            # Establishes subtotal (priority 55)
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>|   `-- TradeOutboxMessage.php
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>|-- Command/PublishOutboxCommand.php
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>|-- DTO/StoreContext.php
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>|-- Message/ + MessageHandler/             # Store integration contracts/consumers
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>|-- EventListener/
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>|   |-- OrderWorkflowListener.php          # Post-transition timestamp setters
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>|-- Exception/
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>|   |-- OrderInvalidTransitionException.php
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>|   |-- SpecificationNotFoundException.php
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>|-- Repository/
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>|   |-- OrderItemRepository.php
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>|   |-- OrderRepository.php
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>|   |-- ProductRepository.php
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>|   |-- SpecificationRepository.php
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>|-- Service/
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>|   |-- OrderItemService.php
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>|   |-- OrderService.php                   # Order creation + price pipeline
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>|   |-- ProductService.php
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>|   |-- SpecificationService.php
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>|   |-- Pricing/
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>|       |-- PriceCalculatorInterface.php   # Plugin contract
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>|       |-- PriceCalculationContext.php    # Input/output DTO
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>|       |-- PriceCalculationResult.php     # Result DTO
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>|       |-- BasePriceCalculator.php        # Resolves specs, extracts unit price
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>|       |-- QuantityCalculator.php         # Computes price = unitPrice * quantity
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>|       |-- TotalAggregator.php            # Establishes subtotal (priority 55)
 </code></pre></div>
 <hr />
 <h2 id="3-entity-relationships">3. Entity Relationships<a class="headerlink" href="#3-entity-relationships" title="Permanent link">&para;</a></h2>
