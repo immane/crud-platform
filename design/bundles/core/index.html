@@ -27,7 +27,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -35,7 +35,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -802,6 +802,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#411-identifier-lookup-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1.1 Identifier Lookup Contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#42-dynamic-query-pipeline-list-method" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1096,6 +1107,34 @@
     
   
     Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
   
 
     
@@ -1627,6 +1666,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#411-identifier-lookup-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1.1 Identifier Lookup Contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#42-dynamic-query-pipeline-list-method" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2081,7 +2131,7 @@ It provides the controller base class, CRUD service abstraction, dynamic query e
 <tr>
 <td><code>get</code></td>
 <td><code>get(mixed $object, bool $directly=false)</code></td>
-<td>Find by id/criteria/QueryBuilder</td>
+<td>Find by local id, UUID, criteria, or QueryBuilder</td>
 </tr>
 <tr>
 <td><code>list</code></td>
@@ -2110,31 +2160,55 @@ It provides the controller base class, CRUD service abstraction, dynamic query e
 </tr>
 </tbody>
 </table>
+<h3 id="411-identifier-lookup-contract">4.1.1 Identifier Lookup Contract<a class="headerlink" href="#411-identifier-lookup-contract" title="Permanent link">&para;</a></h3>
+<p><code>get()</code> is the common lookup facade. The current implementation resolves scalar values
+through the local primary key. The following is the target compatibility contract for
+the UUID-aware implementation; it must be covered by Core regression tests before code
+changes are released:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">$service-&gt;get(123);                  // local integer primary key</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">$service-&gt;get(&#39;123&#39;);                // local integer primary key, backward compatible</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">$service-&gt;get(&#39;canonical-uuid&#39;);     // unique uuid field</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="x">$service-&gt;get([&#39;uuid&#39; =&gt; $uuid]);    // explicit criteria, always unambiguous</span>
+</code></pre></div>
+<p>Rules:</p>
+<ol>
+<li>Integers and digit-only strings resolve to the local primary key.</li>
+<li>A canonical UUID string resolves against the entity's <code>uuid</code> field.</li>
+<li>Arrays remain explicit Doctrine criteria and QueryBuilder handling remains unchanged.</li>
+<li>An entity without a mapped <code>uuid</code> field returns <code>null</code> or raises a clear development
+   error for UUID input; it MUST NOT silently retry the value as a primary key.</li>
+<li>The implementation MUST NOT use an "id lookup then UUID fallback" heuristic because
+   it is ambiguous and adds unnecessary queries.</li>
+</ol>
+<p>Cross-module services, event consumers, and external API code SHOULD use explicit
+<code>get(['uuid' =&gt; $uuid])</code> or a module-specific <code>getByUuid()</code> convenience method. The
+plain <code>get($uuid)</code> form is available for ergonomic controller/service code, not as an
+authorization shortcut.</p>
 <h3 id="42-dynamic-query-pipeline-list-method">4.2 Dynamic Query Pipeline (<code>list()</code> method)<a class="headerlink" href="#42-dynamic-query-pipeline-list-method" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>request params
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  -&gt; @dql         (DQL WHERE sub-clause)
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>  -&gt; @filter      (Expression -&gt; ExpressionDqlParser -&gt; DQL WHERE)
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>      fallback: LegacyEvaluator (in-memory)
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>  -&gt; @order       (DQL ORDER BY)
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>  -&gt; @select      (DQL SELECT)
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>  -&gt; @groupBy     (DQL GROUP BY)
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>  -&gt; @hints       (Query hints)
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>  -&gt; @sort        (in-memory sort)
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>  -&gt; @showDQL     (debug: return compiled DQL)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>request params
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  -&gt; @dql         (DQL WHERE sub-clause)
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>  -&gt; @filter      (Expression -&gt; ExpressionDqlParser -&gt; DQL WHERE)
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>      fallback: LegacyEvaluator (in-memory)
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>  -&gt; @order       (DQL ORDER BY)
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>  -&gt; @select      (DQL SELECT)
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>  -&gt; @groupBy     (DQL GROUP BY)
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>  -&gt; @hints       (Query hints)
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>  -&gt; @sort        (in-memory sort)
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>  -&gt; @showDQL     (debug: return compiled DQL)
 </code></pre></div>
 <h3 id="43-update-mutation-pipeline">4.3 <code>update()</code> Mutation Pipeline<a class="headerlink" href="#43-update-mutation-pipeline" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Input data
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  -&gt; ManyToOne / OneToOne: resolve by ID
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>  -&gt; ManyToMany / OneToMany: add/remove by ID (uses Inflect for setter naming)
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>  -&gt; DateTime: deserialize from string
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>  -&gt; Scalar fields: Symfony Serializer
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>  -&gt; Symfony Validator
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>  -&gt; persist + flush (unless $noFlush)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Input data
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  -&gt; ManyToOne / OneToOne: resolve by ID
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  -&gt; ManyToMany / OneToMany: add/remove by ID (uses Inflect for setter naming)
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>  -&gt; DateTime: deserialize from string
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>  -&gt; Scalar fields: Symfony Serializer
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>  -&gt; Symfony Validator
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>  -&gt; persist + flush (unless $noFlush)
 </code></pre></div>
 <h3 id="44-transaction">4.4 Transaction<a class="headerlink" href="#44-transaction" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="x">$this-&gt;wrapInTransaction(function ($em) {</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">    // All-or-nothing operations</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="x">});</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="x">$this-&gt;wrapInTransaction(function ($em) {</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="x">    // All-or-nothing operations</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="x">});</span>
 </code></pre></div>
 <hr />
 <h2 id="5-view-mixin-system">5. View Mixin System<a class="headerlink" href="#5-view-mixin-system" title="Permanent link">&para;</a></h2>
@@ -2204,12 +2278,12 @@ It provides the controller base class, CRUD service abstraction, dynamic query e
 <hr />
 <h2 id="6-expression-dynamic-query-engine">6. Expression Dynamic Query Engine<a class="headerlink" href="#6-expression-dynamic-query-engine" title="Permanent link">&para;</a></h2>
 <h3 id="61-flow">6.1 Flow<a class="headerlink" href="#61-flow" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>User query string (@filter or @sort)
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  -&gt; ExpressionService (PSR-16 cache facade)
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    -&gt; ExpressionDqlParser::parse(string $expression)
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>      -&gt; fragments: [joins, where, parameters]
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    -&gt; ExpressionQueryBuilderAssembler::assemble(fragments, QueryBuilder)
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>      -&gt; complete QueryBuilder
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>User query string (@filter or @sort)
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  -&gt; ExpressionService (PSR-16 cache facade)
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    -&gt; ExpressionDqlParser::parse(string $expression)
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>      -&gt; fragments: [joins, where, parameters]
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    -&gt; ExpressionQueryBuilderAssembler::assemble(fragments, QueryBuilder)
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>      -&gt; complete QueryBuilder
 </code></pre></div>
 <h3 id="62-expressiondqlparser">6.2 ExpressionDqlParser<a class="headerlink" href="#62-expressiondqlparser" title="Permanent link">&para;</a></h3>
 <p><strong>File</strong>: <code>src/Core/Parser/ExpressionDqlParser.php</code> (479 lines)</p>
@@ -2235,12 +2309,12 @@ It provides the controller base class, CRUD service abstraction, dynamic query e
 <hr />
 <h2 id="7-serializer-pipeline">7. Serializer Pipeline<a class="headerlink" href="#7-serializer-pipeline" title="Permanent link">&para;</a></h2>
 <h3 id="71-normalizer-stack">7.1 Normalizer Stack<a class="headerlink" href="#71-normalizer-stack" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Symfony ObjectNormalizer
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  -&gt; FlatNormalizer (decorator)
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    -&gt; Strips Doctrine proxy internals
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    -&gt; Adds __toString to every entity
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    -&gt; Collapses related entities to {id, __toString, __metadata}
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    -&gt; Auto-parses JSON strings to arrays/objects
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Symfony ObjectNormalizer
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  -&gt; FlatNormalizer (decorator)
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    -&gt; Strips Doctrine proxy internals
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    -&gt; Adds __toString to every entity
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    -&gt; Collapses related entities to {id, __toString, __metadata}
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    -&gt; Auto-parses JSON strings to arrays/objects
 </code></pre></div>
 <h3 id="72-circular-reference-handling">7.2 Circular Reference Handling<a class="headerlink" href="#72-circular-reference-handling" title="Permanent link">&para;</a></h3>
 <p><code>CircularReferenceHandler.php</code> -- returns entity ID or <code>spl_object_hash()</code> if no <code>getId()</code>.</p>
@@ -2318,14 +2392,14 @@ It provides the controller base class, CRUD service abstraction, dynamic query e
 <hr />
 <h2 id="10-environment-variables-core-related">10. Environment Variables (Core-Related)<a class="headerlink" href="#10-environment-variables-core-related" title="Permanent link">&para;</a></h2>
 <p>Core framework itself has no special env vars. Configuration is via <code>config/services.yaml</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nt">services</span><span class="p">:</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">App\</span><span class="p">:</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;../src/&#39;</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="nt">exclude</span><span class="p">:</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;../src/Core/Serializer/Normalizer/FlatNormalizer.php&#39;</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;../src/*/EventListener/&#39;</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;../src/Identity/Controller/&#39;</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;../src/Identity/Security/&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">App\</span><span class="p">:</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;../src/&#39;</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="nt">exclude</span><span class="p">:</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;../src/Core/Serializer/Normalizer/FlatNormalizer.php&#39;</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;../src/*/EventListener/&#39;</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;../src/Identity/Controller/&#39;</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;../src/Identity/Security/&#39;</span>
 </code></pre></div>
 <hr />
 <h2 id="11-testing">11. Testing<a class="headerlink" href="#11-testing" title="Permanent link">&para;</a></h2>
@@ -2422,7 +2496,7 @@ It provides the controller base class, CRUD service abstraction, dynamic query e
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

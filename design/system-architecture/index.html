@@ -27,7 +27,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -35,7 +35,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -527,6 +527,17 @@
     <span class="md-ellipsis">
       
         3.3 Module Interface Contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-cross-boundary-identity-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Cross-Boundary Identity Contract
       
     </span>
   </a>
@@ -1078,6 +1089,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../bundles/payment/" class="md-nav__link">
         
   
@@ -1577,6 +1616,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#34-cross-boundary-identity-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Cross-Boundary Identity Contract
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2033,6 +2083,44 @@
 <li>Other modules <strong>consume</strong> only those interfaces, never concrete implementations</li>
 <li>Interfaces are auto-discovered via <code>services.yaml</code></li>
 </ul>
+<h3 id="34-cross-boundary-identity-contract">3.4 Cross-Boundary Identity Contract<a class="headerlink" href="#34-cross-boundary-identity-contract" title="Permanent link">&para;</a></h3>
+<p>Modules and future services MUST NOT exchange local auto-increment database IDs as
+durable references. Each cross-boundary aggregate exposes a UUID or another explicitly
+documented immutable business key.</p>
+<table>
+<thead>
+<tr>
+<th>Context</th>
+<th>Identifier to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Local Doctrine relation inside one module</td>
+<td>Integer <code>id</code> is allowed</td>
+</tr>
+<tr>
+<td>Public API route/response</td>
+<td>UUID</td>
+</tr>
+<tr>
+<td>Service interface crossing module boundary</td>
+<td>UUID or documented immutable business key</td>
+</tr>
+<tr>
+<td>Integration event aggregate/source/correlation id</td>
+<td>UUID</td>
+</tr>
+<tr>
+<td>Future service database relation</td>
+<td>UUID/business key only; no cross-service FK</td>
+</tr>
+</tbody>
+</table>
+<p>An event carries scalar snapshots and external identities only. It MUST NOT carry a
+Doctrine entity, repository, EntityManager, or a local primary key as a durable
+reference. UUID lookup does not grant access; the receiving module still enforces its
+own authorization and ownership rules.</p>
 <hr />
 <h2 id="4-core-framework-srccore">4. Core Framework (<code>src/Core/</code>)<a class="headerlink" href="#4-core-framework-srccore" title="Permanent link">&para;</a></h2>
 <p>Core provides foundational abstractions. It MUST NOT depend on any business module.</p>
@@ -2364,7 +2452,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

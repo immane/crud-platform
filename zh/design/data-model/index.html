@@ -27,7 +27,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -35,7 +35,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -743,7 +743,18 @@
   <a href="#71-uuid" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.1 用于外部身份的 UUID
+        7.1 用于外部和跨境身份的 UUID
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#711-uuid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1.1 UUID 版本策略
       
     </span>
   </a>
@@ -1124,6 +1135,34 @@
     
   
     Trade (电商)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    商店（多商店运营）
   
 
     
@@ -1797,7 +1836,18 @@
   <a href="#71-uuid" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.1 用于外部身份的 UUID
+        7.1 用于外部和跨境身份的 UUID
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#711-uuid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1.1 UUID 版本策略
       
     </span>
   </a>
@@ -2065,7 +2115,7 @@
 </tr>
 <tr>
 <td>布尔列</td>
-<td>动词或形容词（例如，<code>is_deleted</code>、<code>enabled</code>）</td>
+<td>动词或形容词（例如 <code>is_deleted</code>、<code>enabled</code>）</td>
 </tr>
 <tr>
 <td>状态栏</td>
@@ -2222,7 +2272,7 @@
 <p>每个关系都必须声明：
 - <code>targetEntity</code> (FQCN)
 - <code>inversedBy</code> / <code>mappedBy</code>（双向）
-- <code>cascade</code> 策略（显式）
+- <code>cascade</code>策略（显式）
 - <code>fetch</code>策略（显式，默认LAZY可接受）</p>
 <h3 id="42">4.2 关系基数<a class="headerlink" href="#42" title="Permanent link">&para;</a></h3>
 <table>
@@ -2375,67 +2425,97 @@
 </table>
 <hr />
 <h2 id="7">7. 特殊图案<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
-<h3 id="71-uuid">7.1 用于外部身份的 UUID<a class="headerlink" href="#71-uuid" title="Permanent link">&para;</a></h3>
-<p>一些实体在整数 <code>id</code> 旁边公开 UUID v4：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">#[ORM\Column(type: &#39;string&#39;, length: 32, unique: true)]</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">private string $uuid;</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="x">public function __construct() {</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="x">    $this-&gt;uuid = UUID::v4c(); // compact, no dashes</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="x">}</span>
+<h3 id="71-uuid">7.1 用于外部和跨境身份的 UUID<a class="headerlink" href="#71-uuid" title="Permanent link">&para;</a></h3>
+<p>实体为本地 Doctrine 关系、连接和连接保留整数自动增量 <code>id</code>
+存储效率。 UUID 是一个独立的、稳定的身份，用于离开其实体的实体
+有界上下文。</p>
+<p>当实体属于以下任一情况时，它必须具有 UUID：</p>
+<ul>
+<li>可通过公共 API、URL、Webhook 或第三方集成进行寻址。</li>
+<li>包含在跨模块或跨服务事件负载中。</li>
+<li>域聚合，稍后可能会移动到自己的数据库/服务。</li>
+<li>由幂等性、审计、支付、库存或外部关联流引用。</li>
+</ul>
+<p>纯粹的内部实现记录不需要单独的实体UUID。示例
+包括私有连接表或已由其唯一标识的收件箱记录
+传入<code>eventId</code>。通过 API 公开的独立管理关系应该
+仍然收到 UUID。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Local database key / Doctrine relation: integer id
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>Public API path and response identity: uuid
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>Cross-module/service reference: uuid or immutable business key
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>Event aggregateId, sourceId, correlationId: uuid
 </code></pre></div>
-<p><strong>使用时间</strong>：实体被外部引用（URL、与第三方共享的 API）。</p>
+<p>新的跨界实体使用规范的 UUID 字符串和整数 <code>id</code>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">#[ORM\Column(type: &#39;string&#39;, length: 36, unique: true)]</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">private string $uuid;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">public function __construct() {</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="x">    $this-&gt;uuid = UUID::v4();</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="x">}</span>
+</code></pre></div>
+<p>UUID 不是授权机制。每次查找仍然需要行级
+授权和所有权检查。</p>
+<h3 id="711-uuid">7.1.1 UUID 版本策略<a class="headerlink" href="#711-uuid" title="Permanent link">&para;</a></h3>
+<ul>
+<li>使用 UUID v4 的现有实体保留其当前标识符；迁移不得
+  重写标识符仅仅是为了版本统一。</li>
+<li>一旦共享 UUID 实用程序支持，新的跨服务聚合应该使用 UUID v7
+  它，因为时间排序提高了索引局部性。</li>
+<li>在 UUID v7 可用之前，UUID v4 对于新实体和事件是可接受的。</li>
+<li>UUID 格式和版本是外部 UUID 字符串背后的实现细节
+  合同。消费者不得从 UUID 字节推断业务含义。</li>
+</ul>
 <h3 id="72">7.2 软删除<a class="headerlink" href="#72" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">#[ORM\Column]</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">private bool $isDeleted = false;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">#[ORM\Column]</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">private bool $isDeleted = false;</span>
 </code></pre></div>
 <p><strong>使用时间</strong>：实体永远不应该被硬删除（审计跟踪、法律要求）。</p>
 <p><strong>结果</strong>：所有查询必须过滤 <code>isDeleted = false</code> （通过控制器中的 <code>commonFilter()</code>）。</p>
 <h3 id="73">7.3 价值快照<a class="headerlink" href="#73" title="Permanent link">&para;</a></h3>
 <p>当一个实体捕获另一个实体状态的时间点副本时：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">#[ORM\Column(type: &#39;json&#39;, nullable: true)]</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">private ?array $snapshot = null;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">#[ORM\Column(type: &#39;json&#39;, nullable: true)]</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">private ?array $snapshot = null;</span>
 </code></pre></div>
 <p><strong>在创建时填充</strong>（在 <code>#[ORM\PrePersist]</code> 或服务方法中），从未更新。</p>
 <h3 id="74">7.4 乐观锁<a class="headerlink" href="#74" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">#[ORM\Version]</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">#[ORM\Column]</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">private int $version = 1;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">#[ORM\Version]</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">#[ORM\Column]</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="x">private int $version = 1;</span>
 </code></pre></div>
 <p><strong>使用时间</strong>：对同一记录的并发更新存在数据损坏的风险（例如钱包余额）。</p>
 <h3 id="75">7.5 多态关联<a class="headerlink" href="#75" title="Permanent link">&para;</a></h3>
 <p>对于引用不同实体类型的评论/反应：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">#[ORM\Column(length: 100)]</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">private string $entityType;  // e.g., &#39;App\Common\Entity\Content&#39;</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="x">#[ORM\Column]</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="x">private int $entityId;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="x">#[ORM\Column(length: 100)]</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">private string $entityType;  // e.g., &#39;App\Common\Entity\Content&#39;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="x">#[ORM\Column]</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="x">private int $entityId;</span>
 </code></pre></div>
 <p><strong>无 FK 约束</strong>（在应用层解决）。</p>
 <h3 id="76-json">7.6 JSON 元数据/额外数据<a class="headerlink" href="#76-json" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="x">#[ORM\Column(type: &#39;json&#39;, nullable: true)]</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">private ?array $metadata = null;</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="x">#[ORM\Column(type: &#39;json&#39;, nullable: true)]</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="x">private ?array $extraData = null;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="x">#[ORM\Column(type: &#39;json&#39;, nullable: true)]</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="x">private ?array $metadata = null;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="x">#[ORM\Column(type: &#39;json&#39;, nullable: true)]</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="x">private ?array $extraData = null;</span>
 </code></pre></div>
 <p><strong>使用时间</strong>：不需要专用列的可扩展字段。</p>
 <hr />
 <h2 id="8">8. 存储库合约<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
 <p>每个实体必须有一个专用的存储库：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="x">namespace App\{Module}\Repository;</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="x">use App\{Module}\Entity\Xxx;</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="x">use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="x">use Doctrine\Persistence\ManagerRegistry;</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="x">class XxxRepository extends ServiceEntityRepository</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="x">{</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="x">    public function __construct(ManagerRegistry $registry)</span>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="x">    {</span>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="x">        parent::__construct($registry, Xxx::class);</span>
-<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="x">    }</span>
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="x">namespace App\{Module}\Repository;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="x">use App\{Module}\Entity\Xxx;</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="x">use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="x">use Doctrine\Persistence\ManagerRegistry;</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="x">class XxxRepository extends ServiceEntityRepository</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="x">{</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="x">    public function __construct(ManagerRegistry $registry)</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="x">    {</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="x">        parent::__construct($registry, Xxx::class);</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="x">    }</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="x">}</span>
 </code></pre></div>
 <h3 id="81">8.1 自定义查询方法<a class="headerlink" href="#81" title="Permanent link">&para;</a></h3>
 <ul>
@@ -2450,13 +2530,13 @@
 <hr />
 <h2 id="9">9. 验证合约<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
 <p>实体通过属性或注释定义验证规则：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="x">use Symfony\Component\Validator\Constraints as Assert;</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="x">#[Assert\NotBlank]</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="x">private ?string $name = null;</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="x">#[Assert\Email]</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="x">private ?string $email = null;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="x">use Symfony\Component\Validator\Constraints as Assert;</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="x">#[Assert\NotBlank]</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="x">private ?string $name = null;</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="x">#[Assert\Email]</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="x">private ?string $email = null;</span>
 </code></pre></div>
 <p>通过 Symfony Validator 在 <code>BaseService::update()</code> 中调用验证。实体必须声明以下约束：
 - 必填字段 (<code>NotBlank</code>)
@@ -2566,7 +2646,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

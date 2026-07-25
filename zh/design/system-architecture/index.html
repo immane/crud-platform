@@ -27,7 +27,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -35,7 +35,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -533,6 +533,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 跨境身份合约
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -542,12 +553,12 @@
   <a href="#4-srccore" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 核心框架（src/Core/）
+        4. 核心框架(src/Core/)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="4. 核心框架（src/Core/）">
+    <nav class="md-nav" aria-label="4. 核心框架(src/Core/)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1078,6 +1089,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    商店（多商店运营）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../bundles/payment/" class="md-nav__link">
         
   
@@ -1577,6 +1616,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 跨境身份合约
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1586,12 +1636,12 @@
   <a href="#4-srccore" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 核心框架（src/Core/）
+        4. 核心框架(src/Core/)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="4. 核心框架（src/Core/）">
+    <nav class="md-nav" aria-label="4. 核心框架(src/Core/)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2033,8 +2083,46 @@
 <li>其他模块<strong>仅使用</strong>那些接口，从不具体实现</li>
 <li>通过<code>services.yaml</code>自动发现接口</li>
 </ul>
+<h3 id="34">3.4 跨境身份合约<a class="headerlink" href="#34" title="Permanent link">&para;</a></h3>
+<p>模块和未来的服务不得将本地自动增量数据库 ID 交换为
+持久的参考。每个跨界聚合公开一个 UUID 或另一个明确的
+记录不可变的业务密钥。</p>
+<table>
+<thead>
+<tr>
+<th>背景</th>
+<th>使用的标识符</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一个模块内的本地学说关系</td>
+<td>允许使用整数 <code>id</code></td>
+</tr>
+<tr>
+<td>公共 API 路由/响应</td>
+<td>UUID</td>
+</tr>
+<tr>
+<td>跨模块边界的服务接口</td>
+<td>UUID 或记录的不可变业务密钥</td>
+</tr>
+<tr>
+<td>集成事件聚合/源/关联 ID</td>
+<td>UUID</td>
+</tr>
+<tr>
+<td>未来服务数据库关系</td>
+<td>仅 UUID/业务密钥；没有跨服FK</td>
+</tr>
+</tbody>
+</table>
+<p>事件仅携带标量快照和外部身份。它不得携带
+Doctrine 实体、存储库、EntityManager 或本地主键作为持久的
+参考。 UUID 查找不授予访问权限；接收模块仍然强制执行其
+自己的授权和所有权规则。</p>
 <hr />
-<h2 id="4-srccore">4. 核心框架（<code>src/Core/</code>）<a class="headerlink" href="#4-srccore" title="Permanent link">&para;</a></h2>
+<h2 id="4-srccore">4. 核心框架(<code>src/Core/</code>)<a class="headerlink" href="#4-srccore" title="Permanent link">&para;</a></h2>
 <p>Core 提供了基础抽象。它不能依赖于任何业务模块。</p>
 <h3 id="41-api">4.1 核心导出（公共 API）<a class="headerlink" href="#41-api" title="Permanent link">&para;</a></h3>
 <table>
@@ -2364,7 +2452,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
