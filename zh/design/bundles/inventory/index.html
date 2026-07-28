@@ -802,6 +802,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#todo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        生产准备 TODO
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1715,6 +1726,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#todo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        生产准备 TODO
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2235,12 +2257,30 @@
 
 <h1 id="_1">库存捆绑设计<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>状态：已批准设计，未实施。</strong> 库存包 (<code>src/Inventory/</code>)
-拥有材料、每店库存、规格配方、预订和库存
-分类帐。它是 Store 包定义的延迟保留边界。贸易
-保留目录和商业订单的权威；商店仍然是权威
-专卖店接受并操作订单。</p>
+<p><strong>状态：预览，已实施，但尚未准备好投入生产。</strong> Inventory 捆绑包
+(<code>src/Inventory/</code>) 拥有材料、每店库存、规格配方、
+预订和库存分类帐。这是定义的延迟保留边界
+通过商店捆绑包。贸易仍然是目录和商业订单的权威；商店
+保留商店接受和运营订单的权力。</p>
+<p><code>INVENTORY_ENABLED</code> 必须保持<code>false</code> 独立的开发和测试之外。
+确认的预订目前在没有履行驱动的消费流程的情况下过期，
+并且跨消息取消竞赛没有完全序列化。架构和禁用
+模块可能会被合并，但为实时订单启用库存会被阻止
+下面的生产准备工作。</p>
 </blockquote>
+<h3 id="todo">生产准备 TODO<a class="headerlink" href="#todo" title="Permanent link">&para;</a></h3>
+<ul>
+<li>实施履行驱动的预订消耗，自动减少现有量
+  和保留数量并写入<code>consume</code>分类帐条目。</li>
+<li>定义到期语义，以便已接受或已履行的订单不会丢失其保留
+  虽然这仍然取决于库存。</li>
+<li>序列化商店订单确认和取消转换以防止过时状态
+  恢复已取消的订单。</li>
+<li>使用持久的库存取消墓碑处理预订前发布订单
+  并保留每个预订的发件箱因果关系。</li>
+<li>之前为这些转换添加并发和乱序集成测试
+  允许在生产中使用<code>INVENTORY_ENABLED=true</code>。</li>
+</ul>
 <hr />
 <h2 id="1">1. 目标和范围<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
 <h3 id="11">1.1 目标<a class="headerlink" href="#11" title="Permanent link">&para;</a></h3>
@@ -2407,8 +2447,8 @@
 </table>
 <p>全局设置优先于所有物料级库存策略。它是一个
 部署问题，而不是数据库设置或请求参数。它的默认值必须是
-在 <code>.env</code> 和部署配置中明确记录；生产部署
-出售实物股票的人应该将其设置为<code>true</code>。</p>
+在 <code>.env</code> 和部署配置中明确记录。虽然此捆绑包仍然存在
+在预览版中，生产部署必须保留它 <code>false</code>。</p>
 <h3 id="23">2.3 每商店、每种材料的政策<a class="headerlink" href="#23" title="Permanent link">&para;</a></h3>
 <p>库存由 <code>(storeUuid, material)</code> 隔离。每个余额都有自己的
 <code>allowNegativeStock</code> 标志，默认为 <code>false</code>。</p>
@@ -2461,7 +2501,7 @@
 是允许的，或者其他未来的股票突变。</p>
 <h3 id="25">2.5 本地交易和至少一次交付<a class="headerlink" href="#25" title="Permanent link">&para;</a></h3>
 <p>每个 Inventory 突变都会在一个 SQL 中写入其本地聚合及其传出事件
-交易。收件箱表通过 <code>eventId</code> 至少删除一次传递的重复数据；商业
+交易。收件箱表通过 <code>eventId</code> 至少删除一次传送的重复数据；商业
 记录添加唯一键以实现竞赛安全幂等性。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Inventory transaction:
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  consumed event + reservation + stock changes + ledger entries + outbox event
@@ -2707,7 +2747,7 @@
 从未根据更改的配方重新计算。</p>
 <h3 id="35">3.5 成品良好后备<a class="headerlink" href="#35" title="Permanent link">&para;</a></h3>
 <p>每个库存控制规范均由以下规则之一解析：</p>
-<p>1.<code>specificationUuid</code>存在有效配方：将每个配方材料保留在
+<p>1.<code>specificationUuid</code>存在一个有效配方：将每个配方材料保留在
    <code>orderQuantity * quantityPerUnit</code>。
 2. 不存在有效配方：保留<code>code</code>等于的有效<code>finished</code>物料
    规范 UUID (<code>catalogReference</code>)。
@@ -2718,7 +2758,7 @@
 <code>SpecificationMaterialMapping</code> 通过单独版本化的迁移和事件
 合同；不要将交易表视为后备。</p>
 <h3 id="36-inventoryreservation-reservationline">3.6 InventoryReservation 和 ReservationLine<a class="headerlink" href="#36-inventoryreservation-reservationline" title="Permanent link">&para;</a></h3>
-<p><code>InventoryReservation</code> 是幂等预留聚合。 <code>reservationId</code>是
+<p><code>InventoryReservation</code> 是幂等预留聚合。 <code>reservationId</code> 是
 在发布请求之前由 Store 生成。</p>
 <table>
 <thead>
@@ -2865,7 +2905,7 @@
 </code></pre></div>
 <p>所需验证：</p>
 <ul>
-<li>ID 必须是 UUID 字符串； <code>quantity</code> 是正十进制字符串，最多有 6 个字符
+<li>ID 必须是 UUID 字符串； <code>quantity</code> 是正十进制字符串，最多 6 个
   小数位。</li>
 <li><code>items</code> 必须至少包含一个唯一的<code>lineId</code>。</li>
 <li>预订截止日期必须是 <code>requestedAt</code> 之后的 ISO-8601 日期。</li>
@@ -2883,7 +2923,7 @@
    如果相等则返回其现有结果；如果冲突则消息失败。</li>
 <li>使用活动配方或成品回退解决每个项目。</li>
 <li>按材料 UUID 汇总要求。</li>
-<li>按照确定的 Material UUID 顺序锁定现有的 <code>(storeUuid, material)</code> 余额。</li>
+<li>以确定性材料 UUID 顺序锁定现有 <code>(storeUuid, material)</code> 余额。</li>
 <li>当所需材料处于非活动状态、无库存或
    当其本地负库存标志被禁用时，不足。</li>
 <li>成功后，仅在负库存预留需要时才创建缺席余额
@@ -2961,7 +3001,7 @@
 <a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">  </span><span class="nt">&quot;rejectedAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-07-26T12:00:02+00:00&quot;</span>
 <a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="p">}</span>
 </code></pre></div>
-<p>Store 根据其本地 <code>StoreOrder</code> 验证所有相关 UUID。它只接受一个
+<p>存储根据其本地 <code>StoreOrder</code> 验证所有相关 UUID。它只接受一个
 当订单为<code>awaiting_inventory</code>时匹配已确认的事件；它只拒绝一个
 匹配该状态下的拒绝事件。重复或延迟的事件是无害的空操作。
 商店将库存 <code>OUT_OF_STOCK</code> 映射到其记录的 <code>OUT_OF_STOCK</code> 拒绝代码，并且
@@ -2985,9 +3025,9 @@
 它遵循当前的直接接受路径。因此，如果没有预订，
 故意的而非库存错误。</p>
 <h3 id="52">5.2 取消发布<a class="headerlink" href="#52" title="Permanent link">&para;</a></h3>
-<p>对于商店范围的订单，贸易最终必须发布 <code>trade.order.cancelled.v1</code>。商店
+<p>Trade 最终必须为商店范围的订单发布 <code>trade.order.cancelled.v1</code>。商店
 使用它，将本地操作标记为取消，然后发布
-<code>inventory.reservation.release.requested.v1</code>（如果有<code>reservationId</code>）。</p>
+<code>inventory.reservation.release.requested.v1</code> 如果它有 <code>reservationId</code>。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">&quot;reservationId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;inventory-reservation-uuid&quot;</span><span class="p">,</span>
 <a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nt">&quot;storeUuid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;store-uuid&quot;</span><span class="p">,</span>
@@ -3197,9 +3237,9 @@ available_at, id)</code> 索引到期未发布的行。</p>
 <a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">  </span><span class="nt">&quot;allowNegativeStock&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
 <a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="p">}</span>
 </code></pre></div>
-<p><code>quantityDelta</code> 已签名。负调整不得驱动现有量低于保留值
+<p><code>quantityDelta</code> 已签名。负调整不得驱动手头低于保留值
 数量，除非<code>allowNegativeStock=true</code>；否则它已经失效了
-确认预订。对于同一个管理引用，操作是幂等的
+确认预订。对于相同的管理引用，操作是幂等的
 当提供参考时。</p>
 <hr />
 <h2 id="8">8. 文件结构<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
@@ -3249,7 +3289,7 @@ available_at, id)</code> 索引到期未发布的行。</p>
 <tbody>
 <tr>
 <td><code>inventory_material</code></td>
-<td>唯一<code>uuid</code>，唯一<code>code</code>，状态索引</td>
+<td>唯一<code>uuid</code>、唯一<code>code</code>、状态索引</td>
 </tr>
 <tr>
 <td><code>inventory_stock</code></td>

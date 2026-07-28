@@ -4488,6 +4488,11 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <h2 id="22-inventory-module-stock-reservation-system">22. Inventory Module — Stock &amp; Reservation System<a class="headerlink" href="#22-inventory-module-stock-reservation-system" title="Permanent link">&para;</a></h2>
 <h3 id="221-overview">22.1 Overview<a class="headerlink" href="#221-overview" title="Permanent link">&para;</a></h3>
 <p>The Inventory bundle (<code>src/Inventory/</code>) owns materials, per-store stock, Specification recipes, reservations, and the stock ledger. It implements the deferred reservation boundary defined in Store.</p>
+<p><strong>Preview safety notice:</strong> Inventory is implemented but is not production-ready.
+<code>INVENTORY_ENABLED</code> must remain <code>0</code> outside isolated development and testing until
+fulfillment-driven consumption, safe accepted-order expiry semantics, serialized
+confirmation/cancellation, and release-before-reserve handling are implemented and
+covered by concurrency tests. The disabled schema/module may be deployed safely.</p>
 <h3 id="222-domain-model">22.2 Domain Model<a class="headerlink" href="#222-domain-model" title="Permanent link">&para;</a></h3>
 <table>
 <thead>

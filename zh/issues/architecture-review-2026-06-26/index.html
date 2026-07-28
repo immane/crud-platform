@@ -1176,10 +1176,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#4-payment-and-wallet-transaction-boundaries-need-tightening" class="md-nav__link">
+  <a href="#4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Payment and wallet transaction boundaries need tightening
+        4.支付和钱包交易边界需要收紧
       
     </span>
   </a>
@@ -1215,10 +1215,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#6-baseservice-mixes-service-logic-with-request-level-concerns" class="md-nav__link">
+  <a href="#6-baseservice" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. BaseService mixes service logic with request-level concerns
+        6. BaseService 将服务逻辑与请求级关注点混合在一起
       
     </span>
   </a>
@@ -1455,10 +1455,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#4-payment-and-wallet-transaction-boundaries-need-tightening" class="md-nav__link">
+  <a href="#4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Payment and wallet transaction boundaries need tightening
+        4.支付和钱包交易边界需要收紧
       
     </span>
   </a>
@@ -1494,10 +1494,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#6-baseservice-mixes-service-logic-with-request-level-concerns" class="md-nav__link">
+  <a href="#6-baseservice" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. BaseService mixes service logic with request-level concerns
+        6. BaseService 将服务逻辑与请求级关注点混合在一起
       
     </span>
   </a>
@@ -1604,7 +1604,7 @@
 <h1 id="-2026-06-26">架构审查问题 - 2026-06-26<a class="headerlink" href="#-2026-06-26" title="Permanent link">&para;</a></h1>
 <p>本文档记录了在审查 <code>docs/ai/context.md</code> 和当前代码库期间发现的架构和生产就绪性问题。</p>
 <h2 id="_1">总结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<p>The overall modular architecture is reasonable for a Symfony API skeleton.模块边界清晰，<code>Core</code>提供可重用的CRUD/API基础设施，业务模块按领域分开，支付网关、定价计算器、工作流程和领域事件等扩展点与项目目标很好地契合。</p>
+<p>整体模块化架构对于 Symfony API 框架来说是合理的。模块边界清晰，<code>Core</code>提供可重用的CRUD/API基础设施，业务模块按领域分开，支付网关、定价计算器、工作流程和领域事件等扩展点与项目目标很好地契合。</p>
 <p>主要风险不是结构性故障，而是默认暴露的过于广泛的通用功能、需要收紧的生产安全边界以及围绕支付流的交易边界。</p>
 <h2 id="_2">高优先级<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <h3 id="1">1.微信支付网关可能未注册<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
@@ -1612,7 +1612,7 @@
 <p><strong>证据：</strong></p>
 <ul>
 <li><code>PaymentGatewayRegistry</code>仅收集标记有<code>payment.gateway</code>：<code>src/Payment/Service/PaymentGatewayRegistry.php</code>的服务。</li>
-<li><code>config/services.yaml</code> excludes <code>src/Wechat/Service/Gateway/WechatPayGateway.php</code> from the global <code>App\</code> service resource.</li>
+<li><code>config/services.yaml</code> 将 <code>src/Wechat/Service/Gateway/WechatPayGateway.php</code> 从全局 <code>App\</code> 服务资源中排除。</li>
 <li><code>src/Wechat/Resources/config/services_wechat.yaml</code>显式定义<code>WechatPayGateway</code>，但不添加<code>payment.gateway</code>标签。</li>
 </ul>
 <p><strong>推荐：</strong></p>
@@ -1627,7 +1627,7 @@
 <p><strong>影响：</strong> 实体元数据和路由结构可以在生产中公开。</p>
 <p><strong>证据：</strong></p>
 <ul>
-<li>System controllers are routed under <code>/system</code>, for example <code>src/Core/Controller/System/EntityController.php</code>.</li>
+<li>系统控制器在<code>/system</code>下路由，例如<code>src/Core/Controller/System/EntityController.php</code>。</li>
 <li>配置的API防火墙仅匹配<code>config/packages/security.yaml</code>中的<code>^/api</code>。</li>
 <li><code>access_control</code>规则仅限制<code>/api</code>路径，不覆盖<code>/system</code>。</li>
 </ul>
@@ -1635,7 +1635,7 @@
 <p>选择以下方法之一：</p>
 <ol>
 <li>将系统路由移至 <code>/api/system</code> 下，以便应用 API 防火墙。</li>
-<li>Add explicit <code>access_control</code> rules for <code>^/system</code> requiring <code>ROLE_ADMIN</code>.</li>
+<li>为需要 <code>ROLE_ADMIN</code> 的 <code>^/system</code> 添加显式 <code>access_control</code> 规则。</li>
 <li>在生产中禁用系统路由并使其仅用于开发/测试。</li>
 </ol>
 <h3 id="3api">3.动态查询功能对于默认的公共API使用来说太强大了<a class="headerlink" href="#3api" title="Permanent link">&para;</a></h3>
@@ -1644,7 +1644,7 @@
 <ul>
 <li><code>@dql</code> 从请求中读取并传递到 <code>BaseServiceReadListTrait</code> 中的 Doctrine 查询创建。</li>
 <li>请求参数还支持<code>@select</code>、<code>@groupBy</code>、<code>@hints</code>和<code>@showDQL</code>。</li>
-<li><code>ListApiViewMixin</code> documents these parameters for all generic list endpoints.</li>
+<li><code>ListApiViewMixin</code> 记录所有通用列表端点的这些参数。</li>
 </ul>
 <p><strong>推荐：</strong></p>
 <p>引入查询参数的能力级别：</p>
@@ -1653,26 +1653,26 @@
 <li>管理端点：可选择为管理员提供更丰富的查询功能。</li>
 <li>仅调试/开发：允许 <code>@dql</code>、<code>@hints</code> 和 <code>@showDQL</code>。</li>
 </ul>
-<p>Also consider removing these dangerous parameters from generated public OpenAPI docs.</p>
-<h3 id="4-payment-and-wallet-transaction-boundaries-need-tightening">4. Payment and wallet transaction boundaries need tightening<a class="headerlink" href="#4-payment-and-wallet-transaction-boundaries-need-tightening" title="Permanent link">&para;</a></h3>
-<p><strong>影响：</strong> 数据库事务打开时可能会执行外部支付调用。 Nested wallet transactions may not behave as expected without explicit savepoint support.</p>
+<p>另请考虑从生成的公共 OpenAPI 文档中删除这些危险参数。</p>
+<h3 id="4">4.支付和钱包交易边界需要收紧<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
+<p><strong>影响：</strong> 数据库事务打开时可能会执行外部支付调用。如果没有明确的保存点支持，嵌套钱包交易可能不会按预期运行。</p>
 <p><strong>证据：</strong></p>
 <ul>
 <li><code>InvoiceService::pay()</code> 打开一个事务，然后在其中调用 <code>$gateway-&gt;pay()</code>。</li>
 <li><code>WechatPayGateway::pay()</code>执行出站微信API调用。</li>
 <li><code>TransferService</code>手动启动与<code>beginTransaction()</code>的事务。</li>
-<li><code>Trade\Controller\Manage\OrderController</code> 中的注释假定嵌套保存点行为，但未找到显式 Doctrine 保存点配置。</li>
+<li><code>Trade\Controller\Manage\OrderController</code> 中的注释假设嵌套保存点行为，但未找到显式 Doctrine 保存点配置。</li>
 </ul>
 <p><strong>推荐：</strong></p>
 <p>独立的本地和外部支付流程：</p>
 <ul>
-<li>Wallet gateway: keep local balance movement and invoice state update atomic.</li>
-<li>External gateways such as WeChat: persist invoice as <code>paying</code>, commit, call provider, then finalize through callback/notify.</li>
-<li>If nested transactions are required, explicitly enable and test savepoint behavior.</li>
+<li>钱包网关：保持本地余额移动和发票状态更新原子性。</li>
+<li>微信等外部网关：将发票保留为<code>paying</code>，提交，调用提供商，然后通过回调/通知完成。</li>
+<li>如果需要嵌套事务，请显式启用并测试保存点行为。</li>
 </ul>
 <h2 id="_3">中优先级<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <h3 id="5">5.应用程序订单生命周期可能不完整<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
-<p><strong>Impact:</strong> App users can create orders in <code>draft</code>, but payment requires the order to be able to transition from <code>confirmed</code> to <code>paid</code>.</p>
+<p><strong>影响：</strong> 应用用户可以在<code>draft</code>中创建订单，但付款要求订单能够从<code>confirmed</code>转换为<code>paid</code>。</p>
 <p><strong>证据：</strong></p>
 <ul>
 <li><code>Order</code>初始状态为<code>draft</code>。</li>
@@ -1683,11 +1683,11 @@
 <p><strong>推荐：</strong></p>
 <p>明确预期的业务流程：</p>
 <ul>
-<li>If admin confirmation is required, document it clearly.</li>
-<li>If users should pay immediately, create orders directly as <code>confirmed</code>, or add an App submit flow that moves the order to a payable state.</li>
+<li>如果需要管理员确认，请清楚地记录下来。</li>
+<li>如果用户需要立即付款，请直接创建订单作为<code>confirmed</code>，或添加应用程序提交流程，将订单移至应付状态。</li>
 </ul>
-<h3 id="6-baseservice-mixes-service-logic-with-request-level-concerns">6. <code>BaseService</code> mixes service logic with request-level concerns<a class="headerlink" href="#6-baseservice-mixes-service-logic-with-request-level-concerns" title="Permanent link">&para;</a></h3>
-<p><strong>Impact:</strong> Service classes become harder to reuse outside HTTP and harder to reason about in tests or CLI contexts.</p>
+<h3 id="6-baseservice">6. <code>BaseService</code> 将服务逻辑与请求级关注点混合在一起<a class="headerlink" href="#6-baseservice" title="Permanent link">&para;</a></h3>
+<p><strong>影响：</strong> 服务类变得更难在 HTTP 外部重用，并且更难在测试或 CLI 上下文中进行推理。</p>
 <p><strong>证据：</strong></p>
 <ul>
 <li><code>BaseService</code> 从令牌存储中捕获当前用户。</li>

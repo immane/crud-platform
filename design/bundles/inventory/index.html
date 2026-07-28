@@ -802,6 +802,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#production-readiness-todo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production-Readiness TODO
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#1-goals-and-scope" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1715,6 +1726,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#production-readiness-todo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production-Readiness TODO
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#1-goals-and-scope" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2235,12 +2257,30 @@
 
 <h1 id="inventory-bundle-design">Inventory Bundle Design<a class="headerlink" href="#inventory-bundle-design" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>Status: approved design, not implemented.</strong> The Inventory bundle (<code>src/Inventory/</code>)
-owns materials, per-store stock, Specification recipes, reservations, and the stock
-ledger. It is the deferred reservation boundary defined by the Store bundle. Trade
-remains the catalog and commercial-order authority; Store remains the authority for
-store acceptance and operational orders.</p>
+<p><strong>Status: preview, implemented but not production-ready.</strong> The Inventory bundle
+(<code>src/Inventory/</code>) owns materials, per-store stock, Specification recipes,
+reservations, and the stock ledger. It is the deferred reservation boundary defined
+by the Store bundle. Trade remains the catalog and commercial-order authority; Store
+remains the authority for store acceptance and operational orders.</p>
+<p><code>INVENTORY_ENABLED</code> MUST remain <code>false</code> outside isolated development and testing.
+Confirmed reservations currently expire without a fulfillment-driven consume flow,
+and cross-message cancellation races are not fully serialized. The schema and disabled
+module may be merged, but enabling Inventory for live orders is blocked by the
+production-readiness work below.</p>
 </blockquote>
+<h3 id="production-readiness-todo">Production-Readiness TODO<a class="headerlink" href="#production-readiness-todo" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Implement fulfillment-driven reservation consumption that atomically reduces on-hand
+  and reserved quantities and writes <code>consume</code> ledger entries.</li>
+<li>Define expiry semantics so an accepted or fulfilled order cannot lose its reservation
+  while it still depends on stock.</li>
+<li>Serialize Store order confirmation and cancellation transitions to prevent stale state
+  from resurrecting cancelled orders.</li>
+<li>Handle release-before-reserve ordering with a durable Inventory cancellation tombstone
+  and preserve per-reservation outbox causality.</li>
+<li>Add concurrency and out-of-order integration tests for these transitions before
+  allowing <code>INVENTORY_ENABLED=true</code> in production.</li>
+</ul>
 <hr />
 <h2 id="1-goals-and-scope">1. Goals And Scope<a class="headerlink" href="#1-goals-and-scope" title="Permanent link">&para;</a></h2>
 <h3 id="11-goal">1.1 Goal<a class="headerlink" href="#11-goal" title="Permanent link">&para;</a></h3>
@@ -2407,8 +2447,8 @@ runtime configuration controls whether Store invokes the Inventory boundary:</p>
 </table>
 <p>The global setting takes precedence over all material-level inventory policies. It is a
 deployment concern, not a database setting or a request parameter. Its default MUST be
-documented explicitly in <code>.env</code> and deployment configuration; production deployments
-that sell physical stock SHOULD set it to <code>true</code>.</p>
+documented explicitly in <code>.env</code> and deployment configuration. While this bundle remains
+in preview, production deployments MUST keep it <code>false</code>.</p>
 <h3 id="23-per-store-per-material-policy">2.3 Per-Store, Per-Material Policy<a class="headerlink" href="#23-per-store-per-material-policy" title="Permanent link">&para;</a></h3>
 <p>Inventory is isolated by <code>(storeUuid, material)</code>. Each balance has its own
 <code>allowNegativeStock</code> flag, defaulting to <code>false</code>.</p>
