@@ -3,7 +3,8 @@
 > The Promotion module (`src/Promotion/`) provides a custom DSL-driven promotion engine.
 > Promotions are defined as human-readable DSL text stored in `PromotionTemplate`,
 > with per-store config values in `Promotion` instances. The engine hooks into Trade's
-> price calculation pipeline as a tagged calculator, fully decoupled from Trade internals.
+> price calculation pipeline as a tagged calculator. It is an in-process Trade plugin,
+> not an independently deployable service boundary.
 
 ---
 
@@ -15,8 +16,8 @@ Promotion is an independent module that plugs into Trade's `PriceCalculatorInter
 OrderService::calculatePrices()
  ├─ BasePriceCalculator (-100)       ← Trade built-in
  ├─ QuantityCalculator (50)          ← Trade built-in
- ├─ PromotionCalculator (60)         ← Promotion module (tagged trade.price_calculator)
- └─ TotalAggregator (100)            ← Trade built-in
+  ├─ TotalAggregator (55)              ← Trade built-in; establishes subtotal
+  └─ PromotionCalculator (60)          ← Promotion module (tagged trade.price_calculator)
 ```
 
 Key characteristics:
