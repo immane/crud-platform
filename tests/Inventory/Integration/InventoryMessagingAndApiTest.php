@@ -8,6 +8,7 @@ use App\Inventory\Entity\Material;
 use App\Inventory\Entity\InventoryOutboxMessage;
 use App\Inventory\Message\InventoryReservationReleaseRequestedMessage;
 use App\Inventory\Message\InventoryReservationRequestedMessage;
+use CrudPlatform\IntegrationContracts\Command\V1\InventoryReservationRequested;
 use App\Inventory\Repository\InventoryOutboxMessageRepository;
 use App\Inventory\Service\InventoryOutboxService;
 use App\Inventory\Service\InventoryMessageIntegrityException;
@@ -149,7 +150,7 @@ final class InventoryMessagingAndApiTest extends IntegrationWebTestCase
             ],
         ];
         $handler = $container->get(\App\Inventory\MessageHandler\InventoryReservationRequestedHandler::class);
-        $handler(new InventoryReservationRequestedMessage($envelope));
+        $handler->handleContract(new InventoryReservationRequested($envelope));
         $handler(new InventoryReservationRequestedMessage($envelope));
         self::assertSame('-2.000000', $inventory->getStockView($storeUuid, $material->getUuid())['availableQuantity']);
 

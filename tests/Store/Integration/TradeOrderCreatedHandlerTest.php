@@ -18,6 +18,7 @@ use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
 use App\Trade\Message\TradeOrderCreatedMessage;
 use App\Trade\Message\TradeOrderCancelledMessage;
+use CrudPlatform\IntegrationContracts\Event\V1\TradeOrderCreated;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
@@ -66,7 +67,7 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
             ],
         ]);
 
-        $handler($message);
+        $handler->handleContract(new TradeOrderCreated($message->envelope));
         $handler($message);
 
         $orders = $container->get(StoreOrderRepository::class);

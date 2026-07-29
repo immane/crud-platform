@@ -6,6 +6,7 @@ namespace App\Trade\MessageHandler;
 
 use App\Trade\Entity\Order;
 use App\Trade\Message\StoreOrderAcceptedMessage;
+use CrudPlatform\IntegrationContracts\Event\V1\StoreOrderAccepted;
 use App\Trade\Service\OrderServiceInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -38,5 +39,11 @@ final readonly class StoreOrderAcceptedHandler
                 $this->workflow->apply($order, 'store_accept');
             });
         }
+    }
+
+    #[AsMessageHandler(handles: StoreOrderAccepted::class)]
+    public function handleContract(StoreOrderAccepted $message): void
+    {
+        $this(new StoreOrderAcceptedMessage($message->envelope));
     }
 }

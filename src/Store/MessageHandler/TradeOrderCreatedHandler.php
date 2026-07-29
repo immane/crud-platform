@@ -11,6 +11,7 @@ use App\Store\Repository\StoreTradeOrderCancellationRepository;
 use App\Store\Service\StoreOrderServiceInterface;
 use App\Store\Service\StoreOutboxService;
 use App\Trade\Message\TradeOrderCreatedMessage;
+use CrudPlatform\IntegrationContracts\Event\V1\TradeOrderCreated;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -97,6 +98,12 @@ final readonly class TradeOrderCreatedHandler
                 'requestedAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
             ]);
         });
+    }
+
+    #[AsMessageHandler(handles: TradeOrderCreated::class)]
+    public function handleContract(TradeOrderCreated $message): void
+    {
+        $this(new TradeOrderCreatedMessage($message->envelope));
     }
 
     /** @param array<string, mixed> $payload */

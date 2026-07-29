@@ -6,6 +6,7 @@ namespace App\Inventory\MessageHandler;
 
 use App\Inventory\Entity\InventoryConsumedEvent;
 use App\Inventory\Message\InventoryReservationReleaseRequestedMessage;
+use CrudPlatform\IntegrationContracts\Command\V1\InventoryReservationReleaseRequested;
 use App\Inventory\Repository\InventoryConsumedEventRepository;
 use App\Inventory\Repository\InventoryReservationRepository;
 use App\Inventory\Service\InventoryMessageIntegrityException;
@@ -55,6 +56,12 @@ final readonly class InventoryReservationReleaseRequestedHandler
             ));
             $this->inventoryService->release($reservationId, $reason);
         });
+    }
+
+    #[AsMessageHandler(handles: InventoryReservationReleaseRequested::class)]
+    public function handleContract(InventoryReservationReleaseRequested $message): void
+    {
+        $this(new InventoryReservationReleaseRequestedMessage($message->envelope));
     }
 
     /**

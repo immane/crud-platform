@@ -37,6 +37,15 @@ framework:
             App\Inventory\Message\InventoryReservationConfirmedMessage: async
             App\Inventory\Message\InventoryReservationRejectedMessage: async
             App\Inventory\Message\InventoryReservationReleasedMessage: async
+            CrudPlatform\IntegrationContracts\Event\V1\TradeOrderCreated: async
+            CrudPlatform\IntegrationContracts\Event\V1\TradeOrderCancelled: async
+            CrudPlatform\IntegrationContracts\Event\V1\StoreOrderAccepted: async
+            CrudPlatform\IntegrationContracts\Event\V1\StoreOrderRejected: async
+            CrudPlatform\IntegrationContracts\Command\V1\InventoryReservationRequested: async
+            CrudPlatform\IntegrationContracts\Command\V1\InventoryReservationReleaseRequested: async
+            CrudPlatform\IntegrationContracts\Event\V1\InventoryReservationConfirmed: async
+            CrudPlatform\IntegrationContracts\Event\V1\InventoryReservationRejected: async
+            CrudPlatform\IntegrationContracts\Event\V1\InventoryReservationReleased: async
 
             # Route your messages to the transports
             # 'App\Message\YourMessage': async

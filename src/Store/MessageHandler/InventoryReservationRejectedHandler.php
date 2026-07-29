@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Store\MessageHandler;
 
 use App\Inventory\Message\InventoryReservationRejectedMessage;
+use CrudPlatform\IntegrationContracts\Event\V1\InventoryReservationRejected;
 use App\Store\Entity\StoreConsumedEvent;
 use App\Store\Entity\StoreOrder;
 use App\Store\Repository\StoreConsumedEventRepository;
@@ -65,5 +66,11 @@ final readonly class InventoryReservationRejectedHandler
 
             $this->storeOrderService->reject($storeOrder, $payload['reasonCode'], $payload['reason']);
         });
+    }
+
+    #[AsMessageHandler(handles: InventoryReservationRejected::class)]
+    public function handleContract(InventoryReservationRejected $message): void
+    {
+        $this(new InventoryReservationRejectedMessage($message->envelope));
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Store\MessageHandler;
 
 use App\Inventory\Message\InventoryReservationConfirmedMessage;
+use CrudPlatform\IntegrationContracts\Event\V1\InventoryReservationConfirmed;
 use App\Store\Entity\StoreConsumedEvent;
 use App\Store\Entity\StoreOrder;
 use App\Store\Repository\StoreConsumedEventRepository;
@@ -65,5 +66,11 @@ final readonly class InventoryReservationConfirmedHandler
 
             $this->storeOrderService->accept($storeOrder, $payload['reservationId']);
         });
+    }
+
+    #[AsMessageHandler(handles: InventoryReservationConfirmed::class)]
+    public function handleContract(InventoryReservationConfirmed $message): void
+    {
+        $this(new InventoryReservationConfirmedMessage($message->envelope));
     }
 }

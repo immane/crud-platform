@@ -124,6 +124,19 @@ Events are past-tense facts with manifest `kind: "event"`. Requests such as
 wrapper classes remain compatibility input until old native-PHP serialized queue
 rows and failed messages have been drained or migrated.
 
+### 5.1 Carrier Migration Order
+
+Consumers must be deployed before producers change carrier type. During the
+compatibility phase, each existing handler accepts both its legacy
+`App\*\Message` wrapper and the matching neutral carrier, then delegates to the
+same business logic. Producers continue to publish only one carrier per topic;
+dual publishing is forbidden because not every consumer action is Inbox-idempotent.
+
+After consumers are deployed, publishers may switch one topic at a time from the
+legacy wrapper to the neutral carrier. Rollback changes only that publisher back to
+the legacy wrapper. Consumers and old wrapper classes remain in place until the
+`async` and `failed` queues no longer contain old native-PHP serialized messages.
+
 ## 6. Extraction Order And Gates
 
 The preferred order is:

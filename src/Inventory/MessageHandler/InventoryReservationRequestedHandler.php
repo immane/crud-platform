@@ -6,6 +6,7 @@ namespace App\Inventory\MessageHandler;
 
 use App\Inventory\Entity\InventoryConsumedEvent;
 use App\Inventory\Message\InventoryReservationRequestedMessage;
+use CrudPlatform\IntegrationContracts\Command\V1\InventoryReservationRequested;
 use App\Inventory\Repository\InventoryConsumedEventRepository;
 use App\Inventory\Service\InventoryMessageIntegrityException;
 use App\Inventory\Service\InventoryService;
@@ -53,6 +54,12 @@ final readonly class InventoryReservationRequestedHandler
                 $payload['expiresAt'],
             );
         });
+    }
+
+    #[AsMessageHandler(handles: InventoryReservationRequested::class)]
+    public function handleContract(InventoryReservationRequested $message): void
+    {
+        $this(new InventoryReservationRequestedMessage($message->envelope));
     }
 
     /**

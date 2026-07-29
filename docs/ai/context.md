@@ -68,6 +68,14 @@ not yet change publishers, consumers, Outbox/Inbox storage, queues, or routes.
 because existing `async` and `failed` rows serialize the old `App\*\Message` wrapper
 FQCNs. Those wrappers remain until queued legacy messages are drained or migrated.
 
+All nine existing Trade/Store/Inventory consumers now also accept their matching
+neutral carrier through explicit Messenger handler methods. Each method adapts the
+carrier envelope to the existing legacy wrapper and reuses the original business
+logic, transaction boundaries, and Inbox behavior. Publishers still emit only the
+legacy wrappers. Do not dual-publish: several consumer effects are not universally
+Inbox-idempotent. The safe rollout is consumers first, then one Publisher/topic at
+a time, while keeping consumers and old wrappers compatible for queue retention.
+
 ## 2. Directory Structure
 
 ```
