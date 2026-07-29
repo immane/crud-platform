@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c79da89c5cfa15a1eafa5b24f9c9ef61",
+    "content-hash": "56633aedf7cf1d0cd21d18b04a8bd3e7",
     "packages": [
         {
             "name": "crud-platform/integration-contracts",
