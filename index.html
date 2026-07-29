@@ -1403,18 +1403,26 @@
 <p>CRUD Platform evolves the <code>crud-skeleton</code> Symfony backend into a
 multi-application microservice platform.</p>
 <h2 id="current-status">Current Status<a class="headerlink" href="#current-status" title="Permanent link">&para;</a></h2>
-<p>The codebase is currently a <strong>modular monolith</strong>:</p>
+<p>The codebase is currently a <strong>modular monolith</strong> with Store extracted into
+<code>apps/store</code> as an independently bootable application:</p>
 <ul>
-<li>One Symfony Kernel, Composer project, service container, database, migration chain,
-  Messenger queue, worker, scheduler, Docker image, and test suite.</li>
+<li>One Symfony Kernel for the monolith; Store has its own <code>App\Store\Kernel</code>.</li>
+<li>One Composer project, service container, database, migration chain,
+  Messenger queue, worker, scheduler, and Docker image for the monolith.</li>
+<li>Store has its own config, database (MySQL 8.4), migration baseline, and
+  FrankenPHP container.</li>
 <li>Domain modules include Identity, CMS, Commerce, Store, Inventory, Payment, Wallet,
   Promotion, WeChat adapters, and Storage adapters.</li>
 <li>The <code>Trade -&gt; Store -&gt; Inventory</code> Outbox/Inbox flow is the strongest existing
   extraction seam.</li>
+<li>Store source lives exclusively in <code>apps/store/src</code> with de-prefixed entities
+  (<code>Membership</code>, <code>InboxMessage</code>, <code>OutboxMessage</code>, <code>TradeOrderCancellation</code>).</li>
+<li>Trade resolves <code>X-Store-Code</code> through a local <code>trade_store_directory</code> projection
+  fed by the <code>store.directory.upserted.v1</code> event.</li>
 </ul>
-<p>This is not yet a set of independently deployable services. In particular, shared
-Doctrine associations, synchronous payment/wallet calls, and in-process plugin APIs
-must be removed before the affected modules are extracted.</p>
+<p>This is not yet a set of independently deployed services. Store cutover (Gateway
+routing, standalone worker/scheduler) is deferred until remaining modules are
+extracted.</p>
 <h2 id="target">Target<a class="headerlink" href="#target" title="Permanent link">&para;</a></h2>
 <p>The target is a monorepo with independently deployable Symfony applications. Each
 service owns its Kernel, configuration, database and migrations, queue, worker,
@@ -1427,10 +1435,12 @@ extraction gates.</p>
 <h2 id="local-run">Local Run<a class="headerlink" href="#local-run" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">&#39;P@ssw0rd&#39;</span><span class="w"> </span>--admin
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>store-app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">&#39;P@ssw0rd&#39;</span><span class="w"> </span>--admin
 </code></pre></div>
 <ul>
-<li>API: <code>http://localhost:8080</code></li>
+<li>Monolith API: <code>http://localhost:8080</code></li>
+<li>Store API: <code>http://localhost:8081</code></li>
 <li>OpenAPI: <code>http://localhost:8080/api/doc</code></li>
 <li>Mailpit: <code>http://localhost:8025</code></li>
 </ul>

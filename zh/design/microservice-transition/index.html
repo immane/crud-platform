@@ -1594,8 +1594,8 @@
 </tr>
 <tr>
 <td>店铺运营</td>
-<td>商店</td>
-<td>第一个提取候选者</td>
+<td>商店 → <code>apps/store</code></td>
+<td>提取；过渡期间的整体主机</td>
 </tr>
 <tr>
 <td>库存</td>
@@ -1660,7 +1660,7 @@
 </code></pre></div>
 <p><code>type</code> 没有版本控制。经纪人主题派生为
 <code>type + ".v" + version</code>；例如，<code>store.order.accepted.v1</code>。所有九个领域
-规范 v1 信封中需要。 <code>causationId</code> 可以为空。</p>
+规范 v1 信封中需要。 <code>causationId</code> 可能为空。</p>
 <p>schema 和manifest 归<code>contracts/integration</code>所有，而PHP 运营商
 类位于 <code>packages/integration-contracts</code> 中，而不是生产者或消费者中
 Symfony 命名空间。更改需要新的消息版本和兼容性
@@ -1669,8 +1669,9 @@ Symfony 命名空间。更改需要新的消息版本和兼容性
 <code>inventory.reservation.requested.v1</code> 和
 <code>inventory.reservation.release.requested.v1</code> 是命令
 <code>kind: "command"</code>，即使它们使用相同的信封。旧版信使
-包装类保持兼容性输入，直到旧的本机 PHP 序列化队列
-行和失败的消息已被耗尽或迁移。</p>
+包装类位于 <code>packages/legacy-messenger-compat</code> 中并保持兼容性
+输入，直到旧的本机 PHP 序列化队列行和失败消息已被处理
+排干或迁移。</p>
 <h3 id="51">5.1 运营商迁移命令<a class="headerlink" href="#51" title="Permanent link">&para;</a></h3>
 <p>必须在生产者更改运营商类型之前部署消费者。期间
 兼容阶段，每个现有处理程序都接受其遗留的
@@ -1679,8 +1680,9 @@ Symfony 命名空间。更改需要新的消息版本和兼容性
 双重发布是被禁止的，因为并非每个消费者行为都是收件箱幂等的。</p>
 <p>部署消费者后，发布者可以一次从主题切换一个主题
 传统包装器到中立载体。回滚仅将该发布者更改回
-遗留包装器。消费者和旧的包装类仍然存在，直到
-<code>async</code> 和 <code>failed</code> 队列不再包含旧的本机 PHP 序列化消息。</p>
+遗留包装器。消费者和旧的包装类保持兼容性
+打包直到 <code>async</code> 和 <code>failed</code> 队列不再包含旧的本机 PHP
+序列化的消息。</p>
 <p>所有九个贸易、商店和库存主题现在都发布其匹配的中性主题
 载体。本机 PHP 序列化程序暂时保留，因此载体对象是
 仍然存储在现有的 Doctrine 队列中；该更改删除了应用程序模块
@@ -1688,6 +1690,12 @@ Symfony 命名空间。更改需要新的消息版本和兼容性
 回滚仅将其发布者更改回匹配的旧包装器。消费者
 和包装器将保留，直到历史 <code>async</code> 和 <code>failed</code> 队列记录完成
 已被耗尽或迁移。</p>
+<p>存储目录所有权通过单独同步
+<code>store.directory.upserted.v1</code>。存储更改将此事件写入同一事件中
+交易，并且 Trade 维护 <code>X-Store-Code</code> 的本地只读投影
+分辨率。在生产中将 Trade 切换到此投影之前，运行
+<code>app:store:outbox:backfill-directory</code> 作为试运行，然后使用 <code>--apply</code>
+初始化现有商店的事件。</p>
 <h3 id="52">5.2 发件箱元数据扩展<a class="headerlink" href="#52" title="Permanent link">&para;</a></h3>
 <p>每个生产者发件箱都存储可为空的 <code>correlation_id</code> 和 <code>causation_id</code> 列
 在发布规范信封之前。在支持的 MySQL 8 运行时上
@@ -1718,7 +1726,7 @@ Symfony 命名空间。更改需要新的消息版本和兼容性
 发件箱出版商。不得将其添加到调度程序中。</p>
 <h2 id="6">6. 撤离顺序和门<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
 <p>存储特定的依赖项库存和源移动门维护在
-<a href="../store-extraction-readiness/"><t42/></a>。</p>
+<a href="../store-extraction-readiness/"><t48/></a>。</p>
 <p>首选顺序是：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Store -&gt; Inventory -&gt; Payment -&gt; Wallet
 </code></pre></div>
@@ -1743,7 +1751,7 @@ Symfony 命名空间。更改需要新的消息版本和兼容性
 <p>仅当满足以下所有条件时才认为目录重组完成
 即使在移动业务代码之前就存在：</p>
 <ul>
-<li>目标 <code>apps/</code>、<code>packages/</code>、<code>contracts/</code>、<code>infrastructure/</code> 和 <code>tools/</code> 所有权
+<li>目标<code>apps/</code>、<code>packages/</code>、<code>contracts/</code>、<code>infrastructure/</code>和<code>tools/</code>所有权
   模型被记录并反映在存储库工具中。</li>
 <li>架构检查拒绝禁止的跨服务导入和实体泄漏。</li>
 <li>现有的贸易、商店和库存事件共享第 5 节中的信封。</li>

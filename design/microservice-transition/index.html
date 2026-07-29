@@ -1594,8 +1594,8 @@ local development, but it must not conceal an undeclared runtime dependency.</p>
 </tr>
 <tr>
 <td>Store Operations</td>
-<td>Store</td>
-<td>First extraction candidate</td>
+<td>Store → <code>apps/store</code></td>
+<td>Extracted; monolith hosts during transition</td>
 </tr>
 <tr>
 <td>Inventory</td>
@@ -1669,8 +1669,9 @@ coverage.</p>
 <code>inventory.reservation.requested.v1</code> and
 <code>inventory.reservation.release.requested.v1</code> are Commands with
 <code>kind: "command"</code>, even though they use the same envelope. Legacy Messenger
-wrapper classes remain compatibility input until old native-PHP serialized queue
-rows and failed messages have been drained or migrated.</p>
+wrapper classes live in <code>packages/legacy-messenger-compat</code> and remain compatibility
+input until old native-PHP serialized queue rows and failed messages have been
+drained or migrated.</p>
 <h3 id="51-carrier-migration-order">5.1 Carrier Migration Order<a class="headerlink" href="#51-carrier-migration-order" title="Permanent link">&para;</a></h3>
 <p>Consumers must be deployed before producers change carrier type. During the
 compatibility phase, each existing handler accepts both its legacy
@@ -1679,8 +1680,9 @@ same business logic. Producers continue to publish only one carrier per topic;
 dual publishing is forbidden because not every consumer action is Inbox-idempotent.</p>
 <p>After consumers are deployed, publishers may switch one topic at a time from the
 legacy wrapper to the neutral carrier. Rollback changes only that publisher back to
-the legacy wrapper. Consumers and old wrapper classes remain in place until the
-<code>async</code> and <code>failed</code> queues no longer contain old native-PHP serialized messages.</p>
+the legacy wrapper. Consumers and old wrapper classes remain in the compatibility
+package until the <code>async</code> and <code>failed</code> queues no longer contain old native-PHP
+serialized messages.</p>
 <p>All nine Trade, Store, and Inventory topics now publish their matching neutral
 carrier. The native PHP serializer remains temporarily, so carrier objects are
 still stored in the existing Doctrine queue; the change removes application-module
@@ -1688,6 +1690,12 @@ FQCNs from newly produced messages without changing the transport. A topic-level
 rollback changes only its Publisher back to the matching legacy wrapper. Consumers
 and wrappers remain until the historical <code>async</code> and <code>failed</code> queue records have
 been drained or migrated.</p>
+<p>Store directory ownership is synchronized separately through
+<code>store.directory.upserted.v1</code>. Store changes write this event in the same
+transaction, and Trade maintains a local read-only projection for <code>X-Store-Code</code>
+resolution. Before switching Trade to this projection in production, run
+<code>app:store:outbox:backfill-directory</code> as a dry run and then with <code>--apply</code> to
+initialize events for existing Stores.</p>
 <h3 id="52-outbox-metadata-expansion">5.2 Outbox Metadata Expansion<a class="headerlink" href="#52-outbox-metadata-expansion" title="Permanent link">&para;</a></h3>
 <p>Each producer Outbox stores nullable <code>correlation_id</code> and <code>causation_id</code> columns
 before publishing canonical envelopes. On the supported MySQL 8 runtime the

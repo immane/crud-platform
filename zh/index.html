@@ -1403,18 +1403,26 @@
 <p>CRUD 平台将 <code>crud-skeleton</code> Symfony 后端发展为
 多应用微服务平台。</p>
 <h2 id="_2">目前状态<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>代码库目前是一个<strong>模块化整体</strong>：</p>
+<p>代码库目前是一个<strong>模块化整体</strong>，Store 被提取到
+<code>apps/store</code> 作为独立可启动应用程序：</p>
 <ul>
-<li>一个 Symfony 内核、Composer 项目、服务容器、数据库、迁移链、
-  Messenger 队列、工作线程、调度程序、Docker 映像和测试套件。</li>
+<li>一个用于单体应用的 Symfony 内核； Store 有自己的 <code>App\Store\Kernel</code>。</li>
+<li>一个 Composer 项目、服务容器、数据库、迁移链、
+  单体应用的 Messenger 队列、工作线程、调度程序和 Docker 镜像。</li>
+<li>商店有自己的配置、数据库（MySQL 8.4）、迁移基线和
+  FrankenPHP 容器。</li>
 <li>领域模块包括身份、CMS、商业、商店、库存、支付、钱包、
   促销、微信适配器、存储适配器。</li>
 <li><code>Trade -&gt; Store -&gt; Inventory</code> 发件箱/收件箱流程是现有最强的
   提取缝。</li>
+<li>存储源仅存在于带有去前缀实体的 <code>apps/store/src</code> 中
+  （<code>Membership</code>、<code>InboxMessage</code>、<code>OutboxMessage</code>、<code>TradeOrderCancellation</code>）。</li>
+<li>贸易通过本地<code>trade_store_directory</code>预测解决<code>X-Store-Code</code>
+  由 <code>store.directory.upserted.v1</code> 事件提供。</li>
 </ul>
-<p>这还不是一组可独立部署的服务。特别是共享
-Doctrine 关联、同步支付/钱包调用和进程内插件 API
-必须在提取受影响的模块之前将其删除。</p>
+<p>这还不是一组独立部署的服务。商店割接（网关
+路由、独立工作程序/调度程序）被推迟，直到剩余模块完成
+提取的。</p>
 <h2 id="_3">目标<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <p>目标是具有可独立部署的 Symfony 应用程序的 monorepo。每个
 服务拥有其内核、配置、数据库和迁移、队列、工作线程、
@@ -1427,11 +1435,13 @@ Doctrine 关联、同步支付/钱包调用和进程内插件 API
 <h2 id="_4">本地运行<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">&#39;P@ssw0rd&#39;</span><span class="w"> </span>--admin
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>store-app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">&#39;P@ssw0rd&#39;</span><span class="w"> </span>--admin
 </code></pre></div>
 <ul>
-<li>API：<code>http://localhost:8080</code></li>
-<li>开放API：<code>http://localhost:8080/api/doc</code></li>
+<li>整体API：<code>http://localhost:8080</code></li>
+<li>商店API：<code>http://localhost:8081</code></li>
+<li>OpenAPI：<code>http://localhost:8080/api/doc</code></li>
 <li>邮件坑：<code>http://localhost:8025</code></li>
 </ul>
 <h2 id="_5">文档<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>

@@ -511,10 +511,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#preconditions-for-source-move" class="md-nav__link">
+  <a href="#remaining-cutover-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Preconditions For Source Move
+        Remaining Cutover Steps
       
     </span>
   </a>
@@ -522,10 +522,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#move-sequence" class="md-nav__link">
+  <a href="#extraction-status" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Move Sequence
+        Extraction Status
       
     </span>
   </a>
@@ -1338,10 +1338,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#preconditions-for-source-move" class="md-nav__link">
+  <a href="#remaining-cutover-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Preconditions For Source Move
+        Remaining Cutover Steps
       
     </span>
   </a>
@@ -1349,10 +1349,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#move-sequence" class="md-nav__link">
+  <a href="#extraction-status" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Move Sequence
+        Extraction Status
       
     </span>
   </a>
@@ -1381,20 +1381,25 @@
 
 <h1 id="store-extraction-readiness">Store Extraction Readiness<a class="headerlink" href="#store-extraction-readiness" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>An implementation inventory for extracting Store into <code>apps/store</code> without
-changing public API routes or losing existing queue and database safety.</p>
+<p><strong>Store source has been fully extracted.</strong> This document tracks the completed
+extraction and remaining cutover steps.</p>
 </blockquote>
 <h2 id="current-scope">Current Scope<a class="headerlink" href="#current-scope" title="Permanent link">&para;</a></h2>
-<p>Store currently contains 32 source files and 13 Store-specific test files. Its
-owned runtime responsibilities are:</p>
+<p>Store source now lives exclusively in <code>apps/store/src</code> (34 files). The monolith
+loads Store through a Composer <code>crud-platform/store-app</code> path package as a
+transitional host. Store-owned runtime responsibilities are:</p>
 <ul>
 <li>Store, membership, StoreOrder, Inbox, Outbox, and cancellation-tombstone data.</li>
-<li>App, manage, and staff HTTP endpoints under the existing <code>/api/v1</code> gateway
-  prefix.</li>
-<li>Trade and Inventory integration consumers.</li>
-<li>Store Outbox publisher and correlation backfill command.</li>
+<li>App, manage, and staff HTTP endpoints under the existing <code>/api/v1</code> gateway prefix.</li>
+<li>Trade and Inventory integration consumers (dual-compatible with legacy wrappers).</li>
+<li>Store Outbox publisher, correlation backfill, and directory backfill commands.</li>
+<li>Store directory <code>onFlush</code> listener feeding the <code>store.directory.upserted.v1</code> event.</li>
 </ul>
-<p>The intended owned data set is:</p>
+<p>Entities have been de-prefixed within the <code>App\Store</code> namespace:
+<code>StoreMembership</code> → <code>Membership</code>, <code>StoreConsumedEvent</code> → <code>InboxMessage</code>,
+<code>StoreOutboxMessage</code> → <code>OutboxMessage</code>, <code>StoreTradeOrderCancellation</code> →
+<code>TradeOrderCancellation</code>. Physical <code>store_*</code> table names are unchanged.</p>
+<p>The owned data set is:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>store
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>store_membership
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>store_order
@@ -1402,10 +1407,9 @@ owned runtime responsibilities are:</p>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>store_outbox_message
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>store_trade_order_cancellation
 </code></pre></div>
-<p><code>store_trade_order_cancellation</code> is currently created in the Inventory migration
-only because it was introduced with Inventory flow work. It belongs to Store and
-must move into the Store service schema baseline before an independent database
-cutover.</p>
+<p><code>store_trade_order_cancellation</code> is included in the Store application schema
+baseline at <code>apps/store/migrations/Version20260730000000.php</code> for independent
+database cutover.</p>
 <h2 id="dependency-inventory">Dependency Inventory<a class="headerlink" href="#dependency-inventory" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1419,67 +1423,74 @@ cutover.</p>
 <tr>
 <td><code>App\Core</code></td>
 <td>REST controller, view traits, BaseService, UUID</td>
-<td>Provided by <code>packages/platform-kernel</code>; Store may depend on this library.</td>
+<td>Provided by <code>packages/platform-kernel</code>; Store depends on this library.</td>
 </tr>
 <tr>
 <td><code>CrudPlatform\IntegrationContracts</code></td>
-<td>All new async messages</td>
+<td>All integration messages</td>
 <td>Keep; this is the approved cross-service dependency.</td>
 </tr>
 <tr>
 <td><code>App\Trade\Message</code> / <code>App\Inventory\Message</code></td>
 <td>Legacy native-Messenger compatibility adapters</td>
-<td>Temporary. Retain only until old <code>async</code>/<code>failed</code> records are drained or migrated.</td>
+<td>Provided by <code>packages/legacy-messenger-compat</code> until old <code>async</code>/<code>failed</code> records are drained or migrated.</td>
 </tr>
 <tr>
-<td><code>App\Trade\DTO\StoreContext</code> and resolver interface</td>
-<td>Synchronous <code>X-Store-Code</code> lookup during Trade order creation</td>
-<td>Blocker. Replace with a scalar Store directory HTTP contract or move the resolver to Commerce before Store becomes independent.</td>
+<td>Store directory lookup</td>
+<td><code>store.directory.upserted.v1</code> feeds Trade's local <code>trade_store_directory</code> projection</td>
+<td>Resolved. Trade no longer injects a Store repository or service.</td>
 </tr>
 <tr>
 <td><code>App\Identity\Entity\User</code></td>
 <td>App/staff controllers used it only to read UUID</td>
-<td>Resolved. Store now depends on <code>App\Core\Security\UserUuidPrincipalInterface</code>, implemented by Identity User.</td>
+<td>Resolved. Store depends on <code>App\Core\Security\UserUuidPrincipalInterface</code>, implemented by Identity User.</td>
 </tr>
 <tr>
 <td><code>config/routes.yaml</code></td>
 <td>Imports <code>src/Store/Controller</code></td>
-<td>Move to Store-owned routes; preserve public paths through the gateway.</td>
+<td>Now points to <code>vendor/crud-platform/store-app/src/Controller</code> via path package.</td>
 </tr>
 <tr>
 <td>Root scheduler/worker</td>
 <td>Runs Store Outbox publishing</td>
-<td>Move to Store-owned worker and scheduler after Store application is independently runnable.</td>
+<td>Runs alongside Trade/Inventory in monolith; Store app has own worker/scheduler capacity post-cutover.</td>
+</tr>
+<tr>
+<td>Root Doctrine mapping</td>
+<td><code>src/Store/Entity</code></td>
+<td>Now points to <code>vendor/crud-platform/store-app/src/Entity</code> via path package.</td>
 </tr>
 </tbody>
 </table>
 <p>No Store Entity or Repository imports another module's Entity or Repository. The
-Deptrac baseline no longer contains a Store-to-Identity persistence exemption.</p>
-<h2 id="preconditions-for-source-move">Preconditions For Source Move<a class="headerlink" href="#preconditions-for-source-move" title="Permanent link">&para;</a></h2>
+Deptrac baseline contains no Store-to-Identity persistence exemption.</p>
+<h2 id="remaining-cutover-steps">Remaining Cutover Steps<a class="headerlink" href="#remaining-cutover-steps" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Deploy the neutral-carrier release, run the Outbox metadata migration, and
-   complete bounded correlation backfills in production.</li>
+<li>Perform a zero-data production rehearsal: deploy Store app, run baseline
+   migration, smoke-test HTTP routes and Outbox/Inbox behavior.</li>
 <li>Drain or migrate legacy native-PHP queue records before Store owns its own
    worker queue. Do not remove legacy wrapper adapters earlier.</li>
-<li>Keep the monolith consuming <code>packages/platform-kernel</code> before Store introduces
-   an independent Kernel.</li>
-<li>Replace Trade's in-process <code>StoreContextResolverInterface</code> plugin with a
-   documented scalar boundary.</li>
-<li>Build a Store schema baseline from the owned tables, including the cancellation
-   tombstone, and rehearse copy, increment, and reconciliation steps.</li>
+<li>Configure Store-owned worker and scheduler after remaining modules are extracted
+   and Gateway shadow routing is ready.</li>
+<li>Gateway cutover: point Store routes to the <code>store-app</code> container.</li>
+<li>Observe, then clean up monolith Store host assembly (Composer path package,
+   Doctrine mapping, routes, service scan).</li>
 </ol>
-<h2 id="move-sequence">Move Sequence<a class="headerlink" href="#move-sequence" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>packages/platform-kernel
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  -&gt; monolith consumes package
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  -&gt; apps/store skeleton with independent Kernel/config/composer/tests
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  -&gt; Store source, routes, commands, and tests move to apps/store
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  -&gt; Store schema baseline and shadow database verification
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  -&gt; Store worker/scheduler and gateway shadow routing
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  -&gt; read traffic, then write traffic, then database cutover
+<h2 id="extraction-status">Extraction Status<a class="headerlink" href="#extraction-status" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>✅ packages/platform-kernel — Core as shared Composer package
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>✅ apps/store skeleton with independent Kernel/config/composer/tests
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>✅ Store source, routes, commands moved to apps/store/src
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>✅ Entities de-prefixed (Membership, InboxMessage, OutboxMessage, TradeOrderCancellation)
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>✅ Store schema baseline (6 tables) verifiable in independent MySQL
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>✅ Trade local projection for X-Store-Code resolution
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>✅ Store directory Outbox listener + backfill command
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>✅ Dual-compatible consumers with legacy-messenger-compat
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>✅ FrankenPHP Docker stack with independent store-app + store-database
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>🔲 Store worker/scheduler cutover
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>🔲 Gateway shadow routing
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>🔲 Monolith Store host cleanup (Composer path package, Doctrine mapping, routes)
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>🔲 Legacy queue drain → remove legacy-messenger-compat
 </code></pre></div>
-<p>The first source move must not alter public paths, table names, or JSON request and
-response formats. Gateway ownership changes only after Store has passed data and
-message reconciliation.</p>
 
 
 
