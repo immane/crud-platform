@@ -655,6 +655,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#55-architecture-dependency-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Architecture Dependency Gate
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1805,6 +1816,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#55-architecture-dependency-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Architecture Dependency Gate
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2320,6 +2342,16 @@ It is a framework library candidate, not a future network service.</p>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;trade.price_calculator&#39;</span><span class="p p-Indicator">]</span>
 </code></pre></div>
 <p>Sorted by <code>getPriority(): int</code> method, executed in priority order.</p>
+<h3 id="55-architecture-dependency-gate">5.5 Architecture Dependency Gate<a class="headerlink" href="#55-architecture-dependency-gate" title="Permanent link">&para;</a></h3>
+<p>Run <code>composer deptrac</code> to enforce the initial migration boundaries:</p>
+<ul>
+<li>Core MUST NOT depend on a business module.</li>
+<li>A module MUST NOT add a dependency on another module's <code>Entity</code> or <code>Repository</code>.</li>
+</ul>
+<p><code>deptrac-baseline.yaml</code> contains reviewed, exact historical source-to-target
+violations. It is a debt register, not a namespace-level exception mechanism:
+new baseline entries require an explicit architecture decision, while fixed
+dependencies should remove their entry.</p>
 <hr />
 <h2 id="6-request-lifecycle">6. Request Lifecycle<a class="headerlink" href="#6-request-lifecycle" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Request

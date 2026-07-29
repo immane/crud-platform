@@ -4398,6 +4398,7 @@ deployable; this dependency must be removed before extraction.</p>
 <li><strong>DB</strong>: SQLite <code>var/test.db</code> in test environment</li>
 <li><strong>Coverage</strong>: 90% minimum (enforced in CI), currently <strong>90.49% lines</strong> from latest local Xdebug run</li>
 <li><strong>Test count</strong>: <strong>1711 tests</strong>, <strong>5652 assertions</strong></li>
+<li><strong>Architecture gate</strong>: Deptrac enforces that Core has no business-module dependency and blocks new cross-module Entity/Repository dependencies. <code>deptrac-baseline.yaml</code> records exact legacy source-to-target debt; run <code>composer deptrac</code>.</li>
 <li><strong>Static analysis</strong>: PHPStan Level 8 with zero errors in its configured scope (<code>src/</code>, excluding optional SDK code, exception classes, and documented false-positive suppressions). Generic contract via <code>@template TEntity</code> on <code>BaseServiceInterface</code>/<code>BaseService</code> + <code>@extends</code> on 18 concrete service pairs. Rector automates Doctrine Collection/Repository PHPDoc with <code>composer rector:types</code>; CI enforces <code>composer rector:types:check</code> as a dry-run.</li>
 <li><strong>Local PHP note</strong>: default <code>php</code> may point to PHP 7.4; use Homebrew PHP 8.5 at <code>/opt/homebrew/opt/php@8.5/bin/php</code> for local Symfony/PHPUnit commands.</li>
 <li><strong>HTML coverage report</strong>: <code>XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html var/coverage</code></li>
