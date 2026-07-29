@@ -16,7 +16,7 @@
         <link rel="prev" href="../..">
       
       
-        <link rel="next" href="../api-design/">
+        <link rel="next" href="../microservice-transition/">
       
       
         
@@ -461,22 +461,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-vertical-slice-module-structure" class="md-nav__link">
+  <a href="#2-current-modular-monolith-structure" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Vertical Slice (Module) Structure
+        2. Current Modular-Monolith Structure
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. Vertical Slice (Module) Structure">
+    <nav class="md-nav" aria-label="2. Current Modular-Monolith Structure">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#21-mandatory-artifacts-per-module" class="md-nav__link">
+  <a href="#21-typical-artifacts-per-module" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.1 Mandatory Artifacts per Module
+        2.1 Typical Artifacts per Module
       
     </span>
   </a>
@@ -534,10 +534,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#34-cross-boundary-identity-contract" class="md-nav__link">
+  <a href="#34-future-service-boundary-contract" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.4 Cross-Boundary Identity Contract
+        3.4 Future Service Boundary Contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-cross-boundary-identity-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 Cross-Boundary Identity Contract
       
     </span>
   </a>
@@ -764,6 +775,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../microservice-transition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Microservice Transition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1572,22 +1611,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-vertical-slice-module-structure" class="md-nav__link">
+  <a href="#2-current-modular-monolith-structure" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Vertical Slice (Module) Structure
+        2. Current Modular-Monolith Structure
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. Vertical Slice (Module) Structure">
+    <nav class="md-nav" aria-label="2. Current Modular-Monolith Structure">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#21-mandatory-artifacts-per-module" class="md-nav__link">
+  <a href="#21-typical-artifacts-per-module" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.1 Mandatory Artifacts per Module
+        2.1 Typical Artifacts per Module
       
     </span>
   </a>
@@ -1645,10 +1684,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#34-cross-boundary-identity-contract" class="md-nav__link">
+  <a href="#34-future-service-boundary-contract" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.4 Cross-Boundary Identity Contract
+        3.4 Future Service Boundary Contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-cross-boundary-identity-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 Cross-Boundary Identity Contract
       
     </span>
   </a>
@@ -1913,7 +1963,7 @@
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>+-----+------------------------------------+
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>      |  (Entities only)
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>+-----v------------------------------------+
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>|  Entity Layer (Domain Model)             |  &lt;-- Pure data objects, no business logic
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>|  Entity Layer (Domain Model)             |  &lt;-- Persistence and aggregate-local invariants
 <a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>+-----+------------------------------------+
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>      |  (Doctrine ORM)
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>+-----v------------------------------------+
@@ -2000,7 +2050,11 @@
 </tbody>
 </table>
 <hr />
-<h2 id="2-vertical-slice-module-structure">2. Vertical Slice (Module) Structure<a class="headerlink" href="#2-vertical-slice-module-structure" title="Permanent link">&para;</a></h2>
+<h2 id="2-current-modular-monolith-structure">2. Current Modular-Monolith Structure<a class="headerlink" href="#2-current-modular-monolith-structure" title="Permanent link">&para;</a></h2>
+<p>This section describes the current single Symfony application. A module is a
+source-level boundary, not an independently deployable service. The target
+multi-application architecture and extraction gates are defined in
+<a href="../microservice-transition/">Microservice Transition Contract</a>.</p>
 <p>Each business domain is a self-contained module under <code>src/</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>src/{Module}/
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>|-- Controller/
@@ -2014,7 +2068,7 @@
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>|-- Command/              # CLI commands
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>|-- Resources/config/     # Module-specific DI configuration
 </code></pre></div>
-<h3 id="21-mandatory-artifacts-per-module">2.1 Mandatory Artifacts per Module<a class="headerlink" href="#21-mandatory-artifacts-per-module" title="Permanent link">&para;</a></h3>
+<h3 id="21-typical-artifacts-per-module">2.1 Typical Artifacts per Module<a class="headerlink" href="#21-typical-artifacts-per-module" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2024,33 +2078,33 @@
 </thead>
 <tbody>
 <tr>
-<td>Entity class(es)</td>
-<td>PHP 8 attributes (Doctrine ORM), integer auto-increment <code>id</code></td>
+<td>Entity/repository</td>
+<td>Required only when the module owns relational persistence</td>
 </tr>
 <tr>
-<td>Repository class(es)</td>
-<td>Extends <code>ServiceEntityRepository</code></td>
+<td>Service/application handler</td>
+<td>Required for module use cases; generic CRUD is optional</td>
 </tr>
 <tr>
-<td>Service class(es)</td>
-<td>Extends <code>BaseService</code>, implements <code>{Name}ServiceInterface</code></td>
+<td>Exported interface</td>
+<td>Required only for an intentional in-process extension point</td>
 </tr>
 <tr>
-<td>Service interface</td>
-<td>Extends <code>BaseServiceInterface</code> (can be empty)</td>
+<td>HTTP controller</td>
+<td>Required only when the module owns HTTP endpoints</td>
 </tr>
 <tr>
-<td>App controller(s)</td>
-<td>Read-only public endpoints</td>
-</tr>
-<tr>
-<td>Manage controller(s)</td>
-<td>CRUD endpoints guarded by <code>ROLE_ADMIN</code></td>
+<td>Command/message handler</td>
+<td>Used when the module owns asynchronous or scheduled work</td>
 </tr>
 </tbody>
 </table>
+<p>Infrastructure adapters and event-driven modules do not need CRUD controllers,
+Doctrine entities, or <code>BaseService</code> subclasses merely to conform to a template.</p>
 <hr />
 <h2 id="3-cross-module-communication-contract">3. Cross-Module Communication Contract<a class="headerlink" href="#3-cross-module-communication-contract" title="Permanent link">&para;</a></h2>
+<p>These rules apply while modules run inside the current monolith. They MUST NOT
+be used as a justification for a future service boundary.</p>
 <h3 id="31-allowed">3.1 Allowed<a class="headerlink" href="#31-allowed" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2074,7 +2128,7 @@
 <tr>
 <td>Any Module</td>
 <td>Identity</td>
-<td>DI (TokenStorage for current user)</td>
+<td>Current principal abstraction or a deliberately exported service</td>
 </tr>
 </tbody>
 </table>
@@ -2089,7 +2143,7 @@
 <tbody>
 <tr>
 <td>Direct cross-module Entity access</td>
-<td>Use service interface</td>
+<td>Use an explicit module API or a scalar reference/snapshot</td>
 </tr>
 <tr>
 <td>Direct cross-module Repository access</td>
@@ -2107,11 +2161,20 @@
 </table>
 <h3 id="33-module-interface-contract">3.3 Module Interface Contract<a class="headerlink" href="#33-module-interface-contract" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Each module <strong>exports</strong> service interfaces (e.g., <code>CategoryServiceInterface</code>)</li>
-<li>Other modules <strong>consume</strong> only those interfaces, never concrete implementations</li>
-<li>Interfaces are auto-discovered via <code>services.yaml</code></li>
+<li>A module exports an interface only for a deliberate in-process extension point
+  (for example, <code>CategoryServiceInterface</code>).</li>
+<li>Other modules consume an exported application API rather than a concrete
+  implementation.</li>
+<li>Exported interfaces are auto-discovered via <code>services.yaml</code>; new code should
+  keep their operations use-case-specific.</li>
 </ul>
-<h3 id="34-cross-boundary-identity-contract">3.4 Cross-Boundary Identity Contract<a class="headerlink" href="#34-cross-boundary-identity-contract" title="Permanent link">&para;</a></h3>
+<h3 id="34-future-service-boundary-contract">3.4 Future Service Boundary Contract<a class="headerlink" href="#34-future-service-boundary-contract" title="Permanent link">&para;</a></h3>
+<p>For independently deployable services, direct DI is forbidden. Use a documented
+HTTP/gRPC command/query API or a versioned integration event. The contract MUST
+use scalar values and snapshots only; it MUST NOT expose Doctrine, Symfony HTTP,
+or shared mutable PHP objects. See the
+<a href="../microservice-transition/">Microservice Transition Contract</a>.</p>
+<h3 id="35-cross-boundary-identity-contract">3.5 Cross-Boundary Identity Contract<a class="headerlink" href="#35-cross-boundary-identity-contract" title="Permanent link">&para;</a></h3>
 <p>Modules and future services MUST NOT exchange local auto-increment database IDs as
 durable references. Each cross-boundary aggregate exposes a UUID or another explicitly
 documented immutable business key.</p>
@@ -2151,7 +2214,8 @@ reference. UUID lookup does not grant access; the receiving module still enforce
 own authorization and ownership rules.</p>
 <hr />
 <h2 id="4-core-framework-srccore">4. Core Framework (<code>src/Core/</code>)<a class="headerlink" href="#4-core-framework-srccore" title="Permanent link">&para;</a></h2>
-<p>Core provides foundational abstractions. It MUST NOT depend on any business module.</p>
+<p>Core provides foundational abstractions. It MUST NOT depend on any business module.
+It is a framework library candidate, not a future network service.</p>
 <h3 id="41-core-exports-public-api">4.1 Core Exports (Public API)<a class="headerlink" href="#41-core-exports-public-api" title="Permanent link">&para;</a></h3>
 <table>
 <thead>

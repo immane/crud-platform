@@ -401,6 +401,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../design/microservice-transition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微服务转型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../design/api-design/" class="md-nav__link">
         
   
@@ -1157,7 +1185,7 @@
   <a href="#2-system" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. /system/* 内省端点实际上是公开的
+        2. /system/* 内省端点实际上是公共的
       
     </span>
   </a>
@@ -1436,7 +1464,7 @@
   <a href="#2-system" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. /system/* 内省端点实际上是公开的
+        2. /system/* 内省端点实际上是公共的
       
     </span>
   </a>
@@ -1623,7 +1651,7 @@
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;payment.gateway&#39;</span><span class="p p-Indicator">]</span>
 </code></pre></div>
 <p>或者，在 <code>PaymentGatewayInterface</code> 的微信服务配置中添加 <code>_instanceof</code> 规则。</p>
-<h3 id="2-system">2. <code>/system/*</code> 内省端点实际上是公开的<a class="headerlink" href="#2-system" title="Permanent link">&para;</a></h3>
+<h3 id="2-system">2. <code>/system/*</code> 内省端点实际上是公共的<a class="headerlink" href="#2-system" title="Permanent link">&para;</a></h3>
 <p><strong>影响：</strong> 实体元数据和路由结构可以在生产中公开。</p>
 <p><strong>证据：</strong></p>
 <ul>

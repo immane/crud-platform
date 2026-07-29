@@ -401,6 +401,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../microservice-transition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微服务转型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api-design/" class="md-nav__link">
         
   
@@ -520,7 +548,7 @@
   <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 模块骨架
+        1. 模块形状
       
     </span>
   </a>
@@ -693,7 +721,7 @@
   <a href="#41" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.1 允许的依赖关系
+        4.1 当前的整体依赖项
       
     </span>
   </a>
@@ -704,7 +732,18 @@
   <a href="#42" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.2 模块隔离检查表
+        4.2 未来的服务限制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 模块隔离检查表
       
     </span>
   </a>
@@ -1508,7 +1547,7 @@
   <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 模块骨架
+        1. 模块形状
       
     </span>
   </a>
@@ -1681,7 +1720,7 @@
   <a href="#41" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.1 允许的依赖关系
+        4.1 当前的整体依赖项
       
     </span>
   </a>
@@ -1692,7 +1731,18 @@
   <a href="#42" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.2 模块隔离检查表
+        4.2 未来的服务限制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 模块隔离检查表
       
     </span>
   </a>
@@ -1815,12 +1865,14 @@
 
 <h1 id="_1">模块设计合同<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>创建新业务模块的规则。 <code>src/</code>下的每个模块都必须遵循这个结构和契约。
-这是使用新域扩展系统的蓝图。</p>
+<p>当前模块化整体中模块发展的规则。模块不是一个
+可部署的服务。服务提取遵循
+<a href="../microservice-transition/">Microservice Transition Contract</a>。</p>
 </blockquote>
 <hr />
-<h2 id="1">1. 模块骨架<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<p>创建新的业务模块<code>{Module}</code>时：</p>
+<h2 id="1">1. 模块形状<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p>仅使用模块职责所需的工件。持久化支持
+CRUD 模块可以使用这种形状：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>src/{Module}/
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>|-- Controller/
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>|   |-- App/{Entity}Controller.php         # Public read endpoints
@@ -1842,13 +1894,16 @@
 <li><strong>命名空间</strong>：<code>App\{Module}\Entity</code></li>
 <li><strong>必须</strong>：实现 <code>__toString()</code>，声明 <code>touch()</code> 生命周期钩子，使用 PHP 8 属性</li>
 <li><strong>必须</strong>：遵循<a href="../data-model/">Data Model Design Contract</a></li>
-<li><strong>不得</strong>：包含业务逻辑、DI 或服务引用</li>
+<li><strong>不得</strong>：包含 DI 或服务引用</li>
+<li><strong>五月</strong>：执行此操作时强制聚合局部不变量和状态转换
+  防止无效的持久状态。跨聚合编排仍然处于
+  应用服务。</li>
 </ul>
 <h3 id="22">2.2 存储库合约<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>位置</strong>：<code>src/{Module}/Repository/{Name}Repository.php</code></li>
 <li><strong>命名空间</strong>：<code>App\{Module}\Repository</code></li>
-<li><strong>必须</strong>：扩展<code>ServiceEntityRepository</code></li>
+<li><strong>必须</strong>：扩展 <code>ServiceEntityRepository</code></li>
 <li><strong>必须</strong>：在构造函数中接受 <code>ManagerRegistry</code></li>
 <li><strong>五月</strong>：添加返回实体/数组/标量的自定义查询方法</li>
 <li><strong>不能</strong>：返回原始 <code>QueryBuilder</code> （这是服务层关心的问题）</li>
@@ -1858,8 +1913,11 @@
 <ul>
 <li><strong>位置</strong>：<code>src/{Module}/Service/{Name}ServiceInterface.php</code></li>
 <li><strong>命名空间</strong>：<code>App\{Module}\Service</code></li>
-<li><strong>必须</strong>：扩展 <code>App\Core\Service\BaseServiceInterface</code></li>
-<li><strong>可能</strong>：为空（如果基本接口涵盖所有需要的方法）</li>
+<li><strong>必须</strong>：仅针对有意的进程内扩展点或
+  依赖倒置需求</li>
+<li><strong>五月</strong>：扩展旧版 CRUD 模块的 <code>App\Core\Service\BaseServiceInterface</code></li>
+<li><strong>应该</strong>：声明特定于用例的方法而不是公开通用的 CRUD
+  跨模块边界的API</li>
 <li><strong>可能</strong>：添加特定于模块的方法签名</li>
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">interface CategoryServiceInterface extends BaseServiceInterface</span>
@@ -1871,9 +1929,10 @@
 <ul>
 <li><strong>位置</strong>：<code>src/{Module}/Service/{Name}Service.php</code></li>
 <li><strong>命名空间</strong>：<code>App\{Module}\Service</code></li>
-<li><strong>必须</strong>：扩展<code>App\Core\Service\BaseService</code></li>
-<li><strong>必须</strong>：实施<code>{Name}ServiceInterface</code></li>
-<li><strong>必须</strong>：接受 <code>ContainerInterface</code>、实体类 FQCN、可选定位器/表达式服务</li>
+<li><strong>五月</strong>：扩展旧版 CRUD 模块的 <code>App\Core\Service\BaseService</code></li>
+<li><strong>可能</strong>：有意导出时实现模块接口</li>
+<li><strong>应该</strong>：优于 <code>ContainerInterface</code> 的显式构造函数依赖项
+  在新代码中</li>
 <li><strong>应该</strong>：包含所有业务逻辑、验证和事务管理</li>
 <li><strong>不得</strong>：直接访问请求（使用 <code>getCurrentRequest()</code>）</li>
 <li><strong>不得</strong>：返回原始 HTTP 响应（这是控制器的工作）</li>
@@ -1897,7 +1956,7 @@
 <a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="x">}</span>
 </code></pre></div>
 <h3 id="25">2.5 控制者合约<a class="headerlink" href="#25" title="Permanent link">&para;</a></h3>
-<p>控制器有两个角色。有关完整详细信息，请参阅<a href="../controller-design/">Controller Design Contract</a>。</p>
+<p>控制器有两个角色。有关完整详细信息，请参阅 <a href="../controller-design/">Controller Design Contract</a>。</p>
 <h4 id="_2">应用程序控制器（公共只读）<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h4>
 <ul>
 <li><strong>位置</strong>：<code>src/{Module}/Controller/App/{Name}Controller.php</code></li>
@@ -1922,7 +1981,7 @@
 <hr />
 <h2 id="3">3. 模块注册合约<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
 <h3 id="31">3.1 路由注册<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
-<p>将模块的控制器添加到 <code>config/routes.yaml</code>：</p>
+<p>当模块拥有 HTTP 端点时，将其控制器添加到 <code>config/routes.yaml</code>：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="l l-Scalar l-Scalar-Plain">api_{module}_app</span><span class="p p-Indicator">:</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">resource</span><span class="p">:</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;../src/{Module}/Controller/App/&#39;</span>
@@ -1954,13 +2013,15 @@
 </code></pre></div></p>
 <p>否则，自动装配将通过全局 <code>App\</code> 资源覆盖所有内容。</p>
 <h3 id="33">3.3 迁移<a class="headerlink" href="#33" title="Permanent link">&para;</a></h3>
-<p>在 <code>migrations/</code> 中为每个模块创建单个迁移：</p>
+<p>在当前的整体中，创建一个迁移来更改一个模块的表，其中
+可能的。不要使用此规则来拆分历史混合迁移。提取的
+服务从经过验证的架构基线和服务本地迁移历史开始。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>php<span class="w"> </span>bin/console<span class="w"> </span>make:migration
 </code></pre></div>
 <p>命名约定：<code>Version{YYYYMMDD}{HHMMSS}.php</code></p>
 <hr />
 <h2 id="4">4. 模块依赖规则<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
-<h3 id="41">4.1 允许的依赖关系<a class="headerlink" href="#41" title="Permanent link">&para;</a></h3>
+<h3 id="41">4.1 当前的整体依赖项<a class="headerlink" href="#41" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -1971,7 +2032,7 @@
 <tbody>
 <tr>
 <td>任何业务模块</td>
-<td>核心（始终），其他业务模块（通过服务接口）</td>
+<td>核心（始终），其他模块通过显式应用程序 API</td>
 </tr>
 <tr>
 <td>身份</td>
@@ -1983,18 +2044,29 @@
 </tr>
 </tbody>
 </table>
-<h3 id="42">4.2 模块隔离检查表<a class="headerlink" href="#42" title="Permanent link">&para;</a></h3>
+<h3 id="42">4.2 未来的服务限制<a class="headerlink" href="#42" title="Permanent link">&para;</a></h3>
+<p>在独立部署的服务中禁止执行以下操作：</p>
+<ul>
+<li>直接 DI 调用，包括服务接口。</li>
+<li>Doctrine 实体、存储库、EntityManager 和数据库外键访问。</li>
+<li>本地整数标识符作为持久引用。</li>
+<li>Symfony EventDispatcher 事件作为集成事件。</li>
+<li>合约中共享可变 DTO 或框架 HTTP 对象。</li>
+</ul>
+<p>使用标量 API、版本化集成事件、发件箱/收件箱和服务拥有的
+而是排队。参见<a href="../microservice-transition/">Microservice Transition Contract</a>。</p>
+<h3 id="43">4.3 模块隔离检查表<a class="headerlink" href="#43" title="Permanent link">&para;</a></h3>
 <p>创建新模块时，验证：</p>
 <ul>
 <li>[ ] 模块与其他模块没有循环依赖关系</li>
-<li>[ ] 模块导出至少一个<code>*ServiceInterface</code></li>
-<li>[ ] 模块不从其他模块导入具体服务（使用接口）</li>
-<li>[ ] 模块的实体不被其他模块中的控制器直接引用</li>
-<li>[ ] 模块的服务是独立的（不泄漏 DB 连接或 EM）</li>
+<li>[ ] 模块有明确的所有者和责任</li>
+<li>[ ] 模块仅通过有意的应用程序 API 导入另一个模块</li>
+<li>[ ] 新代码避免了跨模块实体和存储库访问</li>
+<li>[ ] 提取候选具有标量标识符并且没有跨服务持久性假设</li>
 </ul>
 <hr />
 <h2 id="5">5. 模块测试合同<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
-<p>每个模块必须具有：</p>
+<p>每个模块都需要与其职责相适应的测试：</p>
 <table>
 <thead>
 <tr>
@@ -2007,17 +2079,17 @@
 <tr>
 <td>实体单元测试</td>
 <td><code>tests/{Module}/Entity/</code></td>
-<td><code>__toString()</code>、getter/setter、生命周期</td>
+<td>拥有持久性不变量和生命周期</td>
 </tr>
 <tr>
-<td>服务测试</td>
+<td>服务/处理程序测试</td>
 <td><code>tests/{Module}/Service/</code></td>
-<td>所有公共服务方式</td>
+<td>拥有的用例</td>
 </tr>
 <tr>
 <td>集成测试</td>
 <td><code>tests/{Module}/Integration/</code></td>
-<td>API端点，完整的请求/响应周期</td>
+<td>拥有 HTTP、持久性或消息传递边界</td>
 </tr>
 </tbody>
 </table>
@@ -2051,14 +2123,15 @@
 <h3 id="52">5.2 测试数据库<a class="headerlink" href="#52" title="Permanent link">&para;</a></h3>
 <ul>
 <li>测试环境使用SQLite (<code>var/test.db</code>)</li>
-<li>模式是根据测试引导中的 Doctrine 迁移创建的</li>
+<li>模式是从当前测试引导程序中的 Doctrine 模式工具创建的；
+  迁移链验证在 MySQL CI 中单独运行</li>
 <li>每个测试方法都包装在一个事务中并回滚</li>
 </ul>
 <hr />
 <h2 id="6">6. 例外合同<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
 <p>特定于模块的异常必须：</p>
 <ul>
-<li><strong>扩展</strong>：<code>\RuntimeException</code> 或 <code>\Exception</code></li>
+<li><strong>扩展</strong>：<code>\RuntimeException</code>或<code>\Exception</code></li>
 <li><strong>命名</strong>：描述性（<code>InsufficientFundsException</code>、<code>OrderInvalidTransitionException</code>）</li>
 <li><strong>被抛出</strong>：在服务层（绝不在控制器或实体中）</li>
 <li><strong>被捕获</strong>：在控制器层（通过 mixin try/catch 块）</li>

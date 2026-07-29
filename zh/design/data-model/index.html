@@ -401,6 +401,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../microservice-transition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微服务转型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api-design/" class="md-nav__link">
         
   
@@ -2513,13 +2541,15 @@
 <p><strong>使用时间</strong>：对同一记录的并发更新存在数据损坏的风险（例如钱包余额）。</p>
 <h3 id="75">7.5 多态关联<a class="headerlink" href="#75" title="Permanent link">&para;</a></h3>
 <p>对于引用不同实体类型的评论/反应：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="x">#[ORM\Column(length: 100)]</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">private string $entityType;  // e.g., &#39;App\Common\Entity\Content&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="x">#[ORM\Column(length: 50)]</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">private string $targetType;  // e.g., &#39;content&#39;</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="x">#[ORM\Column]</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="x">private int $entityId;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="x">#[ORM\Column(length: 36)]</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="x">private string $targetUuid;</span>
 </code></pre></div>
-<p><strong>无 FK 约束</strong>（在应用层解决）。</p>
+<p><strong>无 FK 约束</strong>（在应用层解决）。不要持久化 PHP 类
+名称或另一个有界上下文的本地整数 ID。如果有意发表评论
+仅对于 CMS 拥有的实体，将 <code>targetType</code> 限制为该有界上下文。</p>
 <h3 id="76-json">7.6 JSON 元数据/额外数据<a class="headerlink" href="#76-json" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="x">#[ORM\Column(type: &#39;json&#39;, nullable: true)]</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="x">private ?array $metadata = null;</span>
@@ -2587,8 +2617,8 @@
 <td>实体是纯粹的数据对象</td>
 </tr>
 <tr>
-<td>实体方法中的业务逻辑</td>
-<td>移至服务层</td>
+<td>实体方法中的跨聚合编排</td>
+<td>转移到应用程序服务</td>
 </tr>
 <tr>
 <td>将服务注入实体</td>

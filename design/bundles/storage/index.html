@@ -397,6 +397,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../microservice-transition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Microservice Transition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../api-design/" class="md-nav__link">
         
   
@@ -1739,18 +1767,19 @@ development, testing, and single-server production deployments without a CDN.</p
 </tr>
 <tr>
 <td>Configuration</td>
-<td><code>%env(QINIU_ACCESS_KEY)%</code>, <code>%env(QINIU_SECRET_KEY)%</code>, <code>%env(QINIU_BUCKET)%</code>, <code>%env(QINIU_DOMAIN)%</code></td>
+<td><code>common_setting</code>: <code>qiniu.access_key</code>, <code>qiniu.secret_key</code>, <code>qiniu.bucket</code>, <code>qiniu.domain</code></td>
 </tr>
 <tr>
 <td>Dependencies</td>
-<td><code>overtrue/qiniu-filesystem</code> or <code>qiniu/php-sdk</code></td>
+<td>Optional <code>qiniu/php-sdk</code>, checked only when the driver is used</td>
 </tr>
 </tbody>
 </table>
-<p>QiniuStorage is optional and toggled by the caller at upload time by passing
-<code>storage=qiniu</code>. When Qiniu env vars are empty, the service definition should
-either be removed or its constructor should gracefully degrade (return <code>false</code>
-from <code>supports()</code> / throw only when <code>store()</code> is called with valid credentials).</p>
+<p>QiniuStorage is optional and selected by the caller at upload time with
+<code>storage=qiniu</code>. It loads credentials from Common's settings repository at runtime.
+This is a current modular-monolith dependency that must be removed before Storage
+can be independently deployed. The driver throws a clear runtime error when the
+optional Qiniu SDK is unavailable.</p>
 <hr />
 <h2 id="5-caller-contract-common-media">5. Caller Contract (Common / Media)<a class="headerlink" href="#5-caller-contract-common-media" title="Permanent link">&para;</a></h2>
 <h3 id="51-media-entity-extension">5.1 Media Entity Extension<a class="headerlink" href="#51-media-entity-extension" title="Permanent link">&para;</a></h3>
@@ -1823,85 +1852,74 @@ talks to <code>MediaStorageInterface</code> through the registry.</p>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">media.local.upload_path</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%kernel.project_dir%/public/uploads&#39;</span>
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nt">media.local.base_url</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/uploads&#39;</span>
 </code></pre></div>
-<p><strong>File</strong>: <code>.env</code></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1">### Storage ###</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="na">MEDIA_STORAGE_DEFAULT</span><span class="o">=</span><span class="s">local</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1">### Qiniu Kodo (optional — leave empty to disable) ###</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="na">QINIU_ACCESS_KEY</span><span class="o">=</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="na">QINIU_SECRET_KEY</span><span class="o">=</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="na">QINIU_BUCKET</span><span class="o">=</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="na">QINIU_DOMAIN</span><span class="o">=</span>
-</code></pre></div>
+<p><strong>Runtime settings</strong>: when <code>storage=qiniu</code> is required, initialize and maintain
+<code>qiniu.access_key</code>, <code>qiniu.secret_key</code>, <code>qiniu.bucket</code>, and <code>qiniu.domain</code> in
+<code>common_setting</code>. <code>MEDIA_STORAGE_DEFAULT</code> remains the only storage selection
+environment variable.</p>
 <p><strong>File</strong>: <code>src/Storage/Resources/config/services_storage.yaml</code></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">services</span><span class="p">:</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="nt">_defaults</span><span class="p">:</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">        </span><span class="nt">autowire</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">        </span><span class="nt">autoconfigure</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="nt">App\Storage\Service\LocalStorage</span><span class="p">:</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">        </span><span class="nt">arguments</span><span class="p">:</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">            </span><span class="nt">$basePath</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%media.local.upload_path%&#39;</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">            </span><span class="nt">$baseUrl</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%media.local.base_url%&#39;</span>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">    </span><span class="nt">App\Storage\Service\QiniuStorage</span><span class="p">:</span>
-<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">        </span><span class="nt">arguments</span><span class="p">:</span>
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">            </span><span class="nt">$accessKey</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(QINIU_ACCESS_KEY)%&#39;</span>
-<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">            </span><span class="nt">$secretKey</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(QINIU_SECRET_KEY)%&#39;</span>
-<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">            </span><span class="nt">$bucket</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(QINIU_BUCKET)%&#39;</span>
-<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">            </span><span class="nt">$domain</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(QINIU_DOMAIN)%&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="nt">_defaults</span><span class="p">:</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">        </span><span class="nt">autowire</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">        </span><span class="nt">autoconfigure</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="nt">App\Storage\Service\LocalStorage</span><span class="p">:</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">        </span><span class="nt">arguments</span><span class="p">:</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">            </span><span class="nt">$basePath</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%media.local.upload_path%&#39;</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">            </span><span class="nt">$baseUrl</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%media.local.base_url%&#39;</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="nt">App\Storage\Service\QiniuStorage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~</span>
 </code></pre></div>
 <p><strong>File</strong>: <code>config/services.yaml</code> (addition)</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">_instanceof</span><span class="p">:</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="nt">App\Storage\Service\MediaStorageInterface</span><span class="p">:</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">        </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;media.storage&#39;</span><span class="p p-Indicator">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">_instanceof</span><span class="p">:</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="nt">App\Storage\Service\MediaStorageInterface</span><span class="p">:</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">        </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;media.storage&#39;</span><span class="p p-Indicator">]</span>
 </code></pre></div>
 <hr />
 <h2 id="7-request-flow">7. Request Flow<a class="headerlink" href="#7-request-flow" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>POST /api/v1/app/media/upload
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  Content-Type: multipart/form-data
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  Body:
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    file: &lt;binary&gt;
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    storage: &quot;qiniu&quot;        (optional, defaults to &quot;local&quot;)
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    alt: &quot;描述文字&quot;           (optional)
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>Controller::uploadAction()
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>  → $request-&gt;files-&gt;get(&#39;file&#39;)
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>  → MediaService::createFromUpload(file, storage, meta)
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>      → MediaStorageRegistry::get(&#39;qiniu&#39;)
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>      → QiniuStorage::store(file, uuid.ext) → &quot;https://cdn.example.com/abc.jpg&quot;
-<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>      → persist Media { storage: &quot;qiniu&quot;, path: &quot;https://cdn.example.com/abc.jpg&quot;, ... }
-<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>      → return Media JSON
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>POST /api/v1/app/media/upload
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  Content-Type: multipart/form-data
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>  Body:
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    file: &lt;binary&gt;
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    storage: &quot;qiniu&quot;        (optional, defaults to &quot;local&quot;)
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    alt: &quot;描述文字&quot;           (optional)
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>Controller::uploadAction()
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>  → $request-&gt;files-&gt;get(&#39;file&#39;)
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>  → MediaService::createFromUpload(file, storage, meta)
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>      → MediaStorageRegistry::get(&#39;qiniu&#39;)
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>      → QiniuStorage::store(file, uuid.ext) → &quot;https://cdn.example.com/abc.jpg&quot;
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>      → persist Media { storage: &quot;qiniu&quot;, path: &quot;https://cdn.example.com/abc.jpg&quot;, ... }
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>      → return Media JSON
 </code></pre></div>
 <h3 id="71-delete-flow">7.1 Delete Flow<a class="headerlink" href="#71-delete-flow" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>DELETE /api/v1/manage/media/{id}
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>Controller::deleteAction()
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>  → MediaService::get({ id })
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>  → MediaService::remove(media)
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>      → MediaStorageRegistry::get(media.storage)
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>      → QiniuStorage::delete(media.path)
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>      → remove entity
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>DELETE /api/v1/manage/media/{id}
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>Controller::deleteAction()
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>  → MediaService::get({ id })
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>  → MediaService::remove(media)
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>      → MediaStorageRegistry::get(media.storage)
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>      → QiniuStorage::delete(media.path)
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>      → remove entity
 </code></pre></div>
 <hr />
 <h2 id="8-driver-auto-discovery">8. Driver Auto-Discovery<a class="headerlink" href="#8-driver-auto-discovery" title="Permanent link">&para;</a></h2>
 <p>Drivers are collected by Symfony's tagged iterator, not by a hardcoded registry:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># config/services.yaml</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nt">_instanceof</span><span class="p">:</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="nt">App\Storage\Service\MediaStorageInterface</span><span class="p">:</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">        </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;media.storage&#39;</span><span class="p p-Indicator">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># config/services.yaml</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nt">_instanceof</span><span class="p">:</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="nt">App\Storage\Service\MediaStorageInterface</span><span class="p">:</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">        </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;media.storage&#39;</span><span class="p p-Indicator">]</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="x">final class MediaStorageRegistry</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="x">{</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="x">    public function __construct(</span>
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="x">        #[AutowireIterator(&#39;media.storage&#39;)]</span>
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="x">        iterable $drivers,</span>
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="x">    ) {</span>
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="x">        foreach ($drivers as $driver) {</span>
-<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="x">            $this-&gt;drivers[$driver::getName()] = $driver;</span>
-<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="x">        }</span>
-<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="x">    }</span>
-<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="x">final class MediaStorageRegistry</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="x">{</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="x">    public function __construct(</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="x">        #[AutowireIterator(&#39;media.storage&#39;)]</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="x">        iterable $drivers,</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="x">    ) {</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="x">        foreach ($drivers as $driver) {</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="x">            $this-&gt;drivers[$driver::getName()] = $driver;</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="x">        }</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="x">    }</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="x">}</span>
 </code></pre></div>
 <p>Adding a new driver (e.g., <code>S3Storage</code>) requires only:
 1. Create <code>src/Storage/Service/S3Storage.php</code> implementing <code>MediaStorageInterface</code>
@@ -1947,7 +1965,8 @@ talks to <code>MediaStorageInterface</code> through the registry.</p>
 </tr>
 </tbody>
 </table>
-<p>Qiniu integration tests should be skipped when <code>QINIU_ACCESS_KEY</code> is empty
+<p>Qiniu integration tests should be skipped when the Qiniu settings are absent or
+the optional SDK is unavailable
 (marked <code>@group qiniu</code> or guarded by an env-var check in <code>setUp()</code>).</p>
 <hr />
 <h2 id="10-error-handling">10. Error Handling<a class="headerlink" href="#10-error-handling" title="Permanent link">&para;</a></h2>
@@ -2033,12 +2052,12 @@ the driver is called, so invalid files never reach the storage backend.</p>
 <hr />
 <h2 id="12-future-drivers">12. Future Drivers<a class="headerlink" href="#12-future-drivers" title="Permanent link">&para;</a></h2>
 <p>The same interface supports any storage backend:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>src/Storage/Service/
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>|-- LocalStorage.php            # First phase (always enabled)
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>|-- QiniuStorage.php            # First phase (optional)
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>|-- S3Storage.php               # Future — AWS S3
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>|-- OssStorage.php              # Future — Alibaba Cloud OSS
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>|-- CosStorage.php              # Future — Tencent Cloud COS
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>src/Storage/Service/
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>|-- LocalStorage.php            # First phase (always enabled)
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>|-- QiniuStorage.php            # First phase (optional)
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>|-- S3Storage.php               # Future — AWS S3
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>|-- OssStorage.php              # Future — Alibaba Cloud OSS
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>|-- CosStorage.php              # Future — Tencent Cloud COS
 </code></pre></div>
 <p>Each is a single class implementing <code>MediaStorageInterface</code>. No registry or
 caller code changes required.</p>

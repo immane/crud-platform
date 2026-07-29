@@ -401,6 +401,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../microservice-transition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Microservice Transition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../api-design/" class="md-nav__link">
         
   
@@ -2957,9 +2985,10 @@
 
 <h1 id="store-bundle-design">Store Bundle Design<a class="headerlink" href="#store-bundle-design" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>Status: phase 1-3 implemented in the modular monolith.</strong> Store, membership,
-StoreOrder, Trade/Store Outbox-Inbox, Messenger consumers, and Store acceptance are
-implemented. Inventory reservation remains an intentionally deferred boundary.
+<p><strong>Status: implemented in the modular monolith.</strong> Store, membership, StoreOrder,
+Trade/Store Outbox-Inbox, Messenger consumers, Store acceptance, and the optional
+Inventory reservation integration are implemented. Inventory remains disabled by
+default and is not production-ready until its documented safety checklist is met.
 The Store bundle (<code>src/Store/</code>) owns multi-store context, store operations, and the
 store-side order projection. Trade remains the single commercial order entry point
 and the source of truth for order amount, payment, refund, and customer order status.</p>

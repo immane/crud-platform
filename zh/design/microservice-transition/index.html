@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/design/api-documentation/">
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/design/microservice-transition/">
       
       
-        <link rel="prev" href="../controller-design/">
+        <link rel="prev" href="../system-architecture/">
       
       
-        <link rel="next" href="../system-contracts/">
+        <link rel="next" href="../api-design/">
       
       
         
@@ -31,7 +31,7 @@
     
     
       
-        <title>API 文档 - CRUD Skeleton</title>
+        <title>微服务转型 - CRUD Skeleton</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#api" class="md-skip">
+        <a href="#_1" class="md-skip">
           跳转至
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              API 文档
+              微服务转型
             
           </span>
         </div>
@@ -398,10 +398,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../microservice-transition/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微服务转型
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -417,6 +444,114 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 决定
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 目标存储库结构
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 当前和目标边界
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 服务边界规则
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 集成事件合约
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 撤离顺序和门
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 第一阶段可交付成果
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 非目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -538,37 +673,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    API 文档
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../api-documentation/" class="md-nav__link">
         
   
   
@@ -584,170 +692,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="目录">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      目录
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. 架构
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. 单文件丰富器
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="2. 单文件丰富器">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#21-detecttag" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2.1 标签检测（detectTag()）
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#22-meta" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2.2 摘要/描述覆盖 (META)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#23" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2.3 添加新模块
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. 模式定义
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="3. 模式定义">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#31" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.1 添加新架构
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. 控制器属性要求
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. 安全文档
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#6" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. 响应格式
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. 动态查询参数
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        8. 验证
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1391,7 +1335,7 @@
   <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 架构
+        1. 决定
       
     </span>
   </a>
@@ -1402,49 +1346,10 @@
   <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 单文件丰富器
+        2. 目标存储库结构
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="2. 单文件丰富器">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#21-detecttag" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2.1 标签检测（detectTag()）
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#22-meta" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2.2 摘要/描述覆盖 (META)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#23" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2.3 添加新模块
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1452,27 +1357,10 @@
   <a href="#3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 模式定义
+        3. 当前和目标边界
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="3. 模式定义">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#31" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.1 添加新架构
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1480,7 +1368,7 @@
   <a href="#4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 控制器属性要求
+        4. 服务边界规则
       
     </span>
   </a>
@@ -1491,7 +1379,7 @@
   <a href="#5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. 安全文档
+        5. 集成事件合约
       
     </span>
   </a>
@@ -1502,7 +1390,7 @@
   <a href="#6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. 响应格式
+        6. 撤离顺序和门
       
     </span>
   </a>
@@ -1513,7 +1401,7 @@
   <a href="#7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. 动态查询参数
+        7. 第一阶段可交付成果
       
     </span>
   </a>
@@ -1524,7 +1412,7 @@
   <a href="#8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. 验证
+        8. 非目标
       
     </span>
   </a>
@@ -1551,246 +1439,185 @@
   
 
 
-<h1 id="api">API文档合约<a class="headerlink" href="#api" title="Permanent link">&para;</a></h1>
+<h1 id="_1">微服务过渡合约<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><code>/api/doc</code> 是如何工作的，如何扩展它，以及每个新端点必须遵循的规则。</p>
+<p>从当前过渡到的目标架构和迁移规则
+模块化整体到可独立部署的服务。本文档不
+声称当前模块已经是服务。</p>
 </blockquote>
 <hr />
-<h2 id="1">1. 架构<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Controller #[OA\*] attributes
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>        │
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        ▼
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  swagger-php (zircote) ─── generates raw OpenAPI paths + generic tags
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        │
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        ▼
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  NelmioApiDocBundle ─── merges config/packages/nelmio_api_doc.yaml
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        │                    (schemas, security, info)
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        ▼
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  OpenApiEnricherListener ─── kernel.response event
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        │                    overrides tags, summaries, descriptions
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        ▼
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  /api/doc  (Swagger UI)    /api/doc.json  (raw JSON)
+<h2 id="1">1. 决定<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p>该平台将发展成为包含多个可部署 Symfony 的 <strong>monorepo
+应用</strong>。服务拥有其运行时、数据库模式、迁移、工作线程
+队列、计划作业和部署工件。拆分成单独的 Git
+存储库被明确推迟，直到服务边界和合同确定为止
+稳定。</p>
+<p>第一个迁移阶段建立目标目录结构并
+依赖治理。它不会移动每个当前的 <code>src/*</code> 模块或拆分
+过早地建立数据库。</p>
+<h2 id="2">2. 目标存储库结构<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>apps/
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  commerce-service/       # Transitional home for Catalog, Ordering, Pricing
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  store-service/
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  inventory-service/
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  payment-service/
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  wallet-service/
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  identity-service/
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  content-service/
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>packages/
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  platform-kernel/        # Framework-only HTTP/CRUD/observability utilities
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  integration-contracts/  # Versioned transport-neutral event schemas
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  test-support/
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>contracts/
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>  events/                 # Source schemas and compatibility fixtures
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  openapi/                # Published service API contracts
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>deploy/
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>  compose/
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>  gateway/
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>docs/
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>tools/
 </code></pre></div>
-<h2 id="2">2. 单文件丰富器<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
-<p><strong>文件</strong>：<code>src/Core/EventListener/OpenApiEnricherListener.php</code></p>
-<p>所有 API 文档丰富内容都位于一个文件中。无需更改控制器。</p>
-<h3 id="21-detecttag">2.1 标签检测（<code>detectTag()</code>）<a class="headerlink" href="#21-detecttag" title="Permanent link">&para;</a></h3>
-<p>从路由的 <code>operationId</code> 中提取模块标签：</p>
+<p>每个 <code>apps/*-service</code> 都是可独立构建的，并包含自己的
+<code>composer.json</code>、<code>src/Kernel.php</code>、<code>config/</code>、<code>migrations/</code>、<code>public/</code>、<code>bin/</code>、
+<code>tests/</code>，以及 Docker 构建定义。根 Composer 工作区可以协调
+本地开发，但不得隐藏未声明的运行时依赖项。</p>
+<h2 id="3">3. 当前和目标边界<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>操作 ID 模式</th>
-<th>标签</th>
+<th>目标环境</th>
+<th>当前来源</th>
+<th>初始位置</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>sys-auth-*</code></td>
-<td>授权</td>
+<td>平台内核</td>
+<td>核心</td>
+<td>共享图书馆，绝不是商业服务</td>
 </tr>
 <tr>
-<td><code>manage-products-*</code>、<code>app-products-*</code></td>
-<td>产品</td>
+<td>身份和访问</td>
+<td>身份加微信登录适配器</td>
+<td>稍后提取</td>
 </tr>
 <tr>
-<td><code>manage-orders-*</code>、<code>app-orders-*</code></td>
-<td>订单</td>
+<td>商业</td>
+<td>贸易+促销</td>
+<td>过渡服务；目录和订购稍后分开</td>
 </tr>
 <tr>
-<td><code>manage-categories-*</code>、<code>app-categories-*</code></td>
-<td>类别</td>
+<td>店铺运营</td>
+<td>商店</td>
+<td>第一个提取候选者</td>
 </tr>
 <tr>
-<td><code>manage-tags-*</code>、<code>app-tags-*</code></td>
-<td>标签</td>
+<td>库存</td>
+<td>库存</td>
+<td>第一个提取候选者；生产支持仍然受到安全检查表的阻碍</td>
 </tr>
 <tr>
-<td><code>manage-contents-*</code>、<code>app-contents-*</code></td>
-<td>内容</td>
+<td>付款</td>
+<td>支付加微信支付适配器</td>
+<td>持久支付生命周期事件存在后</td>
 </tr>
 <tr>
-<td><code>manage-comments-*</code>、<code>app-comments-*</code></td>
-<td>评论</td>
-</tr>
-<tr>
-<td><code>manage-pages-*</code>、<code>app-pages-*</code></td>
-<td>页数</td>
-</tr>
-<tr>
-<td><code>manage-media-*</code>、<code>app-media-*</code></td>
-<td>媒体</td>
-</tr>
-<tr>
-<td><code>manage-settings-*</code>、<code>app-settings-*</code></td>
-<td>设置</td>
-</tr>
-<tr>
-<td><code>manage-wallets-*</code>、<code>manage-transactions-*</code>、<code>manage-transfers-*</code></td>
+<td>钱包/分类账</td>
 <td>钱包</td>
+<td>付款后合同是标量且持久的</td>
 </tr>
 <tr>
-<td>任何其他 <code>manage-{X}-*</code> 或 <code>app-{X}-*</code></td>
-<td>{X}（自动标题大小写）</td>
+<td>内容/媒体</td>
+<td>普通+存储适配器</td>
+<td>之后;首先从 CMS 中分离设置所有权</td>
 </tr>
 </tbody>
 </table>
-<h3 id="22-meta">2.2 摘要/描述覆盖 (<code>META</code>)<a class="headerlink" href="#22-meta" title="Permanent link">&para;</a></h3>
-<p><code>META</code> 常量提供关键端点的可选摘要和描述。如果端点不在 META 中，它仍然会获取正确的标记，但使用 <code>#[OA\*]</code> 属性中的默认摘要。</p>
-<p>示例：
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">&#39;/api/v1/manage/orders/{id}/pay&#39; =&gt; [</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">    &#39;summary&#39; =&gt; [&#39;post&#39; =&gt; &#39;Pay for order (wallet)&#39;],</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="x">    &#39;desc&#39; =&gt; [&#39;post&#39; =&gt; &#39;User wallet → system wallet. Sets paidAt. Order must be confirmed.&#39;],</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="x">],</span>
-</code></pre></div></p>
-<h3 id="23">2.3 添加新模块<a class="headerlink" href="#23" title="Permanent link">&para;</a></h3>
+<p><code>Wechat</code> 是提供者集成命名空间，而不是未来的有界上下文。其
+登录功能属于身份适配器，其支付功能属于
+在支付适配器后面。 <code>Storage</code> 是基础设施，而不是商业服务
+默认。</p>
+<h2 id="4">4. 服务边界规则<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p>在模块可以独立部署之前，需要遵循以下规则：</p>
 <ol>
-<li><strong>路由命名</strong>：使用<code>manage-{resource}-{action}</code>或<code>app-{resource}-{action}</code>约定</li>
-<li><strong>自动检测</strong>：资源名称自动标题大小写为标签</li>
-<li><strong>可选</strong>：添加到 <code>detectTag()</code> 中的 <code>$known</code> 映射以获取自定义显示名称：
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">&#39;notification&#39; =&gt; &#39;Notifications&#39;, &#39;notifications&#39; =&gt; &#39;Notifications&#39;,</span>
-</code></pre></div></li>
-<li><strong>可选</strong>：向 <code>META</code> 添加关键端点的摘要/描述</li>
+<li>一个服务拥有自己的数据库并且没有跨服务的 Doctrine 关联，
+   外键、存储库访问或事务。
+2.持久的跨服务引用使用UUID或记录的不可变业务
+   键，绝不是其他服务的本地整数主键。</li>
+<li>服务边界接受标量命令/查询并发出标量快照。
+   它从不公开 Doctrine 实体、存储库、EntityManagers、Symfony
+   请求/响应，或可变的进程内上下文。</li>
+<li>状态更改集成事件被写入生产者的发件箱
+   本地交易。消费者使用持久的收件箱（或等效的消费事件
+   记录）由<code>eventId</code>键入。</li>
+<li>每个消费者拥有自己的队列、重试策略、死信处理、worker 和
+   预定的工作。共享 Doctrine Messenger 队列不是服务边界。</li>
+<li>共享包可以提供框架实用程序、模式和测试支持。
+   它们不得包含业务实体、存储库或特定于服务的
+   应用逻辑。</li>
+<li>公共路由通过 API 网关或路由层保持稳定，同时
+   所有权在服务之间转移。</li>
 </ol>
-<h2 id="3">3. 模式定义<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
-<p><strong>文件</strong>：<code>config/packages/nelmio_api_doc.yaml</code></p>
-<p>实体模式在 <code>documentation.components.schemas</code> 下定义。每个架构都提供 Swagger UI 中可见的字段级类型、描述、枚举和示例值。</p>
-<p>当前架构：订单、订单项、产品、规格、类别、标签、内容、评论、页面、媒体、设置、钱包、WalletTransaction、TransferRequest、LoginResponse、UserRef。</p>
-<h3 id="31">3.1 添加新架构<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">components</span><span class="p">:</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="nt">schemas</span><span class="p">:</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">        </span><span class="nt">NewEntity</span><span class="p">:</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">object</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">            </span><span class="nt">properties</span><span class="p">:</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">                </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">integer</span><span class="w"> </span><span class="p p-Indicator">}</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">                </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">string</span><span class="p p-Indicator">,</span><span class="nt"> example</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Example&#39;</span><span class="w"> </span><span class="p p-Indicator">}</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">                </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">string</span><span class="p p-Indicator">,</span><span class="nt"> enum</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">active</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">inactive</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<h2 id="5">5. 集成事件合约<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<p>所有集成事件都使用一个版本化信封：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;eventId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;store.order.accepted.v1&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">&quot;aggregateType&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;store_order&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">&quot;aggregateId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">&quot;occurredAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-07-29T12:00:00+00:00&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="nt">&quot;correlationId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="nt">&quot;causationId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">&quot;payload&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="p">}</span>
 </code></pre></div>
-<h2 id="4">4. 控制器属性要求<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
-<p>每个端点必须具有 OpenAPI 属性。 View 特征（<code>ListApiViewMixin</code> 等）已经提供了它们。自定义端点需要显式属性：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">#[OA\Post(</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">    path: &#39;/api/v1/manage/resource/custom-action&#39;,</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">    summary: &#39;Custom action description&#39;,</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="x">    requestBody: new OA\RequestBody(</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="x">        required: true,</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="x">        content: new OA\JsonContent(properties: [</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="x">            new OA\Property(property: &#39;field&#39;, type: &#39;string&#39;, example: &#39;value&#39;),</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="x">        ])</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="x">    ),</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="x">    responses: [</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="x">        new OA\Response(response: 200, description: &#39;Success&#39;),</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="x">    ]</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="x">)]</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="x">#[Route(&#39;/resource/custom-action&#39;, name: &#39;manage-resource-custom&#39;, methods: [&#39;POST&#39;])]</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="x">public function customAction(): Response { ... }</span>
+<p>该架构由 <code>packages/integration-contracts</code> 或 <code>contracts/events</code> 拥有，
+不是由生产者或消费者 Symfony 命名空间。更改需要新事件
+版本和兼容性覆盖范围。</p>
+<h2 id="6">6. 撤离顺序和门<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<p>首选顺序是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Store -&gt; Inventory -&gt; Payment -&gt; Wallet
 </code></pre></div>
-<p><strong>路由命名至关重要</strong> — <code>name:</code> 前缀决定了 <code>operationId</code>，而 <code>operationId</code> 又决定了模块标签：
-- <code>manage-products-custom</code> → <code>operationId: post_manage-products-custom</code> → 标签：<strong>产品</strong>
-- <code>app-orders-export</code> → <code>operationId: get_app-orders-export</code> → 标签：<strong>订单</strong></p>
-<h2 id="5">5. 安全文档<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
-<p>承载 JWT 身份验证是全局配置的：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">components</span><span class="p">:</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="nt">securitySchemes</span><span class="p">:</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">        </span><span class="nt">bearerAuth</span><span class="p">:</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">            </span><span class="nt">scheme</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bearer</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">            </span><span class="nt">bearerFormat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">JWT</span>
-</code></pre></div>
-<p>公共端点（无需身份验证）使用 <code>security: []</code> 覆盖每个路径。</p>
-<h2 id="6">6. 响应格式<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
-<p>所有端点返回统一的信封。这在 OpenAPI <code>info.description</code> 中有记录：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="nt">&quot;paginator&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="p">}</span>
-</code></pre></div>
-<p>适用时的分页元数据：
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="nt">&quot;paginator&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">        </span><span class="nt">&quot;page&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">        </span><span class="nt">&quot;limit&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">        </span><span class="nt">&quot;pages&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">        </span><span class="nt">&quot;total&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="p">}</span>
-</code></pre></div></p>
-<h2 id="7">7. 动态查询参数<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
-<p>列表端点支持这些查询参数（记录在 <code>ListApiViewMixin</code> 中）：</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>类型</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>page</code></td>
-<td>整数</td>
-<td>页码（从 1 开始）</td>
-</tr>
-<tr>
-<td><code>limit</code></td>
-<td>整数</td>
-<td>每页项目</td>
-</tr>
-<tr>
-<td><code>@filter</code></td>
-<td>字符串</td>
-<td>表达式 WHERE（例如 <code>entity.status == "active"</code>）</td>
-</tr>
-<tr>
-<td><code>@dql</code></td>
-<td>字符串</td>
-<td>原始 DQL 子查询</td>
-</tr>
-<tr>
-<td><code>@order</code></td>
-<td>字符串</td>
-<td>排序：<code>field\|ASC</code> 或 <code>field\|DESC</code></td>
-</tr>
-<tr>
-<td><code>@select</code></td>
-<td>字符串</td>
-<td>DQL SELECT 覆盖</td>
-</tr>
-<tr>
-<td><code>@sort</code></td>
-<td>字符串</td>
-<td>内存中排序表达式</td>
-</tr>
-<tr>
-<td><code>@expands</code></td>
-<td>字符串</td>
-<td>嵌套实体扩展</td>
-</tr>
-<tr>
-<td><code>@display</code></td>
-<td>字符串</td>
-<td>场投影模式</td>
-</tr>
-</tbody>
-</table>
-<h2 id="8">8. 验证<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Check generated JSON</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://127.0.0.1:8080/api/doc.json<span class="w"> </span><span class="p">|</span><span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>json.tool<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-50
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Check embedded HTML spec</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://127.0.0.1:8080/api/doc<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-o<span class="w"> </span><span class="s1">&#39;&quot;tags&quot;:\[.*\]&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1"># Count tags</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://127.0.0.1:8080/api/doc.json<span class="w"> </span><span class="p">|</span><span class="w"> </span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="s2">import sys,json;from collections import Counter</span>
-<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="s2">d=json.load(sys.stdin)</span>
-<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="s2">tc=Counter()</span>
-<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="s2">for p,ms in d[&#39;paths&#39;].items():</span>
-<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="s2">    for m,op in ms.items():</span>
-<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="s2">        if isinstance(op,dict): tc.update(op.get(&#39;tags&#39;,[]))</span>
-<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="s2">for t in sorted(tc): print(f&#39;  {t}: {tc[t]}&#39;)</span>
-<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="s2">&quot;</span>
-</code></pre></div>
+<p>商店和库存已使用 UUID/快照集成流程和发件箱/收件箱
+模式。它们是候选服务，而不是自动生产就绪的服务。
+库存必须保留其记录的功能标志和安全限制，直到
+它的履行、到期、排序和并发保证是完整的。</p>
+<p>支付、钱包、身份、商务、促销、内容和提供商适配器
+必须首先在整体内部解耦。所需工作的示例：</p>
+<ul>
+<li>用外部用户 UUID 替换共享 <code>Identity\Entity\User</code> 关联
+  本地投影/快照。</li>
+<li>将支付的同步 Doctrine 实体事件替换为支付发件箱
+  商务收件箱事件。</li>
+<li>取消 Trade 的直接钱包转账路径，转而采用支付边界。</li>
+<li>替换暴露<code>Invoice</code>或的支付网关和调整插件API
+  Symfony HTTP 类型具有服务拥有的命令和结果契约。</li>
+<li>用标量报价请求替换促销的共享可变定价上下文
+  在考虑远程执行之前确定性结果。</li>
+</ul>
+<h2 id="7">7. 第一阶段可交付成果<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<p>仅当满足以下所有条件时才认为目录重组完成
+即使在移动业务代码之前就存在：</p>
+<ul>
+<li>目标<code>apps/</code>、<code>packages/</code>、<code>contracts/</code>、<code>deploy/</code>和<code>tools/</code>所有权
+  模型被记录并反映在存储库工具中。</li>
+<li>架构检查拒绝禁止的跨服务导入和实体泄漏。</li>
+<li>现有的贸易、商店和库存事件共享第 5 节中的信封。</li>
+<li>一个服务模板定义了独立的Kernel、配置、迁移、队列、
+  工作人员、调度程序、Docker、测试、静态分析和 CI 所有权。</li>
+<li>传统的模块化整体测试套件仍然作为表征套件
+  直至相关服务提取完成。</li>
+</ul>
+<h2 id="8">8. 非目标<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
+<ul>
+<li>移动目录而不强制执行可部署边界。</li>
+<li>为每个当前模块创建空服务应用程序。</li>
+<li>将<code>Core</code>提取为网络服务。</li>
+<li>按文件名拆分历史迁移；混合遗留迁移仍然存在
+  重建整体，而提取的服务从经过验证的模式开始
+  基线和新的服务本地迁移历史。</li>
+</ul>
 
 
 

@@ -401,6 +401,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../microservice-transition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Microservice Transition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api-design/" class="md-nav__link">
         
   
@@ -1090,10 +1118,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#94-custom-events-optional" class="md-nav__link">
+  <a href="#94-in-process-custom-events-optional" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9.4 Custom Events (Optional)
+        9.4 In-Process Custom Events (Optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-integration-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 Integration Events
       
     </span>
   </a>
@@ -2360,10 +2399,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#94-custom-events-optional" class="md-nav__link">
+  <a href="#94-in-process-custom-events-optional" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9.4 Custom Events (Optional)
+        9.4 In-Process Custom Events (Optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-integration-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 Integration Events
       
     </span>
   </a>
@@ -2589,6 +2639,10 @@ validation, testing, and deployment. Every module, service, and controller MUST 
 <td>T5</td>
 <td>The mixin methods (<code>createAction</code>, <code>batchUpdateAction</code>) handle transaction wrapping automatically unless <code>@partial=true</code></td>
 </tr>
+<tr>
+<td>T6</td>
+<td>A local transaction MUST NOT include a remote network call. Cross-service effects use Outbox, Inbox, retries, and compensation/reconciliation.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="13-partial-mode-contract">1.3 Partial Mode Contract<a class="headerlink" href="#13-partial-mode-contract" title="Permanent link">&para;</a></h3>
@@ -2627,7 +2681,7 @@ validation, testing, and deployment. Every module, service, and controller MUST 
 <tbody>
 <tr>
 <td>Entity</td>
-<td><strong>NO</strong></td>
+<td>Aggregate-local invariant exceptions only; no infrastructure or cross-aggregate orchestration</td>
 </tr>
 <tr>
 <td>Repository</td>
@@ -3200,12 +3254,23 @@ validation, testing, and deployment. Every module, service, and controller MUST 
 </tr>
 </tbody>
 </table>
-<h3 id="94-custom-events-optional">9.4 Custom Events (Optional)<a class="headerlink" href="#94-custom-events-optional" title="Permanent link">&para;</a></h3>
-<p>Custom events dispatched via Symfony EventDispatcher for decoupled cross-module communication:</p>
+<h3 id="94-in-process-custom-events-optional">9.4 In-Process Custom Events (Optional)<a class="headerlink" href="#94-in-process-custom-events-optional" title="Permanent link">&para;</a></h3>
+<p>Symfony EventDispatcher events are local implementation details. They may be used
+inside one running application but MUST NOT be treated as integration events or
+carry a durable cross-service contract.</p>
 <ul>
 <li>Event classes in <code>src/{Module}/Event/</code></li>
 <li>Listeners/subscribers in <code>src/{Module}/EventListener/</code></li>
 </ul>
+<h3 id="95-integration-events">9.5 Integration Events<a class="headerlink" href="#95-integration-events" title="Permanent link">&para;</a></h3>
+<p>Cross-service state propagation uses a versioned scalar event envelope written to
+the producer's Outbox within the same local transaction. Consumers persist an
+Inbox/consumed-event record keyed by <code>eventId</code> before applying side effects.</p>
+<p>An integration event MUST include <code>eventId</code>, <code>type</code>, <code>version</code>, <code>aggregateType</code>,
+<code>aggregateId</code>, <code>occurredAt</code>, <code>correlationId</code>, <code>causationId</code>, and a scalar payload.
+It MUST NOT carry a Doctrine entity, repository, EntityManager, Symfony Request,
+Response, or local integer primary key from another service. See the
+<a href="../microservice-transition/">Microservice Transition Contract</a>.</p>
 <hr />
 <h2 id="10-cli-command-contract">10. CLI Command Contract<a class="headerlink" href="#10-cli-command-contract" title="Permanent link">&para;</a></h2>
 <h3 id="101-command-structure">10.1 Command Structure<a class="headerlink" href="#101-command-structure" title="Permanent link">&para;</a></h3>
@@ -3279,7 +3344,7 @@ validation, testing, and deployment. Every module, service, and controller MUST 
 </tr>
 <tr>
 <td>5</td>
-<td>Start PostgreSQL service and prepare the test database</td>
+<td>Run the SQLite test suite and validate the MySQL migration chain separately</td>
 </tr>
 <tr>
 <td>6</td>

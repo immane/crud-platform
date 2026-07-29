@@ -397,6 +397,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../microservice-transition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微服务转型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../api-design/" class="md-nav__link">
         
   
@@ -1601,7 +1629,7 @@
   <a href="#81" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8.1 促销服务
+        8.1 推广服务
       
     </span>
   </a>
@@ -1833,12 +1861,12 @@
   <a href="#16" class="md-nav__link">
     <span class="md-ellipsis">
       
-        16. 实施计划
+        16.实施计划
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="16. 实施计划">
+    <nav class="md-nav" aria-label="16.实施计划">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1948,7 +1976,8 @@
 <p>促销模块 (<code>src/Promotion/</code>) 提供自定义 DSL 驱动的促销引擎。
 促销被定义为存储在 <code>PromotionTemplate</code> 中的人类可读的 DSL 文本，
 在 <code>Promotion</code> 实例中使用每个商店的配置值。引擎挂接到 Trade 的
-价格计算管道作为标记计算器，与交易内部完全解耦。</p>
+作为标记计算器的价格计算管道。它是一个正在进行的贸易插件，
+不是可独立部署的服务边界。</p>
 </blockquote>
 <hr />
 <h2 id="1">1. 概述<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
@@ -1956,8 +1985,8 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>OrderService::calculatePrices()
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a> ├─ BasePriceCalculator (-100)       ← Trade built-in
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a> ├─ QuantityCalculator (50)          ← Trade built-in
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a> ├─ PromotionCalculator (60)         ← Promotion module (tagged trade.price_calculator)
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a> └─ TotalAggregator (100)            ← Trade built-in
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  ├─ TotalAggregator (55)              ← Trade built-in; establishes subtotal
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  └─ PromotionCalculator (60)          ← Promotion module (tagged trade.price_calculator)
 </code></pre></div>
 <p>主要特点：</p>
 <ul>
@@ -2736,7 +2765,7 @@
 <p>引擎在运行时按类型解析策略 - 不需要 ExpressionLanguage。</p>
 <hr />
 <h2 id="8">8. 核心引擎设计<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
-<h3 id="81">8.1 促销服务<a class="headerlink" href="#81" title="Permanent link">&para;</a></h3>
+<h3 id="81">8.1 推广服务<a class="headerlink" href="#81" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="x">interface PromotionServiceInterface extends BaseServiceInterface</span>
 <a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="x">{</span>
 <a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="x">    /**</span>
@@ -3073,7 +3102,7 @@
 <a id="__codelineno-30-21" name="__codelineno-30-21" href="#__codelineno-30-21"></a><span class="x">}</span>
 </code></pre></div>
 <h3 id="123">12.3 应用程序/促销控制器<a class="headerlink" href="#123" title="Permanent link">&para;</a></h3>
-<p>只读；仅使用 <code>ApiView</code>、<code>DetailApiViewMixin</code>、<code>ListApiViewMixin</code>。
+<p>只读；仅使用<code>ApiView</code>、<code>DetailApiViewMixin</code>、<code>ListApiViewMixin</code>。
 <code>commonFilter()</code> 限制为 <code>enabled = true</code> 和时间窗口活动，可通过 <code>?storeCode=</code> 过滤。</p>
 <hr />
 <h2 id="13-dsl">13. DSL 更新流程<a class="headerlink" href="#13-dsl" title="Permanent link">&para;</a></h2>
@@ -3154,7 +3183,7 @@
 </tbody>
 </table>
 <hr />
-<h2 id="16">16. 实施计划<a class="headerlink" href="#16" title="Permanent link">&para;</a></h2>
+<h2 id="16">16.实施计划<a class="headerlink" href="#16" title="Permanent link">&para;</a></h2>
 <h3 id="1-dsl">第 1 阶段：核心实体和 DSL 解析器<a class="headerlink" href="#1-dsl" title="Permanent link">&para;</a></h3>
 <ol>
 <li>创建具有属性、存储库的 <code>PromotionTemplate</code> 实体。</li>

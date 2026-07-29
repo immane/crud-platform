@@ -401,6 +401,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../design/microservice-transition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Microservice Transition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../design/api-design/" class="md-nav__link">
         
   
@@ -1162,6 +1190,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="1. Project Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-architecture-status-and-migration-direction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Architecture Status And Migration Direction
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1982,6 +2027,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="1. Project Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-architecture-status-and-migration-direction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Architecture Status And Migration Direction
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2753,7 +2815,7 @@
 
 <h1 id="crud-skeleton-full-codebase-context">CRUD Skeleton - Full Codebase Context<a class="headerlink" href="#crud-skeleton-full-codebase-context" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>Context snapshot. Last updated: 2026-07-26</p>
+<p>Context snapshot. Last updated: 2026-07-29</p>
 </blockquote>
 <hr />
 <h2 id="1-project-overview">1. Project Overview<a class="headerlink" href="#1-project-overview" title="Permanent link">&para;</a></h2>
@@ -2766,6 +2828,23 @@
 - NelmioApiDoc (Swagger at <code>/api/doc</code>), PHPUnit 12.5, Docker Compose (7 services: app, worker, scheduler, nginx, MySQL, Redis, Mailpit)
 - MkDocs Material + GitHub Pages documentation
 - <strong>i18n</strong>: Symfony Translation with en, zh, zh_Hant, ja — all user-facing messages, entity/field names, and status values translated</p>
+<h3 id="11-architecture-status-and-migration-direction">1.1 Architecture Status And Migration Direction<a class="headerlink" href="#11-architecture-status-and-migration-direction" title="Permanent link">&para;</a></h3>
+<p>The current codebase is a <strong>modular monolith</strong>, not a collection of independently
+deployable microservices. It has one Kernel, Composer project, service container,
+database, migration history, Messenger queue, worker, scheduler, Docker image, and
+test suite. The <code>Trade -&gt; Store -&gt; Inventory</code> Outbox/Inbox flow is the strongest
+existing extraction seam; it does not yet make those modules separate services.</p>
+<p>The agreed target is a <strong>multi-application monorepo</strong>. Each extracted service will
+own its Kernel, configuration, database/migrations, queues, worker, scheduler,
+container image, tests, and CI. The first stage is directory and dependency
+governance, not a mass code move or database split. See
+<a href="../../design/microservice-transition/"><code>docs/design/microservice-transition.md</code></a>.</p>
+<p>Current boundary risks that must be removed before extraction include shared
+<code>Identity\Entity\User</code> Doctrine associations, synchronous Trade/Payment/Wallet
+calls, Payment/Wechat/Wallet plugin contracts that expose Doctrine and Symfony types,
+and PHP-class-based Messenger contracts. <code>Core</code> remains a framework library, while
+Promotion and Storage remain in-process plugins/adapters until scalar service
+contracts exist.</p>
 <h2 id="2-directory-structure">2. Directory Structure<a class="headerlink" href="#2-directory-structure" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>├── public/index.php              # Front controller
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── public/.htaccess              # Apache rewrite rules + Authorization header forwarding
@@ -3728,7 +3807,10 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 </tbody>
 </table>
 <h2 id="11-storage-module">11. Storage Module<a class="headerlink" href="#11-storage-module" title="Permanent link">&para;</a></h2>
-<p>Storage is an infrastructure module under <code>src/Storage/</code>. Common/Media depends only on <code>MediaStorageInterface</code> and <code>MediaStorageRegistry</code>; Storage does not depend on Common entities or controllers.</p>
+<p>Storage is an infrastructure module under <code>src/Storage/</code>. Common/Media depends on
+<code>MediaStorageInterface</code> and <code>MediaStorageRegistry</code>. The Qiniu driver currently reads
+<code>common_setting</code> through Common repositories, so Storage is not yet independently
+deployable; this dependency must be removed before extraction.</p>
 <h3 id="111-drivers">11.1 Drivers<a class="headerlink" href="#111-drivers" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4215,6 +4297,10 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <tr>
 <td><code>docs/design/system-architecture.md</code></td>
 <td>Layer rules, module structure, DI contract</td>
+</tr>
+<tr>
+<td><code>docs/design/microservice-transition.md</code></td>
+<td>Target multi-application monorepo, service-boundary rules, extraction gates</td>
 </tr>
 <tr>
 <td><code>docs/design/api-design.md</code></td>

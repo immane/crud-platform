@@ -397,6 +397,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../microservice-transition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Microservice Transition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../api-design/" class="md-nav__link">
         
   
@@ -1948,7 +1976,8 @@
 <p>The Promotion module (<code>src/Promotion/</code>) provides a custom DSL-driven promotion engine.
 Promotions are defined as human-readable DSL text stored in <code>PromotionTemplate</code>,
 with per-store config values in <code>Promotion</code> instances. The engine hooks into Trade's
-price calculation pipeline as a tagged calculator, fully decoupled from Trade internals.</p>
+price calculation pipeline as a tagged calculator. It is an in-process Trade plugin,
+not an independently deployable service boundary.</p>
 </blockquote>
 <hr />
 <h2 id="1-overview">1. Overview<a class="headerlink" href="#1-overview" title="Permanent link">&para;</a></h2>
@@ -1956,8 +1985,8 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>OrderService::calculatePrices()
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a> ├─ BasePriceCalculator (-100)       ← Trade built-in
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a> ├─ QuantityCalculator (50)          ← Trade built-in
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a> ├─ PromotionCalculator (60)         ← Promotion module (tagged trade.price_calculator)
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a> └─ TotalAggregator (100)            ← Trade built-in
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  ├─ TotalAggregator (55)              ← Trade built-in; establishes subtotal
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  └─ PromotionCalculator (60)          ← Promotion module (tagged trade.price_calculator)
 </code></pre></div>
 <p>Key characteristics:</p>
 <ul>

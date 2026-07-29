@@ -401,6 +401,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../microservice-transition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Microservice Transition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api-design/" class="md-nav__link">
         
   
@@ -2513,13 +2541,15 @@ authorization and ownership checks.</p>
 <p><strong>Use when</strong>: Concurrent updates to the same record risk data corruption (e.g., wallet balances).</p>
 <h3 id="75-polymorphic-association">7.5 Polymorphic Association<a class="headerlink" href="#75-polymorphic-association" title="Permanent link">&para;</a></h3>
 <p>For comments/reactions referencing different entity types:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="x">#[ORM\Column(length: 100)]</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">private string $entityType;  // e.g., &#39;App\Common\Entity\Content&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="x">#[ORM\Column(length: 50)]</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">private string $targetType;  // e.g., &#39;content&#39;</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="x">#[ORM\Column]</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="x">private int $entityId;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="x">#[ORM\Column(length: 36)]</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="x">private string $targetUuid;</span>
 </code></pre></div>
-<p><strong>No FK constraint</strong> (resolved in application layer).</p>
+<p><strong>No FK constraint</strong> (resolved in application layer). Do not persist PHP class
+names or another bounded context's local integer ID. If comments are intended
+only for CMS-owned entities, restrict <code>targetType</code> to that bounded context.</p>
 <h3 id="76-json-metadata-extra-data">7.6 JSON Metadata / Extra Data<a class="headerlink" href="#76-json-metadata-extra-data" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="x">#[ORM\Column(type: &#39;json&#39;, nullable: true)]</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="x">private ?array $metadata = null;</span>
@@ -2587,8 +2617,8 @@ authorization and ownership checks.</p>
 <td>Entities are pure data objects</td>
 </tr>
 <tr>
-<td>Business logic in Entity methods</td>
-<td>Move to Service layer</td>
+<td>Cross-aggregate orchestration in Entity methods</td>
+<td>Move to an application service</td>
 </tr>
 <tr>
 <td>Injecting services into Entity</td>

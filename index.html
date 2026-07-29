@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#crud-skeleton" class="md-skip">
+        <a href="#crud-platform" class="md-skip">
           Skip to content
         </a>
       
@@ -350,10 +350,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#architecture" class="md-nav__link">
+  <a href="#current-status" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Architecture
+        Current Status
       
     </span>
   </a>
@@ -361,10 +361,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tech-stack" class="md-nav__link">
+  <a href="#target" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Tech Stack
+        Target
       
     </span>
   </a>
@@ -372,21 +372,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#key-features" class="md-nav__link">
+  <a href="#local-run" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Key Features
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quick Start
+        Local Run
       
     </span>
   </a>
@@ -409,17 +398,6 @@
     <span class="md-ellipsis">
       
         Quality Checks
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#license" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        License
       
     </span>
   </a>
@@ -503,6 +481,34 @@
     
   
     System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="design/microservice-transition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Microservice Transition
   
 
     
@@ -1291,10 +1297,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#architecture" class="md-nav__link">
+  <a href="#current-status" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Architecture
+        Current Status
       
     </span>
   </a>
@@ -1302,10 +1308,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tech-stack" class="md-nav__link">
+  <a href="#target" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Tech Stack
+        Target
       
     </span>
   </a>
@@ -1313,21 +1319,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#key-features" class="md-nav__link">
+  <a href="#local-run" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Key Features
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quick Start
+        Local Run
       
     </span>
   </a>
@@ -1356,17 +1351,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#license" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        License
-      
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -1387,107 +1371,56 @@
   
 
 
-<h1 id="crud-skeleton">CRUD Skeleton<a class="headerlink" href="#crud-skeleton" title="Permanent link">&para;</a></h1>
-<p>Symfony 8.1 API backend skeleton with modular architecture, JWT authentication, dynamic query engine, and pluggable business modules.</p>
-<h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>src/
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── Core/       # Framework core (RestController, BaseService, View Mixins, Expression Parser)
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── Common/     # CMS module (Category, Tag, Content, Comment, Page, Media, Setting)
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── Trade/      # E-Commerce (Product, Specification, Order, OrderItem, Pricing Pipeline)
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── Payment/    # Payments (Invoice, Gateway abstraction, Webhooks, Events)
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── Wallet/     # Wallet (Balance, Atomic Transfers, Idempotency)
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>├── Wechat/     # WeChat (Mini Program/Official Account Login, WeChat Pay V3, Gateway)
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>└── Identity/   # Authentication (JWT RS256, OTP SMS, Refresh Token Rotation)
-</code></pre></div>
-<h2 id="tech-stack">Tech Stack<a class="headerlink" href="#tech-stack" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Technology</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Framework</td>
-<td>Symfony 8.1</td>
-</tr>
-<tr>
-<td>Language</td>
-<td>PHP 8.4+</td>
-</tr>
-<tr>
-<td>ORM</td>
-<td>Doctrine ORM 3.6</td>
-</tr>
-<tr>
-<td>Database</td>
-<td>MySQL 8</td>
-</tr>
-<tr>
-<td>Auth</td>
-<td>JWT (RS256) + OTP (SMS via Alibaba Cloud)</td>
-</tr>
-<tr>
-<td>API Docs</td>
-<td>Swagger UI (<code>/api/doc</code>) via NelmioApiDocBundle</td>
-</tr>
-<tr>
-<td>Testing</td>
-<td>PHPUnit 12.5 (90% coverage minimum)</td>
-</tr>
-<tr>
-<td>Static analysis</td>
-<td>PHPStan Level 8 + Rector type-rule dry-run</td>
-</tr>
-<tr>
-<td>Frontend</td>
-<td><a href="https://github.com/immane/crud-admin">crud-admin</a> — configuration-driven admin panel</td>
-</tr>
-</tbody>
-</table>
-<h2 id="key-features">Key Features<a class="headerlink" href="#key-features" title="Permanent link">&para;</a></h2>
+<h1 id="crud-platform">CRUD Platform<a class="headerlink" href="#crud-platform" title="Permanent link">&para;</a></h1>
+<p>CRUD Platform evolves the <code>crud-skeleton</code> Symfony backend into a
+multi-application microservice platform.</p>
+<h2 id="current-status">Current Status<a class="headerlink" href="#current-status" title="Permanent link">&para;</a></h2>
+<p>The codebase is currently a <strong>modular monolith</strong>:</p>
 <ul>
-<li><strong>Expression-based dynamic queries</strong>: <code>@filter</code>, <code>@sort</code>, <code>@dql</code>, <code>@order</code>, <code>@select</code> query parameters with DQL compilation</li>
-<li><strong>Trait-based controller composition</strong>: 9 PHP traits (List, Detail, Create, Update, Delete, Workflow, etc.) assembled into controllers</li>
-<li><strong>Pluggable price calculation pipeline</strong>: Priority-ordered calculators for e-commerce order pricing</li>
-<li><strong>State machine</strong>: Symfony Workflow for order lifecycle (draft -&gt; completed) and invoice lifecycle (pending -&gt; paid/refunded)</li>
-<li><strong>Invoice-based payment framework</strong>: Gateway abstraction (mock/wallet/wechat), webhooks, provider-agnostic invoice events</li>
-<li><strong>WeChat integration</strong>: Mini Program and Official Account login, WeChat Pay V3 gateway, WechatUser entity (OneToOne→User)</li>
-<li><strong>System introspection</strong>: Entity metadata and route export via <code>/system/*</code> endpoints</li>
-<li><strong>Atomic wallet transfers</strong>: Deadlock prevention, optimistic locking, idempotency</li>
-<li><strong>Token rotation with reuse detection</strong>: Refresh tokens hashed (HMAC-SHA256), rotated on use</li>
+<li>One Symfony Kernel, Composer project, service container, database, migration chain,
+  Messenger queue, worker, scheduler, Docker image, and test suite.</li>
+<li>Domain modules include Identity, CMS, Commerce, Store, Inventory, Payment, Wallet,
+  Promotion, WeChat adapters, and Storage adapters.</li>
+<li>The <code>Trade -&gt; Store -&gt; Inventory</code> Outbox/Inbox flow is the strongest existing
+  extraction seam.</li>
 </ul>
-<h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Clone</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/immane/crud-skeleton.git
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nb">cd</span><span class="w"> </span>crud-skeleton
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># Start all services</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1"># Run migrations</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1"># Create an admin user</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">&#39;P@ssw0rd&#39;</span><span class="w"> </span>--admin
+<p>This is not yet a set of independently deployable services. In particular, shared
+Doctrine associations, synchronous payment/wallet calls, and in-process plugin APIs
+must be removed before the affected modules are extracted.</p>
+<h2 id="target">Target<a class="headerlink" href="#target" title="Permanent link">&para;</a></h2>
+<p>The target is a monorepo with independently deployable Symfony applications. Each
+service owns its Kernel, configuration, database and migrations, queue, worker,
+scheduler, image, tests, and CI.</p>
+<p>The first extraction candidates are Store and Inventory. Inventory remains disabled
+by default and is not production-ready until its safety checklist is complete.</p>
+<p>Read the <a href="design/microservice-transition/">Microservice Transition Contract</a> for
+the target directory structure, service-boundary rules, event envelope, and
+extraction gates.</p>
+<h2 id="local-run">Local Run<a class="headerlink" href="#local-run" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">&#39;P@ssw0rd&#39;</span><span class="w"> </span>--admin
 </code></pre></div>
+<ul>
+<li>API: <code>http://localhost:8080</code></li>
+<li>OpenAPI: <code>http://localhost:8080/api/doc</code></li>
+<li>Mailpit: <code>http://localhost:8025</code></li>
+</ul>
 <h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><a href="design/system-architecture/">Design Contracts</a></strong> -- System architecture rules, API design, data model, controller contract</li>
-<li><strong><a href="design/bundles/core/">Bundles</a></strong> -- Per-module design documents (Core, Common, Trade, Wallet, Identity)</li>
-<li><strong><a href="/api/doc">API Docs</a></strong> -- Interactive Swagger UI (when running)</li>
+<li><a href="design/microservice-transition/">Microservice Transition</a></li>
+<li><a href="design/system-architecture/">System Architecture</a></li>
+<li><a href="design/system-contracts/">System Contracts</a></li>
+<li><a href="design/module-design/">Module Design</a></li>
+<li><a href="design/api-design/">API Design</a></li>
+<li><a href="ai/context/">AI Context</a></li>
 </ul>
 <h2 id="quality-checks">Quality Checks<a class="headerlink" href="#quality-checks" title="Permanent link">&para;</a></h2>
-<p>Use PHP 8.4 or newer, then run the checks enforced by CI:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>composer<span class="w"> </span>phpstan
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>composer<span class="w"> </span>rector:types:check
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>vendor/bin/phpunit<span class="w"> </span>--coverage-text
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./vendor/bin/phpunit
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>composer<span class="w"> </span>phpstan
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>composer<span class="w"> </span>rector:types:check
 </code></pre></div>
-<p>The PHPStan and Rector jobs use isolated SQLite URLs so Composer's cache-clear
-script can run without a locally configured development database.</p>
-<h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
-<p>Apache-2.0</p>
+<p>Use PHP 8.4+ for local commands.</p>
 
 
 
