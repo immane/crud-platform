@@ -121,8 +121,9 @@ Events are past-tense facts with manifest `kind: "event"`. Requests such as
 `inventory.reservation.requested.v1` and
 `inventory.reservation.release.requested.v1` are Commands with
 `kind: "command"`, even though they use the same envelope. Legacy Messenger
-wrapper classes remain compatibility input until old native-PHP serialized queue
-rows and failed messages have been drained or migrated.
+wrapper classes live in `packages/legacy-messenger-compat` and remain compatibility
+input until old native-PHP serialized queue rows and failed messages have been
+drained or migrated.
 
 ### 5.1 Carrier Migration Order
 
@@ -134,8 +135,9 @@ dual publishing is forbidden because not every consumer action is Inbox-idempote
 
 After consumers are deployed, publishers may switch one topic at a time from the
 legacy wrapper to the neutral carrier. Rollback changes only that publisher back to
-the legacy wrapper. Consumers and old wrapper classes remain in place until the
-`async` and `failed` queues no longer contain old native-PHP serialized messages.
+the legacy wrapper. Consumers and old wrapper classes remain in the compatibility
+package until the `async` and `failed` queues no longer contain old native-PHP
+serialized messages.
 
 All nine Trade, Store, and Inventory topics now publish their matching neutral
 carrier. The native PHP serializer remains temporarily, so carrier objects are
