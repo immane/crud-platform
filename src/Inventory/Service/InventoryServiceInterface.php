@@ -36,9 +36,16 @@ interface InventoryServiceInterface
         string $storeOrderUuid,
         array $items,
         ?\DateTimeImmutable $expiresAt = null,
+        ?string $correlationId = null,
+        ?string $causationId = null,
     ): InventoryReservation;
 
-    public function release(string $reservationId, ?string $reason = null): InventoryReservation;
+    public function release(
+        string $reservationId,
+        ?string $reason = null,
+        ?string $correlationId = null,
+        ?string $causationId = null,
+    ): InventoryReservation;
 
     public function releaseExpiredReservations(): int;
 }

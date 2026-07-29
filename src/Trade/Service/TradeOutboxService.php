@@ -14,9 +14,16 @@ final readonly class TradeOutboxService
     }
 
     /** @param array<string, mixed> $payload */
-    public function record(string $topic, string $aggregateType, string $aggregateId, array $payload): TradeOutboxMessage
+    public function record(
+        string $topic,
+        string $aggregateType,
+        string $aggregateId,
+        array $payload,
+        ?string $correlationId = null,
+        ?string $causationId = null,
+    ): TradeOutboxMessage
     {
-        $message = new TradeOutboxMessage($topic, $aggregateType, $aggregateId, $payload);
+        $message = new TradeOutboxMessage($topic, $aggregateType, $aggregateId, $payload, $correlationId, $causationId);
         $this->entityManager->persist($message);
 
         return $message;

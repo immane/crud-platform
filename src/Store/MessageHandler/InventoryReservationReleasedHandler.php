@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Store\MessageHandler;
 
 use App\Inventory\Message\InventoryReservationReleasedMessage;
+use CrudPlatform\IntegrationContracts\Event\V1\InventoryReservationReleased;
 use App\Store\Entity\StoreConsumedEvent;
 use App\Store\Repository\StoreConsumedEventRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -46,5 +47,11 @@ final readonly class InventoryReservationReleasedHandler
                 hash('sha256', json_encode($message->envelope, JSON_THROW_ON_ERROR)),
             ));
         });
+    }
+
+    #[AsMessageHandler(handles: InventoryReservationReleased::class)]
+    public function handleContract(InventoryReservationReleased $message): void
+    {
+        $this(new InventoryReservationReleasedMessage($message->envelope));
     }
 }

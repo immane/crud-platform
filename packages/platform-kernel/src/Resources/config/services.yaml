@@ -1,8 +1,5 @@
-# yaml-language-server: $schema=../../../../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
-# Optional project-specific services for user code
-# This file is imported (optionally) by config/services.yaml
+# Service definitions for the platform kernel.
 
-# Service definitions for src/Core
 services:
     # Example: register a service in App\Code namespace if you need to
     # App\Code\SomeService: ~

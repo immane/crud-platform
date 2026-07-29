@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Inventory\Command;
 
-use App\Inventory\Message\InventoryReservationConfirmedMessage;
-use App\Inventory\Message\InventoryReservationRejectedMessage;
-use App\Inventory\Message\InventoryReservationReleasedMessage;
 use App\Inventory\Repository\InventoryOutboxMessageRepository;
+use CrudPlatform\IntegrationContracts\Event\V1\InventoryReservationConfirmed;
+use CrudPlatform\IntegrationContracts\Event\V1\InventoryReservationRejected;
+use CrudPlatform\IntegrationContracts\Event\V1\InventoryReservationReleased;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -27,27 +27,32 @@ final class PublishOutboxCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $published = 0;
-        foreach ($this->repository->findUnpublishedForPublishing() as $message) {
-            if (!$this->repository->claim($message['id'], new \DateTimeImmutable('+1 minute'))) {
+        foreach ($this->repository->findUnpublished() as $message) {
+            $id = $message->getId();
+            if ($id === null || !$this->repository->claim($id, new \DateTimeImmutable('+1 minute'))) {
                 continue;
             }
             $envelope = [
-                'eventId' => $message['eventId'],
-                'type' => str_replace('.v1', '', $message['topic']),
+                'eventId' => $message->getEventId(),
+                'type' => str_replace('.v1', '', $message->getTopic()),
                 'version' => 1,
-                'aggregateId' => $message['aggregateId'],
-                'payload' => $message['payload'],
+                'aggregateType' => $message->getAggregateType(),
+                'aggregateId' => $message->getAggregateId(),
+                'occurredAt' => $message->getOccurredAt()->format(DATE_ATOM),
+                'correlationId' => $message->getCorrelationId() ?? $message->getEventId(),
+                'causationId' => $message->getCausationId(),
+                'payload' => $message->getPayload(),
             ];
-            $busMessage = match ($message['topic']) {
-                'inventory.reservation.confirmed.v1' => new InventoryReservationConfirmedMessage($envelope),
-                'inventory.reservation.rejected.v1' => new InventoryReservationRejectedMessage($envelope),
-                'inventory.reservation.released.v1' => new InventoryReservationReleasedMessage($envelope),
+            $busMessage = match ($message->getTopic()) {
+                'inventory.reservation.confirmed.v1' => new InventoryReservationConfirmed($envelope),
+                'inventory.reservation.rejected.v1' => new InventoryReservationRejected($envelope),
+                'inventory.reservation.released.v1' => new InventoryReservationReleased($envelope),
                 default => null,
             };
             if ($busMessage === null) {
                 $this->repository->recordAttempt(
-                    $message['id'],
-                    'Unsupported Inventory outbox topic: ' . $message['topic'],
+                    $id,
+                    'Unsupported Inventory outbox topic: ' . $message->getTopic(),
                     new \DateTimeImmutable('+5 minutes'),
                 );
                 continue;
@@ -55,11 +60,11 @@ final class PublishOutboxCommand extends Command
 
             try {
                 $this->messageBus->dispatch($busMessage);
-                $this->repository->markPublished($message['id']);
+                $this->repository->markPublished($id);
                 ++$published;
             } catch (\Throwable $exception) {
                 $this->repository->recordAttempt(
-                    $message['id'],
+                    $id,
                     $exception->getMessage(),
                     new \DateTimeImmutable('+5 minutes'),
                 );

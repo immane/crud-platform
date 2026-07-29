@@ -18,6 +18,7 @@ use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
 use App\Trade\Message\TradeOrderCreatedMessage;
 use App\Trade\Message\TradeOrderCancelledMessage;
+use CrudPlatform\IntegrationContracts\Event\V1\TradeOrderCreated;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
@@ -49,6 +50,7 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
 
         $message = new TradeOrderCreatedMessage([
             'eventId' => 'a0d04d82-fb27-4b2d-8c54-2f896d4c6533',
+            'correlationId' => 'b0d04d82-fb27-4b2d-8c54-2f896d4c6533',
             'payload' => [
                 'orderUuid' => '96a1a1b2-4f86-44ff-94cb-41a1411ad0d8',
                 'store' => [
@@ -66,7 +68,7 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
             ],
         ]);
 
-        $handler($message);
+        $handler->handleContract(new TradeOrderCreated($message->envelope));
         $handler($message);
 
         $orders = $container->get(StoreOrderRepository::class);
@@ -78,6 +80,8 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
         self::assertCount(1, $outbox);
         self::assertSame('store.order.accepted.v1', $outbox[0]->getTopic());
         self::assertSame($storeOrder->getTradeOrderUuid(), $outbox[0]->getPayload()['orderUuid']);
+        self::assertSame('b0d04d82-fb27-4b2d-8c54-2f896d4c6533', $outbox[0]->getCorrelationId());
+        self::assertSame('a0d04d82-fb27-4b2d-8c54-2f896d4c6533', $outbox[0]->getCausationId());
     }
 
     public function testRejectsAnOrderForAnUnavailableStoreAndConsumesTheEvent(): void

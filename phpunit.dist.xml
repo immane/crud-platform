@@ -32,6 +32,7 @@
     >
         <include>
             <directory>src</directory>
+            <directory>packages/platform-kernel/src</directory>
         </include>
 
         <deprecationTrigger>

@@ -3,7 +3,6 @@
 parameters: {}
 
 imports:
-    - { resource: '../src/Core/Resources/config/services.yaml', ignore_errors: true }
     - { resource: '../src/Identity/Resources/config/services_identity.yaml', ignore_errors: true }
     - { resource: '../src/Payment/Resources/config/services_payment.yaml', ignore_errors: true }
     - { resource: '../src/Storage/Resources/config/services_storage.yaml', ignore_errors: true }
@@ -32,8 +31,6 @@ services:
     App\:
         resource: '../src/'
         exclude:
-            - '../src/Core/Serializer/Normalizer/FlatNormalizer.php'
-            - '../src/Core/EventListener/*'
             - '../src/Identity/Controller/AuthController.php'
             - '../src/Identity/Controller/OtpController.php'
             - '../src/Identity/Security/TokenManager.php'
@@ -44,6 +41,12 @@ services:
             - '../src/Wechat/Service/WechatService.php'
             - '../src/Wechat/Service/Payment/WechatPayGateway.php'
             - '../src/Promotion/Exception/*'
+
+    App\Core\:
+        resource: '../vendor/crud-platform/platform-kernel/src/'
+        exclude:
+            - '../vendor/crud-platform/platform-kernel/src/Serializer/Normalizer/FlatNormalizer.php'
+            - '../vendor/crud-platform/platform-kernel/src/EventListener/*'
 
     App\Core\EventListener\OpenApiEnricherListener:
         tags:

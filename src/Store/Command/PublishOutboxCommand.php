@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Store\Command;
 
 use App\Store\Repository\StoreOutboxMessageRepository;
-use App\Inventory\Message\InventoryReservationReleaseRequestedMessage;
-use App\Inventory\Message\InventoryReservationRequestedMessage;
-use App\Trade\Message\StoreOrderAcceptedMessage;
-use App\Trade\Message\StoreOrderRejectedMessage;
+use CrudPlatform\IntegrationContracts\Command\V1\InventoryReservationReleaseRequested;
+use CrudPlatform\IntegrationContracts\Command\V1\InventoryReservationRequested;
+use CrudPlatform\IntegrationContracts\Event\V1\StoreOrderAccepted;
+use CrudPlatform\IntegrationContracts\Event\V1\StoreOrderRejected;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -39,14 +39,18 @@ final class PublishOutboxCommand extends Command
                 'eventId' => $message->getEventId(),
                 'type' => str_replace('.v1', '', $message->getTopic()),
                 'version' => 1,
+                'aggregateType' => $message->getAggregateType(),
                 'aggregateId' => $message->getAggregateId(),
+                'occurredAt' => $message->getOccurredAt()->format(DATE_ATOM),
+                'correlationId' => $message->getCorrelationId() ?? $message->getEventId(),
+                'causationId' => $message->getCausationId(),
                 'payload' => $message->getPayload(),
             ];
             $busMessage = match ($message->getTopic()) {
-                'store.order.accepted.v1' => new StoreOrderAcceptedMessage($envelope),
-                'store.order.rejected.v1' => new StoreOrderRejectedMessage($envelope),
-                'inventory.reservation.requested.v1' => new InventoryReservationRequestedMessage($envelope),
-                'inventory.reservation.release.requested.v1' => new InventoryReservationReleaseRequestedMessage($envelope),
+                'store.order.accepted.v1' => new StoreOrderAccepted($envelope),
+                'store.order.rejected.v1' => new StoreOrderRejected($envelope),
+                'inventory.reservation.requested.v1' => new InventoryReservationRequested($envelope),
+                'inventory.reservation.release.requested.v1' => new InventoryReservationReleaseRequested($envelope),
                 default => null,
             };
             if ($busMessage === null) {

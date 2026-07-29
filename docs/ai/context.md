@@ -33,9 +33,75 @@ governance, not a mass code move or database split. See
 Current boundary risks that must be removed before extraction include shared
 `Identity\Entity\User` Doctrine associations, synchronous Trade/Payment/Wallet
 calls, Payment/Wechat/Wallet plugin contracts that expose Doctrine and Symfony types,
-and PHP-class-based Messenger contracts. `Core` remains a framework library, while
+and PHP-class-based Messenger contracts. `Core` is provided by
+`packages/platform-kernel`, while
 Promotion and Storage remain in-process plugins/adapters until scalar service
 contracts exist.
+
+### 1.2 Target Monorepo Layout
+
+The future repository layout uses `apps/` for independently deployable business
+services, `packages/` for reusable PHP libraries, `contracts/` for published
+cross-service schemas, and `infrastructure/` for broker, gateway, local runtime,
+and deployment configuration. Do not use `*-service` suffixes under `apps/`.
+Services may retain the current pragmatic Symfony structure (`Controller/`,
+`Entity/`, `Repository/`, `Service/`, `MessageHandler/`, `Command/`, `DTO/`,
+`Exception/`) during extraction; independently deployable boundaries, database
+ownership, and contracts matter more than a simultaneous internal DDD rewrite.
+
+`infrastructure/` contains repository-level runtime configuration such as Docker,
+RabbitMQ, and gateway settings. Service-specific Doctrine, Messenger, HTTP-client,
+and third-party PHP adapters stay inside their owning `apps/*` application.
+
+### 1.3 Integration Contract Foundation
+
+`packages/integration-contracts` now provides transport-neutral v1 carrier classes
+for the nine Trade/Store/Inventory messages. `contracts/integration` owns the
+manifest, Draft 2020-12 envelope schema, per-message schemas, and fixtures. The
+canonical envelope requires `eventId`, unversioned `type`, `version`,
+`aggregateType`, `aggregateId`, `occurredAt`, `correlationId`, `causationId`, and
+`payload`; the broker topic is `type + ".v" + version`.
+
+Seven messages are Events (past-tense facts); `inventory.reservation.requested`
+and `inventory.reservation.release.requested` are Commands. This foundation does
+not change queues, routes, or the existing Outbox/Inbox storage model.
+`config/packages/messenger.yaml` explicitly retains Symfony's native PHP serializer
+because existing `async` and `failed` rows serialize the old `App\*\Message` wrapper
+FQCNs. Those wrappers remain until queued legacy messages are drained or migrated.
+
+All nine existing Trade/Store/Inventory consumers now also accept their matching
+neutral carrier through explicit Messenger handler methods. Each method adapts the
+carrier envelope to the existing legacy wrapper and reuses the original business
+logic, transaction boundaries, and Inbox behavior. All nine Publishers now emit
+only neutral carriers through the existing native PHP Messenger serializer. Do not
+dual-publish: several consumer effects are not universally Inbox-idempotent. Old
+wrappers remain compatibility input for historical queue records and as a
+topic-level Publisher rollback target.
+
+Every Publisher now emits the full canonical envelope from Outbox data, including
+`aggregateType`, `occurredAt`, `correlationId`, and `causationId`. A legacy Outbox
+row without a correlation ID falls back to its `eventId` during publication.
+
+Trade, Store, and Inventory Outboxes now have nullable `correlation_id` and
+`causation_id` schema columns. New root messages default correlation to their own
+`eventId` and retain a null causation ID; APIs and existing Publisher behavior are
+unchanged. The migration deliberately does not backfill or make either column
+non-null. A later operational command must backfill unpublished legacy rows in
+bounded, resumable batches before publisher cutover or constraint tightening.
+
+The Trade -> Store -> Inventory consumer chain now propagates trace metadata when
+it writes a derived Outbox event: `correlationId` is inherited and `causationId`
+is the input `eventId`. Legacy envelopes without a correlation ID use their own
+event ID as a compatibility root. HTTP actions and scheduled jobs still create new
+root correlations through the default Outbox behavior.
+
+Store extraction readiness is tracked in
+[`docs/design/store-extraction-readiness.md`](../design/store-extraction-readiness.md).
+Store has no remaining direct cross-module Entity or Repository imports: its two
+controller reads of `Identity\Entity\User` now use
+`Core\Security\UserUuidPrincipalInterface`. The active source-move blockers are
+Trade's in-process StoreContext resolver, legacy queue
+drain, and Store database baseline/rehearsal.
 
 ## 2. Directory Structure
 
@@ -45,7 +111,7 @@ contracts exist.
 ├── src/Kernel.php                # Symfony Kernel (MicroKernelTrait)
 ├── bin/console                   # CLI entry point
 │
-├── src/Core/                     # Framework core
+├── packages/platform-kernel/      # Shared framework core (App\Core namespace)
 │   ├── Controller/RestController.php    # Base API controller (success/warning/pagination)
 │   ├── Controller/System/               # System introspection (EntityController, RouterController)
 │   ├── View/                     # PHP traits: List, Detail, Create, Update, Delete, Workflow, Single, Transform
@@ -515,7 +581,7 @@ All user-facing messages pass through the translator:
 | JWT auth failures | `JwtAuthenticator::onAuthenticationFailure()` | `$this->translator->trans($messageKey)` |
 | Entity field names | `EntityController` `/system/entities/{name}` | `$this->getTranslator()->trans($plainTextFieldName)` |
 
-### 10.3 LocaleListener (`src/Core/EventListener/LocaleListener.php`)
+### 10.3 LocaleListener (`packages/platform-kernel/src/EventListener/LocaleListener.php`)
 
 Registered at `kernel.request` priority 20. Language detection priority:
 
@@ -582,7 +648,7 @@ Multipart fields:
 | `/system/entities/{entityName}` | GET | Field + association metadata per entity (type, nullable, targetEntity) |
 | `/system/router` | GET | List all registered routes |
 
-Placed in `src/Core/Controller/System/` (framework layer). NelmioApiDoc path_patterns include `^/system`. Tag: `System`.
+Placed in `packages/platform-kernel/src/Controller/System/` (framework layer). NelmioApiDoc path_patterns include `^/system`. Tag: `System`.
 
 ## 13. Key Patterns
 
@@ -635,7 +701,7 @@ Placed in `src/Core/Controller/System/` (framework layer). NelmioApiDoc path_pat
 
 Controller `#[OA\*]` attributes → swagger-php (raw spec) → NelmioApiDocBundle (merge config) → `OpenApiEnricherListener` (post-process) → Swagger UI
 
-### 14.2 OpenApiEnricherListener (`src/Core/EventListener/OpenApiEnricherListener.php`)
+### 14.2 OpenApiEnricherListener (`packages/platform-kernel/src/EventListener/OpenApiEnricherListener.php`)
 
 Enriches all endpoints (90+):
 - **`detectTag()`**: Infers module tag from `operationId`: `manage-products-*` → Products, `system-*` → System, `wechat-*` → Wechat, `sys-auth-*` → Auth, etc.
@@ -803,6 +869,9 @@ Requires `.env.prod.local` copied from `.env.prod.example` with `APP_SECRET`, `R
 | `app:trade:outbox:publish` | Trade | Relay unpublished Trade integration events to Messenger |
 | `app:store:outbox:publish` | Store | Relay Store acceptance/rejection events to Messenger |
 | `app:inventory:outbox:publish` | Inventory | Relay published Inventory integration events to Messenger |
+| `app:trade:outbox:backfill-correlation` | Trade | Dry-run or `--apply` bounded correlation backfill for unpublished Trade Outbox rows |
+| `app:store:outbox:backfill-correlation` | Store | Dry-run or `--apply` bounded correlation backfill for unpublished Store Outbox rows |
+| `app:inventory:outbox:backfill-correlation` | Inventory | Dry-run or `--apply` bounded correlation backfill for unpublished Inventory Outbox rows |
 | `app:inventory:reservations:release-expired` | Inventory | Release expired confirmed reservations |
 
 ## 21. Service Container Wiring

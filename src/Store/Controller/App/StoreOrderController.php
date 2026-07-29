@@ -8,7 +8,7 @@ use App\Core\Controller\RestController;
 use App\Core\View\ApiView;
 use App\Core\View\DetailApiViewMixin;
 use App\Core\View\ListApiViewMixin;
-use App\Identity\Entity\User;
+use App\Core\Security\UserUuidPrincipalInterface;
 use App\Store\Entity\StoreOrder;
 use App\Store\Service\StoreOrderServiceInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +30,6 @@ final class StoreOrderController extends RestController
     {
         $user = $this->getUser();
 
-        return $user instanceof User ? ['customerUserUuid' => $user->getUuid()] : ['id' => -1];
+        return $user instanceof UserUuidPrincipalInterface ? ['customerUserUuid' => $user->getUuid()] : ['id' => -1];
     }
 }

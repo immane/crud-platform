@@ -25,4 +25,10 @@ final class MessageHttpExceptionTest extends TestCase
         self::assertSame('ok', $e->getMessage());
         self::assertSame('/next', $e->getHeaders()['redirectUrl']);
     }
+
+    public function testNullMessagesAreNormalizedToEmptyStrings(): void
+    {
+        self::assertSame('', (new MessageErrorHttpException())->getMessage());
+        self::assertSame('', (new MessageSuccessHttpException())->getMessage());
+    }
 }

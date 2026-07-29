@@ -23,9 +23,14 @@ class StoreOrderService extends BaseService implements StoreOrderServiceInterfac
         parent::__construct($container, StoreOrder::class);
     }
 
-    public function accept(StoreOrder $storeOrder, ?string $reservationId = null): StoreOrder
+    public function accept(
+        StoreOrder $storeOrder,
+        ?string $reservationId = null,
+        ?string $correlationId = null,
+        ?string $causationId = null,
+    ): StoreOrder
     {
-        return $this->transaction(function () use ($storeOrder, $reservationId): StoreOrder {
+        return $this->transaction(function () use ($storeOrder, $reservationId, $correlationId, $causationId): StoreOrder {
             if ($this->outboxService === null) {
                 throw new \RuntimeException('Store outbox is not configured.');
             }
@@ -36,15 +41,21 @@ class StoreOrderService extends BaseService implements StoreOrderServiceInterfac
                 'storeUuid' => $storeOrder->getStore()->getUuid(),
                 'acceptedAt' => $storeOrder->getAcceptedAt()?->format(DATE_ATOM),
                 'reservationId' => $storeOrder->getReservationId(),
-            ]);
+            ], $correlationId, $causationId);
 
             return $storeOrder;
         });
     }
 
-    public function reject(StoreOrder $storeOrder, string $code, string $reason): StoreOrder
+    public function reject(
+        StoreOrder $storeOrder,
+        string $code,
+        string $reason,
+        ?string $correlationId = null,
+        ?string $causationId = null,
+    ): StoreOrder
     {
-        return $this->transaction(function () use ($storeOrder, $code, $reason): StoreOrder {
+        return $this->transaction(function () use ($storeOrder, $code, $reason, $correlationId, $causationId): StoreOrder {
             if ($this->outboxService === null) {
                 throw new \RuntimeException('Store outbox is not configured.');
             }
@@ -56,7 +67,7 @@ class StoreOrderService extends BaseService implements StoreOrderServiceInterfac
                 'reasonCode' => $storeOrder->getRejectionCode(),
                 'reason' => $storeOrder->getRejectionReason(),
                 'rejectedAt' => $storeOrder->getRejectedAt()?->format(DATE_ATOM),
-            ]);
+            ], $correlationId, $causationId);
 
             return $storeOrder;
         });

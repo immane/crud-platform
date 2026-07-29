@@ -19,9 +19,11 @@ final class InventoryOutboxService
         string $aggregateType,
         string $aggregateId,
         array $payload,
+        ?string $correlationId = null,
+        ?string $causationId = null,
     ): InventoryOutboxMessage
     {
-        $message = new InventoryOutboxMessage($topic, $aggregateType, $aggregateId, $payload);
+        $message = new InventoryOutboxMessage($topic, $aggregateType, $aggregateId, $payload, null, $correlationId, $causationId);
         $this->entityManager->persist($message);
 
         return $message;

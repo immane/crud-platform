@@ -11,6 +11,7 @@ use App\Store\Repository\StoreTradeOrderCancellationRepository;
 use App\Store\Service\StoreOrderServiceInterface;
 use App\Store\Service\StoreOutboxService;
 use App\Trade\Message\TradeOrderCreatedMessage;
+use CrudPlatform\IntegrationContracts\Event\V1\TradeOrderCreated;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -37,6 +38,9 @@ final readonly class TradeOrderCreatedHandler
         if (!is_string($eventId) || !is_array($payload)) {
             throw new \InvalidArgumentException('Invalid trade.order.created.v1 envelope.');
         }
+        $correlationId = is_string($message->envelope['correlationId'] ?? null)
+            ? $message->envelope['correlationId']
+            : $eventId;
         if ($this->consumedEventRepository->findOneBy(['eventId' => $eventId]) !== null) {
             return;
         }
@@ -47,7 +51,7 @@ final readonly class TradeOrderCreatedHandler
             throw new \InvalidArgumentException('Trade order event does not include a store UUID.');
         }
 
-        $this->entityManager->wrapInTransaction(function () use ($eventId, $message, $payload, $storeUuid): void {
+        $this->entityManager->wrapInTransaction(function () use ($eventId, $correlationId, $message, $payload, $storeUuid): void {
             if ($this->consumedEventRepository->findOneBy(['eventId' => $eventId]) !== null) {
                 return;
             }
@@ -67,7 +71,7 @@ final readonly class TradeOrderCreatedHandler
 
             $store = $this->storeRepository->findOneByUuid($storeUuid);
             if ($store === null || !$store->isActive()) {
-                $this->recordRejected($payload, $storeUuid, 'STORE_UNAVAILABLE', 'Store is not available.');
+                $this->recordRejected($payload, $storeUuid, 'STORE_UNAVAILABLE', 'Store is not available.', $correlationId, $eventId);
                 return;
             }
 
@@ -81,7 +85,7 @@ final readonly class TradeOrderCreatedHandler
             }
 
             if (!$this->inventoryEnabled) {
-                $this->storeOrderService->accept($storeOrder);
+                $this->storeOrderService->accept($storeOrder, null, $correlationId, $eventId);
                 return;
             }
 
@@ -95,12 +99,25 @@ final readonly class TradeOrderCreatedHandler
                 'items' => $this->inventoryItems($payload),
                 'expiresAt' => (new \DateTimeImmutable('+30 minutes'))->format(DATE_ATOM),
                 'requestedAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
-            ]);
+            ], $correlationId, $eventId);
         });
     }
 
+    #[AsMessageHandler(handles: TradeOrderCreated::class)]
+    public function handleContract(TradeOrderCreated $message): void
+    {
+        $this(new TradeOrderCreatedMessage($message->envelope));
+    }
+
     /** @param array<string, mixed> $payload */
-    private function recordRejected(array $payload, string $storeUuid, string $code, string $reason): void
+    private function recordRejected(
+        array $payload,
+        string $storeUuid,
+        string $code,
+        string $reason,
+        string $correlationId,
+        string $causationId,
+    ): void
     {
         $orderUuid = $payload['orderUuid'] ?? null;
         if (!is_string($orderUuid)) {
@@ -113,7 +130,7 @@ final readonly class TradeOrderCreatedHandler
             'reasonCode' => $code,
             'reason' => $reason,
             'rejectedAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
-        ]);
+        ], $correlationId, $causationId);
     }
 
     /**

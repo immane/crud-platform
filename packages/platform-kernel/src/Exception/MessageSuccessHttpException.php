@@ -10,7 +10,7 @@ namespace App\Core\Exception;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class MessageErrorHttpException extends HttpException
+class MessageSuccessHttpException extends HttpException
 {
     /**
      * @param string $message The internal exception message
@@ -18,6 +18,6 @@ class MessageErrorHttpException extends HttpException
      */
     public function __construct(?string $message = null, ?string $redirectUrl = null)
     {
-        parent::__construct(403, $message, null, ['redirectUrl' => $redirectUrl ], 0);
+        parent::__construct(200, $message ?? '', null, ['redirectUrl' => $redirectUrl ], 0);
     }
 }

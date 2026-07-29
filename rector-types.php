@@ -9,6 +9,7 @@ use Rector\Doctrine\TypedCollections\Rector\Class_\CompleteReturnDocblockFromToM
 return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/src',
+        __DIR__ . '/packages/platform-kernel/src',
     ])
     ->withRules([
         AddAnnotationToRepositoryRector::class,

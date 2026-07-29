@@ -22,28 +22,30 @@ databases prematurely.
 
 ```text
 apps/
-  commerce-service/       # Transitional home for Catalog, Ordering, Pricing
-  store-service/
-  inventory-service/
-  payment-service/
-  wallet-service/
-  identity-service/
-  content-service/
+  commerce/               # Transitional home for Catalog, Ordering, Pricing
+  store/
+  inventory/
+  payment/
+  wallet/
+  identity/
+  content/
 packages/
   platform-kernel/        # Framework-only HTTP/CRUD/observability utilities
   integration-contracts/  # Versioned transport-neutral event schemas
   test-support/
 contracts/
-  events/                 # Source schemas and compatibility fixtures
+  integration/            # Manifest, schemas, and compatibility fixtures
   openapi/                # Published service API contracts
-deploy/
-  compose/
+infrastructure/
+  docker/
+  local/
   gateway/
+  rabbitmq/
 docs/
 tools/
 ```
 
-Each `apps/*-service` is independently buildable and contains its own
+Each `apps/*` is independently buildable and contains its own
 `composer.json`, `src/Kernel.php`, `config/`, `migrations/`, `public/`, `bin/`,
 `tests/`, and Docker build definition. A root Composer workspace may coordinate
 local development, but it must not conceal an undeclared runtime dependency.
@@ -88,29 +90,101 @@ The following rules apply before a module can become independently deployable:
 7. Public routes remain stable through an API gateway or routing layer while
    ownership moves between services.
 
-## 5. Integration Event Contract
+## 5. Integration Message Contract
 
-All integration events use one versioned envelope:
+All integration Events and Commands use one versioned envelope:
 
 ```json
 {
   "eventId": "uuid",
-  "type": "store.order.accepted.v1",
+  "type": "store.order.accepted",
   "version": 1,
   "aggregateType": "store_order",
   "aggregateId": "uuid",
   "occurredAt": "2026-07-29T12:00:00+00:00",
   "correlationId": "uuid",
-  "causationId": "uuid",
+  "causationId": null,
   "payload": {}
 }
 ```
 
-The schema is owned by `packages/integration-contracts` or `contracts/events`,
-not by a producer or consumer Symfony namespace. Changes require a new event
-version and compatibility coverage.
+The `type` is unversioned. The broker topic is derived as
+`type + ".v" + version`; for example, `store.order.accepted.v1`. All nine fields
+are required in canonical v1 envelopes. `causationId` may be null.
+
+The schema and manifest are owned by `contracts/integration`, while PHP carrier
+classes live in `packages/integration-contracts`, not in a producer or consumer
+Symfony namespace. Changes require a new message version and compatibility
+coverage.
+
+Events are past-tense facts with manifest `kind: "event"`. Requests such as
+`inventory.reservation.requested.v1` and
+`inventory.reservation.release.requested.v1` are Commands with
+`kind: "command"`, even though they use the same envelope. Legacy Messenger
+wrapper classes remain compatibility input until old native-PHP serialized queue
+rows and failed messages have been drained or migrated.
+
+### 5.1 Carrier Migration Order
+
+Consumers must be deployed before producers change carrier type. During the
+compatibility phase, each existing handler accepts both its legacy
+`App\*\Message` wrapper and the matching neutral carrier, then delegates to the
+same business logic. Producers continue to publish only one carrier per topic;
+dual publishing is forbidden because not every consumer action is Inbox-idempotent.
+
+After consumers are deployed, publishers may switch one topic at a time from the
+legacy wrapper to the neutral carrier. Rollback changes only that publisher back to
+the legacy wrapper. Consumers and old wrapper classes remain in place until the
+`async` and `failed` queues no longer contain old native-PHP serialized messages.
+
+All nine Trade, Store, and Inventory topics now publish their matching neutral
+carrier. The native PHP serializer remains temporarily, so carrier objects are
+still stored in the existing Doctrine queue; the change removes application-module
+FQCNs from newly produced messages without changing the transport. A topic-level
+rollback changes only its Publisher back to the matching legacy wrapper. Consumers
+and wrappers remain until the historical `async` and `failed` queue records have
+been drained or migrated.
+
+### 5.2 Outbox Metadata Expansion
+
+Each producer Outbox stores nullable `correlation_id` and `causation_id` columns
+before publishing canonical envelopes. On the supported MySQL 8 runtime the
+migration explicitly requests `ALGORITHM=INSTANT`; it performs no
+table-wide update and adds no non-null constraint. New root
+messages default `correlationId` to their generated `eventId` and use a null
+`causationId`. Future handlers that emit a follow-up message must explicitly carry
+the inbound `correlationId` and use the inbound `eventId` as `causationId`.
+
+The current Trade -> Store -> Inventory chain applies this propagation for every
+derived Outbox message. Legacy envelopes without a correlation ID remain accepted;
+their `eventId` becomes the compatibility correlation root. This fallback is
+temporary compatibility behavior, not a replacement for canonical envelopes.
+
+Historical rows remain valid with null metadata during this expand phase. A later,
+separate, resumable backfill command will update unpublished rows in bounded batches
+and report progress. It must be deployed and observed before any non-null constraint
+or publisher cutover is considered.
+
+The backfill is intentionally manual and dry-run by default. Run each service
+command with a conservative production batch size, observe the reported count and
+database load, then repeat until dry-run reports zero:
+
+```bash
+php bin/console app:trade:outbox:backfill-correlation --limit=500
+php bin/console app:trade:outbox:backfill-correlation --limit=500 --apply
+php bin/console app:store:outbox:backfill-correlation --limit=500 --apply
+php bin/console app:inventory:outbox:backfill-correlation --limit=500 --apply
+```
+
+Each conditional update rechecks that the row is both unpublished and missing a
+correlation ID. The command neither updates published rows nor changes
+`causation_id`, so it can safely resume after interruption and coexist with the
+Outbox Publisher. It must not be added to the scheduler.
 
 ## 6. Extraction Order And Gates
+
+The Store-specific dependency inventory and source-move gates are maintained in
+[`docs/design/store-extraction-readiness.md`](store-extraction-readiness.md).
 
 The preferred order is:
 
@@ -141,7 +215,7 @@ must first be decoupled inside the monolith. Examples of required work:
 Directory restructuring is considered complete only when all of the following
 exist, even before business code is moved:
 
-- The target `apps/`, `packages/`, `contracts/`, `deploy/`, and `tools/` ownership
+- The target `apps/`, `packages/`, `contracts/`, `infrastructure/`, and `tools/` ownership
   model is documented and reflected in repository tooling.
 - Architecture checks reject forbidden cross-service imports and entity leaks.
 - Existing Trade, Store, and Inventory events share the envelope in section 5.

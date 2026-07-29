@@ -7,9 +7,11 @@ namespace App\Tests\Store\Integration;
 use App\Inventory\Message\InventoryReservationConfirmedMessage;
 use App\Inventory\Message\InventoryReservationRejectedMessage;
 use App\Inventory\Message\InventoryReservationReleasedMessage;
+use CrudPlatform\IntegrationContracts\Event\V1\InventoryReservationConfirmed;
 use App\Store\Entity\Store;
 use App\Store\Entity\StoreOrder;
 use App\Store\Repository\StoreOrderRepository;
+use App\Store\Repository\StoreOutboxMessageRepository;
 use App\Store\Repository\StoreConsumedEventRepository;
 use App\Store\Service\StoreOrderServiceInterface;
 use App\Tests\Integration\DatabaseBootstrapTrait;
@@ -37,9 +39,13 @@ final class InventoryReservationOutcomeHandlerTest extends IntegrationWebTestCas
     {
         [$container, $order] = $this->awaitingOrder();
         $handler = $container->get(\App\Store\MessageHandler\InventoryReservationConfirmedHandler::class);
-        $handler(new InventoryReservationConfirmedMessage(['eventId' => '00000000-0000-4000-8000-000000000020', 'type' => 'inventory.reservation.confirmed', 'version' => 1, 'payload' => $this->outcomePayload($order, ['confirmedAt' => '2026-07-26T00:00:00+00:00'])]));
+        $handler->handleContract(new InventoryReservationConfirmed(['eventId' => '00000000-0000-4000-8000-000000000020', 'correlationId' => '00000000-0000-4000-8000-000000000026', 'type' => 'inventory.reservation.confirmed', 'version' => 1, 'payload' => $this->outcomePayload($order, ['confirmedAt' => '2026-07-26T00:00:00+00:00'])]));
         $handler(new InventoryReservationConfirmedMessage(['eventId' => '00000000-0000-4000-8000-000000000020', 'type' => 'inventory.reservation.confirmed', 'version' => 1, 'payload' => $this->outcomePayload($order, ['confirmedAt' => '2026-07-26T00:00:00+00:00'])]));
         self::assertSame(StoreOrder::STATUS_ACCEPTED, $container->get(StoreOrderRepository::class)->findOneByUuid($order->getUuid())?->getOperationalStatus());
+        $outbox = $container->get(StoreOutboxMessageRepository::class)->findUnpublished();
+        self::assertCount(1, $outbox);
+        self::assertSame('00000000-0000-4000-8000-000000000026', $outbox[0]->getCorrelationId());
+        self::assertSame('00000000-0000-4000-8000-000000000020', $outbox[0]->getCausationId());
     }
 
     public function testRejectionRejectsMatchingAwaitingStoreOrder(): void

@@ -6,6 +6,7 @@ namespace App\Inventory\MessageHandler;
 
 use App\Inventory\Entity\InventoryConsumedEvent;
 use App\Inventory\Message\InventoryReservationRequestedMessage;
+use CrudPlatform\IntegrationContracts\Command\V1\InventoryReservationRequested;
 use App\Inventory\Repository\InventoryConsumedEventRepository;
 use App\Inventory\Service\InventoryMessageIntegrityException;
 use App\Inventory\Service\InventoryService;
@@ -25,13 +26,16 @@ final readonly class InventoryReservationRequestedHandler
     public function __invoke(InventoryReservationRequestedMessage $message): void
     {
         [$eventId, $payload] = $this->validateEnvelope($message->envelope);
+        $correlationId = is_string($message->envelope['correlationId'] ?? null)
+            ? $message->envelope['correlationId']
+            : $eventId;
         $payloadHash = hash('sha256', json_encode($message->envelope, JSON_THROW_ON_ERROR));
 
         if ($this->isAlreadyConsumed($eventId, $payloadHash)) {
             return;
         }
 
-        $this->entityManager->wrapInTransaction(function () use ($eventId, $payload, $payloadHash): void {
+        $this->entityManager->wrapInTransaction(function () use ($eventId, $correlationId, $payload, $payloadHash): void {
             if ($this->isAlreadyConsumed($eventId, $payloadHash)) {
                 return;
             }
@@ -51,8 +55,16 @@ final readonly class InventoryReservationRequestedHandler
                 $payload['storeOrderUuid'],
                 $payload['items'],
                 $payload['expiresAt'],
+                $correlationId,
+                $eventId,
             );
         });
+    }
+
+    #[AsMessageHandler(handles: InventoryReservationRequested::class)]
+    public function handleContract(InventoryReservationRequested $message): void
+    {
+        $this(new InventoryReservationRequestedMessage($message->envelope));
     }
 
     /**
