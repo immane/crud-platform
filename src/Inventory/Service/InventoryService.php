@@ -179,6 +179,8 @@ final class InventoryService implements InventoryServiceInterface
         string $storeOrderUuid,
         array $items,
         ?\DateTimeImmutable $expiresAt = null,
+        ?string $correlationId = null,
+        ?string $causationId = null,
     ): InventoryReservation
     {
         $this->assertStoreUuid($storeUuid);
@@ -199,6 +201,8 @@ final class InventoryService implements InventoryServiceInterface
             $normalizedItems,
             $expiresAt,
             $hash,
+            $correlationId,
+            $causationId,
         ): InventoryReservation {
             $existing = $this->reservationRepository->findOneByReservationId($reservationId);
             if ($existing !== null) {
@@ -215,13 +219,13 @@ final class InventoryService implements InventoryServiceInterface
             $reservation = new InventoryReservation($reservationId, $storeUuid, $tradeOrderUuid, $storeOrderUuid, $hash, $expiresAt);
             $this->entityManager->persist($reservation);
             if ($expiresAt !== null && $expiresAt <= new \DateTimeImmutable()) {
-                return $this->reject($reservation, 'RESERVATION_EXPIRED', 'The reservation request has expired.');
+                return $this->reject($reservation, 'RESERVATION_EXPIRED', 'The reservation request has expired.', $correlationId, $causationId);
             }
 
             try {
                 $demands = $this->resolveDemands($normalizedItems);
             } catch (ReservationRejected $exception) {
-                return $this->reject($reservation, $exception->reasonCode, $exception->getMessage());
+                return $this->reject($reservation, $exception->reasonCode, $exception->getMessage(), $correlationId, $causationId);
             }
 
             /** @var array<string, InventoryStock> $stocks */
@@ -232,7 +236,7 @@ final class InventoryService implements InventoryServiceInterface
                     $stock === null
                     || (!$stock->allowsNegativeStock() && Quantity::compare($stock->getAvailableQuantity(), $demand['quantity']) < 0)
                 ) {
-                    return $this->reject($reservation, 'OUT_OF_STOCK', 'One or more required materials are unavailable.');
+                    return $this->reject($reservation, 'OUT_OF_STOCK', 'One or more required materials are unavailable.', $correlationId, $causationId);
                 }
 
                 $stocks[$materialUuid] = $stock;
@@ -262,14 +266,19 @@ final class InventoryService implements InventoryServiceInterface
                 'tradeOrderUuid' => $tradeOrderUuid,
                 'storeOrderUuid' => $storeOrderUuid,
                 'confirmedAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
-            ]);
+            ], $correlationId, $causationId);
             return $reservation;
         });
     }
 
-    public function release(string $reservationId, ?string $reason = null): InventoryReservation
+    public function release(
+        string $reservationId,
+        ?string $reason = null,
+        ?string $correlationId = null,
+        ?string $causationId = null,
+    ): InventoryReservation
     {
-        return $this->entityManager->wrapInTransaction(function () use ($reservationId, $reason): InventoryReservation {
+        return $this->entityManager->wrapInTransaction(function () use ($reservationId, $reason, $correlationId, $causationId): InventoryReservation {
             $reservation = $this->reservationRepository->findOneByReservationId($reservationId);
             if ($reservation === null) {
                 throw new \InvalidArgumentException('Reservation was not found.');
@@ -305,7 +314,7 @@ final class InventoryService implements InventoryServiceInterface
             $this->outbox->record('inventory.reservation.released.v1', 'inventory_reservation', $reservationId, [
                 'reservationId' => $reservationId,
                 'releasedAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
-            ]);
+            ], $correlationId, $causationId);
             return $reservation;
         });
     }
@@ -409,7 +418,13 @@ final class InventoryService implements InventoryServiceInterface
         $demands[$uuid]['specifications'] = array_values(array_unique($demands[$uuid]['specifications']));
     }
 
-    private function reject(InventoryReservation $reservation, string $code, string $reason): InventoryReservation
+    private function reject(
+        InventoryReservation $reservation,
+        string $code,
+        string $reason,
+        ?string $correlationId,
+        ?string $causationId,
+    ): InventoryReservation
     {
         $reservation->reject($code, $reason);
         $this->outbox->record('inventory.reservation.rejected.v1', 'inventory_reservation', $reservation->getReservationId(), [
@@ -420,7 +435,7 @@ final class InventoryService implements InventoryServiceInterface
             'reasonCode' => $code,
             'reason' => $reason,
             'rejectedAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
-        ]);
+        ], $correlationId, $causationId);
 
         return $reservation;
     }

@@ -35,6 +35,9 @@ final readonly class InventoryReservationConfirmedHandler
             || !is_array($payload)) {
             throw new \InvalidArgumentException('Invalid inventory.reservation.confirmed.v1 envelope.');
         }
+        $correlationId = is_string($message->envelope['correlationId'] ?? null)
+            ? $message->envelope['correlationId']
+            : $eventId;
         foreach (['reservationId', 'storeUuid', 'tradeOrderUuid', 'storeOrderUuid', 'confirmedAt'] as $field) {
             if (!is_string($payload[$field] ?? null)) {
                 throw new \InvalidArgumentException('Invalid inventory reservation confirmation payload.');
@@ -44,7 +47,7 @@ final readonly class InventoryReservationConfirmedHandler
             return;
         }
 
-        $this->entityManager->wrapInTransaction(function () use ($eventId, $payload, $message): void {
+        $this->entityManager->wrapInTransaction(function () use ($eventId, $correlationId, $payload, $message): void {
             if ($this->consumedEventRepository->findOneBy(['eventId' => $eventId]) !== null) {
                 return;
             }
@@ -64,7 +67,7 @@ final readonly class InventoryReservationConfirmedHandler
                 return;
             }
 
-            $this->storeOrderService->accept($storeOrder, $payload['reservationId']);
+            $this->storeOrderService->accept($storeOrder, $payload['reservationId'], $correlationId, $eventId);
         });
     }
 

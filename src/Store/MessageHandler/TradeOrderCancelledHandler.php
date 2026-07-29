@@ -41,6 +41,9 @@ final readonly class TradeOrderCancelledHandler
             || !is_string($payload['cancelledAt'] ?? null)) {
             throw new \InvalidArgumentException('Invalid trade.order.cancelled.v1 envelope.');
         }
+        $correlationId = is_string($message->envelope['correlationId'] ?? null)
+            ? $message->envelope['correlationId']
+            : $eventId;
         $cancelledAt = \DateTimeImmutable::createFromFormat(DATE_ATOM, $payload['cancelledAt']);
         $errors = \DateTimeImmutable::getLastErrors();
         if ($cancelledAt === false || ($errors !== false && ($errors['warning_count'] > 0 || $errors['error_count'] > 0))) {
@@ -50,7 +53,7 @@ final readonly class TradeOrderCancelledHandler
             return;
         }
 
-        $this->entityManager->wrapInTransaction(function () use ($eventId, $payload, $message, $cancelledAt): void {
+        $this->entityManager->wrapInTransaction(function () use ($eventId, $correlationId, $payload, $message, $cancelledAt): void {
             if ($this->consumedEventRepository->findOneBy(['eventId' => $eventId]) !== null) {
                 return;
             }
@@ -89,7 +92,7 @@ final readonly class TradeOrderCancelledHandler
                 'storeOrderUuid' => $storeOrder->getUuid(),
                 'reason' => 'trade_order_cancelled',
                 'requestedAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
-            ]);
+            ], $correlationId, $eventId);
         });
     }
 

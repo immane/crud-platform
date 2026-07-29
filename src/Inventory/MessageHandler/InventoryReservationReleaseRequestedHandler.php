@@ -28,12 +28,15 @@ final readonly class InventoryReservationReleaseRequestedHandler
     public function __invoke(InventoryReservationReleaseRequestedMessage $message): void
     {
         [$eventId, $reservationId, $reason, $correlations] = $this->validateEnvelope($message->envelope);
+        $correlationId = is_string($message->envelope['correlationId'] ?? null)
+            ? $message->envelope['correlationId']
+            : $eventId;
         $payloadHash = hash('sha256', json_encode($message->envelope, JSON_THROW_ON_ERROR));
         if ($this->isAlreadyConsumed($eventId, $payloadHash)) {
             return;
         }
 
-        $this->entityManager->wrapInTransaction(function () use ($eventId, $reservationId, $reason, $correlations, $payloadHash): void {
+        $this->entityManager->wrapInTransaction(function () use ($eventId, $correlationId, $reservationId, $reason, $correlations, $payloadHash): void {
             if ($this->isAlreadyConsumed($eventId, $payloadHash)) {
                 return;
             }
@@ -54,7 +57,7 @@ final readonly class InventoryReservationReleaseRequestedHandler
                 $reservationId,
                 $payloadHash,
             ));
-            $this->inventoryService->release($reservationId, $reason);
+            $this->inventoryService->release($reservationId, $reason, $correlationId, $eventId);
         });
     }
 

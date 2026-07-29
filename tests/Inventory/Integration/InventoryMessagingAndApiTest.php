@@ -132,6 +132,7 @@ final class InventoryMessagingAndApiTest extends IntegrationWebTestCase
 
         $envelope = [
             'eventId' => '00000000-0000-4000-8000-000000000013',
+            'correlationId' => '00000000-0000-4000-8000-000000000019',
             'type' => 'inventory.reservation.requested',
             'version' => 1,
             'aggregateId' => '00000000-0000-4000-8000-000000000014',
@@ -153,6 +154,10 @@ final class InventoryMessagingAndApiTest extends IntegrationWebTestCase
         $handler->handleContract(new InventoryReservationRequested($envelope));
         $handler(new InventoryReservationRequestedMessage($envelope));
         self::assertSame('-2.000000', $inventory->getStockView($storeUuid, $material->getUuid())['availableQuantity']);
+        $outbox = $container->get(InventoryOutboxMessageRepository::class)->findUnpublished();
+        self::assertCount(1, $outbox);
+        self::assertSame('00000000-0000-4000-8000-000000000019', $outbox[0]->getCorrelationId());
+        self::assertSame('00000000-0000-4000-8000-000000000013', $outbox[0]->getCausationId());
 
         $release = [
             'eventId' => '00000000-0000-4000-8000-000000000018',

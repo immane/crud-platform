@@ -83,6 +83,12 @@ unchanged. The migration deliberately does not backfill or make either column
 non-null. A later operational command must backfill unpublished legacy rows in
 bounded, resumable batches before publisher cutover or constraint tightening.
 
+The Trade -> Store -> Inventory consumer chain now propagates trace metadata when
+it writes a derived Outbox event: `correlationId` is inherited and `causationId`
+is the input `eventId`. Legacy envelopes without a correlation ID use their own
+event ID as a compatibility root. HTTP actions and scheduled jobs still create new
+root correlations through the default Outbox behavior.
+
 ## 2. Directory Structure
 
 ```

@@ -147,6 +147,11 @@ messages default `correlationId` to their generated `eventId` and use a null
 `causationId`. Future handlers that emit a follow-up message must explicitly carry
 the inbound `correlationId` and use the inbound `eventId` as `causationId`.
 
+The current Trade -> Store -> Inventory chain applies this propagation for every
+derived Outbox message. Legacy envelopes without a correlation ID remain accepted;
+their `eventId` becomes the compatibility correlation root. This fallback is
+temporary compatibility behavior, not a replacement for canonical envelopes.
+
 Historical rows remain valid with null metadata during this expand phase. A later,
 separate, resumable backfill command will update unpublished rows in bounded batches
 and report progress. It must be deployed and observed before any non-null constraint
