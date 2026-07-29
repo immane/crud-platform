@@ -53,6 +53,11 @@ ownership, and contracts matter more than a simultaneous internal DDD rewrite.
 RabbitMQ, and gateway settings. Service-specific Doctrine, Messenger, HTTP-client,
 and third-party PHP adapters stay inside their owning `apps/*` application.
 
+`apps/store` now exists as an independently installable Symfony skeleton with its
+own `App\Store\Kernel`, Composer lock, config, migrations, tests, and runtime
+entry points. It intentionally maps no Store source or monolith database entities
+until the Store source-move gates are complete.
+
 ### 1.3 Integration Contract Foundation
 
 `packages/integration-contracts` now provides transport-neutral v1 carrier classes
@@ -110,6 +115,12 @@ drain, and Store database baseline/rehearsal.
 ├── public/.htaccess              # Apache rewrite rules + Authorization header forwarding
 ├── src/Kernel.php                # Symfony Kernel (MicroKernelTrait)
 ├── bin/console                   # CLI entry point
+│
+├── apps/store/                   # Independently bootable Store application skeleton
+│   ├── src/Kernel.php             # App\Store\Kernel; no monolith source mapped yet
+│   ├── config/                    # Store-owned Symfony/Doctrine/Messenger config
+│   ├── migrations/                # Future Store-owned migration history
+│   └── tests/                     # Store application regression tests
 │
 ├── packages/platform-kernel/      # Shared framework core (App\Core namespace)
 │   ├── Controller/RestController.php    # Base API controller (success/warning/pagination)

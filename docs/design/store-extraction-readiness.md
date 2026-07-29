@@ -63,7 +63,7 @@ Deptrac baseline no longer contains a Store-to-Identity persistence exemption.
 ```text
 packages/platform-kernel
   -> monolith consumes package
-  -> apps/store skeleton with independent Kernel/config/composer/tests
+  -> apps/store skeleton with independent Kernel/config/composer/tests (complete)
   -> Store source, routes, commands, and tests move to apps/store
   -> Store schema baseline and shadow database verification
   -> Store worker/scheduler and gateway shadow routing
@@ -73,3 +73,12 @@ packages/platform-kernel
 The first source move must not alter public paths, table names, or JSON request and
 response formats. Gateway ownership changes only after Store has passed data and
 message reconciliation.
+
+## Application Skeleton
+
+`apps/store` is an independently installable Symfony application with its own
+Composer lock, `App\Store\Kernel`, configuration, migration directory, tests, and
+runtime entry points. It maps only `App\Store\Entity` and intentionally contains no
+monolith Store source yet. A successful `php bin/console about --env=test` proves
+that the application boots without loading the root application's `src/Store` or
+Doctrine mapping.
