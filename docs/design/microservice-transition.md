@@ -137,6 +137,12 @@ legacy wrapper to the neutral carrier. Rollback changes only that publisher back
 the legacy wrapper. Consumers and old wrapper classes remain in place until the
 `async` and `failed` queues no longer contain old native-PHP serialized messages.
 
+`trade.order.created.v1` is the first switched topic: Trade publishes
+`CrudPlatform\IntegrationContracts\Event\V1\TradeOrderCreated`, while Store
+continues to accept both carriers. `trade.order.cancelled.v1` and every Store and
+Inventory topic still publish their legacy wrappers. A rollback of this pilot only
+changes the Trade order-created publisher back to `App\Trade\Message\TradeOrderCreatedMessage`.
+
 ### 5.2 Outbox Metadata Expansion
 
 Before a publisher emits canonical envelopes, each producer Outbox stores nullable

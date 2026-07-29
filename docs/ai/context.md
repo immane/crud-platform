@@ -76,6 +76,13 @@ legacy wrappers. Do not dual-publish: several consumer effects are not universal
 Inbox-idempotent. The safe rollout is consumers first, then one Publisher/topic at
 a time, while keeping consumers and old wrappers compatible for queue retention.
 
+The first producer cutover is active in code: `trade.order.created.v1` now
+publishes the neutral `TradeOrderCreated` carrier, still through the native PHP
+Messenger serializer. Store's dual-compatible consumer accepts it. All other
+topics, including `trade.order.cancelled.v1`, continue to publish their legacy
+wrappers. The Trade publisher now reads persisted correlation/causation metadata
+for both topics, falling back to `eventId` only when a legacy row has no correlation.
+
 Trade, Store, and Inventory Outboxes now have nullable `correlation_id` and
 `causation_id` schema columns. New root messages default correlation to their own
 `eventId` and retain a null causation ID; APIs and existing Publisher behavior are

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Trade\Command;
 
-use App\Trade\Message\TradeOrderCreatedMessage;
 use App\Trade\Message\TradeOrderCancelledMessage;
 use App\Trade\Repository\TradeOutboxMessageRepository;
+use CrudPlatform\IntegrationContracts\Event\V1\TradeOrderCreated;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -44,13 +44,13 @@ final class PublishOutboxCommand extends Command
                 'occurredAt' => $message->getOccurredAt()->format(DATE_ATOM),
                 'aggregateType' => 'trade_order',
                 'aggregateId' => $message->getAggregateId(),
-                'correlationId' => $message->getAggregateId(),
-                'causationId' => null,
+                'correlationId' => $message->getCorrelationId() ?? $message->getEventId(),
+                'causationId' => $message->getCausationId(),
                 'payload' => $message->getPayload(),
             ];
             try {
                 $this->messageBus->dispatch(match ($message->getTopic()) {
-                    'trade.order.created.v1' => new TradeOrderCreatedMessage($envelope),
+                    'trade.order.created.v1' => new TradeOrderCreated($envelope),
                     'trade.order.cancelled.v1' => new TradeOrderCancelledMessage($envelope),
                 });
                 $message->markPublished();
