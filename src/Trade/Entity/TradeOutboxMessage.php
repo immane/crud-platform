@@ -22,6 +22,12 @@ class TradeOutboxMessage
     #[ORM\Column(name: 'event_id', type: 'string', length: 36, unique: true)]
     private string $eventId;
 
+    #[ORM\Column(name: 'correlation_id', type: 'string', length: 36, nullable: true)]
+    private ?string $correlationId;
+
+    #[ORM\Column(name: 'causation_id', type: 'string', length: 36, nullable: true)]
+    private ?string $causationId;
+
     #[ORM\Column(type: 'string', length: 120)]
     private string $topic;
 
@@ -51,9 +57,18 @@ class TradeOutboxMessage
     private ?string $lastError = null;
 
     /** @param array<string, mixed> $payload */
-    public function __construct(string $topic, string $aggregateType, string $aggregateId, array $payload)
+    public function __construct(
+        string $topic,
+        string $aggregateType,
+        string $aggregateId,
+        array $payload,
+        ?string $correlationId = null,
+        ?string $causationId = null,
+    )
     {
         $this->eventId = UUID::v4();
+        $this->correlationId = $correlationId ?? $this->eventId;
+        $this->causationId = $causationId;
         $this->topic = $topic;
         $this->aggregateType = $aggregateType;
         $this->aggregateId = $aggregateId;
@@ -64,6 +79,8 @@ class TradeOutboxMessage
 
     public function getId(): ?int { return $this->id; }
     public function getEventId(): string { return $this->eventId; }
+    public function getCorrelationId(): ?string { return $this->correlationId; }
+    public function getCausationId(): ?string { return $this->causationId; }
     public function getTopic(): string { return $this->topic; }
     public function getAggregateId(): string { return $this->aggregateId; }
     /** @return array<string, mixed> */

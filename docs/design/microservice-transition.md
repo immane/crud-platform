@@ -137,6 +137,21 @@ legacy wrapper to the neutral carrier. Rollback changes only that publisher back
 the legacy wrapper. Consumers and old wrapper classes remain in place until the
 `async` and `failed` queues no longer contain old native-PHP serialized messages.
 
+### 5.2 Outbox Metadata Expansion
+
+Before a publisher emits canonical envelopes, each producer Outbox stores nullable
+`correlation_id` and `causation_id` columns. On the supported MySQL 8 runtime the
+migration explicitly requests `ALGORITHM=INSTANT, LOCK=NONE`; it performs no
+table-wide update and adds no non-null constraint. New root
+messages default `correlationId` to their generated `eventId` and use a null
+`causationId`. Future handlers that emit a follow-up message must explicitly carry
+the inbound `correlationId` and use the inbound `eventId` as `causationId`.
+
+Historical rows remain valid with null metadata during this expand phase. A later,
+separate, resumable backfill command will update unpublished rows in bounded batches
+and report progress. It must be deployed and observed before any non-null constraint
+or publisher cutover is considered.
+
 ## 6. Extraction Order And Gates
 
 The preferred order is:

@@ -76,6 +76,13 @@ legacy wrappers. Do not dual-publish: several consumer effects are not universal
 Inbox-idempotent. The safe rollout is consumers first, then one Publisher/topic at
 a time, while keeping consumers and old wrappers compatible for queue retention.
 
+Trade, Store, and Inventory Outboxes now have nullable `correlation_id` and
+`causation_id` schema columns. New root messages default correlation to their own
+`eventId` and retain a null causation ID; APIs and existing Publisher behavior are
+unchanged. The migration deliberately does not backfill or make either column
+non-null. A later operational command must backfill unpublished legacy rows in
+bounded, resumable batches before publisher cutover or constraint tightening.
+
 ## 2. Directory Structure
 
 ```
