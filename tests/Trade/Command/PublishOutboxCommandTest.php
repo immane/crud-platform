@@ -6,16 +6,15 @@ namespace App\Tests\Trade\Command;
 
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
+use App\Tests\Integration\RecordingMessageBus;
 use App\Trade\Command\PublishOutboxCommand;
 use App\Trade\Entity\TradeOutboxMessage;
-use App\Trade\Message\TradeOrderCancelledMessage;
 use App\Trade\Repository\TradeOutboxMessageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
-use Symfony\Component\Messenger\Envelope;
-use Symfony\Component\Messenger\MessageBusInterface;
 use CrudPlatform\IntegrationContracts\Event\V1\TradeOrderCreated;
+use CrudPlatform\IntegrationContracts\Event\V1\TradeOrderCancelled;
 
 final class PublishOutboxCommandTest extends IntegrationWebTestCase
 {
@@ -33,7 +32,7 @@ final class PublishOutboxCommandTest extends IntegrationWebTestCase
         self::ensureKernelShutdown();
     }
 
-    public function testPublishesOnlyTradeOrderCreatedWithTheNeutralCarrier(): void
+    public function testPublishesTradeTopicsWithNeutralCarriersAndCanonicalEnvelopes(): void
     {
         $client = static::createClient();
         $container = $client->getContainer();
@@ -58,24 +57,7 @@ final class PublishOutboxCommandTest extends IntegrationWebTestCase
         $entityManager->persist($cancelled);
         $entityManager->flush();
 
-        $messages = [];
-        $bus = new class($messages) implements MessageBusInterface {
-            /** @var list<object> */
-            public array $messages;
-
-            /** @param list<object> $messages */
-            public function __construct(array $messages)
-            {
-                $this->messages = $messages;
-            }
-
-            public function dispatch(object $message, array $stamps = []): Envelope
-            {
-                $this->messages[] = $message;
-
-                return new Envelope($message);
-            }
-        };
+        $bus = new RecordingMessageBus();
 
         $command = new PublishOutboxCommand(
             $container->get(TradeOutboxMessageRepository::class),
@@ -86,10 +68,16 @@ final class PublishOutboxCommandTest extends IntegrationWebTestCase
 
         self::assertCount(2, $bus->messages);
         self::assertInstanceOf(TradeOrderCreated::class, $bus->messages[0]);
-        self::assertInstanceOf(TradeOrderCancelledMessage::class, $bus->messages[1]);
+        self::assertInstanceOf(TradeOrderCancelled::class, $bus->messages[1]);
         self::assertSame('00000000-0000-4000-8000-000000000011', $bus->messages[0]->envelope['correlationId']);
         self::assertSame('00000000-0000-4000-8000-000000000012', $bus->messages[0]->envelope['causationId']);
         self::assertSame('00000000-0000-4000-8000-000000000021', $bus->messages[1]->envelope['correlationId']);
         self::assertSame('00000000-0000-4000-8000-000000000022', $bus->messages[1]->envelope['causationId']);
+        foreach ($bus->messages as $message) {
+            self::assertEqualsCanonicalizing([
+                'eventId', 'type', 'version', 'aggregateType', 'aggregateId',
+                'occurredAt', 'correlationId', 'causationId', 'payload',
+            ], array_keys($message->envelope));
+        }
     }
 }

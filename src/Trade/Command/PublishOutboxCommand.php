@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Trade\Command;
 
-use App\Trade\Message\TradeOrderCancelledMessage;
 use App\Trade\Repository\TradeOutboxMessageRepository;
+use CrudPlatform\IntegrationContracts\Event\V1\TradeOrderCancelled;
 use CrudPlatform\IntegrationContracts\Event\V1\TradeOrderCreated;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -51,7 +51,7 @@ final class PublishOutboxCommand extends Command
             try {
                 $this->messageBus->dispatch(match ($message->getTopic()) {
                     'trade.order.created.v1' => new TradeOrderCreated($envelope),
-                    'trade.order.cancelled.v1' => new TradeOrderCancelledMessage($envelope),
+                    'trade.order.cancelled.v1' => new TradeOrderCancelled($envelope),
                 });
                 $message->markPublished();
                 ++$count;

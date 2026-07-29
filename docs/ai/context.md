@@ -63,7 +63,7 @@ canonical envelope requires `eventId`, unversioned `type`, `version`,
 
 Seven messages are Events (past-tense facts); `inventory.reservation.requested`
 and `inventory.reservation.release.requested` are Commands. This foundation does
-not yet change publishers, consumers, Outbox/Inbox storage, queues, or routes.
+not change queues, routes, or the existing Outbox/Inbox storage model.
 `config/packages/messenger.yaml` explicitly retains Symfony's native PHP serializer
 because existing `async` and `failed` rows serialize the old `App\*\Message` wrapper
 FQCNs. Those wrappers remain until queued legacy messages are drained or migrated.
@@ -71,17 +71,15 @@ FQCNs. Those wrappers remain until queued legacy messages are drained or migrate
 All nine existing Trade/Store/Inventory consumers now also accept their matching
 neutral carrier through explicit Messenger handler methods. Each method adapts the
 carrier envelope to the existing legacy wrapper and reuses the original business
-logic, transaction boundaries, and Inbox behavior. Publishers still emit only the
-legacy wrappers. Do not dual-publish: several consumer effects are not universally
-Inbox-idempotent. The safe rollout is consumers first, then one Publisher/topic at
-a time, while keeping consumers and old wrappers compatible for queue retention.
+logic, transaction boundaries, and Inbox behavior. All nine Publishers now emit
+only neutral carriers through the existing native PHP Messenger serializer. Do not
+dual-publish: several consumer effects are not universally Inbox-idempotent. Old
+wrappers remain compatibility input for historical queue records and as a
+topic-level Publisher rollback target.
 
-The first producer cutover is active in code: `trade.order.created.v1` now
-publishes the neutral `TradeOrderCreated` carrier, still through the native PHP
-Messenger serializer. Store's dual-compatible consumer accepts it. All other
-topics, including `trade.order.cancelled.v1`, continue to publish their legacy
-wrappers. The Trade publisher now reads persisted correlation/causation metadata
-for both topics, falling back to `eventId` only when a legacy row has no correlation.
+Every Publisher now emits the full canonical envelope from Outbox data, including
+`aggregateType`, `occurredAt`, `correlationId`, and `causationId`. A legacy Outbox
+row without a correlation ID falls back to its `eventId` during publication.
 
 Trade, Store, and Inventory Outboxes now have nullable `correlation_id` and
 `causation_id` schema columns. New root messages default correlation to their own

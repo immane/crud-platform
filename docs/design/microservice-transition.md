@@ -137,16 +137,18 @@ legacy wrapper to the neutral carrier. Rollback changes only that publisher back
 the legacy wrapper. Consumers and old wrapper classes remain in place until the
 `async` and `failed` queues no longer contain old native-PHP serialized messages.
 
-`trade.order.created.v1` is the first switched topic: Trade publishes
-`CrudPlatform\IntegrationContracts\Event\V1\TradeOrderCreated`, while Store
-continues to accept both carriers. `trade.order.cancelled.v1` and every Store and
-Inventory topic still publish their legacy wrappers. A rollback of this pilot only
-changes the Trade order-created publisher back to `App\Trade\Message\TradeOrderCreatedMessage`.
+All nine Trade, Store, and Inventory topics now publish their matching neutral
+carrier. The native PHP serializer remains temporarily, so carrier objects are
+still stored in the existing Doctrine queue; the change removes application-module
+FQCNs from newly produced messages without changing the transport. A topic-level
+rollback changes only its Publisher back to the matching legacy wrapper. Consumers
+and wrappers remain until the historical `async` and `failed` queue records have
+been drained or migrated.
 
 ### 5.2 Outbox Metadata Expansion
 
-Before a publisher emits canonical envelopes, each producer Outbox stores nullable
-`correlation_id` and `causation_id` columns. On the supported MySQL 8 runtime the
+Each producer Outbox stores nullable `correlation_id` and `causation_id` columns
+before publishing canonical envelopes. On the supported MySQL 8 runtime the
 migration explicitly requests `ALGORITHM=INSTANT, LOCK=NONE`; it performs no
 table-wide update and adds no non-null constraint. New root
 messages default `correlationId` to their generated `eventId` and use a null
