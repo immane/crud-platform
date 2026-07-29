@@ -47,6 +47,11 @@ services:
         exclude:
             - '../vendor/crud-platform/store-app/src/Kernel.php'
 
+    App\Inventory\:
+        resource: '../vendor/crud-platform/inventory-app/src/'
+        exclude:
+            - '../vendor/crud-platform/inventory-app/src/Kernel.php'
+
     App\Core\:
         resource: '../vendor/crud-platform/platform-kernel/src/'
         exclude:
@@ -87,6 +92,7 @@ services:
     App\Inventory\Service\MaterialServiceInterface: '@App\Inventory\Service\MaterialService'
     App\Inventory\Service\InventoryStockServiceInterface: '@App\Inventory\Service\InventoryStockService'
     App\Inventory\Service\SpecificationRecipeServiceInterface: '@App\Inventory\Service\SpecificationRecipeService'
+    App\Inventory\Service\InventoryServiceInterface: '@App\Inventory\Service\InventoryService'
 
     App\Identity\Service\LocalCacheOtpStorage:
         arguments:

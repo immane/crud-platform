@@ -93,6 +93,6 @@ api_store:
 api_inventory:
     prefix: /api/v1
     resource:
-        path: ../src/Inventory/Controller/
+        path: ../vendor/crud-platform/inventory-app/src/Controller/
         namespace: App\Inventory\Controller
     type: attribute

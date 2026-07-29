@@ -2,6 +2,7 @@ parameters:
     level: 8
     paths:
         - apps/store/src/
+        - apps/inventory/src/
         - src/
         - packages/legacy-messenger-compat/src/
         - packages/platform-kernel/src/

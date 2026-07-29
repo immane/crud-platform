@@ -1,8 +1,9 @@
 # Quick Start
 
-This repository runs as one modular-monolith application with an independent Store
-app. Docker Compose starts the web app (FrankenPHP), Store app, one shared Messenger
-worker, and one shared scheduler. It is not yet the target multi-service runtime.
+This repository runs as one modular-monolith application with independent Store and
+Inventory apps. Docker Compose starts the web app (FrankenPHP), both extracted apps,
+one shared Messenger worker, and one shared scheduler. It is not yet the target
+multi-service runtime.
 
 ## Docker
 
@@ -12,6 +13,7 @@ Docker is the recommended local path and the only host prerequisite.
 docker compose up -d --build
 docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec store-app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec inventory-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec app php bin/console app:identity:user:create admin@example.com admin 'P@ssw0rd' --admin
 ```
 
@@ -27,16 +29,18 @@ Open:
 
 - API: `http://localhost:8080`
 - Store API: `http://localhost:8081`
+- Inventory API: `http://localhost:8082`
 - OpenAPI UI: `http://localhost:8080/api/doc`
 - Mailpit: `http://localhost:8025`
 
 Useful commands:
 
 ```bash
-docker compose logs -f app worker scheduler store-app
+docker compose logs -f app worker scheduler store-app inventory-app
 docker compose exec app php bin/console about
 docker compose exec app php bin/console doctrine:migrations:status
 docker compose exec store-app php bin/console doctrine:migrations:status
+docker compose exec inventory-app php bin/console doctrine:migrations:status
 docker compose down
 ```
 
