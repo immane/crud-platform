@@ -149,7 +149,7 @@ been drained or migrated.
 
 Each producer Outbox stores nullable `correlation_id` and `causation_id` columns
 before publishing canonical envelopes. On the supported MySQL 8 runtime the
-migration explicitly requests `ALGORITHM=INSTANT, LOCK=NONE`; it performs no
+migration explicitly requests `ALGORITHM=INSTANT`; it performs no
 table-wide update and adds no non-null constraint. New root
 messages default `correlationId` to their generated `eventId` and use a null
 `causationId`. Future handlers that emit a follow-up message must explicitly carry

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineMigrations;
 
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
@@ -32,8 +33,8 @@ final class Version20260729000000 extends AbstractMigration
 
     private function addNullableColumn(string $table, string $column): void
     {
-        if ($this->connection->getDatabasePlatform()->getName() === 'mysql') {
-            $this->addSql(sprintf('ALTER TABLE %s ADD COLUMN %s VARCHAR(36) NULL, ALGORITHM=INSTANT, LOCK=NONE', $table, $column));
+        if ($this->connection->getDatabasePlatform() instanceof AbstractMySQLPlatform) {
+            $this->addSql(sprintf('ALTER TABLE %s ADD COLUMN %s VARCHAR(36) NULL, ALGORITHM=INSTANT', $table, $column));
 
             return;
         }
