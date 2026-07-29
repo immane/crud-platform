@@ -140,7 +140,7 @@ deptrac:
     IdentityPersistence: [Core, Vendor, CommonCode, IdentityCode, InventoryCode, PaymentCode, PromotionCode, StorageCode, StoreCode, TradeCode, WalletCode, WechatCode]
     InventoryCode: [Core, Vendor, IntegrationContracts, CommonCode, IdentityCode, InventoryPersistence, PaymentCode, PromotionCode, StorageCode, StoreCode, TradeCode, WalletCode, WechatCode]
     InventoryPersistence: [Core, Vendor, CommonCode, IdentityCode, InventoryCode, PaymentCode, PromotionCode, StorageCode, StoreCode, TradeCode, WalletCode, WechatCode]
-    PaymentCode: [Core, Vendor, CommonCode, IdentityCode, InventoryCode, PaymentPersistence, PromotionCode, StorageCode, StoreCode, TradeCode, WalletCode, WechatCode]
+    PaymentCode: [Core, Vendor, IntegrationContracts, CommonCode, IdentityCode, InventoryCode, PaymentPersistence, PromotionCode, StorageCode, StoreCode, TradeCode, WalletCode, WechatCode]
     PaymentPersistence: [Core, Vendor, CommonCode, IdentityCode, InventoryCode, PaymentCode, PromotionCode, StorageCode, StoreCode, TradeCode, WalletCode, WechatCode]
     PromotionCode: [Core, Vendor, CommonCode, IdentityCode, InventoryCode, PaymentCode, PromotionPersistence, StorageCode, StoreCode, TradeCode, WalletCode, WechatCode]
     PromotionPersistence: [Core, Vendor, CommonCode, IdentityCode, InventoryCode, PaymentCode, PromotionCode, StorageCode, StoreCode, TradeCode, WalletCode, WechatCode]

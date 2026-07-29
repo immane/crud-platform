@@ -100,10 +100,12 @@ services:
       - /bin/sh
       - -ec
       - |
+        rm -rf var/cache/prod
         while :; do
           php bin/console app:trade:outbox:publish --no-interaction
           php bin/console app:store:outbox:publish --no-interaction
           php bin/console app:inventory:outbox:publish --no-interaction
+          php bin/console app:payment:outbox:publish --no-interaction
           php bin/console app:inventory:reservations:release-expired --no-interaction
           sleep "${OUTBOX_PUBLISH_INTERVAL:-5}"
         done

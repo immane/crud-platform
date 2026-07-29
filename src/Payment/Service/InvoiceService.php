@@ -33,6 +33,7 @@ class InvoiceService extends BaseService implements InvoiceServiceInterface
         #[Target('state_machine.invoice')]
         private readonly WorkflowInterface $workflow,
         private readonly EventDispatcherInterface $dispatcher,
+        private readonly PaymentOutboxService $outboxService,
     ) {
         parent::__construct($container, Invoice::class);
     }
@@ -184,6 +185,7 @@ class InvoiceService extends BaseService implements InvoiceServiceInterface
             $invoice->setPaidAt($result->paidAt ?? new \DateTimeImmutable());
             $invoice->appendExtraData('notify', $this->sanitizePayload($result->rawData));
             $this->workflow->apply($invoice, 'mark_paid');
+            $this->recordLifecycleEvent($invoice, 'payment.invoice.paid.v1');
             $this->getEntityManager()->flush();
             $this->dispatcher->dispatch(new InvoicePaidEvent($invoice, $result));
 
@@ -204,6 +206,7 @@ class InvoiceService extends BaseService implements InvoiceServiceInterface
             $this->adjustmentRegistry->releaseApplied($invoice, 'Invoice payment failed.');
             $invoice->appendExtraData('notify_failed', $this->sanitizePayload($result->rawData));
             $this->workflow->apply($invoice, 'fail');
+            $this->recordLifecycleEvent($invoice, 'payment.invoice.failed.v1');
             $this->getEntityManager()->flush();
             $this->dispatcher->dispatch(new InvoiceFailedEvent($invoice, $result));
 
@@ -224,6 +227,7 @@ class InvoiceService extends BaseService implements InvoiceServiceInterface
             }
             $invoice->setCancelledAt(new \DateTimeImmutable());
             $this->workflow->apply($invoice, 'cancel');
+            $this->recordLifecycleEvent($invoice, 'payment.invoice.cancelled.v1');
             $this->getEntityManager()->flush();
             $this->dispatcher->dispatch(new InvoiceCancelledEvent($invoice));
 
@@ -282,6 +286,7 @@ class InvoiceService extends BaseService implements InvoiceServiceInterface
                 $invoice->setRefundedAt(new \DateTimeImmutable());
             }
             $this->workflow->apply($invoice, $transition);
+            $this->recordLifecycleEvent($invoice, 'payment.invoice.refunded.v1', $amount);
             $this->getEntityManager()->flush();
 
             $finalResult = new PaymentRefundResult($invoice, $amount, $invoice->getStatus(), $refundId, $rawData);
@@ -310,6 +315,29 @@ class InvoiceService extends BaseService implements InvoiceServiceInterface
             }
         }
         return $payload;
+    }
+
+    private function recordLifecycleEvent(Invoice $invoice, string $topic, ?int $refundAmount = null): void
+    {
+        $payload = [
+            'invoiceUuid' => $invoice->getUuid(),
+            'outTradeNo' => $invoice->getOutTradeNo(),
+            'sourceType' => $invoice->getSourceType(),
+            'sourceId' => $invoice->getSourceId(),
+            'status' => $invoice->getStatus(),
+            'amount' => $invoice->getAmount(),
+            'refundedAmount' => $invoice->getRefundedAmount(),
+            'currency' => $invoice->getCurrency(),
+            'payment' => $invoice->getPayment(),
+            'transactionId' => $invoice->getTransactionId(),
+            'paidAt' => $invoice->getPaidAt()?->format(DATE_ATOM),
+            'cancelledAt' => $invoice->getCancelledAt()?->format(DATE_ATOM),
+            'refundedAt' => $invoice->getRefundedAt()?->format(DATE_ATOM),
+        ];
+        if ($refundAmount !== null) {
+            $payload['refundAmount'] = $refundAmount;
+        }
+        $this->outboxService->record($topic, 'payment_invoice', $invoice->getUuid(), $payload);
     }
 
     /** @param PaymentAdjustmentResult[] $adjustments */
