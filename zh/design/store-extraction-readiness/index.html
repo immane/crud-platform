@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/design/microservice-transition/">
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/design/store-extraction-readiness/">
       
       
-        <link rel="prev" href="../system-architecture/">
+        <link rel="prev" href="../microservice-transition/">
       
       
-        <link rel="next" href="../store-extraction-readiness/">
+        <link rel="next" href="../api-design/">
       
       
         
@@ -31,7 +31,7 @@
     
     
       
-        <title>微服务转型 - CRUD Skeleton</title>
+        <title>商店撤离准备情况 - CRUD Skeleton</title>
       
     
     
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              微服务转型
+              商店撤离准备情况
             
           </span>
         </div>
@@ -398,6 +398,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../microservice-transition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微服务转型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -417,7 +445,7 @@
   <span class="md-ellipsis">
     
   
-    微服务转型
+    商店撤离准备情况
   
 
     
@@ -435,7 +463,7 @@
   <span class="md-ellipsis">
     
   
-    微服务转型
+    商店撤离准备情况
   
 
     
@@ -461,10 +489,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 决定
+        当前范围
       
     </span>
   </a>
@@ -472,10 +500,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 目标存储库结构
+        依赖项清单
       
     </span>
   </a>
@@ -483,10 +511,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 当前和目标边界
+        源移动的先决条件
       
     </span>
   </a>
@@ -494,82 +522,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 服务边界规则
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. 集成消息合约
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="5. 集成消息合约">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#51" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5.1 运营商迁移命令
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#52" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5.2 发件箱元数据扩展
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#6" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. 撤离顺序和门
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. 第一阶段可交付成果
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        8. 非目标
+        移动顺序
       
     </span>
   </a>
@@ -580,34 +536,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../store-extraction-readiness/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    商店撤离准备情况
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -1388,10 +1316,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 决定
+        当前范围
       
     </span>
   </a>
@@ -1399,10 +1327,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 目标存储库结构
+        依赖项清单
       
     </span>
   </a>
@@ -1410,10 +1338,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 当前和目标边界
+        源移动的先决条件
       
     </span>
   </a>
@@ -1421,82 +1349,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 服务边界规则
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. 集成消息合约
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="5. 集成消息合约">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#51" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5.1 运营商迁移命令
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#52" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5.2 发件箱元数据扩展
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#6" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. 撤离顺序和门
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. 第一阶段可交付成果
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        8. 非目标
+        移动顺序
       
     </span>
   </a>
@@ -1523,244 +1379,107 @@
   
 
 
-<h1 id="_1">微服务过渡合约<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h1 id="_1">存储提取准备情况<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>从当前过渡到的目标架构和迁移规则
-模块化整体到可独立部署的服务。本文档不
-声称当前模块已经是服务。</p>
+<p>用于将 Store 提取到 <code>apps/store</code> 中的实现清单，无需
+更改公共 API 路由或失去现有队列和数据库安全性。</p>
 </blockquote>
-<hr />
-<h2 id="1">1. 决定<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<p>该平台将发展成为包含多个可部署 Symfony 的 <strong>monorepo
-应用</strong>。服务拥有其运行时、数据库模式、迁移、工作线程
-队列、计划作业和部署工件。拆分成单独的 Git
-存储库被明确推迟，直到服务边界和合同确定为止
-稳定。</p>
-<p>第一个迁移阶段建立目标目录结构并
-依赖治理。它不会移动每个当前的 <code>src/*</code> 模块或拆分
-过早地建立数据库。</p>
-<h2 id="2">2. 目标存储库结构<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>apps/
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  commerce/               # Transitional home for Catalog, Ordering, Pricing
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  store/
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  inventory/
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  payment/
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  wallet/
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  identity/
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  content/
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>packages/
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  platform-kernel/        # Framework-only HTTP/CRUD/observability utilities
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  integration-contracts/  # Versioned transport-neutral event schemas
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  test-support/
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>contracts/
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>  integration/            # Manifest, schemas, and compatibility fixtures
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  openapi/                # Published service API contracts
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>infrastructure/
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>  docker/
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>  local/
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>  gateway/
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>  rabbitmq/
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>docs/
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>tools/
+<h2 id="_2">当前范围<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>Store 目前包含 32 个源文件和 13 个特定于 Store 的测试文件。其
+拥有的运行时职责是：</p>
+<ul>
+<li>商店、会员资格、商店订单、收件箱、发件箱和取消逻辑删除数据。</li>
+<li>在现有 <code>/api/v1</code> 网关下应用、管理和配置 HTTP 端点
+  前缀。</li>
+<li>贸易和库存整合消费者。</li>
+<li>存储发件箱发布者和相关回填命令。</li>
+</ul>
+<p>预期拥有的数据集是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>store
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>store_membership
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>store_order
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>store_consumed_event
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>store_outbox_message
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>store_trade_order_cancellation
 </code></pre></div>
-<p>每个 <code>apps/*</code> 都是可独立构建的并包含自己的
-<code>composer.json</code>、<code>src/Kernel.php</code>、<code>config/</code>、<code>migrations/</code>、<code>public/</code>、<code>bin/</code>、
-<code>tests/</code>，以及 Docker 构建定义。根 Composer 工作区可以协调
-本地开发，但不得隐藏未声明的运行时依赖项。</p>
-<h2 id="3">3. 当前和目标边界<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<p><code>store_trade_order_cancellation</code> 当前是在清单迁移中创建的
+只是因为它是与库存流程工作一起引入的。它属于商店和
+必须在独立数据库之前移入存储服务架构基线
+切换。</p>
+<h2 id="_3">依赖项清单<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>目标环境</th>
-<th>当前来源</th>
-<th>初始位置</th>
+<th>依赖</th>
+<th>当前使用</th>
+<th>提取处置</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>平台内核</td>
-<td>核心</td>
-<td>共享图书馆，绝不是商业服务</td>
+<td><code>App\Core</code></td>
+<td>REST 控制器、视图特征、BaseService、UUID</td>
+<td>由<code>packages/platform-kernel</code>提供； Store 可能依赖于这个库。</td>
 </tr>
 <tr>
-<td>身份和访问</td>
-<td>身份加微信登录适配器</td>
-<td>稍后提取</td>
+<td><code>CrudPlatform\IntegrationContracts</code></td>
+<td>所有新的异步消息</td>
+<td>保持;这是已批准的跨服务依赖性。</td>
 </tr>
 <tr>
-<td>商业</td>
-<td>贸易+促销</td>
-<td>过渡服务；目录和订购稍后分开</td>
+<td><code>App\Trade\Message</code> / <code>App\Inventory\Message</code></td>
+<td>旧版原生 Messenger 兼容性适配器</td>
+<td>暂时的。仅保留到旧的 <code>async</code>/<code>failed</code> 记录被耗尽或迁移为止。</td>
 </tr>
 <tr>
-<td>店铺运营</td>
-<td>商店</td>
-<td>第一个提取候选者</td>
+<td><code>App\Trade\DTO\StoreContext</code> 和解析器接口</td>
+<td>交易订单创建期间同步 <code>X-Store-Code</code> 查找</td>
+<td>拦截器。在 Store 变得独立之前，替换为标量 Store 目录 HTTP 合约或将解析器移至 Commerce。</td>
 </tr>
 <tr>
-<td>库存</td>
-<td>库存</td>
-<td>第一个提取候选者；生产支持仍然受到安全检查表的阻碍</td>
+<td><code>App\Identity\Entity\User</code></td>
+<td>应用程序/员工控制器仅使用它来读取 UUID</td>
+<td>已解决。 Store 现在依赖于 <code>App\Core\Security\UserUuidPrincipalInterface</code>，由 Identity User 实现。</td>
 </tr>
 <tr>
-<td>付款</td>
-<td>支付加微信支付适配器</td>
-<td>持久支付生命周期事件存在后</td>
+<td><code>config/routes.yaml</code></td>
+<td>进口<code>src/Store/Controller</code></td>
+<td>转移至商店自有路线；保留通过网关的公共路径。</td>
 </tr>
 <tr>
-<td>钱包/分类账</td>
-<td>钱包</td>
-<td>付款后合同是标量且持久的</td>
-</tr>
-<tr>
-<td>内容/媒体</td>
-<td>普通+存储适配器</td>
-<td>之后;首先从 CMS 中分离设置所有权</td>
+<td>根调度程序/工作者</td>
+<td>运行商店发件箱发布</td>
+<td>在 Store 应用程序可独立运行后，转移到 Store 拥有的工作程序和调度程序。</td>
 </tr>
 </tbody>
 </table>
-<p><code>Wechat</code> 是提供者集成命名空间，而不是未来的有界上下文。其
-登录功能属于身份适配器，其支付功能属于
-在支付适配器后面。 <code>Storage</code> 是基础设施，而不是商业服务
-默认。</p>
-<h2 id="4">4. 服务边界规则<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
-<p>在模块可以独立部署之前，需要遵循以下规则：</p>
+<p>没有存储实体或存储库导入另一个模块的实体或存储库。的
+Deptrac 基线不再包含 Store-to-Identity 持久性豁免。</p>
+<h2 id="_4">源移动的先决条件<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ol>
-<li>一个服务拥有自己的数据库并且没有跨服务的 Doctrine 关联，
-   外键、存储库访问或事务。
-2.持久的跨服务引用使用UUID或记录的不可变业务
-   键，绝不是其他服务的本地整数主键。</li>
-<li>服务边界接受标量命令/查询并发出标量快照。
-   它从不公开 Doctrine 实体、存储库、EntityManagers、Symfony
-   请求/响应，或可变的进程内上下文。</li>
-<li>状态更改集成事件被写入生产者的发件箱
-   本地交易。消费者使用持久的收件箱（或等效的消费事件
-   记录）由<code>eventId</code>键入。</li>
-<li>每个消费者拥有自己的队列、重试策略、死信处理、worker 和
-   预定的工作。共享 Doctrine Messenger 队列不是服务边界。</li>
-<li>共享包可以提供框架实用程序、模式和测试支持。
-   它们不得包含业务实体、存储库或特定于服务的
-   应用逻辑。</li>
-<li>公共路由通过 API 网关或路由层保持稳定，同时
-   所有权在服务之间转移。</li>
+<li>部署中立运营商版本，运行发件箱元数据迁移，然后
+   生产中完整的有界相关回填。</li>
+<li>在 Store 拥有自己的队列记录之前，排空或迁移旧的本机 PHP 队列记录
+   工人队列。不要提前删除旧的包装适配器。</li>
+<li>在 Store 引入之前保持单体消费 <code>packages/platform-kernel</code>
+   一个独立的内核。</li>
+<li>将 Trade 的进程内 <code>StoreContextResolverInterface</code> 插件替换为
+   记录的标量边界。</li>
+<li>从拥有的表构建 Store schema 基线，包括取消
+   墓碑，并排练复制、增量和协调步骤。</li>
 </ol>
-<h2 id="5">5. 集成消息合约<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
-<p>所有集成事件和命令都使用一个版本化信封：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;eventId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;store.order.accepted&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">&quot;aggregateType&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;store_order&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">&quot;aggregateId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">&quot;occurredAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-07-29T12:00:00+00:00&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="nt">&quot;correlationId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="nt">&quot;causationId&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">&quot;payload&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="p">}</span>
+<h2 id="_5">移动顺序<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>packages/platform-kernel
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  -&gt; monolith consumes package
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  -&gt; apps/store skeleton with independent Kernel/config/composer/tests
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  -&gt; Store source, routes, commands, and tests move to apps/store
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  -&gt; Store schema baseline and shadow database verification
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  -&gt; Store worker/scheduler and gateway shadow routing
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  -&gt; read traffic, then write traffic, then database cutover
 </code></pre></div>
-<p><code>type</code> 没有版本控制。经纪人主题派生为
-<code>type + ".v" + version</code>；例如，<code>store.order.accepted.v1</code>。所有九个领域
-规范 v1 信封中需要。 <code>causationId</code> 可以为空。</p>
-<p>schema 和manifest 归<code>contracts/integration</code>所有，而PHP 运营商
-类位于 <code>packages/integration-contracts</code> 中，而不是生产者或消费者中
-Symfony 命名空间。更改需要新的消息版本和兼容性
-覆盖范围。</p>
-<p>事件是带有明显<code>kind: "event"</code>的过去时事实。请求如
-<code>inventory.reservation.requested.v1</code> 和
-<code>inventory.reservation.release.requested.v1</code> 是命令
-<code>kind: "command"</code>，即使它们使用相同的信封。旧版信使
-包装类保持兼容性输入，直到旧的本机 PHP 序列化队列
-行和失败的消息已被耗尽或迁移。</p>
-<h3 id="51">5.1 运营商迁移命令<a class="headerlink" href="#51" title="Permanent link">&para;</a></h3>
-<p>必须在生产者更改运营商类型之前部署消费者。期间
-兼容阶段，每个现有处理程序都接受其遗留的
-<code>App\*\Message</code> 包装器和匹配的中立载体，然后委托给
-相同的业务逻辑。制作者继续为每个主题仅发布一个载体；
-双重发布是被禁止的，因为并非每个消费者行为都是收件箱幂等的。</p>
-<p>部署消费者后，发布者可以一次从主题切换一个主题
-传统包装器到中立载体。回滚仅将该发布者更改回
-遗留包装器。消费者和旧的包装类仍然存在，直到
-<code>async</code> 和 <code>failed</code> 队列不再包含旧的本机 PHP 序列化消息。</p>
-<p>所有九个贸易、商店和库存主题现在都发布其匹配的中性主题
-载体。本机 PHP 序列化程序暂时保留，因此载体对象是
-仍然存储在现有的 Doctrine 队列中；该更改删除了应用程序模块
-来自新生成的消息的 FQCN，无需更改传输。主题级
-回滚仅将其发布者更改回匹配的旧包装器。消费者
-和包装器将保留，直到历史 <code>async</code> 和 <code>failed</code> 队列记录完成
-已被耗尽或迁移。</p>
-<h3 id="52">5.2 发件箱元数据扩展<a class="headerlink" href="#52" title="Permanent link">&para;</a></h3>
-<p>每个生产者发件箱都存储可为空的 <code>correlation_id</code> 和 <code>causation_id</code> 列
-在发布规范信封之前。在支持的 MySQL 8 运行时上
-迁移明确请求<code>ALGORITHM=INSTANT, LOCK=NONE</code>；它执行不
-表范围更新并且不添加非空约束。新根
-消息默认 <code>correlationId</code> 为其生成的 <code>eventId</code> 并使用 null
-<code>causationId</code>。发出后续消息的未来处理程序必须显式携带
-入站 <code>correlationId</code> 并将入站 <code>eventId</code> 用作 <code>causationId</code>。</p>
-<p>当前的 Trade -&gt; Store -&gt; Inventory 链将此传播应用于每个
-派生的发件箱消息。没有相关 ID 的旧信封仍然被接受；
-它们的 <code>eventId</code> 成为兼容性相关根。这个后备是
-临时兼容性行为，不能替代规范信封。</p>
-<p>在此扩展阶段，历史行在元数据为空的情况下仍然有效。后来，
-单独的、可恢复的回填命令将按有限批次更新未发布的行
-并报告进展情况。它必须在任何非空约束之前部署和观察
-或考虑发布商切换。</p>
-<p>默认情况下，有意手动进行回填并进行空运行。运行每个服务
-命令使用保守的生产批量大小，观察报告的计数和
-数据库加载，然后重复直到试运行报告为零：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>php<span class="w"> </span>bin/console<span class="w"> </span>app:trade:outbox:backfill-correlation<span class="w"> </span>--limit<span class="o">=</span><span class="m">500</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>php<span class="w"> </span>bin/console<span class="w"> </span>app:trade:outbox:backfill-correlation<span class="w"> </span>--limit<span class="o">=</span><span class="m">500</span><span class="w"> </span>--apply
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>php<span class="w"> </span>bin/console<span class="w"> </span>app:store:outbox:backfill-correlation<span class="w"> </span>--limit<span class="o">=</span><span class="m">500</span><span class="w"> </span>--apply
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>php<span class="w"> </span>bin/console<span class="w"> </span>app:inventory:outbox:backfill-correlation<span class="w"> </span>--limit<span class="o">=</span><span class="m">500</span><span class="w"> </span>--apply
-</code></pre></div>
-<p>每个条件更新都会重新检查该行是否未发布且缺少
-相关 ID。该命令既不更新已发布的行，也不更改
-<code>causation_id</code>，因此可以在中断后安全地恢复并与
-发件箱出版商。不得将其添加到调度程序中。</p>
-<h2 id="6">6. 撤离顺序和门<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
-<p>存储特定的依赖项库存和源移动门维护在
-<a href="../store-extraction-readiness/"><t42/></a>。</p>
-<p>首选顺序是：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Store -&gt; Inventory -&gt; Payment -&gt; Wallet
-</code></pre></div>
-<p>商店和库存已使用 UUID/快照集成流程和发件箱/收件箱
-模式。它们是候选服务，而不是自动生产就绪的服务。
-库存必须保留其记录的功能标志和安全限制，直到
-它的履行、到期、排序和并发保证是完整的。</p>
-<p>支付、钱包、身份、商务、促销、内容和提供商适配器
-必须首先在整体内部解耦。所需工作的示例：</p>
-<ul>
-<li>用外部用户 UUID 替换共享 <code>Identity\Entity\User</code> 关联
-  本地投影/快照。</li>
-<li>将支付的同步 Doctrine 实体事件替换为支付发件箱
-  商务收件箱事件。</li>
-<li>取消 Trade 的直接钱包转账路径，转而采用支付边界。</li>
-<li>替换暴露 <code>Invoice</code> 或的支付网关和调整插件 API
-  Symfony HTTP 类型具有服务拥有的命令和结果契约。</li>
-<li>用标量报价请求替换促销的共享可变定价上下文
-  在考虑远程执行之前确定性结果。</li>
-</ul>
-<h2 id="7">7. 第一阶段可交付成果<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
-<p>仅当满足以下所有条件时才认为目录重组完成
-即使在移动业务代码之前就存在：</p>
-<ul>
-<li>目标 <code>apps/</code>、<code>packages/</code>、<code>contracts/</code>、<code>infrastructure/</code> 和 <code>tools/</code> 所有权
-  模型被记录并反映在存储库工具中。</li>
-<li>架构检查拒绝禁止的跨服务导入和实体泄漏。</li>
-<li>现有的贸易、商店和库存事件共享第 5 节中的信封。</li>
-<li>一个服务模板定义了独立的Kernel、配置、迁移、队列、
-  工作人员、调度程序、Docker、测试、静态分析和 CI 所有权。</li>
-<li>传统的模块化整体测试套件仍然作为表征套件
-  直至相关服务提取完成。</li>
-</ul>
-<h2 id="8">8. 非目标<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
-<ul>
-<li>移动目录而不强制执行可部署边界。</li>
-<li>为每个当前模块创建空服务应用程序。</li>
-<li>将<code>Core</code>提取为网络服务。</li>
-<li>按文件名拆分历史迁移；混合遗留迁移仍然存在
-  重建整体，而提取的服务从经过验证的模式开始
-  基线和新的服务本地迁移历史。</li>
-</ul>
+<p>第一次源移动不得更改公共路径、表名称或 JSON 请求，并且
+响应格式。网关所有权仅在 Store 传递数据并
+消息协调。</p>
 
 
 

@@ -429,6 +429,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../store-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    商店撤离准备情况
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api-design/" class="md-nav__link">
         
   
@@ -1922,7 +1950,7 @@
 <hr />
 <h2 id="2-trait-catalog">2. Trait Catalog（控制器合约工具包）<a class="headerlink" href="#2-trait-catalog" title="Permanent link">&para;</a></h2>
 <h3 id="21-apiview">2.1 强制：<code>ApiView</code><a class="headerlink" href="#21-apiview" title="Permanent link">&para;</a></h3>
-<p><strong>文件</strong>：<code>src/Core/View/ApiView.php</code>
+<p><strong>文件</strong>：<code>packages/platform-kernel/src/View/ApiView.php</code>
 <strong>必须由</strong>使用：每个控制器</p>
 <p>声明服务绑定和数据范围的契约：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">trait ApiView</span>
@@ -1940,7 +1968,7 @@
 - 控制器应该覆盖 <code>commonFilter()</code> 以应用所有权/范围过滤器
 - <code>commonFilter()</code> 返回：(a) 标准关联数组，或 (b) <code>QueryBuilder</code> 实例</p>
 <h3 id="22-listapiviewmixin">2.2 列表：<code>ListApiViewMixin</code><a class="headerlink" href="#22-listapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>文件</strong>：<code>src/Core/View/ListApiViewMixin.php</code></p>
+<p><strong>文件</strong>：<code>packages/platform-kernel/src/View/ListApiViewMixin.php</code></p>
 <p>注册 <code>GET /</code> 并提供分页列表端点：</p>
 <table>
 <thead>
@@ -1992,7 +2020,7 @@
 <p><strong>OpenAPI 参数</strong>（已记录）：
 <code>page</code>、<code>limit</code>、<code>@order</code>、<code>@dql</code>、<code>@select</code>、<code>@groupBy</code>、<code>@hints</code>、<code>@filter</code>、<code>@sort</code>、<code>@expands</code>、<code>@display</code>、<code>@showDQL</code></p>
 <h3 id="23-detailapiviewmixin">2.3 详细信息：<code>DetailApiViewMixin</code><a class="headerlink" href="#23-detailapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>文件</strong>：<code>src/Core/View/DetailApiViewMixin.php</code></p>
+<p><strong>文件</strong>：<code>packages/platform-kernel/src/View/DetailApiViewMixin.php</code></p>
 <p>寄存器<code>GET /{id}</code>（需要数字ID）：</p>
 <table>
 <thead>
@@ -2042,7 +2070,7 @@
 </tbody>
 </table>
 <h3 id="24-createapiviewmixin">2.4 创建：<code>CreateApiViewMixin</code><a class="headerlink" href="#24-createapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>文件</strong>：<code>src/Core/View/CreateApiViewMixin.php</code></p>
+<p><strong>文件</strong>：<code>packages/platform-kernel/src/View/CreateApiViewMixin.php</code></p>
 <p>注册 <code>POST /</code> 以支持单个对象和数组输入：</p>
 <table>
 <thead>
@@ -2124,7 +2152,7 @@
 - 单个对象<code>{}</code>：直接返回创建的实体
 - 数组<code>[{}, {}, ...]</code>：返回已创建实体的数组，包装在事务中（除非<code>@partial=true</code>）</p>
 <h3 id="25-updateapiviewmixin">2.5 更新：<code>UpdateApiViewMixin</code><a class="headerlink" href="#25-updateapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>文件</strong>：<code>src/Core/View/UpdateApiViewMixin.php</code></p>
+<p><strong>文件</strong>：<code>packages/platform-kernel/src/View/UpdateApiViewMixin.php</code></p>
 <p>注册两条路由：</p>
 <table>
 <thead>
@@ -2230,7 +2258,7 @@
 3. 如果没有找到：<code>new()</code> + <code>update()</code> (MODE_CREATE)
 4. 使用<code>@mode=strict</code>：跳过不存在的项目（仅更新）</p>
 <h3 id="26-deleteapiviewmixin">2.6 删除：<code>DeleteApiViewMixin</code><a class="headerlink" href="#26-deleteapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>文件</strong>：<code>src/Core/View/DeleteApiViewMixin.php</code></p>
+<p><strong>文件</strong>：<code>packages/platform-kernel/src/View/DeleteApiViewMixin.php</code></p>
 <p>寄存器<code>DELETE /{id}</code>：</p>
 <table>
 <thead>
@@ -2268,7 +2296,7 @@
 </tbody>
 </table>
 <h3 id="27-singlecreateandupdateapiviewmixin">2.7 单例：<code>SingleCreateAndUpdateApiViewMixin</code><a class="headerlink" href="#27-singlecreateandupdateapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>文件</strong>：<code>src/Core/View/SingleCreateAndUpdateApiViewMixin.php</code></p>
+<p><strong>文件</strong>：<code>packages/platform-kernel/src/View/SingleCreateAndUpdateApiViewMixin.php</code></p>
 <p>对于每个范围只有<strong>一行</strong>的资源（例如，用户设置）：</p>
 <table>
 <thead>
@@ -2288,7 +2316,7 @@
 </table>
 <p><strong>挂钩方法</strong>：<code>defaultCreateValues()</code>、<code>defaultUpdateValues()</code></p>
 <h3 id="28-singledetailapiviewmixin">2.8 单例详细信息：<code>SingleDetailApiViewMixin</code><a class="headerlink" href="#28-singledetailapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>文件</strong>：<code>src/Core/View/SingleDetailApiViewMixin.php</code></p>
+<p><strong>文件</strong>：<code>packages/platform-kernel/src/View/SingleDetailApiViewMixin.php</code></p>
 <table>
 <thead>
 <tr>
@@ -2307,7 +2335,7 @@
 </table>
 <p>使用 <code>commonFilter()</code> 来标识哪一行。</p>
 <h3 id="29-workflowapiviewmixin">2.9 工作流程：<code>WorkflowApiViewMixin</code><a class="headerlink" href="#29-workflowapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>文件</strong>：<code>src/Core/View/WorkflowApiViewMixin.php</code></p>
+<p><strong>文件</strong>：<code>packages/platform-kernel/src/View/WorkflowApiViewMixin.php</code></p>
 <p>对于 Symfony Workflow 状态机管理的实体：</p>
 <table>
 <thead>

@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://immane.github.io/crud-skeleton/issues/architecture-review-2026-06-26/">
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/design/store-extraction-readiness/">
       
       
-        <link rel="prev" href="../../research/huifu-payment-api/">
+        <link rel="prev" href="../microservice-transition/">
       
       
-        <link rel="next" href="../../ai/context/">
+        <link rel="next" href="../api-design/">
       
       
         
@@ -31,7 +31,7 @@
     
     
       
-        <title>Architecture Review 2026-06-26 - CRUD Skeleton</title>
+        <title>Store Extraction Readiness - CRUD Skeleton</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#architecture-review-issues-2026-06-26" class="md-skip">
+        <a href="#store-extraction-readiness" class="md-skip">
           Skip to content
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Architecture Review 2026-06-26
+              Store Extraction Readiness
             
           </span>
         </div>
@@ -316,8 +316,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -328,13 +330,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
@@ -355,7 +355,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -373,7 +373,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/system-architecture/" class="md-nav__link">
+      <a href="../system-architecture/" class="md-nav__link">
         
   
   
@@ -401,7 +401,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/microservice-transition/" class="md-nav__link">
+      <a href="../microservice-transition/" class="md-nav__link">
         
   
   
@@ -426,10 +426,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../design/store-extraction-readiness/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store Extraction Readiness
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -445,6 +472,70 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#current-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependency-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency Inventory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preconditions-for-source-move" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Preconditions For Source Move
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#move-sequence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Move Sequence
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -457,7 +548,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/api-design/" class="md-nav__link">
+      <a href="../api-design/" class="md-nav__link">
         
   
   
@@ -485,7 +576,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/data-model/" class="md-nav__link">
+      <a href="../data-model/" class="md-nav__link">
         
   
   
@@ -513,7 +604,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/module-design/" class="md-nav__link">
+      <a href="../module-design/" class="md-nav__link">
         
   
   
@@ -541,7 +632,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/controller-design/" class="md-nav__link">
+      <a href="../controller-design/" class="md-nav__link">
         
   
   
@@ -569,7 +660,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/api-documentation/" class="md-nav__link">
+      <a href="../api-documentation/" class="md-nav__link">
         
   
   
@@ -597,7 +688,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/system-contracts/" class="md-nav__link">
+      <a href="../system-contracts/" class="md-nav__link">
         
   
   
@@ -686,7 +777,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/bundles/core/" class="md-nav__link">
+      <a href="../bundles/core/" class="md-nav__link">
         
   
   
@@ -714,7 +805,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/bundles/common/" class="md-nav__link">
+      <a href="../bundles/common/" class="md-nav__link">
         
   
   
@@ -742,7 +833,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/bundles/trade/" class="md-nav__link">
+      <a href="../bundles/trade/" class="md-nav__link">
         
   
   
@@ -770,7 +861,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/bundles/store/" class="md-nav__link">
+      <a href="../bundles/store/" class="md-nav__link">
         
   
   
@@ -798,7 +889,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/bundles/inventory/" class="md-nav__link">
+      <a href="../bundles/inventory/" class="md-nav__link">
         
   
   
@@ -826,7 +917,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/bundles/payment/" class="md-nav__link">
+      <a href="../bundles/payment/" class="md-nav__link">
         
   
   
@@ -854,7 +945,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/bundles/wallet/" class="md-nav__link">
+      <a href="../bundles/wallet/" class="md-nav__link">
         
   
   
@@ -882,7 +973,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/bundles/identity/" class="md-nav__link">
+      <a href="../bundles/identity/" class="md-nav__link">
         
   
   
@@ -910,7 +1001,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/bundles/wechat/" class="md-nav__link">
+      <a href="../bundles/wechat/" class="md-nav__link">
         
   
   
@@ -1059,8 +1150,6 @@
       
   
   
-    
-  
   
   
     
@@ -1073,11 +1162,13 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
@@ -1098,7 +1189,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1113,37 +1204,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Architecture Review 2026-06-26
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../issues/architecture-review-2026-06-26/" class="md-nav__link">
         
   
   
@@ -1159,209 +1223,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Summary
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#high-priority" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        High Priority
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="High Priority">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-wechat-payment-gateway-may-not-be-registered" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. WeChat payment gateway may not be registered
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-system-introspection-endpoints-are-effectively-public" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. /system/* introspection endpoints are effectively public
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-dynamic-query-features-are-too-powerful-for-default-public-api-use" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Dynamic query features are too powerful for default public API use
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-payment-and-wallet-transaction-boundaries-need-tightening" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Payment and wallet transaction boundaries need tightening
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#medium-priority" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Medium Priority
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Medium Priority">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#5-app-order-lifecycle-may-be-incomplete" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. App order lifecycle may be incomplete
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-baseservice-mixes-service-logic-with-request-level-concerns" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. BaseService mixes service logic with request-level concerns
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#7-baseservicenew-can-bypass-entity-constructors" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. BaseService::new() can bypass entity constructors
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#8-pagination-has-no-maximum-limit" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        8. Pagination has no maximum limit
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#9-in-memory-fallback-filtering-can-load-too-much-data" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        9. In-memory fallback filtering can load too much data
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#low-priority-cleanup" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Low Priority / Cleanup
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Low Priority / Cleanup">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#10-generic-openapi-docs-expose-implementation-controls" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        10. Generic OpenAPI docs expose implementation controls
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#11-service-wiring-has-duplicated-gateway-tagging-conventions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        11. Service wiring has duplicated gateway tagging conventions
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1455,10 +1316,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
+  <a href="#current-scope" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Summary
+        Current Scope
       
     </span>
   </a>
@@ -1466,174 +1327,35 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#high-priority" class="md-nav__link">
+  <a href="#dependency-inventory" class="md-nav__link">
     <span class="md-ellipsis">
       
-        High Priority
+        Dependency Inventory
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="High Priority">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-wechat-payment-gateway-may-not-be-registered" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. WeChat payment gateway may not be registered
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-system-introspection-endpoints-are-effectively-public" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. /system/* introspection endpoints are effectively public
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-dynamic-query-features-are-too-powerful-for-default-public-api-use" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Dynamic query features are too powerful for default public API use
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-payment-and-wallet-transaction-boundaries-need-tightening" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Payment and wallet transaction boundaries need tightening
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#medium-priority" class="md-nav__link">
+  <a href="#preconditions-for-source-move" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Medium Priority
+        Preconditions For Source Move
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Medium Priority">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#5-app-order-lifecycle-may-be-incomplete" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. App order lifecycle may be incomplete
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-baseservice-mixes-service-logic-with-request-level-concerns" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. BaseService mixes service logic with request-level concerns
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#7-baseservicenew-can-bypass-entity-constructors" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. BaseService::new() can bypass entity constructors
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#8-pagination-has-no-maximum-limit" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        8. Pagination has no maximum limit
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#9-in-memory-fallback-filtering-can-load-too-much-data" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        9. In-memory fallback filtering can load too much data
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#low-priority-cleanup" class="md-nav__link">
+  <a href="#move-sequence" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Low Priority / Cleanup
+        Move Sequence
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Low Priority / Cleanup">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#10-generic-openapi-docs-expose-implementation-controls" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        10. Generic OpenAPI docs expose implementation controls
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#11-service-wiring-has-duplicated-gateway-tagging-conventions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        11. Service wiring has duplicated gateway tagging conventions
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1657,135 +1379,107 @@
   
 
 
-<h1 id="architecture-review-issues-2026-06-26">Architecture Review Issues - 2026-06-26<a class="headerlink" href="#architecture-review-issues-2026-06-26" title="Permanent link">&para;</a></h1>
-<p>This document records architecture and production-readiness issues found during a review of <code>docs/ai/context.md</code> and the current codebase.</p>
-<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
-<p>The overall modular architecture is reasonable for a Symfony API skeleton. Module boundaries are clear, <code>Core</code> provides reusable CRUD/API infrastructure, business modules are separated by domain, and extension points such as payment gateways, pricing calculators, workflow, and domain events are well aligned with the project's goals.</p>
-<p>The main risks are not structural failure, but overly broad generic capabilities being exposed by default, production security boundaries that need tightening, and transaction boundaries around payment flows.</p>
-<h2 id="high-priority">High Priority<a class="headerlink" href="#high-priority" title="Permanent link">&para;</a></h2>
-<h3 id="1-wechat-payment-gateway-may-not-be-registered">1. WeChat payment gateway may not be registered<a class="headerlink" href="#1-wechat-payment-gateway-may-not-be-registered" title="Permanent link">&para;</a></h3>
-<p><strong>Impact:</strong> <code>payment=wechat</code> may fail with <code>PaymentGatewayNotFoundException</code> even though <code>WechatPayGateway</code> implements <code>PaymentGatewayInterface</code>.</p>
-<p><strong>Evidence:</strong></p>
+<h1 id="store-extraction-readiness">Store Extraction Readiness<a class="headerlink" href="#store-extraction-readiness" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>An implementation inventory for extracting Store into <code>apps/store</code> without
+changing public API routes or losing existing queue and database safety.</p>
+</blockquote>
+<h2 id="current-scope">Current Scope<a class="headerlink" href="#current-scope" title="Permanent link">&para;</a></h2>
+<p>Store currently contains 32 source files and 13 Store-specific test files. Its
+owned runtime responsibilities are:</p>
 <ul>
-<li><code>PaymentGatewayRegistry</code> only collects services tagged with <code>payment.gateway</code>: <code>src/Payment/Service/PaymentGatewayRegistry.php</code>.</li>
-<li><code>config/services.yaml</code> excludes <code>src/Wechat/Service/Gateway/WechatPayGateway.php</code> from the global <code>App\</code> service resource.</li>
-<li><code>src/Wechat/Resources/config/services_wechat.yaml</code> explicitly defines <code>WechatPayGateway</code>, but does not add <code>payment.gateway</code> tag.</li>
+<li>Store, membership, StoreOrder, Inbox, Outbox, and cancellation-tombstone data.</li>
+<li>App, manage, and staff HTTP endpoints under the existing <code>/api/v1</code> gateway
+  prefix.</li>
+<li>Trade and Inventory integration consumers.</li>
+<li>Store Outbox publisher and correlation backfill command.</li>
 </ul>
-<p><strong>Recommendation:</strong></p>
-<p>Add an explicit tag in <code>services_wechat.yaml</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">App\Wechat\Service\Gateway\WechatPayGateway</span><span class="p">:</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nt">arguments</span><span class="p">:</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">        </span><span class="nt">$notifyUrl</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(WECHAT_PAY_NOTIFY_URL)%&#39;</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;payment.gateway&#39;</span><span class="p p-Indicator">]</span>
+<p>The intended owned data set is:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>store
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>store_membership
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>store_order
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>store_consumed_event
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>store_outbox_message
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>store_trade_order_cancellation
 </code></pre></div>
-<p>Alternatively, add an <code>_instanceof</code> rule inside the WeChat service config for <code>PaymentGatewayInterface</code>.</p>
-<h3 id="2-system-introspection-endpoints-are-effectively-public">2. <code>/system/*</code> introspection endpoints are effectively public<a class="headerlink" href="#2-system-introspection-endpoints-are-effectively-public" title="Permanent link">&para;</a></h3>
-<p><strong>Impact:</strong> Entity metadata and route structure can be exposed in production.</p>
-<p><strong>Evidence:</strong></p>
-<ul>
-<li>System controllers are routed under <code>/system</code>, for example <code>packages/platform-kernel/src/Controller/System/EntityController.php</code>.</li>
-<li>The configured API firewall only matches <code>^/api</code> in <code>config/packages/security.yaml</code>.</li>
-<li><code>access_control</code> rules only restrict <code>/api</code> paths and do not cover <code>/system</code>.</li>
-</ul>
-<p><strong>Recommendation:</strong></p>
-<p>Choose one of these approaches:</p>
+<p><code>store_trade_order_cancellation</code> is currently created in the Inventory migration
+only because it was introduced with Inventory flow work. It belongs to Store and
+must move into the Store service schema baseline before an independent database
+cutover.</p>
+<h2 id="dependency-inventory">Dependency Inventory<a class="headerlink" href="#dependency-inventory" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Dependency</th>
+<th>Current use</th>
+<th>Extraction disposition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>App\Core</code></td>
+<td>REST controller, view traits, BaseService, UUID</td>
+<td>Provided by <code>packages/platform-kernel</code>; Store may depend on this library.</td>
+</tr>
+<tr>
+<td><code>CrudPlatform\IntegrationContracts</code></td>
+<td>All new async messages</td>
+<td>Keep; this is the approved cross-service dependency.</td>
+</tr>
+<tr>
+<td><code>App\Trade\Message</code> / <code>App\Inventory\Message</code></td>
+<td>Legacy native-Messenger compatibility adapters</td>
+<td>Temporary. Retain only until old <code>async</code>/<code>failed</code> records are drained or migrated.</td>
+</tr>
+<tr>
+<td><code>App\Trade\DTO\StoreContext</code> and resolver interface</td>
+<td>Synchronous <code>X-Store-Code</code> lookup during Trade order creation</td>
+<td>Blocker. Replace with a scalar Store directory HTTP contract or move the resolver to Commerce before Store becomes independent.</td>
+</tr>
+<tr>
+<td><code>App\Identity\Entity\User</code></td>
+<td>App/staff controllers used it only to read UUID</td>
+<td>Resolved. Store now depends on <code>App\Core\Security\UserUuidPrincipalInterface</code>, implemented by Identity User.</td>
+</tr>
+<tr>
+<td><code>config/routes.yaml</code></td>
+<td>Imports <code>src/Store/Controller</code></td>
+<td>Move to Store-owned routes; preserve public paths through the gateway.</td>
+</tr>
+<tr>
+<td>Root scheduler/worker</td>
+<td>Runs Store Outbox publishing</td>
+<td>Move to Store-owned worker and scheduler after Store application is independently runnable.</td>
+</tr>
+</tbody>
+</table>
+<p>No Store Entity or Repository imports another module's Entity or Repository. The
+Deptrac baseline no longer contains a Store-to-Identity persistence exemption.</p>
+<h2 id="preconditions-for-source-move">Preconditions For Source Move<a class="headerlink" href="#preconditions-for-source-move" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Move system routes under <code>/api/system</code> so the API firewall applies.</li>
-<li>Add explicit <code>access_control</code> rules for <code>^/system</code> requiring <code>ROLE_ADMIN</code>.</li>
-<li>Disable system routes in production and keep them dev/test-only.</li>
+<li>Deploy the neutral-carrier release, run the Outbox metadata migration, and
+   complete bounded correlation backfills in production.</li>
+<li>Drain or migrate legacy native-PHP queue records before Store owns its own
+   worker queue. Do not remove legacy wrapper adapters earlier.</li>
+<li>Keep the monolith consuming <code>packages/platform-kernel</code> before Store introduces
+   an independent Kernel.</li>
+<li>Replace Trade's in-process <code>StoreContextResolverInterface</code> plugin with a
+   documented scalar boundary.</li>
+<li>Build a Store schema baseline from the owned tables, including the cancellation
+   tombstone, and rehearse copy, increment, and reconciliation steps.</li>
 </ol>
-<h3 id="3-dynamic-query-features-are-too-powerful-for-default-public-api-use">3. Dynamic query features are too powerful for default public API use<a class="headerlink" href="#3-dynamic-query-features-are-too-powerful-for-default-public-api-use" title="Permanent link">&para;</a></h3>
-<p><strong>Impact:</strong> Clients can submit raw or near-raw query controls, which increases data exposure and performance risk.</p>
-<p><strong>Evidence:</strong></p>
-<ul>
-<li><code>@dql</code> is read from the request and passed to Doctrine query creation in <code>BaseServiceReadListTrait</code>.</li>
-<li><code>@select</code>, <code>@groupBy</code>, <code>@hints</code>, and <code>@showDQL</code> are also supported by request parameters.</li>
-<li><code>ListApiViewMixin</code> documents these parameters for all generic list endpoints.</li>
-</ul>
-<p><strong>Recommendation:</strong></p>
-<p>Introduce capability levels for query parameters:</p>
-<ul>
-<li>Public/App endpoints: allow only <code>page</code>, <code>limit</code>, constrained <code>@order</code>, and safe <code>@filter</code>.</li>
-<li>Manage endpoints: optionally allow richer query features for admins.</li>
-<li>Debug/dev only: allow <code>@dql</code>, <code>@hints</code>, and <code>@showDQL</code>.</li>
-</ul>
-<p>Also consider removing these dangerous parameters from generated public OpenAPI docs.</p>
-<h3 id="4-payment-and-wallet-transaction-boundaries-need-tightening">4. Payment and wallet transaction boundaries need tightening<a class="headerlink" href="#4-payment-and-wallet-transaction-boundaries-need-tightening" title="Permanent link">&para;</a></h3>
-<p><strong>Impact:</strong> External payment calls may be executed while a database transaction is open. Nested wallet transactions may not behave as expected without explicit savepoint support.</p>
-<p><strong>Evidence:</strong></p>
-<ul>
-<li><code>InvoiceService::pay()</code> opens a transaction and then calls <code>$gateway-&gt;pay()</code> inside it.</li>
-<li><code>WechatPayGateway::pay()</code> performs outbound WeChat API calls.</li>
-<li><code>TransferService</code> manually starts transactions with <code>beginTransaction()</code>.</li>
-<li>Comments in <code>Trade\Controller\Manage\OrderController</code> assume nested savepoint behavior, but no explicit Doctrine savepoint configuration was found.</li>
-</ul>
-<p><strong>Recommendation:</strong></p>
-<p>Separate local and external payment flows:</p>
-<ul>
-<li>Wallet gateway: keep local balance movement and invoice state update atomic.</li>
-<li>External gateways such as WeChat: persist invoice as <code>paying</code>, commit, call provider, then finalize through callback/notify.</li>
-<li>If nested transactions are required, explicitly enable and test savepoint behavior.</li>
-</ul>
-<h2 id="medium-priority">Medium Priority<a class="headerlink" href="#medium-priority" title="Permanent link">&para;</a></h2>
-<h3 id="5-app-order-lifecycle-may-be-incomplete">5. App order lifecycle may be incomplete<a class="headerlink" href="#5-app-order-lifecycle-may-be-incomplete" title="Permanent link">&para;</a></h3>
-<p><strong>Impact:</strong> App users can create orders in <code>draft</code>, but payment requires the order to be able to transition from <code>confirmed</code> to <code>paid</code>.</p>
-<p><strong>Evidence:</strong></p>
-<ul>
-<li><code>Order</code> initial status is <code>draft</code>.</li>
-<li>Workflow requires <code>draft -&gt; pending -&gt; confirmed -&gt; paid</code>.</li>
-<li>App payment action checks <code>workflow-&gt;can($order, 'pay')</code>.</li>
-<li>No App endpoint was found for submit/confirm.</li>
-</ul>
-<p><strong>Recommendation:</strong></p>
-<p>Clarify intended business flow:</p>
-<ul>
-<li>If admin confirmation is required, document it clearly.</li>
-<li>If users should pay immediately, create orders directly as <code>confirmed</code>, or add an App submit flow that moves the order to a payable state.</li>
-</ul>
-<h3 id="6-baseservice-mixes-service-logic-with-request-level-concerns">6. <code>BaseService</code> mixes service logic with request-level concerns<a class="headerlink" href="#6-baseservice-mixes-service-logic-with-request-level-concerns" title="Permanent link">&para;</a></h3>
-<p><strong>Impact:</strong> Service classes become harder to reuse outside HTTP and harder to reason about in tests or CLI contexts.</p>
-<p><strong>Evidence:</strong></p>
-<ul>
-<li><code>BaseService</code> captures current user from token storage.</li>
-<li><code>BaseServiceReadListTrait::list()</code> reads query parameters from the current request.</li>
-<li>Query syntax, request filtering, Doctrine, serialization, and validation are concentrated in the base service layer.</li>
-</ul>
-<p><strong>Recommendation:</strong></p>
-<p>Move request parsing toward controllers or dedicated Query DTO/query builder objects over time. Keep service methods focused on explicit inputs and domain operations.</p>
-<h3 id="7-baseservicenew-can-bypass-entity-constructors">7. <code>BaseService::new()</code> can bypass entity constructors<a class="headerlink" href="#7-baseservicenew-can-bypass-entity-constructors" title="Permanent link">&para;</a></h3>
-<p><strong>Impact:</strong> Entities with required constructor invariants may be created in invalid states.</p>
-<p><strong>Evidence:</strong></p>
-<ul>
-<li><code>BaseServiceMutationTrait::new()</code> uses <code>newInstanceWithoutConstructor()</code> when the entity constructor has required parameters.</li>
-<li><code>Wallet</code> requires a <code>User</code> and currency in its constructor.</li>
-</ul>
-<p><strong>Recommendation:</strong></p>
-<p>Use dedicated factory/create methods for entities with required invariants. Avoid exposing generic create endpoints for those entities unless the controller constructs them safely.</p>
-<h3 id="8-pagination-has-no-maximum-limit">8. Pagination has no maximum limit<a class="headerlink" href="#8-pagination-has-no-maximum-limit" title="Permanent link">&para;</a></h3>
-<p><strong>Impact:</strong> A client can request a very large <code>limit</code>, causing heavy DB queries or large serialized responses.</p>
-<p><strong>Evidence:</strong></p>
-<ul>
-<li><code>RestController::pagination()</code> uses <code>max(1, request limit)</code> with default <code>100</code>, but does not cap upper bound.</li>
-</ul>
-<p><strong>Recommendation:</strong></p>
-<p>Add a global max, for example <code>min(200, max(1, $request-&gt;query-&gt;getInt('limit', 100)))</code>, or make the maximum configurable.</p>
-<h3 id="9-in-memory-fallback-filtering-can-load-too-much-data">9. In-memory fallback filtering can load too much data<a class="headerlink" href="#9-in-memory-fallback-filtering-can-load-too-much-data" title="Permanent link">&para;</a></h3>
-<p><strong>Impact:</strong> If DQL compilation fails, the service loads the full result set and filters in PHP, which can be expensive on large tables.</p>
-<p><strong>Evidence:</strong></p>
-<ul>
-<li><code>BaseServiceReadListTrait::list()</code> falls back to <code>$query-&gt;getResult()</code> and then <code>array_filter()</code> when filter compilation fails or <code>@sort</code> is used.</li>
-</ul>
-<p><strong>Recommendation:</strong></p>
-<p>For production API endpoints, fail fast with <code>400 Bad Request</code> when filter compilation fails. Keep in-memory fallback only for dev/debug or explicitly small collections.</p>
-<h2 id="low-priority-cleanup">Low Priority / Cleanup<a class="headerlink" href="#low-priority-cleanup" title="Permanent link">&para;</a></h2>
-<h3 id="10-generic-openapi-docs-expose-implementation-controls">10. Generic OpenAPI docs expose implementation controls<a class="headerlink" href="#10-generic-openapi-docs-expose-implementation-controls" title="Permanent link">&para;</a></h3>
-<p><strong>Impact:</strong> Public API docs advertise internal query controls like <code>@dql</code>, <code>@hints</code>, and <code>@showDQL</code>.</p>
-<p><strong>Recommendation:</strong></p>
-<p>Split OpenAPI parameter documentation by endpoint type or remove dangerous controls from the generic mixin docs.</p>
-<h3 id="11-service-wiring-has-duplicated-gateway-tagging-conventions">11. Service wiring has duplicated gateway tagging conventions<a class="headerlink" href="#11-service-wiring-has-duplicated-gateway-tagging-conventions" title="Permanent link">&para;</a></h3>
-<p><strong>Impact:</strong> Payment gateways under <code>src/Payment/Service/Gateway/</code> are tagged by both the root <code>_instanceof</code> rule and <code>services_payment.yaml</code>, while WeChat gateway is defined separately and currently not tagged.</p>
-<p><strong>Recommendation:</strong></p>
-<p>Centralize gateway tagging in one consistent convention, preferably <code>_instanceof PaymentGatewayInterface</code> for all imported module service configs.</p>
+<h2 id="move-sequence">Move Sequence<a class="headerlink" href="#move-sequence" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>packages/platform-kernel
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  -&gt; monolith consumes package
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  -&gt; apps/store skeleton with independent Kernel/config/composer/tests
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  -&gt; Store source, routes, commands, and tests move to apps/store
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  -&gt; Store schema baseline and shadow database verification
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  -&gt; Store worker/scheduler and gateway shadow routing
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  -&gt; read traffic, then write traffic, then database cutover
+</code></pre></div>
+<p>The first source move must not alter public paths, table names, or JSON request and
+response formats. Gateway ownership changes only after Store has passed data and
+message reconciliation.</p>
 
 
 

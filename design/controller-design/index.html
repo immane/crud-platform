@@ -429,6 +429,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../store-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store Extraction Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api-design/" class="md-nav__link">
         
   
@@ -1922,7 +1950,7 @@ Controllers compose behaviors (list, detail, create, update, delete, workflow) b
 <hr />
 <h2 id="2-trait-catalog-the-controller-contract-toolkit">2. Trait Catalog (The Controller Contract Toolkit)<a class="headerlink" href="#2-trait-catalog-the-controller-contract-toolkit" title="Permanent link">&para;</a></h2>
 <h3 id="21-mandatory-apiview">2.1 Mandatory: <code>ApiView</code><a class="headerlink" href="#21-mandatory-apiview" title="Permanent link">&para;</a></h3>
-<p><strong>File</strong>: <code>src/Core/View/ApiView.php</code>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/View/ApiView.php</code>
 <strong>Must be used by</strong>: Every controller</p>
 <p>Declares the contract for service binding and data scoping:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">trait ApiView</span>
@@ -1940,7 +1968,7 @@ Controllers compose behaviors (list, detail, create, update, delete, workflow) b
 - Controller SHOULD override <code>commonFilter()</code> to apply ownership/scoping filters
 - <code>commonFilter()</code> returns either: (a) associative array of criteria, or (b) a <code>QueryBuilder</code> instance</p>
 <h3 id="22-list-listapiviewmixin">2.2 List: <code>ListApiViewMixin</code><a class="headerlink" href="#22-list-listapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>File</strong>: <code>src/Core/View/ListApiViewMixin.php</code></p>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/View/ListApiViewMixin.php</code></p>
 <p>Registers <code>GET /</code> and provides paginated list endpoint:</p>
 <table>
 <thead>
@@ -1992,7 +2020,7 @@ Controllers compose behaviors (list, detail, create, update, delete, workflow) b
 <p><strong>OpenAPI Parameters</strong> (documented):
 <code>page</code>, <code>limit</code>, <code>@order</code>, <code>@dql</code>, <code>@select</code>, <code>@groupBy</code>, <code>@hints</code>, <code>@filter</code>, <code>@sort</code>, <code>@expands</code>, <code>@display</code>, <code>@showDQL</code></p>
 <h3 id="23-detail-detailapiviewmixin">2.3 Detail: <code>DetailApiViewMixin</code><a class="headerlink" href="#23-detail-detailapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>File</strong>: <code>src/Core/View/DetailApiViewMixin.php</code></p>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/View/DetailApiViewMixin.php</code></p>
 <p>Registers <code>GET /{id}</code> (numeric ID required):</p>
 <table>
 <thead>
@@ -2042,7 +2070,7 @@ Controllers compose behaviors (list, detail, create, update, delete, workflow) b
 </tbody>
 </table>
 <h3 id="24-create-createapiviewmixin">2.4 Create: <code>CreateApiViewMixin</code><a class="headerlink" href="#24-create-createapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>File</strong>: <code>src/Core/View/CreateApiViewMixin.php</code></p>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/View/CreateApiViewMixin.php</code></p>
 <p>Registers <code>POST /</code> with support for both single object and array inputs:</p>
 <table>
 <thead>
@@ -2124,7 +2152,7 @@ Controllers compose behaviors (list, detail, create, update, delete, workflow) b
 - Single object <code>{}</code>: Returns the created entity directly
 - Array <code>[{}, {}, ...]</code>: Returns array of created entities, wrapped in transaction (unless <code>@partial=true</code>)</p>
 <h3 id="25-update-updateapiviewmixin">2.5 Update: <code>UpdateApiViewMixin</code><a class="headerlink" href="#25-update-updateapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>File</strong>: <code>src/Core/View/UpdateApiViewMixin.php</code></p>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/View/UpdateApiViewMixin.php</code></p>
 <p>Registers two routes:</p>
 <table>
 <thead>
@@ -2230,7 +2258,7 @@ Controllers compose behaviors (list, detail, create, update, delete, workflow) b
 3. If not found: <code>new()</code> + <code>update()</code> (MODE_CREATE)
 4. With <code>@mode=strict</code>: skip items that don't exist (update-only)</p>
 <h3 id="26-delete-deleteapiviewmixin">2.6 Delete: <code>DeleteApiViewMixin</code><a class="headerlink" href="#26-delete-deleteapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>File</strong>: <code>src/Core/View/DeleteApiViewMixin.php</code></p>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/View/DeleteApiViewMixin.php</code></p>
 <p>Registers <code>DELETE /{id}</code>:</p>
 <table>
 <thead>
@@ -2268,7 +2296,7 @@ Controllers compose behaviors (list, detail, create, update, delete, workflow) b
 </tbody>
 </table>
 <h3 id="27-singleton-singlecreateandupdateapiviewmixin">2.7 Singleton: <code>SingleCreateAndUpdateApiViewMixin</code><a class="headerlink" href="#27-singleton-singlecreateandupdateapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>File</strong>: <code>src/Core/View/SingleCreateAndUpdateApiViewMixin.php</code></p>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/View/SingleCreateAndUpdateApiViewMixin.php</code></p>
 <p>For resources that have exactly <strong>one row</strong> per scope (e.g., user settings):</p>
 <table>
 <thead>
@@ -2288,7 +2316,7 @@ Controllers compose behaviors (list, detail, create, update, delete, workflow) b
 </table>
 <p><strong>Hook Methods</strong>: <code>defaultCreateValues()</code>, <code>defaultUpdateValues()</code></p>
 <h3 id="28-singleton-detail-singledetailapiviewmixin">2.8 Singleton Detail: <code>SingleDetailApiViewMixin</code><a class="headerlink" href="#28-singleton-detail-singledetailapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>File</strong>: <code>src/Core/View/SingleDetailApiViewMixin.php</code></p>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/View/SingleDetailApiViewMixin.php</code></p>
 <table>
 <thead>
 <tr>
@@ -2307,7 +2335,7 @@ Controllers compose behaviors (list, detail, create, update, delete, workflow) b
 </table>
 <p>Uses <code>commonFilter()</code> to identify which row.</p>
 <h3 id="29-workflow-workflowapiviewmixin">2.9 Workflow: <code>WorkflowApiViewMixin</code><a class="headerlink" href="#29-workflow-workflowapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>File</strong>: <code>src/Core/View/WorkflowApiViewMixin.php</code></p>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/View/WorkflowApiViewMixin.php</code></p>
 <p>For entities governed by Symfony Workflow state machines:</p>
 <table>
 <thead>

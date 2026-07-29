@@ -429,6 +429,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../design/store-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    商店撤离准备情况
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../design/api-design/" class="md-nav__link">
         
   
@@ -1205,6 +1233,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#12-target-monorepo-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Target Monorepo Layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-integration-contract-foundation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Integration Contract Foundation
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1588,10 +1638,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#103-localelistener-srccoreeventlistenerlocalelistenerphp" class="md-nav__link">
+  <a href="#103-localelistener-packagesplatform-kernelsrceventlistenerlocalelistenerphp" class="md-nav__link">
     <span class="md-ellipsis">
       
-        10.3 LocaleListener (src/Core/EventListener/LocaleListener.php)
+        10.3 LocaleListener (packages/platform-kernel/src/EventListener/LocaleListener.php)
       
     </span>
   </a>
@@ -1699,10 +1749,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#142-openapienricherlistener-srccoreeventlisteneropenapienricherlistenerphp" class="md-nav__link">
+  <a href="#142-openapienricherlistener-packagesplatform-kernelsrceventlisteneropenapienricherlistenerphp" class="md-nav__link">
     <span class="md-ellipsis">
       
-        14.2 OpenApiEnricherListener (src/Core/EventListener/OpenApiEnricherListener.php)
+        14.2 OpenApiEnricherListener (packages/platform-kernel/src/EventListener/OpenApiEnricherListener.php)
       
     </span>
   </a>
@@ -2041,6 +2091,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#12-target-monorepo-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Target Monorepo Layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-integration-contract-foundation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Integration Contract Foundation
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2424,10 +2496,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#103-localelistener-srccoreeventlistenerlocalelistenerphp" class="md-nav__link">
+  <a href="#103-localelistener-packagesplatform-kernelsrceventlistenerlocalelistenerphp" class="md-nav__link">
     <span class="md-ellipsis">
       
-        10.3 LocaleListener (src/Core/EventListener/LocaleListener.php)
+        10.3 LocaleListener (packages/platform-kernel/src/EventListener/LocaleListener.php)
       
     </span>
   </a>
@@ -2535,10 +2607,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#142-openapienricherlistener-srccoreeventlisteneropenapienricherlistenerphp" class="md-nav__link">
+  <a href="#142-openapienricherlistener-packagesplatform-kernelsrceventlisteneropenapienricherlistenerphp" class="md-nav__link">
     <span class="md-ellipsis">
       
-        14.2 OpenApiEnricherListener (src/Core/EventListener/OpenApiEnricherListener.php)
+        14.2 OpenApiEnricherListener (packages/platform-kernel/src/EventListener/OpenApiEnricherListener.php)
       
     </span>
   </a>
@@ -2842,16 +2914,71 @@ governance, not a mass code move or database split. See
 <p>Current boundary risks that must be removed before extraction include shared
 <code>Identity\Entity\User</code> Doctrine associations, synchronous Trade/Payment/Wallet
 calls, Payment/Wechat/Wallet plugin contracts that expose Doctrine and Symfony types,
-and PHP-class-based Messenger contracts. <code>Core</code> remains a framework library, while
+and PHP-class-based Messenger contracts. <code>Core</code> is provided by
+<code>packages/platform-kernel</code>, while
 Promotion and Storage remain in-process plugins/adapters until scalar service
 contracts exist.</p>
+<h3 id="12-target-monorepo-layout">1.2 Target Monorepo Layout<a class="headerlink" href="#12-target-monorepo-layout" title="Permanent link">&para;</a></h3>
+<p>The future repository layout uses <code>apps/</code> for independently deployable business
+services, <code>packages/</code> for reusable PHP libraries, <code>contracts/</code> for published
+cross-service schemas, and <code>infrastructure/</code> for broker, gateway, local runtime,
+and deployment configuration. Do not use <code>*-service</code> suffixes under <code>apps/</code>.
+Services may retain the current pragmatic Symfony structure (<code>Controller/</code>,
+<code>Entity/</code>, <code>Repository/</code>, <code>Service/</code>, <code>MessageHandler/</code>, <code>Command/</code>, <code>DTO/</code>,
+<code>Exception/</code>) during extraction; independently deployable boundaries, database
+ownership, and contracts matter more than a simultaneous internal DDD rewrite.</p>
+<p><code>infrastructure/</code> contains repository-level runtime configuration such as Docker,
+RabbitMQ, and gateway settings. Service-specific Doctrine, Messenger, HTTP-client,
+and third-party PHP adapters stay inside their owning <code>apps/*</code> application.</p>
+<h3 id="13-integration-contract-foundation">1.3 Integration Contract Foundation<a class="headerlink" href="#13-integration-contract-foundation" title="Permanent link">&para;</a></h3>
+<p><code>packages/integration-contracts</code> now provides transport-neutral v1 carrier classes
+for the nine Trade/Store/Inventory messages. <code>contracts/integration</code> owns the
+manifest, Draft 2020-12 envelope schema, per-message schemas, and fixtures. The
+canonical envelope requires <code>eventId</code>, unversioned <code>type</code>, <code>version</code>,
+<code>aggregateType</code>, <code>aggregateId</code>, <code>occurredAt</code>, <code>correlationId</code>, <code>causationId</code>, and
+<code>payload</code>; the broker topic is <code>type + ".v" + version</code>.</p>
+<p>Seven messages are Events (past-tense facts); <code>inventory.reservation.requested</code>
+and <code>inventory.reservation.release.requested</code> are Commands. This foundation does
+not change queues, routes, or the existing Outbox/Inbox storage model.
+<code>config/packages/messenger.yaml</code> explicitly retains Symfony's native PHP serializer
+because existing <code>async</code> and <code>failed</code> rows serialize the old <code>App\*\Message</code> wrapper
+FQCNs. Those wrappers remain until queued legacy messages are drained or migrated.</p>
+<p>All nine existing Trade/Store/Inventory consumers now also accept their matching
+neutral carrier through explicit Messenger handler methods. Each method adapts the
+carrier envelope to the existing legacy wrapper and reuses the original business
+logic, transaction boundaries, and Inbox behavior. All nine Publishers now emit
+only neutral carriers through the existing native PHP Messenger serializer. Do not
+dual-publish: several consumer effects are not universally Inbox-idempotent. Old
+wrappers remain compatibility input for historical queue records and as a
+topic-level Publisher rollback target.</p>
+<p>Every Publisher now emits the full canonical envelope from Outbox data, including
+<code>aggregateType</code>, <code>occurredAt</code>, <code>correlationId</code>, and <code>causationId</code>. A legacy Outbox
+row without a correlation ID falls back to its <code>eventId</code> during publication.</p>
+<p>Trade, Store, and Inventory Outboxes now have nullable <code>correlation_id</code> and
+<code>causation_id</code> schema columns. New root messages default correlation to their own
+<code>eventId</code> and retain a null causation ID; APIs and existing Publisher behavior are
+unchanged. The migration deliberately does not backfill or make either column
+non-null. A later operational command must backfill unpublished legacy rows in
+bounded, resumable batches before publisher cutover or constraint tightening.</p>
+<p>The Trade -&gt; Store -&gt; Inventory consumer chain now propagates trace metadata when
+it writes a derived Outbox event: <code>correlationId</code> is inherited and <code>causationId</code>
+is the input <code>eventId</code>. Legacy envelopes without a correlation ID use their own
+event ID as a compatibility root. HTTP actions and scheduled jobs still create new
+root correlations through the default Outbox behavior.</p>
+<p>Store extraction readiness is tracked in
+<a href="../../design/store-extraction-readiness/"><code>docs/design/store-extraction-readiness.md</code></a>.
+Store has no remaining direct cross-module Entity or Repository imports: its two
+controller reads of <code>Identity\Entity\User</code> now use
+<code>Core\Security\UserUuidPrincipalInterface</code>. The active source-move blockers are
+Trade's in-process StoreContext resolver, legacy queue
+drain, and Store database baseline/rehearsal.</p>
 <h2 id="2-directory-structure">2. Directory Structure<a class="headerlink" href="#2-directory-structure" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>├── public/index.php              # Front controller
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── public/.htaccess              # Apache rewrite rules + Authorization header forwarding
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── src/Kernel.php                # Symfony Kernel (MicroKernelTrait)
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── bin/console                   # CLI entry point
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── src/Core/                     # Framework core
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── packages/platform-kernel/      # Shared framework core (App\Core namespace)
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│   ├── Controller/RestController.php    # Base API controller (success/warning/pagination)
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│   ├── Controller/System/               # System introspection (EntityController, RouterController)
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│   ├── View/                     # PHP traits: List, Detail, Create, Update, Delete, Workflow, Single, Transform
@@ -3767,7 +3894,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 </tr>
 </tbody>
 </table>
-<h3 id="103-localelistener-srccoreeventlistenerlocalelistenerphp">10.3 LocaleListener (<code>src/Core/EventListener/LocaleListener.php</code>)<a class="headerlink" href="#103-localelistener-srccoreeventlistenerlocalelistenerphp" title="Permanent link">&para;</a></h3>
+<h3 id="103-localelistener-packagesplatform-kernelsrceventlistenerlocalelistenerphp">10.3 LocaleListener (<code>packages/platform-kernel/src/EventListener/LocaleListener.php</code>)<a class="headerlink" href="#103-localelistener-packagesplatform-kernelsrceventlistenerlocalelistenerphp" title="Permanent link">&para;</a></h3>
 <p>Registered at <code>kernel.request</code> priority 20. Language detection priority:</p>
 <ol>
 <li><strong><code>?_locale=</code> query parameter</strong> — explicit override (e.g., <code>?_locale=ja</code>)</li>
@@ -3914,7 +4041,7 @@ deployable; this dependency must be removed before extraction.</p>
 </tr>
 </tbody>
 </table>
-<p>Placed in <code>src/Core/Controller/System/</code> (framework layer). NelmioApiDoc path_patterns include <code>^/system</code>. Tag: <code>System</code>.</p>
+<p>Placed in <code>packages/platform-kernel/src/Controller/System/</code> (framework layer). NelmioApiDoc path_patterns include <code>^/system</code>. Tag: <code>System</code>.</p>
 <h2 id="13-key-patterns">13. Key Patterns<a class="headerlink" href="#13-key-patterns" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -4130,7 +4257,7 @@ deployable; this dependency must be removed before extraction.</p>
 <h2 id="14-api-documentation-system">14. API Documentation System<a class="headerlink" href="#14-api-documentation-system" title="Permanent link">&para;</a></h2>
 <h3 id="141-architecture">14.1 Architecture<a class="headerlink" href="#141-architecture" title="Permanent link">&para;</a></h3>
 <p>Controller <code>#[OA\*]</code> attributes → swagger-php (raw spec) → NelmioApiDocBundle (merge config) → <code>OpenApiEnricherListener</code> (post-process) → Swagger UI</p>
-<h3 id="142-openapienricherlistener-srccoreeventlisteneropenapienricherlistenerphp">14.2 OpenApiEnricherListener (<code>src/Core/EventListener/OpenApiEnricherListener.php</code>)<a class="headerlink" href="#142-openapienricherlistener-srccoreeventlisteneropenapienricherlistenerphp" title="Permanent link">&para;</a></h3>
+<h3 id="142-openapienricherlistener-packagesplatform-kernelsrceventlisteneropenapienricherlistenerphp">14.2 OpenApiEnricherListener (<code>packages/platform-kernel/src/EventListener/OpenApiEnricherListener.php</code>)<a class="headerlink" href="#142-openapienricherlistener-packagesplatform-kernelsrceventlisteneropenapienricherlistenerphp" title="Permanent link">&para;</a></h3>
 <p>Enriches all endpoints (90+):
 - <strong><code>detectTag()</code></strong>: Infers module tag from <code>operationId</code>: <code>manage-products-*</code> → Products, <code>system-*</code> → System, <code>wechat-*</code> → Wechat, <code>sys-auth-*</code> → Auth, etc.
 - <strong><code>META</code></strong>: Optional summaries/descriptions for key endpoints
@@ -4546,6 +4673,21 @@ deployable; this dependency must be removed before extraction.</p>
 <td><code>app:inventory:outbox:publish</code></td>
 <td>Inventory</td>
 <td>Relay published Inventory integration events to Messenger</td>
+</tr>
+<tr>
+<td><code>app:trade:outbox:backfill-correlation</code></td>
+<td>Trade</td>
+<td>Dry-run or <code>--apply</code> bounded correlation backfill for unpublished Trade Outbox rows</td>
+</tr>
+<tr>
+<td><code>app:store:outbox:backfill-correlation</code></td>
+<td>Store</td>
+<td>Dry-run or <code>--apply</code> bounded correlation backfill for unpublished Store Outbox rows</td>
+</tr>
+<tr>
+<td><code>app:inventory:outbox:backfill-correlation</code></td>
+<td>Inventory</td>
+<td>Dry-run or <code>--apply</code> bounded correlation backfill for unpublished Inventory Outbox rows</td>
 </tr>
 <tr>
 <td><code>app:inventory:reservations:release-expired</code></td>

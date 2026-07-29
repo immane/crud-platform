@@ -561,15 +561,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-srccore" class="md-nav__link">
+  <a href="#4-packagesplatform-kernelsrc" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 核心框架（src/Core/）
+        4. 核心框架（packages/platform-kernel/src/）
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="4. 核心框架（src/Core/）">
+    <nav class="md-nav" aria-label="4. 核心框架（packages/platform-kernel/src/）">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -806,6 +806,34 @@
     
   
     微服务转型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../store-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    商店撤离准备情况
   
 
     
@@ -1722,15 +1750,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-srccore" class="md-nav__link">
+  <a href="#4-packagesplatform-kernelsrc" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 核心框架（src/Core/）
+        4. 核心框架（packages/platform-kernel/src/）
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="4. 核心框架（src/Core/）">
+    <nav class="md-nav" aria-label="4. 核心框架（packages/platform-kernel/src/）">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2235,7 +2263,7 @@ Doctrine 实体、存储库、EntityManager 或本地主键作为持久的
 参考。 UUID 查找不授予访问权限；接收模块仍然强制执行其
 自己的授权和所有权规则。</p>
 <hr />
-<h2 id="4-srccore">4. 核心框架（<code>src/Core/</code>）<a class="headerlink" href="#4-srccore" title="Permanent link">&para;</a></h2>
+<h2 id="4-packagesplatform-kernelsrc">4. 核心框架（<code>packages/platform-kernel/src/</code>）<a class="headerlink" href="#4-packagesplatform-kernelsrc" title="Permanent link">&para;</a></h2>
 <p>Core 提供了基础抽象。它不能依赖于任何业务模块。
 它是一个框架库候选者，而不是未来的网络服务。</p>
 <h3 id="41-api">4.1 核心导出（公共 API）<a class="headerlink" href="#41-api" title="Permanent link">&para;</a></h3>
@@ -2308,7 +2336,7 @@ Doctrine 实体、存储库、EntityManager 或本地主键作为持久的
 <li>事件监听器（用于排序）</li>
 </ul>
 <h3 id="52-setter">5.2 控制器的 Setter 注入<a class="headerlink" href="#52-setter" title="Permanent link">&para;</a></h3>
-<p>扩展 <code>RestController</code> 的控制器通过 <code>#[Required]</code> 接收这些：</p>
+<p>扩展<code>RestController</code>的控制器通过<code>#[Required]</code>接收这些：</p>
 <table>
 <thead>
 <tr>

@@ -16,7 +16,7 @@
         <link rel="prev" href="../system-architecture/">
       
       
-        <link rel="next" href="../api-design/">
+        <link rel="next" href="../store-extraction-readiness/">
       
       
         
@@ -505,13 +505,41 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-integration-event-contract" class="md-nav__link">
+  <a href="#5-integration-message-contract" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Integration Event Contract
+        5. Integration Message Contract
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="5. Integration Message Contract">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-carrier-migration-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Carrier Migration Order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-outbox-metadata-expansion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Outbox Metadata Expansion
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -552,6 +580,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../store-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store Extraction Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1376,13 +1432,41 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-integration-event-contract" class="md-nav__link">
+  <a href="#5-integration-message-contract" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Integration Event Contract
+        5. Integration Message Contract
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="5. Integration Message Contract">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-carrier-migration-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Carrier Migration Order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-outbox-metadata-expansion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Outbox Metadata Expansion
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1457,27 +1541,29 @@ dependency governance. It does not move every current <code>src/*</code> module 
 databases prematurely.</p>
 <h2 id="2-target-repository-structure">2. Target Repository Structure<a class="headerlink" href="#2-target-repository-structure" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>apps/
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  commerce-service/       # Transitional home for Catalog, Ordering, Pricing
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  store-service/
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  inventory-service/
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  payment-service/
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  wallet-service/
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  identity-service/
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  content-service/
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  commerce/               # Transitional home for Catalog, Ordering, Pricing
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  store/
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  inventory/
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  payment/
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  wallet/
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  identity/
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  content/
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>packages/
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  platform-kernel/        # Framework-only HTTP/CRUD/observability utilities
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  integration-contracts/  # Versioned transport-neutral event schemas
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  test-support/
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>contracts/
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>  events/                 # Source schemas and compatibility fixtures
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>  integration/            # Manifest, schemas, and compatibility fixtures
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  openapi/                # Published service API contracts
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>deploy/
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>  compose/
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>  gateway/
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>docs/
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>tools/
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>infrastructure/
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>  docker/
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>  local/
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>  gateway/
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>  rabbitmq/
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>docs/
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>tools/
 </code></pre></div>
-<p>Each <code>apps/*-service</code> is independently buildable and contains its own
+<p>Each <code>apps/*</code> is independently buildable and contains its own
 <code>composer.json</code>, <code>src/Kernel.php</code>, <code>config/</code>, <code>migrations/</code>, <code>public/</code>, <code>bin/</code>,
 <code>tests/</code>, and Docker build definition. A root Composer workspace may coordinate
 local development, but it must not conceal an undeclared runtime dependency.</p>
@@ -1558,26 +1644,83 @@ default.</p>
 <li>Public routes remain stable through an API gateway or routing layer while
    ownership moves between services.</li>
 </ol>
-<h2 id="5-integration-event-contract">5. Integration Event Contract<a class="headerlink" href="#5-integration-event-contract" title="Permanent link">&para;</a></h2>
-<p>All integration events use one versioned envelope:</p>
+<h2 id="5-integration-message-contract">5. Integration Message Contract<a class="headerlink" href="#5-integration-message-contract" title="Permanent link">&para;</a></h2>
+<p>All integration Events and Commands use one versioned envelope:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;eventId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;store.order.accepted.v1&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;store.order.accepted&quot;</span><span class="p">,</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">&quot;aggregateType&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;store_order&quot;</span><span class="p">,</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">&quot;aggregateId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">&quot;occurredAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-07-29T12:00:00+00:00&quot;</span><span class="p">,</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="nt">&quot;correlationId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="nt">&quot;causationId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="nt">&quot;causationId&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">&quot;payload&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="p">}</span>
 </code></pre></div>
-<p>The schema is owned by <code>packages/integration-contracts</code> or <code>contracts/events</code>,
-not by a producer or consumer Symfony namespace. Changes require a new event
-version and compatibility coverage.</p>
+<p>The <code>type</code> is unversioned. The broker topic is derived as
+<code>type + ".v" + version</code>; for example, <code>store.order.accepted.v1</code>. All nine fields
+are required in canonical v1 envelopes. <code>causationId</code> may be null.</p>
+<p>The schema and manifest are owned by <code>contracts/integration</code>, while PHP carrier
+classes live in <code>packages/integration-contracts</code>, not in a producer or consumer
+Symfony namespace. Changes require a new message version and compatibility
+coverage.</p>
+<p>Events are past-tense facts with manifest <code>kind: "event"</code>. Requests such as
+<code>inventory.reservation.requested.v1</code> and
+<code>inventory.reservation.release.requested.v1</code> are Commands with
+<code>kind: "command"</code>, even though they use the same envelope. Legacy Messenger
+wrapper classes remain compatibility input until old native-PHP serialized queue
+rows and failed messages have been drained or migrated.</p>
+<h3 id="51-carrier-migration-order">5.1 Carrier Migration Order<a class="headerlink" href="#51-carrier-migration-order" title="Permanent link">&para;</a></h3>
+<p>Consumers must be deployed before producers change carrier type. During the
+compatibility phase, each existing handler accepts both its legacy
+<code>App\*\Message</code> wrapper and the matching neutral carrier, then delegates to the
+same business logic. Producers continue to publish only one carrier per topic;
+dual publishing is forbidden because not every consumer action is Inbox-idempotent.</p>
+<p>After consumers are deployed, publishers may switch one topic at a time from the
+legacy wrapper to the neutral carrier. Rollback changes only that publisher back to
+the legacy wrapper. Consumers and old wrapper classes remain in place until the
+<code>async</code> and <code>failed</code> queues no longer contain old native-PHP serialized messages.</p>
+<p>All nine Trade, Store, and Inventory topics now publish their matching neutral
+carrier. The native PHP serializer remains temporarily, so carrier objects are
+still stored in the existing Doctrine queue; the change removes application-module
+FQCNs from newly produced messages without changing the transport. A topic-level
+rollback changes only its Publisher back to the matching legacy wrapper. Consumers
+and wrappers remain until the historical <code>async</code> and <code>failed</code> queue records have
+been drained or migrated.</p>
+<h3 id="52-outbox-metadata-expansion">5.2 Outbox Metadata Expansion<a class="headerlink" href="#52-outbox-metadata-expansion" title="Permanent link">&para;</a></h3>
+<p>Each producer Outbox stores nullable <code>correlation_id</code> and <code>causation_id</code> columns
+before publishing canonical envelopes. On the supported MySQL 8 runtime the
+migration explicitly requests <code>ALGORITHM=INSTANT, LOCK=NONE</code>; it performs no
+table-wide update and adds no non-null constraint. New root
+messages default <code>correlationId</code> to their generated <code>eventId</code> and use a null
+<code>causationId</code>. Future handlers that emit a follow-up message must explicitly carry
+the inbound <code>correlationId</code> and use the inbound <code>eventId</code> as <code>causationId</code>.</p>
+<p>The current Trade -&gt; Store -&gt; Inventory chain applies this propagation for every
+derived Outbox message. Legacy envelopes without a correlation ID remain accepted;
+their <code>eventId</code> becomes the compatibility correlation root. This fallback is
+temporary compatibility behavior, not a replacement for canonical envelopes.</p>
+<p>Historical rows remain valid with null metadata during this expand phase. A later,
+separate, resumable backfill command will update unpublished rows in bounded batches
+and report progress. It must be deployed and observed before any non-null constraint
+or publisher cutover is considered.</p>
+<p>The backfill is intentionally manual and dry-run by default. Run each service
+command with a conservative production batch size, observe the reported count and
+database load, then repeat until dry-run reports zero:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>php<span class="w"> </span>bin/console<span class="w"> </span>app:trade:outbox:backfill-correlation<span class="w"> </span>--limit<span class="o">=</span><span class="m">500</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>php<span class="w"> </span>bin/console<span class="w"> </span>app:trade:outbox:backfill-correlation<span class="w"> </span>--limit<span class="o">=</span><span class="m">500</span><span class="w"> </span>--apply
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>php<span class="w"> </span>bin/console<span class="w"> </span>app:store:outbox:backfill-correlation<span class="w"> </span>--limit<span class="o">=</span><span class="m">500</span><span class="w"> </span>--apply
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>php<span class="w"> </span>bin/console<span class="w"> </span>app:inventory:outbox:backfill-correlation<span class="w"> </span>--limit<span class="o">=</span><span class="m">500</span><span class="w"> </span>--apply
+</code></pre></div>
+<p>Each conditional update rechecks that the row is both unpublished and missing a
+correlation ID. The command neither updates published rows nor changes
+<code>causation_id</code>, so it can safely resume after interruption and coexist with the
+Outbox Publisher. It must not be added to the scheduler.</p>
 <h2 id="6-extraction-order-and-gates">6. Extraction Order And Gates<a class="headerlink" href="#6-extraction-order-and-gates" title="Permanent link">&para;</a></h2>
+<p>The Store-specific dependency inventory and source-move gates are maintained in
+<a href="../store-extraction-readiness/"><code>docs/design/store-extraction-readiness.md</code></a>.</p>
 <p>The preferred order is:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Store -&gt; Inventory -&gt; Payment -&gt; Wallet
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Store -&gt; Inventory -&gt; Payment -&gt; Wallet
 </code></pre></div>
 <p>Store and Inventory already use UUID/snapshot integration flows and Outbox/Inbox
 patterns. They are candidates, not automatically production-ready services.
@@ -1600,7 +1743,7 @@ must first be decoupled inside the monolith. Examples of required work:</p>
 <p>Directory restructuring is considered complete only when all of the following
 exist, even before business code is moved:</p>
 <ul>
-<li>The target <code>apps/</code>, <code>packages/</code>, <code>contracts/</code>, <code>deploy/</code>, and <code>tools/</code> ownership
+<li>The target <code>apps/</code>, <code>packages/</code>, <code>contracts/</code>, <code>infrastructure/</code>, and <code>tools/</code> ownership
   model is documented and reflected in repository tooling.</li>
 <li>Architecture checks reject forbidden cross-service imports and entity leaks.</li>
 <li>Existing Trade, Store, and Inventory events share the envelope in section 5.</li>
