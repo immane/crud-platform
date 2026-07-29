@@ -56,6 +56,7 @@ docker compose exec app php bin/console app:identity:user:create admin@example.c
 
 ```bash
 ./vendor/bin/phpunit
+composer deptrac
 composer phpstan
 composer rector:types:check
 ```

@@ -724,6 +724,7 @@ Enriches all endpoints (90+):
 - **DB**: SQLite `var/test.db` in test environment
 - **Coverage**: 90% minimum (enforced in CI), currently **90.49% lines** from latest local Xdebug run
 - **Test count**: **1711 tests**, **5652 assertions**
+- **Architecture gate**: Deptrac enforces that Core has no business-module dependency and blocks new cross-module Entity/Repository dependencies. `deptrac-baseline.yaml` records exact legacy source-to-target debt; run `composer deptrac`.
 - **Static analysis**: PHPStan Level 8 with zero errors in its configured scope (`src/`, excluding optional SDK code, exception classes, and documented false-positive suppressions). Generic contract via `@template TEntity` on `BaseServiceInterface`/`BaseService` + `@extends` on 18 concrete service pairs. Rector automates Doctrine Collection/Repository PHPDoc with `composer rector:types`; CI enforces `composer rector:types:check` as a dry-run.
 - **Local PHP note**: default `php` may point to PHP 7.4; use Homebrew PHP 8.5 at `/opt/homebrew/opt/php@8.5/bin/php` for local Symfony/PHPUnit commands.
 - **HTML coverage report**: `XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html var/coverage`

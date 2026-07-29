@@ -212,6 +212,18 @@ services:
 
 Sorted by `getPriority(): int` method, executed in priority order.
 
+### 5.5 Architecture Dependency Gate
+
+Run `composer deptrac` to enforce the initial migration boundaries:
+
+- Core MUST NOT depend on a business module.
+- A module MUST NOT add a dependency on another module's `Entity` or `Repository`.
+
+`deptrac-baseline.yaml` contains reviewed, exact historical source-to-target
+violations. It is a debt register, not a namespace-level exception mechanism:
+new baseline entries require an explicit architecture decision, while fixed
+dependencies should remove their entry.
+
 ---
 
 ## 6. Request Lifecycle

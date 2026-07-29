@@ -76,6 +76,7 @@ own queue/runtime/deployment ownership.
 
 ```bash
 ./vendor/bin/phpunit
+composer deptrac
 composer phpstan
 composer rector:types:check
 mkdocs build --strict

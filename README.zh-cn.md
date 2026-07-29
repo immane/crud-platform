@@ -68,6 +68,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 
 ```bash
 ./vendor/bin/phpunit
+composer deptrac
 composer phpstan
 composer rector:types:check
 mkdocs build --strict

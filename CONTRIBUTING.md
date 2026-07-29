@@ -76,6 +76,9 @@ Supported scopes: `common`, `trade`, `wallet`, `payment`, `wechat`, `identity`, 
 # Run PHPStan at Level 8
 composer phpstan
 
+# Enforce module dependency boundaries
+composer deptrac
+
 # Verify Doctrine Collection/Repository PHPDoc rules without modifying files
 composer rector:types:check
 
@@ -99,6 +102,7 @@ as a formatting step without reviewing its proposed changes.
 - [ ] All tests pass (`vendor/bin/phpunit`)
 - [ ] Coverage does not drop below 90% (CI enforced)
 - [ ] PHPStan passes (`composer phpstan`)
+- [ ] Deptrac passes (`composer deptrac`)
 - [ ] Rector type-rule check passes (`composer rector:types:check`)
 - [ ] New features include tests
 - [ ] Behavior changes are reflected in `docs/ai/context.md` where appropriate
@@ -169,6 +173,14 @@ To add translations for a new string:
 - Design contracts live in `docs/design/`
 - AI context snapshot is at `docs/ai/context.md` — update it when adding new modules, patterns, or significant structural changes
 - API documentation is generated via `#[OA\*]` attributes on controllers and enriched by `OpenApiEnricherListener`
+
+## Architecture Boundaries
+
+`composer deptrac` enforces that Core does not depend on business modules and
+that modules do not introduce new cross-module Entity or Repository dependencies.
+Existing violations are listed as exact source-to-target edges in
+`deptrac-baseline.yaml`; do not add baseline entries to bypass a new dependency.
+Removing a legacy dependency should remove its baseline entry in the same change.
 
 ## Reporting Issues
 
