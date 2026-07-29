@@ -2467,8 +2467,8 @@
 </tr>
 <tr>
 <td><code>matches</code></td>
-<td>Regex match</td>
-<td><code>entity.title matches "pattern"</code></td>
+<td>Literal substring or <code>/regex/flags</code> match</td>
+<td><code>entity.title matches "paper"</code>, <code>entity.title matches "/^paper.*/i"</code></td>
 </tr>
 <tr>
 <td>Chained attributes</td>
@@ -2477,6 +2477,9 @@
 </tr>
 </tbody>
 </table>
+<p>Plain <code>matches</code> values are escaped before being compiled to a contains-style <code>LIKE</code>.
+Regex literals support <code>i</code>, <code>m</code>, <code>s</code>, and <code>x</code>; <code>g</code> and <code>u</code> are accepted but have no
+database-side effect. Unknown regex flags are rejected.</p>
 <h3 id="54-expression-functions-available-in-expressions">5.4 Expression Functions (Available in Expressions)<a class="headerlink" href="#54-expression-functions-available-in-expressions" title="Permanent link">&para;</a></h3>
 <table>
 <thead>

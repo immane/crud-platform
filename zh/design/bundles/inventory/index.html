@@ -863,22 +863,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-architectural-principles" class="md-nav__link">
+  <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Architectural Principles
+        2. 架构原则
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. Architectural Principles">
+    <nav class="md-nav" aria-label="2. 架构原则">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#21-stable-scalar-references" class="md-nav__link">
+  <a href="#21" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.1 Stable Scalar References
+        2.1 稳定标量引用
       
     </span>
   </a>
@@ -886,10 +886,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#22-globally-optional-locally-enforced" class="md-nav__link">
+  <a href="#22" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2 Globally Optional, Locally Enforced
+        2.2 全球可选，本地强制
       
     </span>
   </a>
@@ -1787,22 +1787,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-architectural-principles" class="md-nav__link">
+  <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Architectural Principles
+        2. 架构原则
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. Architectural Principles">
+    <nav class="md-nav" aria-label="2. 架构原则">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#21-stable-scalar-references" class="md-nav__link">
+  <a href="#21" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.1 Stable Scalar References
+        2.1 稳定标量引用
       
     </span>
   </a>
@@ -1810,10 +1810,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#22-globally-optional-locally-enforced" class="md-nav__link">
+  <a href="#22" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2 Globally Optional, Locally Enforced
+        2.2 全球可选，本地强制
       
     </span>
   </a>
@@ -2275,11 +2275,11 @@
 <li>定义到期语义，以便已接受或已履行的订单不会丢失其保留
   虽然这仍然取决于库存。</li>
 <li>序列化商店订单确认和取消转换以防止过时状态
-  from resurrecting cancelled orders.</li>
+  恢复已取消的订单。</li>
 <li>使用持久的库存取消墓碑处理预订前发布订单
   并保留每个预订的发件箱因果关系。</li>
 <li>之前为这些转换添加并发和乱序集成测试
-  allowing <code>INVENTORY_ENABLED=true</code> in production.</li>
+  允许在生产中使用<code>INVENTORY_ENABLED=true</code>。</li>
 </ul>
 <hr />
 <h2 id="1">1. 目标和范围<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
@@ -2318,7 +2318,7 @@
 <li>将代理视为一次性、全局排序或以事务方式耦合到 SQL。</li>
 <li>在商店和库存之间使用分布式事务。</li>
 <li>保留历史食谱作为订单的可变参考；预订线路是
-  the immutable material snapshot.</li>
+  不可变的材质快照。</li>
 <li>预订时扣除库存。预订仅更改预订数量。</li>
 <li>支持多个有效配方、配方版本、替代品、批次、序列号、
   第一阶段的到期、仓库箱或生产工单。</li>
@@ -2329,22 +2329,22 @@
 <tr>
 <th>关注</th>
 <th>业主</th>
-<th>Inventory Responsibility</th>
+<th>库存责任</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Product and Specification catalog</td>
+<td>产品及规格目录</td>
 <td>贸易</td>
-<td>Reference Specification UUID only</td>
+<td>仅参考规范UUID</td>
 </tr>
 <tr>
 <td>商业订单及付款状态</td>
 <td>贸易+支付</td>
-<td>Consume immutable Store request only</td>
+<td>仅使用不可变存储请求</td>
 </tr>
 <tr>
-<td>Store identity and acceptance</td>
+<td>商店形象和接受度</td>
 <td>商店</td>
 <td>仅限参考存储 UUID</td>
 </tr>
@@ -2370,14 +2370,14 @@
 </tr>
 <tr>
 <td>全球库存绕行</td>
-<td>Deployment configuration</td>
-<td>尊重它； do no inventory work when disabled</td>
+<td>部署配置</td>
+<td>尊重它；禁用时不进行库存工作</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="2-architectural-principles">2. Architectural Principles<a class="headerlink" href="#2-architectural-principles" title="Permanent link">&para;</a></h2>
-<h3 id="21-stable-scalar-references">2.1 Stable Scalar References<a class="headerlink" href="#21-stable-scalar-references" title="Permanent link">&para;</a></h3>
+<h2 id="2">2. 架构原则<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<h3 id="21">2.1 稳定标量引用<a class="headerlink" href="#21" title="Permanent link">&para;</a></h3>
 <p>Inventory 仅通过 UUID 和不可变快照引用相邻模块：</p>
 <table>
 <thead>
@@ -2411,13 +2411,13 @@
 <tr>
 <td>门店预订</td>
 <td><code>reservationId</code> 字符串(36)</td>
-<td>Cross-module entity relation</td>
+<td>跨模块实体关系</td>
 </tr>
 </tbody>
 </table>
 <p>商店提供的 <code>catalogReference</code> 是交易规范 UUID。库存从来没有
-loads Trade tables while reserving inventory. This preserves a future extraction path.</p>
-<h3 id="22-globally-optional-locally-enforced">2.2 Globally Optional, Locally Enforced<a class="headerlink" href="#22-globally-optional-locally-enforced" title="Permanent link">&para;</a></h3>
+在保留库存的同时加载交易表。这保留了未来的提取路径。</p>
+<h3 id="22">2.2 全球可选，本地强制<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
 <p>模块化整体支持不操作库存的部署。单个
 运行时配置控制 Store 是否调用 Inventory 边界：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Inventory Resources/config/services_inventory.yaml</span>
