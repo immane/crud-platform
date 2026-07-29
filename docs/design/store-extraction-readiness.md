@@ -25,10 +25,10 @@ store_outbox_message
 store_trade_order_cancellation
 ```
 
-`store_trade_order_cancellation` is currently created in the Inventory migration
-only because it was introduced with Inventory flow work. It belongs to Store and
-must move into the Store service schema baseline before an independent database
-cutover.
+`store_trade_order_cancellation` is currently created in the monolith's Inventory
+migration only because it was introduced with Inventory flow work. It belongs to
+Store and is included in `apps/store/migrations/Version20260730000000.php`, the
+final Store application schema baseline for an independent database cutover.
 
 ## Dependency Inventory
 
@@ -36,8 +36,8 @@ cutover.
 |---|---|---|
 | `App\Core` | REST controller, view traits, BaseService, UUID | Provided by `packages/platform-kernel`; Store may depend on this library. |
 | `CrudPlatform\IntegrationContracts` | All new async messages | Keep; this is the approved cross-service dependency. |
-| `App\Trade\Message` / `App\Inventory\Message` | Legacy native-Messenger compatibility adapters | Temporary. Retain only until old `async`/`failed` records are drained or migrated. |
-| `App\Trade\DTO\StoreContext` and resolver interface | Synchronous `X-Store-Code` lookup during Trade order creation | Blocker. Replace with a scalar Store directory HTTP contract or move the resolver to Commerce before Store becomes independent. |
+| `App\Trade\Message` / `App\Inventory\Message` | Legacy native-Messenger compatibility adapters | Provided by `packages/legacy-messenger-compat` until old `async`/`failed` records are drained or migrated. |
+| Store directory lookup | `store.directory.upserted.v1` feeds Trade's local read model | Resolved. Trade no longer injects a Store repository or service. |
 | `App\Identity\Entity\User` | App/staff controllers used it only to read UUID | Resolved. Store now depends on `App\Core\Security\UserUuidPrincipalInterface`, implemented by Identity User. |
 | `config/routes.yaml` | Imports `src/Store/Controller` | Move to Store-owned routes; preserve public paths through the gateway. |
 | Root scheduler/worker | Runs Store Outbox publishing | Move to Store-owned worker and scheduler after Store application is independently runnable. |
@@ -53,10 +53,8 @@ Deptrac baseline no longer contains a Store-to-Identity persistence exemption.
    worker queue. Do not remove legacy wrapper adapters earlier.
 3. Keep the monolith consuming `packages/platform-kernel` before Store introduces
    an independent Kernel.
-4. Replace Trade's in-process `StoreContextResolverInterface` plugin with a
-   documented scalar boundary.
-5. Build a Store schema baseline from the owned tables, including the cancellation
-   tombstone, and rehearse copy, increment, and reconciliation steps.
+4. Rehearse Store schema copy, increment, and reconciliation against the application
+   baseline before independent database cutover.
 
 ## Move Sequence
 

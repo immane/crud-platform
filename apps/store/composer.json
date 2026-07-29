@@ -1,6 +1,7 @@
 {
     "name": "crud-platform/store-app",
     "description": "Store application for CRUD Platform",
+    "version": "1.0.1-dev",
     "type": "project",
     "license": "Apache-2.0",
     "minimum-stability": "stable",
@@ -19,11 +20,19 @@
             "options": {
                 "symlink": false
             }
+        },
+        {
+            "type": "path",
+            "url": "../../packages/legacy-messenger-compat",
+            "options": {
+                "symlink": false
+            }
         }
     ],
     "require": {
         "php": ">=8.4",
-        "crud-platform/integration-contracts": "^1.0@dev",
+        "crud-platform/integration-contracts": "^1.1.1@dev",
+        "crud-platform/legacy-messenger-compat": "^1.0@dev",
         "crud-platform/platform-kernel": "^1.0.1@dev",
         "doctrine/doctrine-bundle": "^3.2",
         "doctrine/doctrine-migrations-bundle": "^4.0",

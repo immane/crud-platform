@@ -8,8 +8,8 @@ use App\Inventory\Command\BackfillOutboxCorrelationCommand as InventoryBackfillC
 use App\Inventory\Entity\InventoryOutboxMessage;
 use App\Inventory\Repository\InventoryOutboxMessageRepository;
 use App\Store\Command\BackfillOutboxCorrelationCommand as StoreBackfillCommand;
-use App\Store\Entity\StoreOutboxMessage;
-use App\Store\Repository\StoreOutboxMessageRepository;
+use App\Store\Entity\OutboxMessage;
+use App\Store\Repository\OutboxMessageRepository;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
 use App\Trade\Command\BackfillOutboxCorrelationCommand as TradeBackfillCommand;
@@ -31,7 +31,7 @@ final class OutboxCorrelationBackfillCommandTest extends IntegrationWebTestCase
         $entityManager = $client->getContainer()->get(EntityManagerInterface::class);
         foreach ([
             'App\\Trade\\Entity\\TradeOutboxMessage',
-            'App\\Store\\Entity\\StoreOutboxMessage',
+            'App\\Store\\Entity\\OutboxMessage',
             'App\\Inventory\\Entity\\InventoryOutboxMessage',
         ] as $entity) {
             $entityManager->createQuery(sprintf('DELETE FROM %s message', $entity))->execute();
@@ -47,7 +47,7 @@ final class OutboxCorrelationBackfillCommandTest extends IntegrationWebTestCase
 
         $trade = new TradeOutboxMessage('trade.order.created.v1', 'trade_order', 'trade-order', []);
         $publishedTrade = new TradeOutboxMessage('trade.order.cancelled.v1', 'trade_order', 'published-trade-order', []);
-        $store = new StoreOutboxMessage('store.order.accepted.v1', 'store_order', 'store-order', []);
+        $store = new OutboxMessage('store.order.accepted.v1', 'store_order', 'store-order', []);
         $inventory = new InventoryOutboxMessage('inventory.reservation.confirmed.v1', 'inventory_reservation', 'reservation', []);
         foreach ([$trade, $publishedTrade, $store, $inventory] as $message) {
             $entityManager->persist($message);
@@ -58,7 +58,7 @@ final class OutboxCorrelationBackfillCommandTest extends IntegrationWebTestCase
 
         $ids = [
             TradeOutboxMessage::class => $trade->getId(),
-            StoreOutboxMessage::class => $store->getId(),
+            OutboxMessage::class => $store->getId(),
             InventoryOutboxMessage::class => $inventory->getId(),
         ];
         foreach ($ids as $entity => $id) {
@@ -74,7 +74,7 @@ final class OutboxCorrelationBackfillCommandTest extends IntegrationWebTestCase
 
         $commands = [
             [new TradeBackfillCommand($container->get(TradeOutboxMessageRepository::class)), TradeOutboxMessage::class, $ids[TradeOutboxMessage::class]],
-            [new StoreBackfillCommand($container->get(StoreOutboxMessageRepository::class)), StoreOutboxMessage::class, $ids[StoreOutboxMessage::class]],
+            [new StoreBackfillCommand($container->get(OutboxMessageRepository::class)), OutboxMessage::class, $ids[OutboxMessage::class]],
             [new InventoryBackfillCommand($container->get(InventoryOutboxMessageRepository::class)), InventoryOutboxMessage::class, $ids[InventoryOutboxMessage::class]],
         ];
 
@@ -89,7 +89,7 @@ final class OutboxCorrelationBackfillCommandTest extends IntegrationWebTestCase
             $entityManager->clear();
             $message = $container->get(match ($entity) {
                 TradeOutboxMessage::class => TradeOutboxMessageRepository::class,
-                StoreOutboxMessage::class => StoreOutboxMessageRepository::class,
+                OutboxMessage::class => OutboxMessageRepository::class,
                 InventoryOutboxMessage::class => InventoryOutboxMessageRepository::class,
             })->find($id);
             self::assertNotNull($message);

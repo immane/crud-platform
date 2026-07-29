@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Trade\Integration;
 
-use App\Store\Entity\StoreOutboxMessage;
-use App\Store\Repository\StoreOutboxMessageRepository;
+use App\Store\Entity\OutboxMessage;
+use App\Store\Repository\OutboxMessageRepository;
 use App\Store\Service\StoreServiceInterface;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
@@ -28,7 +28,7 @@ final class StoreDirectoryProjectionTest extends IntegrationWebTestCase
         $client = static::createClient();
         $entityManager = $client->getContainer()->get(EntityManagerInterface::class);
         $entityManager->createQuery('DELETE FROM App\\Trade\\Entity\\TradeStoreDirectory directory')->execute();
-        $entityManager->createQuery('DELETE FROM App\\Store\\Entity\\StoreOutboxMessage message')->execute();
+        $entityManager->createQuery('DELETE FROM App\\Store\\Entity\\OutboxMessage message')->execute();
         $entityManager->createQuery('DELETE FROM App\\Store\\Entity\\Store store')->execute();
         self::ensureKernelShutdown();
     }
@@ -39,12 +39,12 @@ final class StoreDirectoryProjectionTest extends IntegrationWebTestCase
         $container = $client->getContainer();
         $store = $container->get(StoreServiceInterface::class)->createStore('xuhui', 'Xuhui Store', 'Asia/Shanghai');
 
-        $outbox = $container->get(StoreOutboxMessageRepository::class)->findUnpublished();
+        $outbox = $container->get(OutboxMessageRepository::class)->findUnpublished();
         self::assertCount(1, $outbox);
         self::assertSame('store.directory.upserted.v1', $outbox[0]->getTopic());
 
         $message = $outbox[0];
-        self::assertInstanceOf(StoreOutboxMessage::class, $message);
+        self::assertInstanceOf(OutboxMessage::class, $message);
         $container->get(\App\Trade\MessageHandler\StoreDirectoryUpsertedHandler::class)(new StoreDirectoryUpserted([
             'eventId' => $message->getEventId(),
             'type' => 'store.directory.upserted',

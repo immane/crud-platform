@@ -86,7 +86,7 @@ api_promotion:
 api_store:
     prefix: /api/v1
     resource:
-        path: ../src/Store/Controller/
+        path: ../vendor/crud-platform/store-app/src/Controller/
         namespace: App\Store\Controller
     type: attribute
 

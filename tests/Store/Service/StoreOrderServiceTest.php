@@ -6,9 +6,9 @@ namespace App\Tests\Store\Service;
 
 use App\Store\Entity\Store;
 use App\Store\Entity\StoreOrder;
-use App\Store\Entity\StoreOutboxMessage;
+use App\Store\Entity\OutboxMessage;
 use App\Store\Repository\StoreOrderRepository;
-use App\Store\Service\StoreOutboxService;
+use App\Store\Service\OutboxService;
 use App\Store\Service\StoreOrderService;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -64,7 +64,7 @@ final class StoreOrderServiceTest extends TestCase
         $service = new StoreOrderService(
             $this->createContainer($entityManager),
             $this->createMock(StoreOrderRepository::class),
-            new StoreOutboxService($entityManager),
+            new OutboxService($entityManager),
         );
         $order = $this->createOrder();
 
@@ -73,7 +73,7 @@ final class StoreOrderServiceTest extends TestCase
         self::assertSame('reservation-1', $order->getReservationId());
         self::assertInstanceOf(\DateTimeImmutable::class, $order->getAcceptedAt());
         self::assertCount(1, $persisted);
-        self::assertInstanceOf(StoreOutboxMessage::class, $persisted[0]);
+        self::assertInstanceOf(OutboxMessage::class, $persisted[0]);
         self::assertSame('store.order.accepted.v1', $persisted[0]->getTopic());
         self::assertSame($order->getUuid(), $persisted[0]->getPayload()['storeOrderUuid']);
     }
@@ -89,7 +89,7 @@ final class StoreOrderServiceTest extends TestCase
         $service = new StoreOrderService(
             $this->createContainer($entityManager),
             $this->createMock(StoreOrderRepository::class),
-            new StoreOutboxService($entityManager),
+            new OutboxService($entityManager),
         );
         $order = $this->createOrder();
 
@@ -99,7 +99,7 @@ final class StoreOrderServiceTest extends TestCase
         self::assertSame('Inventory unavailable', $order->getRejectionReason());
         self::assertInstanceOf(\DateTimeImmutable::class, $order->getRejectedAt());
         self::assertCount(1, $persisted);
-        self::assertInstanceOf(StoreOutboxMessage::class, $persisted[0]);
+        self::assertInstanceOf(OutboxMessage::class, $persisted[0]);
         self::assertSame('store.order.rejected.v1', $persisted[0]->getTopic());
         self::assertSame('out_of_stock', $persisted[0]->getPayload()['reasonCode']);
     }

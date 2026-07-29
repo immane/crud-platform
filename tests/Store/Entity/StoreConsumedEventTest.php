@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Store\Entity;
 
-use App\Store\Entity\StoreConsumedEvent;
+use App\Store\Entity\InboxMessage;
 use PHPUnit\Framework\TestCase;
 
 final class StoreConsumedEventTest extends TestCase
 {
     public function testStoresInboundEventAuditFields(): void
     {
-        $event = new StoreConsumedEvent(
+        $event = new InboxMessage(
             '2beed699-4e1b-4a49-af75-2e0b0f6db0fd',
             'trade.order.created.v1',
             '96a1a1b2-4f86-44ff-94cb-41a1411ad0d8',

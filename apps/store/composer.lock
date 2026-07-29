@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f6f9094be445cee78e0f3c3a8d3f8d7e",
+    "content-hash": "c79da89c5cfa15a1eafa5b24f9c9ef61",
     "packages": [
         {
             "name": "crud-platform/integration-contracts",
-            "version": "1.0.0-dev",
+            "version": "1.1.1-dev",
             "dist": {
                 "type": "path",
                 "url": "../../packages/integration-contracts",
-                "reference": "ffdf07e6c3fcff7557f5fa1172f6a21459c78b40"
+                "reference": "8d1737684641078609f0b53da209f8f7e08b9961"
             },
             "require": {
                 "php": ">=8.4"
@@ -27,6 +27,33 @@
                 "Apache-2.0"
             ],
             "description": "Transport-neutral integration message carriers for CRUD Platform.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "crud-platform/legacy-messenger-compat",
+            "version": "1.0.0-dev",
+            "dist": {
+                "type": "path",
+                "url": "../../packages/legacy-messenger-compat",
+                "reference": "7f0998970ba67e0e88a17a5625cc1fca9869065c"
+            },
+            "require": {
+                "php": ">=8.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "App\\Trade\\Message\\": "src/Trade/Message/",
+                    "App\\Inventory\\Message\\": "src/Inventory/Message/"
+                }
+            },
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "Historical native-PHP Messenger wrappers for queued CRUD Platform messages.",
             "transport-options": {
                 "symlink": false,
                 "relative": true
@@ -7576,6 +7603,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "crud-platform/integration-contracts": 20,
+        "crud-platform/legacy-messenger-compat": 20,
         "crud-platform/platform-kernel": 20
     },
     "prefer-stable": true,
