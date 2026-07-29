@@ -36,6 +36,12 @@ doctrine:
                 dir: '%kernel.project_dir%/vendor/crud-platform/inventory-app/src/Entity'
                 prefix: 'App\Inventory\Entity'
                 alias: Inventory
+            Payment:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/vendor/crud-platform/payment-app/src/Entity'
+                prefix: 'App\Payment\Entity'
+                alias: Payment
         dql:
             string_functions:
                 regexp: DoctrineExtensions\Query\Mysql\Regexp

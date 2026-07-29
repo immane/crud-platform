@@ -5,6 +5,7 @@ deptrac:
   paths:
     - apps/store/src/
     - apps/inventory/src/
+    - apps/payment/src/
     - src/
     - packages/integration-contracts/src/
     - packages/legacy-messenger-compat/src/

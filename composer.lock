@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b8cd5d009431cc6ceb1fb259c4da125",
+    "content-hash": "a53cc7d5d460f711602b8dd3111e8ce2",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -257,6 +257,70 @@
                 "Apache-2.0"
             ],
             "description": "Historical native-PHP Messenger wrappers for queued CRUD Platform messages.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "crud-platform/payment-app",
+            "version": "1.0.0-dev",
+            "dist": {
+                "type": "path",
+                "url": "apps/payment",
+                "reference": "512e8ecf527f431cf8158945268b1af8e276eea9"
+            },
+            "require": {
+                "crud-platform/integration-contracts": "^1.1.1@dev",
+                "crud-platform/platform-kernel": "^1.0.1@dev",
+                "doctrine/doctrine-bundle": "^3.2",
+                "doctrine/doctrine-migrations-bundle": "^4.0",
+                "doctrine/orm": "^3.6",
+                "php": ">=8.4",
+                "symfony/console": "8.1.*",
+                "symfony/doctrine-messenger": "8.1.*",
+                "symfony/dotenv": "8.1.*",
+                "symfony/framework-bundle": "8.1.*",
+                "symfony/monolog-bundle": "^3.0|^4.0",
+                "symfony/runtime": "8.1.*",
+                "symfony/security-bundle": "8.1.*",
+                "symfony/serializer": "8.1.*",
+                "symfony/translation": "8.1.*",
+                "symfony/workflow": "8.1.*",
+                "symfony/yaml": "8.1.*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^12.5"
+            },
+            "type": "project",
+            "extra": {
+                "symfony": {
+                    "allow-contrib": false,
+                    "require": "8.1.*"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "App\\Payment\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "App\\Payment\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "cache:clear": [
+                    "php bin/console cache:clear"
+                ],
+                "test": [
+                    "@php vendor/bin/phpunit --configuration phpunit.xml"
+                ]
+            },
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "Payment application for CRUD Platform",
             "transport-options": {
                 "symlink": false,
                 "relative": true
@@ -12333,6 +12397,7 @@
         "crud-platform/integration-contracts": 20,
         "crud-platform/inventory-app": 20,
         "crud-platform/legacy-messenger-compat": 20,
+        "crud-platform/payment-app": 20,
         "crud-platform/platform-kernel": 20,
         "crud-platform/store-app": 20
     },

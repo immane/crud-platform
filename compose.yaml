@@ -193,6 +193,46 @@ services:
       - internal
 
   # ========================
+  # Payment application (FrankenPHP, independent database baseline)
+  # ========================
+  payment-app:
+    build:
+      context: .
+      dockerfile: apps/payment/Dockerfile
+    restart: unless-stopped
+    environment:
+      APP_ENV: ${PAYMENT_APP_ENV:-dev}
+      APP_DEBUG: "1"
+      APP_SECRET: ${PAYMENT_APP_SECRET:-payment-dev-secret-change-me}
+      DATABASE_URL: "mysql://${PAYMENT_MYSQL_USER:-payment}:${PAYMENT_MYSQL_PASSWORD:-!PaymentChangeMe!}@payment-database:3306/${PAYMENT_MYSQL_DATABASE:-payment}?serverVersion=8.4&charset=utf8mb4"
+      MESSENGER_TRANSPORT_DSN: "doctrine://default?auto_setup=0"
+    ports:
+      - "${PAYMENT_APP_PORT:-8083}:80"
+    depends_on:
+      payment-database:
+        condition: service_healthy
+    networks:
+      - internal
+
+  payment-database:
+    image: mysql:${MYSQL_VERSION:-8.4}
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${PAYMENT_MYSQL_DATABASE:-payment}
+      MYSQL_USER: ${PAYMENT_MYSQL_USER:-payment}
+      MYSQL_PASSWORD: ${PAYMENT_MYSQL_PASSWORD:-!PaymentChangeMe!}
+      MYSQL_ROOT_PASSWORD: ${PAYMENT_MYSQL_ROOT_PASSWORD:-!PaymentRootChangeMe!}
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} --silent"]
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    volumes:
+      - payment_mysql_data:/var/lib/mysql:rw
+    networks:
+      - internal
+
+  # ========================
   # Database (MySQL 8)
   # ========================
   database:
@@ -246,3 +286,4 @@ volumes:
   redis_data:
   store_mysql_data:
   inventory_mysql_data:
+  payment_mysql_data:

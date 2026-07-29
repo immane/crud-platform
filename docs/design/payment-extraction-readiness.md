@@ -1,37 +1,22 @@
 # Payment Extraction Readiness
 
-> Payment remains hosted by the monolith. Its outgoing invoice lifecycle has
-> been made durable so that the eventual Payment application can be extracted
-> without retaining a synchronous Payment-to-Trade dependency.
+> **Payment source has been fully extracted.** This document records the
+> completed transition-host work and the remaining runtime cutover steps.
 
-## Completed Expand Stage
+## Completed
 
-- `payment_outbox_message` records paid, failed, cancelled, and refunded invoice
-  lifecycle events in the same transaction as the invoice state transition.
-- `app:payment:outbox:publish` publishes the four neutral v1 contracts through
-  the existing async transport:
-  - `payment.invoice.paid.v1`
-  - `payment.invoice.failed.v1`
-  - `payment.invoice.cancelled.v1`
-  - `payment.invoice.refunded.v1`
-- Trade consumes these contracts through an idempotent `trade_consumed_event`
-  Inbox. It verifies the source order, linked invoice identity, and paid amount
-  and currency before applying the existing order workflow transitions.
-- Payment events carry invoice identifiers, source binding, status, money,
-  currency, payment metadata, and lifecycle timestamps only. Gateway raw data
-  and invoice `extra_data` never cross the integration boundary.
-- The root scheduler publishes Payment Outbox rows alongside Trade, Store, and
-  Inventory. It clears its production Symfony cache at startup so newly deployed
-  command services are discovered.
-- Payment invoices now own a nullable `payer_uuid` scalar instead of an ORM
-  association or foreign key to Identity's `users` table. The
-  `payment_payer_directory` maps legacy numeric Identity IDs to UUIDs during the
-  transition. Root-hosted management APIs continue accepting numeric `payer`
-  IDs through an Identity adapter; a standalone Payment app resolves UUIDs from
-  its own directory only.
-- Wallet uses a Core UUID-to-local-ID resolver supplied by Identity, and WeChat
-  resolves its own user relation by UUID. Payment no longer imports Identity
-  entities or repositories.
+- Payment source now lives exclusively in `apps/payment/src` under
+  `App\Payment\*` (30 files).
+- `apps/payment` has its own Kernel, Composer lock, composer.json (`crud-platform/payment-app`), configuration, PHPUnit smoke test, FrankenPHP image, and MySQL 8.4 service.
+- The monolith temporarily loads Payment through the `crud-platform/payment-app` Composer path package; root routes, Doctrine mapping, services, PHPStan, Deptrac, and Rector point to that package.
+- The Payment baseline migration owns `payment_invoice`, `payment_outbox_message`, and `payment_payer_directory` — three Payment-owned tables with no foreign keys to non-Payment tables.
+- Payment invoices use a Payment-owned `payer_uuid` scalar instead of an ORM association to Identity `users`. The `payment_payer_directory` maps legacy numeric Identity IDs to UUIDs during the transition.
+- Payment's `InvoiceService` writes durable outbox rows; `app:payment:outbox:publish` publishes paid/failed/cancelled/refunded v1 contracts through the root async transport.
+- Trade consumes those contracts via an idempotent `trade_consumed_event` inbox; the synchronous `OrderInvoiceListener` remains temporarily for observation.
+- Wallet uses a Core UUID-to-local-ID contract, and WeChat resolves its own user relation by UUID. Payment no longer imports Identity entities or repositories.
+- Root Dockerfile copies `apps/payment` before `composer install`, and the root scheduler publishes Payment outbox rows independently.
+- The Payment app resolves its own `PayerReferenceResolverInterface` through `PayerDirectoryReferenceResolver` in standalone mode; the monolith binds it to the Identity adapter.
+- Payment app includes its own `invoice` workflow state machine.
 
 ## Transition Safety
 

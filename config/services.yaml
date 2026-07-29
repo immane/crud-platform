@@ -4,7 +4,6 @@ parameters: {}
 
 imports:
     - { resource: '../src/Identity/Resources/config/services_identity.yaml', ignore_errors: true }
-    - { resource: '../src/Payment/Resources/config/services_payment.yaml', ignore_errors: true }
     - { resource: '../src/Storage/Resources/config/services_storage.yaml', ignore_errors: true }
     - { resource: '../src/Wechat/Resources/config/services_wechat.yaml', ignore_errors: true }
     - { resource: '../src/Promotion/Resources/config/services_promotion.yaml', ignore_errors: true }
@@ -51,6 +50,11 @@ services:
         resource: '../vendor/crud-platform/inventory-app/src/'
         exclude:
             - '../vendor/crud-platform/inventory-app/src/Kernel.php'
+
+    App\Payment\:
+        resource: '../vendor/crud-platform/payment-app/src/'
+        exclude:
+            - '../vendor/crud-platform/payment-app/src/Kernel.php'
 
     App\Core\:
         resource: '../vendor/crud-platform/platform-kernel/src/'

@@ -3,6 +3,7 @@ parameters:
     paths:
         - apps/store/src/
         - apps/inventory/src/
+        - apps/payment/src/
         - src/
         - packages/legacy-messenger-compat/src/
         - packages/platform-kernel/src/
@@ -49,6 +50,9 @@ parameters:
         -
             message: '#Property .+::\$createdAt in isset\(\) is not nullable nor uninitialized#'
             path: src/
+        -
+            message: '#Property .+::\$createdAt in isset\(\) is not nullable nor uninitialized#'
+            path: apps/payment/src/
 
 includes:
     - vendor/phpstan/phpstan-symfony/extension.neon
