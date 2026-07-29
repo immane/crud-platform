@@ -6,11 +6,11 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+        <meta name="description" content="A production-oriented Symfony microservices platform evolved from modular monolith architecture, featuring DDD, service isolation, and event-driven communication.">
       
       
       
-        <link rel="canonical" href="https://immane.github.io/crud-skeleton/design/bundles/inventory/">
+        <link rel="canonical" href="https://immane.github.io/crud-platform/design/bundles/inventory/">
       
       
         <link rel="prev" href="../store/">
@@ -20,9 +20,9 @@
       
       
         
-          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+          <link rel="alternate" href="/crud-platform/" hreflang="en">
         
-          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+          <link rel="alternate" href="/crud-platform/zh/" hreflang="zh">
         
       
       
@@ -31,7 +31,7 @@
     
     
       
-        <title>Inventory - CRUD Skeleton</title>
+        <title>Inventory - CRUD Platform</title>
       
     
     
@@ -98,7 +98,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+    <a href="../../.." title="CRUD Platform" class="md-header__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -112,7 +112,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            CRUD Skeleton
+            CRUD Platform
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -165,13 +165,13 @@
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+            <a href="/crud-platform/" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
         
           <li class="md-select__item">
-            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+            <a href="/crud-platform/zh/" hreflang="zh" class="md-select__link">
               中文
             </a>
           </li>
@@ -226,7 +226,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/immane/crud-platform" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -262,17 +262,17 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+    <a href="../../.." title="CRUD Platform" class="md-nav__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    CRUD Skeleton
+    CRUD Platform
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/immane/crud-platform" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -437,6 +437,34 @@
     
   
     Store Extraction Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory Extraction Readiness
   
 
     
@@ -2313,8 +2341,11 @@
 
 <h1 id="inventory-bundle-design">Inventory Bundle Design<a class="headerlink" href="#inventory-bundle-design" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>Status: preview, implemented but not production-ready.</strong> The Inventory bundle
-(<code>src/Inventory/</code>) owns materials, per-store stock, Specification recipes,
+<p><strong>Status: extracted preview, not production-ready.</strong> Inventory source lives
+exclusively in <code>apps/inventory/src</code> and the monolith hosts it through the
+<code>crud-platform/inventory-app</code> Composer path package during transition. The Inventory
+application has an independent Kernel, MySQL 8.4 baseline, and FrankenPHP image.
+It owns materials, per-store stock, Specification recipes,
 reservations, and the stock ledger. It is the deferred reservation boundary defined
 by the Store bundle. Trade remains the catalog and commercial-order authority; Store
 remains the authority for store acceptance and operational orders.</p>
@@ -3301,7 +3332,7 @@ confirmed reservations. The operation is idempotent for the same management refe
 when a reference is supplied.</p>
 <hr />
 <h2 id="8-file-structure">8. File Structure<a class="headerlink" href="#8-file-structure" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>src/Inventory/
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>apps/inventory/src/
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>|-- Command/
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>|   `-- PublishOutboxCommand.php
 <a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>|-- Controller/Manage/
@@ -3336,7 +3367,11 @@ event publishing, and Inventory outcome/release handlers. Trade changes remain l
 repository, or domain service.</p>
 <hr />
 <h2 id="9-persistence-and-migration-plan">9. Persistence And Migration Plan<a class="headerlink" href="#9-persistence-and-migration-plan" title="Permanent link">&para;</a></h2>
-<p>One Inventory migration creates the phase-one tables and only local foreign keys:</p>
+<p><code>apps/inventory/migrations/Version20260730000000.php</code> creates the final baseline
+with the phase-one tables and only local foreign keys. It includes nullable
+Outbox <code>correlation_id</code> and <code>causation_id</code> metadata and intentionally excludes the
+Store-owned <code>store_trade_order_cancellation</code> table that remains in the monolith's
+historical migration chain.</p>
 <table>
 <thead>
 <tr>

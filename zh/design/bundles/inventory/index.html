@@ -6,11 +6,11 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+        <meta name="description" content="A production-oriented Symfony microservices platform evolved from modular monolith architecture, featuring DDD, service isolation, and event-driven communication.">
       
       
       
-        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/design/bundles/inventory/">
+        <link rel="canonical" href="https://immane.github.io/crud-platform/zh/design/bundles/inventory/">
       
       
         <link rel="prev" href="../store/">
@@ -20,9 +20,9 @@
       
       
         
-          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+          <link rel="alternate" href="/crud-platform/" hreflang="en">
         
-          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+          <link rel="alternate" href="/crud-platform/zh/" hreflang="zh">
         
       
       
@@ -31,7 +31,7 @@
     
     
       
-        <title>Inventory - CRUD Skeleton</title>
+        <title>Inventory - CRUD Platform</title>
       
     
     
@@ -98,7 +98,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="页眉">
-    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+    <a href="../../.." title="CRUD Platform" class="md-header__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -112,7 +112,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            CRUD Skeleton
+            CRUD Platform
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -165,13 +165,13 @@
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+            <a href="/crud-platform/" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
         
           <li class="md-select__item">
-            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+            <a href="/crud-platform/zh/" hreflang="zh" class="md-select__link">
               中文
             </a>
           </li>
@@ -226,7 +226,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+        <a href="https://github.com/immane/crud-platform" title="前往仓库" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -262,17 +262,17 @@
 
 <nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+    <a href="../../.." title="CRUD Platform" class="md-nav__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    CRUD Skeleton
+    CRUD Platform
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+      <a href="https://github.com/immane/crud-platform" title="前往仓库" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -437,6 +437,34 @@
     
   
     商店撤离准备情况
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    库存提取准备情况
   
 
     
@@ -2313,8 +2341,11 @@
 
 <h1 id="_1">库存捆绑设计<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>状态：预览，已实施，但尚未准备好投入生产。</strong> Inventory 捆绑包
-(<code>src/Inventory/</code>) 拥有材料、每店库存、规格配方、
+<p><strong>状态：提取预览，未准备好生产。</strong> 库存源有效
+专门位于 <code>apps/inventory/src</code> 中，并且整体通过以下方式托管它
+<code>crud-platform/inventory-app</code> 过渡期间的 Composer 路径包。库存
+应用程序具有独立的内核、MySQL 8.4 基线和 FrankenPHP 映像。
+它拥有材料、每店库存、规格配方、
 预订和库存分类帐。这是定义的延迟保留边界
 通过商店捆绑包。贸易仍然是目录和商业订单的权威；商店
 保留商店接受和运营订单的权力。</p>
@@ -2557,7 +2588,7 @@
 是允许的，或者其他未来的股票突变。</p>
 <h3 id="25">2.5 本地交易和至少一次交付<a class="headerlink" href="#25" title="Permanent link">&para;</a></h3>
 <p>每个 Inventory 突变都会在一个 SQL 中写入其本地聚合及其传出事件
-交易。收件箱表通过 <code>eventId</code> 至少删除一次传送的重复数据；商业
+交易。收件箱表通过 <code>eventId</code> 至少删除一次传递的重复数据；商业
 记录添加唯一键以实现竞赛安全幂等性。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Inventory transaction:
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  consumed event + reservation + stock changes + ledger entries + outbox event
@@ -2753,7 +2784,7 @@
 <li><code>reservedQuantity &gt;= 0</code> 在域代码中强制执行，并且在可移植的情况下进行数据库检查。</li>
 </ul>
 <p>故意没有公共 <code>setOnHandQuantity()</code> 或 <code>setReservedQuantity()</code>。
-<code>InventoryService</code> 仅通过相应的分类帐条目更改数量。</p>
+<code>InventoryService</code>仅通过相应的分类帐条目更改数量。</p>
 <h3 id="34">3.4 规格菜谱和菜谱行<a class="headerlink" href="#34" title="Permanent link">&para;</a></h3>
 <p><code>SpecificationRecipe</code> 拥有一项贸易规范的当前物料清单。
 它不存储贸易实体关系。</p>
@@ -2803,7 +2834,7 @@
 从未根据更改的配方重新计算。</p>
 <h3 id="35">3.5 成品良好后备<a class="headerlink" href="#35" title="Permanent link">&para;</a></h3>
 <p>每个库存控制规范均由以下规则之一解析：</p>
-<p>1.<code>specificationUuid</code>存在一个有效配方：将每个配方材料保留在
+<p>1.<code>specificationUuid</code>存在有效配方：将每个配方材料保留在
    <code>orderQuantity * quantityPerUnit</code>。
 2. 不存在有效配方：保留<code>code</code>等于的有效<code>finished</code>物料
    规范 UUID (<code>catalogReference</code>)。
@@ -2937,7 +2968,7 @@
 </table>
 <p>每行包括<code>storeUuid</code>、本地<code>material</code>、增量数量、突变后余额
 快照、<code>referenceType</code>、<code>referenceId</code>、可用的非秘密参与者参考，
-和时间戳。 <code>(type, reference_id, material_id)</code> 上的唯一性约束可防止
+和时间戳。 <code>(type, reference_id, material_id)</code> 上的唯一性约束可以防止
 相同的保留操作对相同的材料应用两次。</p>
 <hr />
 <h2 id="4">4. 预订处理<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
@@ -2961,7 +2992,7 @@
 </code></pre></div>
 <p>所需验证：</p>
 <ul>
-<li>ID 必须是 UUID 字符串； <code>quantity</code> 是正十进制字符串，最多 6 个
+<li>ID 必须是 UUID 字符串； <code>quantity</code> 是正十进制字符串，最多有 6 个字符
   小数位。</li>
 <li><code>items</code> 必须至少包含一个唯一的<code>lineId</code>。</li>
 <li>预订截止日期必须是 <code>requestedAt</code> 之后的 ISO-8601 日期。</li>
@@ -3057,7 +3088,7 @@
 <a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">  </span><span class="nt">&quot;rejectedAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-07-26T12:00:02+00:00&quot;</span>
 <a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="p">}</span>
 </code></pre></div>
-<p>存储根据其本地 <code>StoreOrder</code> 验证所有相关 UUID。它只接受一个
+<p>Store 根据其本地 <code>StoreOrder</code> 验证所有相关 UUID。它只接受一个
 当订单为<code>awaiting_inventory</code>时匹配已确认的事件；它只拒绝一个
 匹配该状态下的拒绝事件。重复或延迟的事件是无害的空操作。
 商店将库存 <code>OUT_OF_STOCK</code> 映射到其记录的 <code>OUT_OF_STOCK</code> 拒绝代码，并且
@@ -3114,7 +3145,7 @@
 取消发布一并实施；它不能默默地保留过期的
 无限期保留。</p>
 <p>库存调节将每个余额与其分类账增量进行比较。任何维修都是
-新的<code>adjustment</code>分类帐条目，绝不直接余额覆盖。</p>
+新的 <code>adjustment</code> 分类帐条目，永远不会直接覆盖余额。</p>
 <hr />
 <h2 id="6">6. 收件箱、发件箱和信使<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
 <h3 id="61">6.1 持久化消息记录<a class="headerlink" href="#61" title="Permanent link">&para;</a></h3>
@@ -3294,12 +3325,12 @@ available_at, id)</code> 索引到期未发布的行。</p>
 <a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="p">}</span>
 </code></pre></div>
 <p><code>quantityDelta</code> 已签名。负调整不得驱动现有量低于保留值
-数量，除非<code>allowNegativeStock=true</code>；否则它已经失效了
+数量，除非 <code>allowNegativeStock=true</code>；否则它已经失效了
 确认预订。对于同一个管理引用，操作是幂等的
 当提供参考时。</p>
 <hr />
 <h2 id="8">8. 文件结构<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>src/Inventory/
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>apps/inventory/src/
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>|-- Command/
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>|   `-- PublishOutboxCommand.php
 <a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>|-- Controller/Manage/
@@ -3334,7 +3365,11 @@ available_at, id)</code> 索引到期未发布的行。</p>
 存储库或域服务。</p>
 <hr />
 <h2 id="9">9. 持久化和迁移计划<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
-<p>一次清单迁移创建第一阶段表并且仅创建本地外键：</p>
+<p><code>apps/inventory/migrations/Version20260730000000.php</code> 创建最终基线
+与第一阶段表和只有本地外键。它包括可为空的
+发件箱 <code>correlation_id</code> 和 <code>causation_id</code> 元数据并有意排除
+商店拥有的 <code>store_trade_order_cancellation</code> 表保留在整体结构中
+历史迁徙链。</p>
 <table>
 <thead>
 <tr>
@@ -3345,7 +3380,7 @@ available_at, id)</code> 索引到期未发布的行。</p>
 <tbody>
 <tr>
 <td><code>inventory_material</code></td>
-<td>唯一<code>uuid</code>、唯一<code>code</code>、状态索引</td>
+<td>唯一<code>uuid</code>，唯一<code>code</code>，状态索引</td>
 </tr>
 <tr>
 <td><code>inventory_stock</code></td>

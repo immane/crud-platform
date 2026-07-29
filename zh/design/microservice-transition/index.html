@@ -6,11 +6,11 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+        <meta name="description" content="A production-oriented Symfony microservices platform evolved from modular monolith architecture, featuring DDD, service isolation, and event-driven communication.">
       
       
       
-        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/design/microservice-transition/">
+        <link rel="canonical" href="https://immane.github.io/crud-platform/zh/design/microservice-transition/">
       
       
         <link rel="prev" href="../system-architecture/">
@@ -20,9 +20,9 @@
       
       
         
-          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+          <link rel="alternate" href="/crud-platform/" hreflang="en">
         
-          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+          <link rel="alternate" href="/crud-platform/zh/" hreflang="zh">
         
       
       
@@ -31,7 +31,7 @@
     
     
       
-        <title>微服务转型 - CRUD Skeleton</title>
+        <title>微服务转型 - CRUD Platform</title>
       
     
     
@@ -98,7 +98,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="页眉">
-    <a href="../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+    <a href="../.." title="CRUD Platform" class="md-header__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -112,7 +112,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            CRUD Skeleton
+            CRUD Platform
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -165,13 +165,13 @@
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+            <a href="/crud-platform/" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
         
           <li class="md-select__item">
-            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+            <a href="/crud-platform/zh/" hreflang="zh" class="md-select__link">
               中文
             </a>
           </li>
@@ -226,7 +226,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+        <a href="https://github.com/immane/crud-platform" title="前往仓库" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -262,17 +262,17 @@
 
 <nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+    <a href="../.." title="CRUD Platform" class="md-nav__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    CRUD Skeleton
+    CRUD Platform
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+      <a href="https://github.com/immane/crud-platform" title="前往仓库" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -600,6 +600,34 @@
     
   
     商店撤离准备情况
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inventory-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    库存提取准备情况
   
 
     
@@ -1599,8 +1627,8 @@
 </tr>
 <tr>
 <td>库存</td>
-<td>库存</td>
-<td>第一个提取候选者；生产支持仍然受到安全检查表的阻碍</td>
+<td>库存 → <code>apps/inventory</code></td>
+<td>提取；过渡期间的整体主机；生产支持仍然受到安全检查表的阻碍</td>
 </tr>
 <tr>
 <td>付款</td>
@@ -1660,7 +1688,7 @@
 </code></pre></div>
 <p><code>type</code> 没有版本控制。经纪人主题派生为
 <code>type + ".v" + version</code>；例如，<code>store.order.accepted.v1</code>。所有九个领域
-规范 v1 信封中需要。 <code>causationId</code> 可能为空。</p>
+规范 v1 信封中需要。 <code>causationId</code> 可以为空。</p>
 <p>schema 和manifest 归<code>contracts/integration</code>所有，而PHP 运营商
 类位于 <code>packages/integration-contracts</code> 中，而不是生产者或消费者中
 Symfony 命名空间。更改需要新的消息版本和兼容性
@@ -1668,13 +1696,13 @@ Symfony 命名空间。更改需要新的消息版本和兼容性
 <p>事件是带有明显<code>kind: "event"</code>的过去时事实。请求如
 <code>inventory.reservation.requested.v1</code> 和
 <code>inventory.reservation.release.requested.v1</code> 是命令
-<code>kind: "command"</code>，即使它们使用相同的信封。旧版信使
+<code>kind: "command"</code>，即使他们使用相同的信封。旧版信使
 包装类位于 <code>packages/legacy-messenger-compat</code> 中并保持兼容性
 输入，直到旧的本机 PHP 序列化队列行和失败消息已被处理
 排干或迁移。</p>
 <h3 id="51">5.1 运营商迁移命令<a class="headerlink" href="#51" title="Permanent link">&para;</a></h3>
 <p>必须在生产者更改运营商类型之前部署消费者。期间
-兼容阶段，每个现有的处理程序都接受其遗留的
+兼容阶段，每个现有处理程序都接受其遗留的
 <code>App\*\Message</code> 包装器和匹配的中立载体，然后委托给
 相同的业务逻辑。制作者继续为每个主题仅发布一个载体；
 双重发布是被禁止的，因为并非每个消费者行为都是收件箱幂等的。</p>
@@ -1694,7 +1722,7 @@ Symfony 命名空间。更改需要新的消息版本和兼容性
 <code>store.directory.upserted.v1</code>。存储更改将此事件写入同一事件中
 交易，并且 Trade 维护 <code>X-Store-Code</code> 的本地只读投影
 分辨率。在生产中将 Trade 切换到此投影之前，运行
-<code>app:store:outbox:backfill-directory</code> 作为试运行，然后使用 <code>--apply</code>
+<code>app:store:outbox:backfill-directory</code> 作为一次演练，然后使用 <code>--apply</code> 来
 初始化现有商店的事件。</p>
 <h3 id="52">5.2 发件箱元数据扩展<a class="headerlink" href="#52" title="Permanent link">&para;</a></h3>
 <p>每个生产者发件箱都存储可为空的 <code>correlation_id</code> 和 <code>causation_id</code> 列
@@ -1726,7 +1754,7 @@ Symfony 命名空间。更改需要新的消息版本和兼容性
 发件箱出版商。不得将其添加到调度程序中。</p>
 <h2 id="6">6. 撤离顺序和门<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
 <p>存储特定的依赖项库存和源移动门维护在
-<a href="../store-extraction-readiness/"><t48/></a>。</p>
+<a href="../store-extraction-readiness/"><t49/></a>。</p>
 <p>首选顺序是：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Store -&gt; Inventory -&gt; Payment -&gt; Wallet
 </code></pre></div>
@@ -1742,7 +1770,7 @@ Symfony 命名空间。更改需要新的消息版本和兼容性
 <li>将支付的同步 Doctrine 实体事件替换为支付发件箱
   商务收件箱事件。</li>
 <li>取消 Trade 的直接钱包转账路径，转而采用支付边界。</li>
-<li>替换暴露 <code>Invoice</code> 或的支付网关和调整插件 API
+<li>替换暴露<code>Invoice</code>或的支付网关和调整插件API
   Symfony HTTP 类型具有服务拥有的命令和结果契约。</li>
 <li>用标量报价请求替换促销的共享可变定价上下文
   在考虑远程执行之前确定性结果。</li>
