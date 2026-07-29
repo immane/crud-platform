@@ -8,11 +8,10 @@ use App\Core\Controller\RestController;
 use App\Core\View\ApiView;
 use App\Core\View\DetailApiViewMixin;
 use App\Core\View\ListApiViewMixin;
-use App\Identity\Entity\User;
 use App\Payment\DTO\CreateInvoiceRequest;
 use App\Payment\Entity\Invoice;
 use App\Payment\Service\InvoiceServiceInterface;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Payment\Service\PayerReferenceResolverInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,7 +27,7 @@ class InvoiceController extends RestController
 
     public function __construct(
         protected readonly InvoiceServiceInterface $service,
-        private readonly EntityManagerInterface $entityManager,
+        private readonly PayerReferenceResolverInterface $payerReferenceResolver,
         #[Target('state_machine.invoice')]
         protected readonly WorkflowInterface $workflow,
     ) {
@@ -45,9 +44,9 @@ class InvoiceController extends RestController
         }
 
         try {
-            $payer = null;
+            $payerUuid = null;
             if (!empty($content['payer'])) {
-                $payer = $this->entityManager->getRepository(User::class)->find((int) $content['payer']);
+                $payerUuid = $this->payerReferenceResolver->resolve((string) $content['payer']);
             }
 
             $invoice = $this->service->createInvoice(new CreateInvoiceRequest(
@@ -56,7 +55,7 @@ class InvoiceController extends RestController
                 scene: (string) $content['scene'],
                 amount: self::parseAmount($content['amount']),
                 currency: (string) ($content['currency'] ?? 'CNY'),
-                payer: $payer,
+                payerUuid: $payerUuid,
                 subject: $content['subject'] ?? null,
                 description: $content['description'] ?? null,
                 extraData: $content['extraData'] ?? [],

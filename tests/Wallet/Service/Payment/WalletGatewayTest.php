@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Wallet\Service\Payment;
 
+use App\Identity\Entity\User;
+use App\Core\Security\IdentityUserIdResolverInterface;
 use App\Payment\DTO\PaymentNotifyResult;
 use App\Payment\DTO\PaymentRefundResult;
 use App\Payment\DTO\PaymentResult;
@@ -60,12 +62,12 @@ final class WalletGatewayTest extends TestCase
         $payerRef = new \ReflectionProperty($payer, 'id');
         $payerRef->setValue($payer, 99);
 
-        $invoice = (new Invoice())->setPayer($payer)->setCurrency('CNY');
+        $invoice = (new Invoice())->setPayerUuid($payer->getUuid())->setCurrency('CNY');
 
         $walletRepo = $this->createMock(WalletRepository::class);
         $walletRepo->method('findByUserAndCurrency')->willReturn(null);
 
-        $gateway = new WalletGateway($walletRepo, $this->createMock(TransferServiceInterface::class), 1);
+        $gateway = new WalletGateway($walletRepo, $this->createMock(TransferServiceInterface::class), 1, $this->identityUserIdResolver($payer));
 
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('No CNY wallet found for payer.');
@@ -88,12 +90,12 @@ final class WalletGatewayTest extends TestCase
         $payerRef = new \ReflectionProperty($payer, 'id');
         $payerRef->setValue($payer, 99);
 
-        $invoice = (new Invoice())->setPayer($payer)->setCurrency('CNY');
+        $invoice = (new Invoice())->setPayerUuid($payer->getUuid())->setCurrency('CNY');
 
         $walletRepo = $this->createMock(WalletRepository::class);
         $walletRepo->method('findByUserAndCurrency')->willReturn(null);
 
-        $gateway = new WalletGateway($walletRepo, $this->createMock(TransferServiceInterface::class), 1);
+        $gateway = new WalletGateway($walletRepo, $this->createMock(TransferServiceInterface::class), 1, $this->identityUserIdResolver($payer));
 
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('No CNY wallet found for payer.');
@@ -110,12 +112,12 @@ final class WalletGatewayTest extends TestCase
         $walletRef = new \ReflectionProperty($wallet, 'id');
         $walletRef->setValue($wallet, 1);
 
-        $invoice = (new Invoice())->setPayer($payer)->setCurrency('CNY');
+        $invoice = (new Invoice())->setPayerUuid($payer->getUuid())->setCurrency('CNY');
 
         $walletRepo = $this->createMock(WalletRepository::class);
         $walletRepo->method('findByUserAndCurrency')->willReturn($wallet);
 
-        $gateway = new WalletGateway($walletRepo, $this->createMock(TransferServiceInterface::class), null);
+        $gateway = new WalletGateway($walletRepo, $this->createMock(TransferServiceInterface::class), null, $this->identityUserIdResolver($payer));
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('systemWalletId is required for wallet payment.');
@@ -132,12 +134,12 @@ final class WalletGatewayTest extends TestCase
         $walletRef = new \ReflectionProperty($wallet, 'id');
         $walletRef->setValue($wallet, 1);
 
-        $invoice = (new Invoice())->setPayer($payer)->setCurrency('CNY');
+        $invoice = (new Invoice())->setPayerUuid($payer->getUuid())->setCurrency('CNY');
 
         $walletRepo = $this->createMock(WalletRepository::class);
         $walletRepo->method('findByUserAndCurrency')->willReturn($wallet);
 
-        $gateway = new WalletGateway($walletRepo, $this->createMock(TransferServiceInterface::class), null);
+        $gateway = new WalletGateway($walletRepo, $this->createMock(TransferServiceInterface::class), null, $this->identityUserIdResolver($payer));
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('systemWalletId is required for wallet refund.');
@@ -154,7 +156,7 @@ final class WalletGatewayTest extends TestCase
         $walletRef = new \ReflectionProperty($wallet, 'id');
         $walletRef->setValue($wallet, 1);
 
-        $invoice = (new Invoice())->setPayer($payer)->setCurrency('CNY');
+        $invoice = (new Invoice())->setPayerUuid($payer->getUuid())->setCurrency('CNY');
 
         $walletRepo = $this->createMock(WalletRepository::class);
         $walletRepo->method('findByUserAndCurrency')->willReturn($wallet);
@@ -164,7 +166,7 @@ final class WalletGatewayTest extends TestCase
         $transferService = $this->createMock(TransferServiceInterface::class);
         $transferService->method('transfer')->willReturn($transferResult);
 
-        $gateway = new WalletGateway($walletRepo, $transferService, 1);
+        $gateway = new WalletGateway($walletRepo, $transferService, 1, $this->identityUserIdResolver($payer));
         $result = $gateway->refund($invoice, 50, 200, 'partial');
 
         self::assertInstanceOf(PaymentRefundResult::class, $result);
@@ -182,7 +184,7 @@ final class WalletGatewayTest extends TestCase
         $walletRef = new \ReflectionProperty($wallet, 'id');
         $walletRef->setValue($wallet, 1);
 
-        $invoice = (new Invoice())->setPayer($payer)->setCurrency('CNY');
+        $invoice = (new Invoice())->setPayerUuid($payer->getUuid())->setCurrency('CNY');
 
         $walletRepo = $this->createMock(WalletRepository::class);
         $walletRepo->method('findByUserAndCurrency')->willReturn($wallet);
@@ -192,9 +194,17 @@ final class WalletGatewayTest extends TestCase
         $transferService = $this->createMock(TransferServiceInterface::class);
         $transferService->method('transfer')->willReturn($transferResult);
 
-        $gateway = new WalletGateway($walletRepo, $transferService, 1);
+        $gateway = new WalletGateway($walletRepo, $transferService, 1, $this->identityUserIdResolver($payer));
         $result = $gateway->refund($invoice, 200, 200, 'full');
 
         self::assertSame(Invoice::STATUS_REFUNDED, $result->status);
+    }
+
+    private function identityUserIdResolver(User $payer): IdentityUserIdResolverInterface
+    {
+        $resolver = $this->createMock(IdentityUserIdResolverInterface::class);
+        $resolver->method('resolveIdentityUserId')->with($payer->getUuid())->willReturn($payer->getId());
+
+        return $resolver;
     }
 }

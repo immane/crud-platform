@@ -33,6 +33,11 @@ class UserRepository extends ServiceEntityRepository
         return $this->findOneBy(['phone' => $phone]);
     }
 
+    public function findByUuid(string $uuid): ?User
+    {
+        return $this->findOneBy(['uuid' => $uuid]);
+    }
+
     /**
      * Finds a user by identifier (email, username, or phone).
      * Phone-based lookup only returns users with phoneVerified=true.

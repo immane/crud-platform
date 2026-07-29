@@ -219,7 +219,7 @@ final class WalletPaymentDeductionServiceIntegrationTest extends IntegrationKern
 
     private function createInvoice(User $payer, int $amount): Invoice
     {
-        return $this->invoiceService->createInvoice(new CreateInvoiceRequest('deduction_test', uniqid('src-', true), Invoice::SCENE_ORDER, $amount, 'CNY', $payer));
+        return $this->invoiceService->createInvoice(new CreateInvoiceRequest('deduction_test', uniqid('src-', true), Invoice::SCENE_ORDER, $amount, 'CNY', $payer->getUuid()));
     }
 
     private function createPersistedInvoice(?User $payer, int $amount): Invoice
@@ -230,7 +230,7 @@ final class WalletPaymentDeductionServiceIntegrationTest extends IntegrationKern
             ->setScene(Invoice::SCENE_ORDER)
             ->setAmount($amount)
             ->setCurrency('CNY')
-            ->setPayer($payer);
+            ->setPayerUuid($payer?->getUuid());
         $this->em->persist($invoice);
         $this->em->flush();
 

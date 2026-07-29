@@ -51,7 +51,7 @@ class InvoiceService extends BaseService implements InvoiceServiceInterface
             $invoice->setScene($request->scene);
             $invoice->setAmount($request->amount);
             $invoice->setCurrency($request->currency);
-            $invoice->setPayer($request->payer);
+            $invoice->setPayerUuid($request->payerUuid);
             $invoice->setSubject($request->subject);
             $invoice->setDescription($request->description);
             $invoice->setExtraData($request->extraData ?: null);

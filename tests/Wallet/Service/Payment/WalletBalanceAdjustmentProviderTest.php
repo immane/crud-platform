@@ -116,7 +116,7 @@ final class WalletBalanceAdjustmentProviderTest extends TestCase
 
     private static function deduction(Invoice $invoice): WalletPaymentDeduction
     {
-        return new WalletPaymentDeduction($invoice, self::invoiceAndWallet()[1], 2, 300, 'CNY', 'deduction-ref-1');
+        return new WalletPaymentDeduction($invoice, 1, self::invoiceAndWallet()[1], 2, 300, 'CNY', 'deduction-ref-1');
     }
 
     /** @return array{Invoice, Wallet} */
@@ -124,7 +124,7 @@ final class WalletBalanceAdjustmentProviderTest extends TestCase
     {
         $user = new User();
         self::setId($user, 1);
-        $invoice = (new Invoice())->setPayer($user)->setAmount(1000)->setCurrency('CNY');
+        $invoice = (new Invoice())->setPayerUuid($user->getUuid())->setAmount(1000)->setCurrency('CNY');
         $wallet = new Wallet($user, 'CNY');
         self::setId($wallet, 1);
 

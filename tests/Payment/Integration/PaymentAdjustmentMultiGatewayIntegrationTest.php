@@ -465,7 +465,7 @@ final class PaymentAdjustmentMultiGatewayIntegrationTest extends IntegrationKern
     private function createInvoice(User $payer, int $amount): Invoice
     {
         return $this->invoiceService->createInvoice(new CreateInvoiceRequest(
-            'multigateway_test', uniqid('src-', true), Invoice::SCENE_ORDER, $amount, 'CNY', $payer,
+            'multigateway_test', uniqid('src-', true), Invoice::SCENE_ORDER, $amount, 'CNY', $payer->getUuid(),
         ));
     }
 

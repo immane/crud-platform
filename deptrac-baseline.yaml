@@ -18,14 +18,6 @@ deptrac:
       - App\Identity\Entity\User
     App\Common\Service\MediaServiceInterface:
       - App\Identity\Entity\User
-    App\Payment\Controller\App\InvoiceController:
-      - App\Identity\Entity\User
-    App\Payment\Controller\Manage\InvoiceController:
-      - App\Identity\Entity\User
-    App\Payment\DTO\CreateInvoiceRequest:
-      - App\Identity\Entity\User
-    App\Payment\Entity\Invoice:
-      - App\Identity\Entity\User
     App\Promotion\Service\Dsl\Evaluator:
       - App\Identity\Entity\User
     App\Promotion\Strategy\MemberDiscountStrategy:

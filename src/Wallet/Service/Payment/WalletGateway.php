@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Wallet\Service\Payment;
 
+use App\Core\Security\IdentityUserIdResolverInterface;
 use App\Payment\DTO\PaymentNotifyResult;
 use App\Payment\DTO\PaymentRefundResult;
 use App\Payment\DTO\PaymentResult;
@@ -23,6 +24,7 @@ final class WalletGateway implements PaymentGatewayInterface
         private readonly TransferServiceInterface $transferService,
         #[Autowire('%payment.system_wallet_id%')]
         private readonly ?int $systemWalletId = null,
+        private readonly ?IdentityUserIdResolverInterface $identityUserIdResolver = null,
     ) {}
 
     public static function getName(): string
@@ -39,11 +41,12 @@ final class WalletGateway implements PaymentGatewayInterface
         if ($systemWalletId <= 0) {
             throw new \InvalidArgumentException('systemWalletId is required for wallet payment.');
         }
-        $payer = $invoice->getPayer();
-        if ($payer === null || $payer->getId() === null) {
+        $payerUuid = $invoice->getPayerUuid();
+        $payerId = $payerUuid === null || $this->identityUserIdResolver === null ? null : $this->identityUserIdResolver->resolveIdentityUserId($payerUuid);
+        if ($payerId === null) {
             throw new \RuntimeException('Invoice has no payer for wallet payment.');
         }
-        $wallet = $this->walletRepository->findByUserAndCurrency($payer->getId(), $invoice->getCurrency());
+        $wallet = $this->walletRepository->findByUserAndCurrency($payerId, $invoice->getCurrency());
         if ($wallet === null || $wallet->getId() === null) {
             throw new \RuntimeException(sprintf('No %s wallet found for payer.', $invoice->getCurrency()));
         }
@@ -81,11 +84,12 @@ final class WalletGateway implements PaymentGatewayInterface
         if ($systemWalletId <= 0) {
             throw new \InvalidArgumentException('systemWalletId is required for wallet refund.');
         }
-        $payer = $invoice->getPayer();
-        if ($payer === null || $payer->getId() === null) {
+        $payerUuid = $invoice->getPayerUuid();
+        $payerId = $payerUuid === null || $this->identityUserIdResolver === null ? null : $this->identityUserIdResolver->resolveIdentityUserId($payerUuid);
+        if ($payerId === null) {
             throw new \RuntimeException('Invoice has no payer for wallet refund.');
         }
-        $wallet = $this->walletRepository->findByUserAndCurrency($payer->getId(), $invoice->getCurrency());
+        $wallet = $this->walletRepository->findByUserAndCurrency($payerId, $invoice->getCurrency());
         if ($wallet === null || $wallet->getId() === null) {
             throw new \RuntimeException(sprintf('No %s wallet found for payer.', $invoice->getCurrency()));
         }

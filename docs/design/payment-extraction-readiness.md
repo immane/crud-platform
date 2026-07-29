@@ -23,6 +23,15 @@
 - The root scheduler publishes Payment Outbox rows alongside Trade, Store, and
   Inventory. It clears its production Symfony cache at startup so newly deployed
   command services are discovered.
+- Payment invoices now own a nullable `payer_uuid` scalar instead of an ORM
+  association or foreign key to Identity's `users` table. The
+  `payment_payer_directory` maps legacy numeric Identity IDs to UUIDs during the
+  transition. Root-hosted management APIs continue accepting numeric `payer`
+  IDs through an Identity adapter; a standalone Payment app resolves UUIDs from
+  its own directory only.
+- Wallet uses a Core UUID-to-local-ID resolver supplied by Identity, and WeChat
+  resolves its own user relation by UUID. Payment no longer imports Identity
+  entities or repositories.
 
 ## Transition Safety
 

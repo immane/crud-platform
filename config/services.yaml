@@ -103,6 +103,9 @@ services:
             $storage: '@App\Identity\Service\LocalCacheOtpStorage'
             $sms: '@App\Identity\Sms\AliyunSmsProvider'
 
+    App\Payment\Service\PayerReferenceResolverInterface: '@App\Identity\Service\IdentityPayerDirectoryAdapter'
+    App\Core\Security\IdentityUserIdResolverInterface: '@App\Identity\Service\IdentityPayerDirectoryAdapter'
+
 when@test:
     services:
         App\Identity\Service\OtpStorageInterface: '@App\Identity\Service\NullOtpStorage'

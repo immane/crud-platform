@@ -28,4 +28,14 @@ class WechatUserRepository extends ServiceEntityRepository
     {
         return $this->findOneBy(['user' => $user]);
     }
+
+    public function findByUserUuid(string $userUuid): ?WechatUser
+    {
+        return $this->createQueryBuilder('wechatUser')
+            ->innerJoin('wechatUser.user', 'user')
+            ->andWhere('user.uuid = :userUuid')
+            ->setParameter('userUuid', $userUuid)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

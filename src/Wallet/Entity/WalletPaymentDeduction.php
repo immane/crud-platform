@@ -87,17 +87,12 @@ class WalletPaymentDeduction
     #[ORM\Column(name: 'refunded_at', type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $refundedAt = null;
 
-    public function __construct(Invoice $invoice, Wallet $wallet, int $systemWalletId, int $amount, string $currency, string $referenceId)
+    public function __construct(Invoice $invoice, int $payerId, Wallet $wallet, int $systemWalletId, int $amount, string $currency, string $referenceId)
     {
-        $payer = $invoice->getPayer();
-        if ($payer === null || $payer->getId() === null) {
-            throw new \InvalidArgumentException('Invoice payer is required for wallet payment deduction.');
-        }
-
         $this->uuid = UUID::v4();
         $this->invoiceId = $invoice->getUuid();
         $this->invoiceNo = $invoice->getOutTradeNo();
-        $this->payerId = $payer->getId();
+        $this->payerId = $payerId;
         $this->wallet = $wallet;
         $this->systemWalletId = $systemWalletId;
         $this->amount = $amount;

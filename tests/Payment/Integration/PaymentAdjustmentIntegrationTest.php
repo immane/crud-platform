@@ -158,7 +158,7 @@ final class PaymentAdjustmentIntegrationTest extends IntegrationKernelTestCase
 
     private function createInvoice(User $payer, int $amount): Invoice
     {
-        return $this->invoiceService->createInvoice(new CreateInvoiceRequest('deduction_payment_test', uniqid('src-', true), Invoice::SCENE_ORDER, $amount, 'CNY', $payer));
+        return $this->invoiceService->createInvoice(new CreateInvoiceRequest('deduction_payment_test', uniqid('src-', true), Invoice::SCENE_ORDER, $amount, 'CNY', $payer->getUuid()));
     }
 
     /** @return array{User, Wallet} */

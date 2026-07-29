@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Payment\Controller\App;
 
 use App\Core\Controller\RestController;
+use App\Core\Security\UserUuidPrincipalInterface;
 use App\Core\View\ApiView;
 use App\Core\View\DetailApiViewMixin;
 use App\Core\View\ListApiViewMixin;
-use App\Identity\Entity\User;
 use App\Payment\Entity\Invoice;
 use App\Payment\Service\InvoiceServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +31,7 @@ class InvoiceController extends RestController
     protected function commonFilter(): array
     {
         $user = $this->getUser();
-        return $user ? ['payer' => $user] : ['id' => -1];
+        return $user instanceof UserUuidPrincipalInterface ? ['payerUuid' => $user->getUuid()] : ['id' => -1];
     }
 
     #[Route('/{id<\d+>}/pay/{payment}', name: 'pay', methods: ['POST'])]
@@ -39,7 +39,7 @@ class InvoiceController extends RestController
     {
         $user = $this->getUser();
         $invoice = $this->service->get(['id' => $id]);
-        if (!$invoice instanceof Invoice || !$user instanceof User || $invoice->getPayer()?->getId() !== $user->getId()) {
+        if (!$invoice instanceof Invoice || !$user instanceof UserUuidPrincipalInterface || $invoice->getPayerUuid() !== $user->getUuid()) {
             return $this->warning('Invoice not found.', 404, '', 404);
         }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Wallet\Service\Payment;
 
+use App\Core\Security\IdentityUserIdResolverInterface;
 use App\Payment\Entity\Invoice;
 use App\Wallet\DTO\WalletPaymentDeductionRequest;
 use App\Wallet\Entity\WalletPaymentDeduction;
@@ -20,6 +21,7 @@ class WalletPaymentDeductionService
         private readonly WalletPaymentDeductionRepository $deductionRepository,
         private readonly WalletRepository $walletRepository,
         private readonly TransferServiceInterface $transferService,
+        private readonly IdentityUserIdResolverInterface $identityUserIdResolver,
         #[Autowire('%payment.system_wallet_id%')]
         private readonly ?int $systemWalletId = null,
     ) {}
@@ -84,8 +86,9 @@ class WalletPaymentDeductionService
             throw new \RuntimeException(sprintf('Invoice wallet deduction already exists with status "%s".', $existing->getStatus()));
         }
 
-        $payer = $invoice->getPayer();
-        if ($payer === null || $payer->getId() === null) {
+        $payerUuid = $invoice->getPayerUuid();
+        $payerId = $payerUuid === null ? null : $this->identityUserIdResolver->resolveIdentityUserId($payerUuid);
+        if ($payerId === null) {
             throw new \RuntimeException('Invoice has no payer for wallet deduction.');
         }
 
@@ -94,13 +97,13 @@ class WalletPaymentDeductionService
             throw new \InvalidArgumentException('systemWalletId is required for wallet deduction.');
         }
 
-        $wallet = $this->walletRepository->findByUserAndCurrency($payer->getId(), $currency);
+        $wallet = $this->walletRepository->findByUserAndCurrency($payerId, $currency);
         if ($wallet === null || $wallet->getId() === null) {
             throw new \RuntimeException(sprintf('No %s wallet found for payer.', strtoupper($currency)));
         }
 
         $referenceId = $options['deductionReferenceId'] ?? ('invoice-adjustment-wallet-balance-' . $invoice->getUuid());
-        $deduction = new WalletPaymentDeduction($invoice, $wallet, $systemWalletId, $amount, $currency, $referenceId);
+        $deduction = new WalletPaymentDeduction($invoice, $payerId, $wallet, $systemWalletId, $amount, $currency, $referenceId);
         $this->em->persist($deduction);
 
         try {

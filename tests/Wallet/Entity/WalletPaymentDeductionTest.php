@@ -15,7 +15,7 @@ final class WalletPaymentDeductionTest extends TestCase
     public function testDefaultsAndStateMarkers(): void
     {
         [$invoice, $wallet] = self::invoiceAndWallet();
-        $deduction = new WalletPaymentDeduction($invoice, $wallet, 2, 300, 'cny', 'ref-1');
+        $deduction = new WalletPaymentDeduction($invoice, 1, $wallet, 2, 300, 'cny', 'ref-1');
 
         self::assertNull($deduction->getId());
         self::assertNotSame('', $deduction->getUuid());
@@ -63,12 +63,13 @@ final class WalletPaymentDeductionTest extends TestCase
         self::assertInstanceOf(\DateTimeImmutable::class, $deduction->getCreatedAt());
     }
 
-    public function testRequiresInvoicePayer(): void
+    public function testStoresProvidedPayerId(): void
     {
         [, $wallet] = self::invoiceAndWallet();
 
-        $this->expectException(\InvalidArgumentException::class);
-        new WalletPaymentDeduction(new Invoice(), $wallet, 2, 300, 'CNY', 'ref-1');
+        $deduction = new WalletPaymentDeduction(new Invoice(), 2, $wallet, 2, 300, 'CNY', 'ref-1');
+
+        self::assertSame(2, $deduction->getPayerId());
     }
 
     /** @return array{Invoice, Wallet} */
@@ -76,7 +77,7 @@ final class WalletPaymentDeductionTest extends TestCase
     {
         $user = new User();
         self::setId($user, 1);
-        $invoice = (new Invoice())->setAmount(1000)->setCurrency('cny')->setPayer($user);
+        $invoice = (new Invoice())->setAmount(1000)->setCurrency('cny')->setPayerUuid($user->getUuid());
         $wallet = new Wallet($user, 'CNY');
         self::setId($wallet, 1);
 

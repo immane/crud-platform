@@ -40,6 +40,7 @@ final class InvoiceTest extends TestCase
             ->setAmount(1234)
             ->setRefundedAmount(234)
             ->setCurrency('usd')
+            ->setPayerUuid('payer-uuid')
             ->setSubject('Subject')
             ->setDescription('Description')
             ->setExtraData(['a' => 1])
@@ -61,6 +62,7 @@ final class InvoiceTest extends TestCase
         self::assertSame(12.34, $invoice->getAmountAsFloat());
         self::assertSame(234, $invoice->getRefundedAmount());
         self::assertSame('USD', $invoice->getCurrency());
+        self::assertSame('payer-uuid', $invoice->getPayerUuid());
         self::assertSame('Subject', $invoice->getSubject());
         self::assertSame('Description', $invoice->getDescription());
         self::assertSame(['a' => 1, 'notify' => ['ok' => true]], $invoice->getExtraData());

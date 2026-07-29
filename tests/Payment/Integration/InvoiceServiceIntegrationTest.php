@@ -42,7 +42,7 @@ final class InvoiceServiceIntegrationTest extends IntegrationKernelTestCase
             scene: Invoice::SCENE_ORDER,
             amount: 1200,
             currency: 'CNY',
-            payer: $payer,
+            payerUuid: $payer->getUuid(),
             subject: 'Order 1',
             description: 'Test invoice',
             extraData: ['secret' => 'must-redact'],
@@ -148,7 +148,7 @@ final class InvoiceServiceIntegrationTest extends IntegrationKernelTestCase
     public function testMarkFailedOnPaidInvoiceReturnsEarly(): void
     {
         $payer = $this->createUser('paid-failed@example.com');
-        $invoice = $this->service->createInvoice(new CreateInvoiceRequest('manual', 'src-7', Invoice::SCENE_DEPOSIT, 100, payer: $payer));
+        $invoice = $this->service->createInvoice(new CreateInvoiceRequest('manual', 'src-7', Invoice::SCENE_DEPOSIT, 100, payerUuid: $payer->getUuid()));
         $this->service->pay($invoice, Invoice::PAYMENT_MOCK);
         $this->service->markPaid($invoice, new PaymentNotifyResult(Invoice::PAYMENT_MOCK, $invoice->getOutTradeNo(), Invoice::STATUS_PAID, 100));
 
@@ -159,7 +159,7 @@ final class InvoiceServiceIntegrationTest extends IntegrationKernelTestCase
     public function testRefundRejectsNonPositiveAmount(): void
     {
         $payer = $this->createUser('refund-zero@example.com');
-        $invoice = $this->service->createInvoice(new CreateInvoiceRequest('manual', 'src-8', Invoice::SCENE_DEPOSIT, 100, payer: $payer));
+        $invoice = $this->service->createInvoice(new CreateInvoiceRequest('manual', 'src-8', Invoice::SCENE_DEPOSIT, 100, payerUuid: $payer->getUuid()));
         $this->service->pay($invoice, Invoice::PAYMENT_MOCK);
         $this->service->markPaid($invoice, new PaymentNotifyResult(Invoice::PAYMENT_MOCK, $invoice->getOutTradeNo(), Invoice::STATUS_PAID, 100));
 
@@ -178,7 +178,7 @@ final class InvoiceServiceIntegrationTest extends IntegrationKernelTestCase
     public function testRefundRejectsAmountExceedingRemaining(): void
     {
         $payer = $this->createUser('refund-excess@example.com');
-        $invoice = $this->service->createInvoice(new CreateInvoiceRequest('manual', 'src-10', Invoice::SCENE_DEPOSIT, 100, payer: $payer));
+        $invoice = $this->service->createInvoice(new CreateInvoiceRequest('manual', 'src-10', Invoice::SCENE_DEPOSIT, 100, payerUuid: $payer->getUuid()));
         $this->service->pay($invoice, Invoice::PAYMENT_MOCK);
         $this->service->markPaid($invoice, new PaymentNotifyResult(Invoice::PAYMENT_MOCK, $invoice->getOutTradeNo(), Invoice::STATUS_PAID, 100));
         $this->service->refund($invoice, 30, 'partial');

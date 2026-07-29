@@ -41,7 +41,7 @@ final class WalletGatewayIntegrationTest extends IntegrationKernelTestCase
             scene: Invoice::SCENE_ORDER,
             amount: 1500,
             currency: 'CNY',
-            payer: $payer,
+            payerUuid: $payer->getUuid(),
             subject: 'Wallet pay',
         ));
 
@@ -70,7 +70,7 @@ final class WalletGatewayIntegrationTest extends IntegrationKernelTestCase
     public function testWalletGatewayRequiresSystemWallet(): void
     {
         [$payer] = $this->createUserWallet('wallet-error@example.com', 1000);
-        $invoice = $this->invoiceService->createInvoice(new CreateInvoiceRequest('wallet_test', 'wallet-2', Invoice::SCENE_ORDER, 100, 'CNY', $payer));
+        $invoice = $this->invoiceService->createInvoice(new CreateInvoiceRequest('wallet_test', 'wallet-2', Invoice::SCENE_ORDER, 100, 'CNY', $payer->getUuid()));
 
         $this->expectException(\InvalidArgumentException::class);
         $this->invoiceService->pay($invoice, Invoice::PAYMENT_WALLET);
