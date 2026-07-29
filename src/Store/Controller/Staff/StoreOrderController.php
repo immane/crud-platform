@@ -8,7 +8,7 @@ use App\Core\Controller\RestController;
 use App\Core\View\ApiView;
 use App\Core\View\ScopedDetailApiViewMixin;
 use App\Core\View\ScopedListApiViewMixin;
-use App\Identity\Entity\User;
+use App\Core\Security\UserUuidPrincipalInterface;
 use App\Store\Entity\Store;
 use App\Store\Entity\StoreMembership;
 use App\Store\Entity\StoreOrder;
@@ -123,7 +123,7 @@ final class StoreOrderController extends RestController
     {
         $store = $this->storeService->get(['uuid' => $storeUuid]);
         $user = $this->getUser();
-        if (!$store instanceof Store || !$user instanceof User) {
+        if (!$store instanceof Store || !$user instanceof UserUuidPrincipalInterface) {
             return null;
         }
 

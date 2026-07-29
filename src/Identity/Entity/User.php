@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Identity\Entity;
 
+use App\Core\Security\UserUuidPrincipalInterface;
 use App\Core\Utils\UUID;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -15,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\UniqueConstraint(name: 'uniq_users_email', columns: ['email'])]
 #[ORM\UniqueConstraint(name: 'uniq_users_phone', columns: ['phone'])]
 #[ORM\UniqueConstraint(name: 'uniq_users_uuid', columns: ['uuid'])]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, UserUuidPrincipalInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

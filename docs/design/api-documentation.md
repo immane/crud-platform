@@ -24,7 +24,7 @@ Controller #[OA\*] attributes
 
 ## 2. Single-File Enricher
 
-**File**: `src/Core/EventListener/OpenApiEnricherListener.php`
+**File**: `packages/platform-kernel/src/EventListener/OpenApiEnricherListener.php`
 
 All API documentation enrichment lives in ONE file. No controller changes needed.
 

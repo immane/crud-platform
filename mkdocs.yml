@@ -47,6 +47,7 @@ nav:
   - Design Contracts:
       - System Architecture: design/system-architecture.md
       - Microservice Transition: design/microservice-transition.md
+      - Store Extraction Readiness: design/store-extraction-readiness.md
       - API Design: design/api-design.md
       - Data Model: design/data-model.md
       - Module Design: design/module-design.md

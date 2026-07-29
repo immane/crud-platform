@@ -10,6 +10,13 @@
             "options": {
                 "symlink": false
             }
+        },
+        {
+            "type": "path",
+            "url": "packages/platform-kernel",
+            "options": {
+                "symlink": false
+            }
         }
     ],
     "require": {
@@ -18,6 +25,7 @@
         "ext-iconv": "*",
         "beberlei/doctrineextensions": "^1.5",
         "crud-platform/integration-contracts": "^1.0@dev",
+        "crud-platform/platform-kernel": "^1.0.1@dev",
         "doctrine/doctrine-bundle": "^3.2.4",
         "doctrine/doctrine-migrations-bundle": "^4.0",
         "doctrine/orm": "^3.6.7",

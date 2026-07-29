@@ -36,10 +36,6 @@ deptrac:
       - App\Common\Repository\SettingRepository
     App\Storage\Service\QiniuStorage:
       - App\Common\Repository\SettingRepository
-    App\Store\Controller\App\StoreOrderController:
-      - App\Identity\Entity\User
-    App\Store\Controller\Staff\StoreOrderController:
-      - App\Identity\Entity\User
     App\Trade\Controller\App\OrderController:
       - App\Identity\Entity\User
     App\Trade\Entity\Order:

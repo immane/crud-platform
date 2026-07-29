@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Identity\Entity;
 
 use App\Core\Utils\UUID;
+use App\Core\Security\UserUuidPrincipalInterface;
 use App\Identity\Entity\User;
 use PHPUnit\Framework\TestCase;
 
@@ -16,6 +17,7 @@ final class UserTest extends TestCase
 
         self::assertInstanceOf(\Symfony\Component\Security\Core\User\UserInterface::class, $user);
         self::assertInstanceOf(\Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface::class, $user);
+        self::assertInstanceOf(UserUuidPrincipalInterface::class, $user);
     }
 
     public function testEmailNormalization(): void

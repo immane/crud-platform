@@ -33,7 +33,8 @@ governance, not a mass code move or database split. See
 Current boundary risks that must be removed before extraction include shared
 `Identity\Entity\User` Doctrine associations, synchronous Trade/Payment/Wallet
 calls, Payment/Wechat/Wallet plugin contracts that expose Doctrine and Symfony types,
-and PHP-class-based Messenger contracts. `Core` remains a framework library, while
+and PHP-class-based Messenger contracts. `Core` is provided by
+`packages/platform-kernel`, while
 Promotion and Storage remain in-process plugins/adapters until scalar service
 contracts exist.
 
@@ -94,6 +95,14 @@ is the input `eventId`. Legacy envelopes without a correlation ID use their own
 event ID as a compatibility root. HTTP actions and scheduled jobs still create new
 root correlations through the default Outbox behavior.
 
+Store extraction readiness is tracked in
+[`docs/design/store-extraction-readiness.md`](../design/store-extraction-readiness.md).
+Store has no remaining direct cross-module Entity or Repository imports: its two
+controller reads of `Identity\Entity\User` now use
+`Core\Security\UserUuidPrincipalInterface`. The active source-move blockers are
+Trade's in-process StoreContext resolver, legacy queue
+drain, and Store database baseline/rehearsal.
+
 ## 2. Directory Structure
 
 ```
@@ -102,7 +111,7 @@ root correlations through the default Outbox behavior.
 ├── src/Kernel.php                # Symfony Kernel (MicroKernelTrait)
 ├── bin/console                   # CLI entry point
 │
-├── src/Core/                     # Framework core
+├── packages/platform-kernel/      # Shared framework core (App\Core namespace)
 │   ├── Controller/RestController.php    # Base API controller (success/warning/pagination)
 │   ├── Controller/System/               # System introspection (EntityController, RouterController)
 │   ├── View/                     # PHP traits: List, Detail, Create, Update, Delete, Workflow, Single, Transform
@@ -572,7 +581,7 @@ All user-facing messages pass through the translator:
 | JWT auth failures | `JwtAuthenticator::onAuthenticationFailure()` | `$this->translator->trans($messageKey)` |
 | Entity field names | `EntityController` `/system/entities/{name}` | `$this->getTranslator()->trans($plainTextFieldName)` |
 
-### 10.3 LocaleListener (`src/Core/EventListener/LocaleListener.php`)
+### 10.3 LocaleListener (`packages/platform-kernel/src/EventListener/LocaleListener.php`)
 
 Registered at `kernel.request` priority 20. Language detection priority:
 
@@ -639,7 +648,7 @@ Multipart fields:
 | `/system/entities/{entityName}` | GET | Field + association metadata per entity (type, nullable, targetEntity) |
 | `/system/router` | GET | List all registered routes |
 
-Placed in `src/Core/Controller/System/` (framework layer). NelmioApiDoc path_patterns include `^/system`. Tag: `System`.
+Placed in `packages/platform-kernel/src/Controller/System/` (framework layer). NelmioApiDoc path_patterns include `^/system`. Tag: `System`.
 
 ## 13. Key Patterns
 
@@ -692,7 +701,7 @@ Placed in `src/Core/Controller/System/` (framework layer). NelmioApiDoc path_pat
 
 Controller `#[OA\*]` attributes → swagger-php (raw spec) → NelmioApiDocBundle (merge config) → `OpenApiEnricherListener` (post-process) → Swagger UI
 
-### 14.2 OpenApiEnricherListener (`src/Core/EventListener/OpenApiEnricherListener.php`)
+### 14.2 OpenApiEnricherListener (`packages/platform-kernel/src/EventListener/OpenApiEnricherListener.php`)
 
 Enriches all endpoints (90+):
 - **`detectTag()`**: Infers module tag from `operationId`: `manage-products-*` → Products, `system-*` → System, `wechat-*` → Wechat, `sys-auth-*` → Auth, etc.

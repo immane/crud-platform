@@ -1,4 +1,7 @@
 {
+    "crud-platform/platform-kernel": {
+        "version": "1.0.0-dev"
+    },
     "deptrac/deptrac": {
         "version": "4.7.1"
     },

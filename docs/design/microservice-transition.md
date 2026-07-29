@@ -183,6 +183,9 @@ Outbox Publisher. It must not be added to the scheduler.
 
 ## 6. Extraction Order And Gates
 
+The Store-specific dependency inventory and source-move gates are maintained in
+[`docs/design/store-extraction-readiness.md`](store-extraction-readiness.md).
+
 The preferred order is:
 
 ```text

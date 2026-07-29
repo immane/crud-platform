@@ -5,6 +5,7 @@ deptrac:
   paths:
     - src/
     - packages/integration-contracts/src/
+    - packages/platform-kernel/src/
   layers:
     - name: Application
       collectors:

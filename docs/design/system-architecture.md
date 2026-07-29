@@ -147,7 +147,7 @@ own authorization and ownership rules.
 
 ---
 
-## 4. Core Framework (`src/Core/`)
+## 4. Core Framework (`packages/platform-kernel/src/`)
 
 Core provides foundational abstractions. It MUST NOT depend on any business module.
 It is a framework library candidate, not a future network service.
