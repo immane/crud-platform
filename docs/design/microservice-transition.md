@@ -157,6 +157,22 @@ separate, resumable backfill command will update unpublished rows in bounded bat
 and report progress. It must be deployed and observed before any non-null constraint
 or publisher cutover is considered.
 
+The backfill is intentionally manual and dry-run by default. Run each service
+command with a conservative production batch size, observe the reported count and
+database load, then repeat until dry-run reports zero:
+
+```bash
+php bin/console app:trade:outbox:backfill-correlation --limit=500
+php bin/console app:trade:outbox:backfill-correlation --limit=500 --apply
+php bin/console app:store:outbox:backfill-correlation --limit=500 --apply
+php bin/console app:inventory:outbox:backfill-correlation --limit=500 --apply
+```
+
+Each conditional update rechecks that the row is both unpublished and missing a
+correlation ID. The command neither updates published rows nor changes
+`causation_id`, so it can safely resume after interruption and coexist with the
+Outbox Publisher. It must not be added to the scheduler.
+
 ## 6. Extraction Order And Gates
 
 The preferred order is:

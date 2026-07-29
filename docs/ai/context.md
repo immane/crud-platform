@@ -855,6 +855,9 @@ Requires `.env.prod.local` copied from `.env.prod.example` with `APP_SECRET`, `R
 | `app:trade:outbox:publish` | Trade | Relay unpublished Trade integration events to Messenger |
 | `app:store:outbox:publish` | Store | Relay Store acceptance/rejection events to Messenger |
 | `app:inventory:outbox:publish` | Inventory | Relay published Inventory integration events to Messenger |
+| `app:trade:outbox:backfill-correlation` | Trade | Dry-run or `--apply` bounded correlation backfill for unpublished Trade Outbox rows |
+| `app:store:outbox:backfill-correlation` | Store | Dry-run or `--apply` bounded correlation backfill for unpublished Store Outbox rows |
+| `app:inventory:outbox:backfill-correlation` | Inventory | Dry-run or `--apply` bounded correlation backfill for unpublished Inventory Outbox rows |
 | `app:inventory:reservations:release-expired` | Inventory | Release expired confirmed reservations |
 
 ## 21. Service Container Wiring
