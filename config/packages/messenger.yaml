@@ -6,13 +6,17 @@ framework:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
             async:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                # Keep queued legacy wrapper FQCNs decodable during contract migration.
+                serializer: messenger.transport.native_php_serializer
                 options:
                     use_notify: true
                     check_delayed_interval: 60000
                 retry_strategy:
                     max_retries: 3
                     multiplier: 2
-            failed: 'doctrine://default?queue_name=failed'
+            failed:
+                dsn: 'doctrine://default?queue_name=failed'
+                serializer: messenger.transport.native_php_serializer
             # sync: 'sync://'
 
         default_bus: messenger.bus.default

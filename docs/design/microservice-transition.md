@@ -22,28 +22,30 @@ databases prematurely.
 
 ```text
 apps/
-  commerce-service/       # Transitional home for Catalog, Ordering, Pricing
-  store-service/
-  inventory-service/
-  payment-service/
-  wallet-service/
-  identity-service/
-  content-service/
+  commerce/               # Transitional home for Catalog, Ordering, Pricing
+  store/
+  inventory/
+  payment/
+  wallet/
+  identity/
+  content/
 packages/
   platform-kernel/        # Framework-only HTTP/CRUD/observability utilities
   integration-contracts/  # Versioned transport-neutral event schemas
   test-support/
 contracts/
-  events/                 # Source schemas and compatibility fixtures
+  integration/            # Manifest, schemas, and compatibility fixtures
   openapi/                # Published service API contracts
-deploy/
-  compose/
+infrastructure/
+  docker/
+  local/
   gateway/
+  rabbitmq/
 docs/
 tools/
 ```
 
-Each `apps/*-service` is independently buildable and contains its own
+Each `apps/*` is independently buildable and contains its own
 `composer.json`, `src/Kernel.php`, `config/`, `migrations/`, `public/`, `bin/`,
 `tests/`, and Docker build definition. A root Composer workspace may coordinate
 local development, but it must not conceal an undeclared runtime dependency.
@@ -88,27 +90,39 @@ The following rules apply before a module can become independently deployable:
 7. Public routes remain stable through an API gateway or routing layer while
    ownership moves between services.
 
-## 5. Integration Event Contract
+## 5. Integration Message Contract
 
-All integration events use one versioned envelope:
+All integration Events and Commands use one versioned envelope:
 
 ```json
 {
   "eventId": "uuid",
-  "type": "store.order.accepted.v1",
+  "type": "store.order.accepted",
   "version": 1,
   "aggregateType": "store_order",
   "aggregateId": "uuid",
   "occurredAt": "2026-07-29T12:00:00+00:00",
   "correlationId": "uuid",
-  "causationId": "uuid",
+  "causationId": null,
   "payload": {}
 }
 ```
 
-The schema is owned by `packages/integration-contracts` or `contracts/events`,
-not by a producer or consumer Symfony namespace. Changes require a new event
-version and compatibility coverage.
+The `type` is unversioned. The broker topic is derived as
+`type + ".v" + version`; for example, `store.order.accepted.v1`. All nine fields
+are required in canonical v1 envelopes. `causationId` may be null.
+
+The schema and manifest are owned by `contracts/integration`, while PHP carrier
+classes live in `packages/integration-contracts`, not in a producer or consumer
+Symfony namespace. Changes require a new message version and compatibility
+coverage.
+
+Events are past-tense facts with manifest `kind: "event"`. Requests such as
+`inventory.reservation.requested.v1` and
+`inventory.reservation.release.requested.v1` are Commands with
+`kind: "command"`, even though they use the same envelope. Legacy Messenger
+wrapper classes remain compatibility input until old native-PHP serialized queue
+rows and failed messages have been drained or migrated.
 
 ## 6. Extraction Order And Gates
 
@@ -141,7 +155,7 @@ must first be decoupled inside the monolith. Examples of required work:
 Directory restructuring is considered complete only when all of the following
 exist, even before business code is moved:
 
-- The target `apps/`, `packages/`, `contracts/`, `deploy/`, and `tools/` ownership
+- The target `apps/`, `packages/`, `contracts/`, `infrastructure/`, and `tools/` ownership
   model is documented and reflected in repository tooling.
 - Architecture checks reject forbidden cross-service imports and entity leaks.
 - Existing Trade, Store, and Inventory events share the envelope in section 5.

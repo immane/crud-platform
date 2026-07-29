@@ -37,6 +37,37 @@ and PHP-class-based Messenger contracts. `Core` remains a framework library, whi
 Promotion and Storage remain in-process plugins/adapters until scalar service
 contracts exist.
 
+### 1.2 Target Monorepo Layout
+
+The future repository layout uses `apps/` for independently deployable business
+services, `packages/` for reusable PHP libraries, `contracts/` for published
+cross-service schemas, and `infrastructure/` for broker, gateway, local runtime,
+and deployment configuration. Do not use `*-service` suffixes under `apps/`.
+Services may retain the current pragmatic Symfony structure (`Controller/`,
+`Entity/`, `Repository/`, `Service/`, `MessageHandler/`, `Command/`, `DTO/`,
+`Exception/`) during extraction; independently deployable boundaries, database
+ownership, and contracts matter more than a simultaneous internal DDD rewrite.
+
+`infrastructure/` contains repository-level runtime configuration such as Docker,
+RabbitMQ, and gateway settings. Service-specific Doctrine, Messenger, HTTP-client,
+and third-party PHP adapters stay inside their owning `apps/*` application.
+
+### 1.3 Integration Contract Foundation
+
+`packages/integration-contracts` now provides transport-neutral v1 carrier classes
+for the nine Trade/Store/Inventory messages. `contracts/integration` owns the
+manifest, Draft 2020-12 envelope schema, per-message schemas, and fixtures. The
+canonical envelope requires `eventId`, unversioned `type`, `version`,
+`aggregateType`, `aggregateId`, `occurredAt`, `correlationId`, `causationId`, and
+`payload`; the broker topic is `type + ".v" + version`.
+
+Seven messages are Events (past-tense facts); `inventory.reservation.requested`
+and `inventory.reservation.release.requested` are Commands. This foundation does
+not yet change publishers, consumers, Outbox/Inbox storage, queues, or routes.
+`config/packages/messenger.yaml` explicitly retains Symfony's native PHP serializer
+because existing `async` and `failed` rows serialize the old `App\*\Message` wrapper
+FQCNs. Those wrappers remain until queued legacy messages are drained or migrated.
+
 ## 2. Directory Structure
 
 ```

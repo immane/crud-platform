@@ -4,6 +4,7 @@ imports:
 deptrac:
   paths:
     - src/
+    - packages/integration-contracts/src/
   layers:
     - name: Application
       collectors:
@@ -12,7 +13,11 @@ deptrac:
     - name: Vendor
       collectors:
         - type: classLike
-          value: ^(?!App\\).*
+          value: ^(?!(?:App|CrudPlatform\\IntegrationContracts)\\).*
+    - name: IntegrationContracts
+      collectors:
+        - type: classLike
+          value: ^CrudPlatform\\IntegrationContracts\\
     - name: Core
       collectors:
         - type: classLike
@@ -101,6 +106,7 @@ deptrac:
     Application:
       - Core
       - Vendor
+      - IntegrationContracts
       - CommonCode
       - CommonPersistence
       - IdentityCode
@@ -123,6 +129,7 @@ deptrac:
       - WechatPersistence
     Core: [Vendor]
     Vendor: []
+    IntegrationContracts: [Vendor]
     CommonCode: [Core, Vendor, CommonPersistence, IdentityCode, InventoryCode, PaymentCode, PromotionCode, StorageCode, StoreCode, TradeCode, WalletCode, WechatCode]
     CommonPersistence: [Core, Vendor, CommonCode, IdentityCode, InventoryCode, PaymentCode, PromotionCode, StorageCode, StoreCode, TradeCode, WalletCode, WechatCode]
     IdentityCode: [Core, Vendor, CommonCode, IdentityPersistence, InventoryCode, PaymentCode, PromotionCode, StorageCode, StoreCode, TradeCode, WalletCode, WechatCode]
