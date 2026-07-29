@@ -97,7 +97,8 @@
         "rector": "@php vendor/bin/rector process --dry-run --no-progress-bar --memory-limit=512M",
         "rector:fix": "@php vendor/bin/rector process --no-progress-bar --memory-limit=512M",
         "rector:types": "@php vendor/bin/rector process --config=rector-types.php --no-progress-bar --memory-limit=512M",
-        "rector:types:check": "@php vendor/bin/rector process --config=rector-types.php --dry-run --no-progress-bar --memory-limit=512M"
+        "rector:types:check": "@php vendor/bin/rector process --config=rector-types.php --dry-run --no-progress-bar --memory-limit=512M",
+        "deptrac": "@php vendor/bin/deptrac --config-file=deptrac.yaml --no-cache --fail-on-uncovered"
     },
     "conflict": {
         "symfony/symfony": "*"
@@ -109,6 +110,7 @@
         }
     },
     "require-dev": {
+        "deptrac/deptrac": "^4.7",
         "phpstan/phpstan": "^2.2",
         "phpstan/phpstan-doctrine": "^2.0",
         "phpstan/phpstan-symfony": "^2.0",

@@ -1,6 +1,6 @@
 # CRUD Skeleton - Full Codebase Context
 
-> Context snapshot. Last updated: 2026-07-26
+> Context snapshot. Last updated: 2026-07-29
 
 ---
 
@@ -15,6 +15,27 @@
 - NelmioApiDoc (Swagger at `/api/doc`), PHPUnit 12.5, Docker Compose (7 services: app, worker, scheduler, nginx, MySQL, Redis, Mailpit)
 - MkDocs Material + GitHub Pages documentation
 - **i18n**: Symfony Translation with en, zh, zh_Hant, ja — all user-facing messages, entity/field names, and status values translated
+
+### 1.1 Architecture Status And Migration Direction
+
+The current codebase is a **modular monolith**, not a collection of independently
+deployable microservices. It has one Kernel, Composer project, service container,
+database, migration history, Messenger queue, worker, scheduler, Docker image, and
+test suite. The `Trade -> Store -> Inventory` Outbox/Inbox flow is the strongest
+existing extraction seam; it does not yet make those modules separate services.
+
+The agreed target is a **multi-application monorepo**. Each extracted service will
+own its Kernel, configuration, database/migrations, queues, worker, scheduler,
+container image, tests, and CI. The first stage is directory and dependency
+governance, not a mass code move or database split. See
+[`docs/design/microservice-transition.md`](../design/microservice-transition.md).
+
+Current boundary risks that must be removed before extraction include shared
+`Identity\Entity\User` Doctrine associations, synchronous Trade/Payment/Wallet
+calls, Payment/Wechat/Wallet plugin contracts that expose Doctrine and Symfony types,
+and PHP-class-based Messenger contracts. `Core` remains a framework library, while
+Promotion and Storage remain in-process plugins/adapters until scalar service
+contracts exist.
 
 ## 2. Directory Structure
 
@@ -519,7 +540,10 @@ Sub-requests are ignored.
 
 ## 11. Storage Module
 
-Storage is an infrastructure module under `src/Storage/`. Common/Media depends only on `MediaStorageInterface` and `MediaStorageRegistry`; Storage does not depend on Common entities or controllers.
+Storage is an infrastructure module under `src/Storage/`. Common/Media depends on
+`MediaStorageInterface` and `MediaStorageRegistry`. The Qiniu driver currently reads
+`common_setting` through Common repositories, so Storage is not yet independently
+deployable; this dependency must be removed before extraction.
 
 ### 11.1 Drivers
 
@@ -670,6 +694,7 @@ Enriches all endpoints (90+):
 | File | Purpose |
 |------|---------|
 | `docs/design/system-architecture.md` | Layer rules, module structure, DI contract |
+| `docs/design/microservice-transition.md` | Target multi-application monorepo, service-boundary rules, extraction gates |
 | `docs/design/api-design.md` | Response envelope, URL conventions, HTTP semantics, query params |
 | `docs/design/data-model.md` | Entity conventions, naming, relationships, patterns |
 | `docs/design/module-design.md` | Module skeleton, file contracts, checklist |
@@ -699,6 +724,7 @@ Enriches all endpoints (90+):
 - **DB**: SQLite `var/test.db` in test environment
 - **Coverage**: 90% minimum (enforced in CI), currently **90.49% lines** from latest local Xdebug run
 - **Test count**: **1711 tests**, **5652 assertions**
+- **Architecture gate**: Deptrac enforces that Core has no business-module dependency and blocks new cross-module Entity/Repository dependencies. `deptrac-baseline.yaml` records exact legacy source-to-target debt; run `composer deptrac`.
 - **Static analysis**: PHPStan Level 8 with zero errors in its configured scope (`src/`, excluding optional SDK code, exception classes, and documented false-positive suppressions). Generic contract via `@template TEntity` on `BaseServiceInterface`/`BaseService` + `@extends` on 18 concrete service pairs. Rector automates Doctrine Collection/Repository PHPDoc with `composer rector:types`; CI enforces `composer rector:types:check` as a dry-run.
 - **Local PHP note**: default `php` may point to PHP 7.4; use Homebrew PHP 8.5 at `/opt/homebrew/opt/php@8.5/bin/php` for local Symfony/PHPUnit commands.
 - **HTML coverage report**: `XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html var/coverage`

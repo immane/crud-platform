@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Core\EventListener;
 
-use App\Identity\Entity\User;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 final class AccessLogListener
 {
@@ -75,13 +75,11 @@ final class AccessLogListener
         }
 
         $user = $token->getUser();
-        if (!$user instanceof User) {
+        if (!$user instanceof UserInterface) {
             return '(anon)';
         }
 
-        $id = $user->getId();
-
-        return sprintf('@%s#%d', $user->__toString(), $id ?? 0);
+        return '@' . $user->getUserIdentifier();
     }
 
     private function isAuthPath(string $pathInfo): bool

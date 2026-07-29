@@ -1,8 +1,9 @@
 # Store Bundle Design
 
-> **Status: phase 1-3 implemented in the modular monolith.** Store, membership,
-> StoreOrder, Trade/Store Outbox-Inbox, Messenger consumers, and Store acceptance are
-> implemented. Inventory reservation remains an intentionally deferred boundary.
+> **Status: implemented in the modular monolith.** Store, membership, StoreOrder,
+> Trade/Store Outbox-Inbox, Messenger consumers, Store acceptance, and the optional
+> Inventory reservation integration are implemented. Inventory remains disabled by
+> default and is not production-ready until its documented safety checklist is met.
 > The Store bundle (`src/Store/`) owns multi-store context, store operations, and the
 > store-side order projection. Trade remains the single commercial order entry point
 > and the source of truth for order amount, payment, refund, and customer order status.

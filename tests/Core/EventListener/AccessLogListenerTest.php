@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Core\EventListener;
 
 use App\Core\EventListener\AccessLogListener;
-use App\Identity\Entity\User;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\AbstractLogger;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +21,7 @@ final class AccessLogListenerTest extends TestCase
     public function testLogsPostRequest(): void
     {
         $logger = new InMemoryLogger();
-        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('john', 42));
+        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('john'));
 
         $request = Request::create('/api/test', 'POST', [], [], [], [], '{"key":"value"}');
         $response = new Response('{"ok":true}', 201);
@@ -36,7 +35,7 @@ final class AccessLogListenerTest extends TestCase
         $listener->onKernelResponse($event);
 
         self::assertCount(1, $logger->records);
-        self::assertStringContainsString('@john#42', $logger->records[0]);
+        self::assertStringContainsString('@john', $logger->records[0]);
         self::assertStringContainsString('POST', $logger->records[0]);
         self::assertStringContainsString('/api/test', $logger->records[0]);
         self::assertStringContainsString('201', $logger->records[0]);
@@ -47,7 +46,7 @@ final class AccessLogListenerTest extends TestCase
     public function testLogsPutRequest(): void
     {
         $logger = new InMemoryLogger();
-        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('jane', 7));
+        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('jane'));
 
         $request = Request::create('/api/test/1', 'PUT', [], [], [], [], '{"updated":true}');
         $response = new Response('{"ok":true}', 200);
@@ -61,7 +60,7 @@ final class AccessLogListenerTest extends TestCase
         $listener->onKernelResponse($event);
 
         self::assertCount(1, $logger->records);
-        self::assertStringContainsString('@jane#7', $logger->records[0]);
+        self::assertStringContainsString('@jane', $logger->records[0]);
         self::assertStringContainsString('PUT', $logger->records[0]);
         self::assertStringContainsString('/api/test/1', $logger->records[0]);
     }
@@ -69,7 +68,7 @@ final class AccessLogListenerTest extends TestCase
     public function testLogsDeleteRequest(): void
     {
         $logger = new InMemoryLogger();
-        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('admin', 1));
+        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('admin'));
 
         $request = Request::create('/api/test/1', 'DELETE');
         $response = new Response('', 204);
@@ -83,14 +82,14 @@ final class AccessLogListenerTest extends TestCase
         $listener->onKernelResponse($event);
 
         self::assertCount(1, $logger->records);
-        self::assertStringContainsString('@admin#1', $logger->records[0]);
+        self::assertStringContainsString('@admin', $logger->records[0]);
         self::assertStringContainsString('DELETE', $logger->records[0]);
     }
 
     public function testDoesNotLogGetRequest(): void
     {
         $logger = new InMemoryLogger();
-        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('john', 42));
+        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('john'));
 
         $request = Request::create('/api/test', 'GET');
         $response = new Response('{"data":[]}', 200);
@@ -109,7 +108,7 @@ final class AccessLogListenerTest extends TestCase
     public function testEmptyRequestBodyLoggedAsEmpty(): void
     {
         $logger = new InMemoryLogger();
-        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('john', 42));
+        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('john'));
 
         $request = Request::create('/api/test', 'POST');
         $response = new Response('{"ok":true}', 201);
@@ -129,7 +128,7 @@ final class AccessLogListenerTest extends TestCase
     public function testEmptyResponseBodyLoggedAsEmpty(): void
     {
         $logger = new InMemoryLogger();
-        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('john', 42));
+        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('john'));
 
         $request = Request::create('/api/test', 'POST', [], [], [], [], '{"key":"value"}');
         $response = new Response('', 204);
@@ -149,7 +148,7 @@ final class AccessLogListenerTest extends TestCase
     public function testStreamedResponseLoggedAsBinary(): void
     {
         $logger = new InMemoryLogger();
-        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('john', 42));
+        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('john'));
 
         $request = Request::create('/api/test', 'POST', [], [], [], [], '{"key":"value"}');
         $response = new StreamedResponse(function (): void {
@@ -171,7 +170,7 @@ final class AccessLogListenerTest extends TestCase
     public function testTruncatesLongRequestBody(): void
     {
         $logger = new InMemoryLogger();
-        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('john', 42));
+        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('john'));
 
         $longBody = str_repeat('x', 5000);
         $request = Request::create('/api/test', 'POST', [], [], [], [], $longBody);
@@ -193,7 +192,7 @@ final class AccessLogListenerTest extends TestCase
     public function testTruncatesLongResponseBody(): void
     {
         $logger = new InMemoryLogger();
-        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('john', 42));
+        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('john'));
 
         $longBody = str_repeat('y', 5000);
         $request = Request::create('/api/test', 'POST');
@@ -214,7 +213,7 @@ final class AccessLogListenerTest extends TestCase
     public function testLogFormatContainsMethodUriStatusReqRes(): void
     {
         $logger = new InMemoryLogger();
-        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('alice', 99));
+        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('alice'));
 
         $request = Request::create('/api/orders/1/payment', 'POST', [], [], [], [], '{"payment":"wechat"}');
         $response = new Response('{"status":"paying"}', 200);
@@ -229,7 +228,7 @@ final class AccessLogListenerTest extends TestCase
 
         self::assertCount(1, $logger->records);
         self::assertSame(
-            '@alice#99 POST /api/orders/1/payment | 200 | REQ: {"payment":"wechat"} | RES: {"status":"paying"}',
+            '@alice POST /api/orders/1/payment | 200 | REQ: {"payment":"wechat"} | RES: {"status":"paying"}',
             $logger->records[0],
         );
     }
@@ -237,7 +236,7 @@ final class AccessLogListenerTest extends TestCase
     public function testDoesNotLogPatchRequest(): void
     {
         $logger = new InMemoryLogger();
-        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('john', 42));
+        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('john'));
 
         $request = Request::create('/api/test', 'PATCH', [], [], [], [], '{"partial":true}');
         $response = new Response('ok', 200);
@@ -361,7 +360,7 @@ final class AccessLogListenerTest extends TestCase
     public function testNonAuthPathShowsBodiesAnyway(): void
     {
         $logger = new InMemoryLogger();
-        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('bob', 3));
+        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('bob'));
 
         $request = Request::create('/api/v1/app/orders', 'POST', [], [], [], [], '{"items":[]}');
         $response = new Response('{"id":123}', 201);
@@ -402,7 +401,7 @@ final class AccessLogListenerTest extends TestCase
         self::assertStringContainsString('(anon)', $logger->records[0]);
     }
 
-    public function testTokenWithUserWithoutGetIdShowsAnon(): void
+    public function testTokenWithUserIdentifierIsLogged(): void
     {
         $logger = new InMemoryLogger();
         $user = new class implements \Symfony\Component\Security\Core\User\UserInterface {
@@ -426,13 +425,13 @@ final class AccessLogListenerTest extends TestCase
         $listener->onKernelResponse($event);
 
         self::assertCount(1, $logger->records);
-        self::assertStringContainsString('(anon)', $logger->records[0]);
+        self::assertStringContainsString('@no-id-user', $logger->records[0]);
     }
 
     public function testUsernameFallsBackToEmail(): void
     {
         $logger = new InMemoryLogger();
-        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser('', 42));
+        $listener = new AccessLogListener($logger, $this->tokenStorageWithUser(''));
 
         $request = Request::create('/api/test', 'POST');
         $response = new Response('ok', 200);
@@ -446,17 +445,18 @@ final class AccessLogListenerTest extends TestCase
         $listener->onKernelResponse($event);
 
         self::assertCount(1, $logger->records);
-        self::assertStringContainsString('@user@example.com#42', $logger->records[0]);
+        self::assertStringContainsString('@user@example.com', $logger->records[0]);
     }
 
-    private function tokenStorageWithUser(string $username, int $id): TokenStorageInterface
+    private function tokenStorageWithUser(string $username): TokenStorageInterface
     {
-        $user = new User();
-        $user->setUsername($username);
-        $user->setEmail('user@example.com');
-        $user->setPassword('ignored');
-        $ref = new \ReflectionProperty(User::class, 'id');
-        $ref->setValue($user, $id);
+        $user = new class($username) implements \Symfony\Component\Security\Core\User\UserInterface {
+            public function __construct(private readonly string $username) {}
+
+            public function getRoles(): array { return []; }
+            public function eraseCredentials(): void {}
+            public function getUserIdentifier(): string { return $this->username !== '' ? $this->username : 'user@example.com'; }
+        };
 
         $token = $this->createStub(TokenInterface::class);
         $token->method('getUser')->willReturn($user);
