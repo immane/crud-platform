@@ -9,9 +9,17 @@ services:
     volumes:
       - ./:/var/www/html
 
+  store-app:
+    volumes:
+      - ./:/workspace
+
   database:
     ports:
-      - "3306:3306"
+      - "${MYSQL_PORT:-3306}:3306"
+
+  store-database:
+    ports:
+      - "3307:3306"
 
   mailer:
     ports:

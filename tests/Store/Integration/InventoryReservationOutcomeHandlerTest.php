@@ -11,8 +11,8 @@ use CrudPlatform\IntegrationContracts\Event\V1\InventoryReservationConfirmed;
 use App\Store\Entity\Store;
 use App\Store\Entity\StoreOrder;
 use App\Store\Repository\StoreOrderRepository;
-use App\Store\Repository\StoreOutboxMessageRepository;
-use App\Store\Repository\StoreConsumedEventRepository;
+use App\Store\Repository\OutboxMessageRepository;
+use App\Store\Repository\InboxMessageRepository;
 use App\Store\Service\StoreOrderServiceInterface;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
@@ -28,8 +28,8 @@ final class InventoryReservationOutcomeHandlerTest extends IntegrationWebTestCas
         self::ensureKernelShutdown();
         $client = static::createClient();
         $em = $client->getContainer()->get(EntityManagerInterface::class);
-        $em->createQuery('DELETE FROM App\\Store\\Entity\\StoreOutboxMessage message')->execute();
-        $em->createQuery('DELETE FROM App\\Store\\Entity\\StoreConsumedEvent event')->execute();
+        $em->createQuery('DELETE FROM App\\Store\\Entity\\OutboxMessage message')->execute();
+        $em->createQuery('DELETE FROM App\\Store\\Entity\\InboxMessage event')->execute();
         $em->createQuery('DELETE FROM App\\Store\\Entity\\StoreOrder storeOrder')->execute();
         $em->createQuery('DELETE FROM App\\Store\\Entity\\Store store')->execute();
         self::ensureKernelShutdown();
@@ -42,7 +42,10 @@ final class InventoryReservationOutcomeHandlerTest extends IntegrationWebTestCas
         $handler->handleContract(new InventoryReservationConfirmed(['eventId' => '00000000-0000-4000-8000-000000000020', 'correlationId' => '00000000-0000-4000-8000-000000000026', 'type' => 'inventory.reservation.confirmed', 'version' => 1, 'payload' => $this->outcomePayload($order, ['confirmedAt' => '2026-07-26T00:00:00+00:00'])]));
         $handler(new InventoryReservationConfirmedMessage(['eventId' => '00000000-0000-4000-8000-000000000020', 'type' => 'inventory.reservation.confirmed', 'version' => 1, 'payload' => $this->outcomePayload($order, ['confirmedAt' => '2026-07-26T00:00:00+00:00'])]));
         self::assertSame(StoreOrder::STATUS_ACCEPTED, $container->get(StoreOrderRepository::class)->findOneByUuid($order->getUuid())?->getOperationalStatus());
-        $outbox = $container->get(StoreOutboxMessageRepository::class)->findUnpublished();
+        $outbox = array_values(array_filter(
+            $container->get(OutboxMessageRepository::class)->findUnpublished(),
+            static fn ($message): bool => $message->getTopic() !== 'store.directory.upserted.v1',
+        ));
         self::assertCount(1, $outbox);
         self::assertSame('00000000-0000-4000-8000-000000000026', $outbox[0]->getCorrelationId());
         self::assertSame('00000000-0000-4000-8000-000000000020', $outbox[0]->getCausationId());
@@ -78,7 +81,7 @@ final class InventoryReservationOutcomeHandlerTest extends IntegrationWebTestCas
         $handler($message);
 
         self::assertSame(StoreOrder::STATUS_CANCELLED, $container->get(StoreOrderRepository::class)->findOneByUuid($order->getUuid())?->getOperationalStatus());
-        self::assertNotNull($container->get(StoreConsumedEventRepository::class)->findOneByEventId('00000000-0000-4000-8000-000000000025'));
+        self::assertNotNull($container->get(InboxMessageRepository::class)->findOneByEventId('00000000-0000-4000-8000-000000000025'));
     }
 
     /** @return array{\Symfony\Component\DependencyInjection\ContainerInterface, StoreOrder} */

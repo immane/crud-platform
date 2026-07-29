@@ -35,6 +35,7 @@ Docker 是推荐的本地运行方式。在仓库根目录执行，主机只需�
 ```bash
 docker compose up -d --build
 docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec store-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec app php bin/console app:identity:user:create admin@example.com admin 'P@ssw0rd' --admin
 
 curl -X POST http://localhost:8080/api/auth/login \
@@ -43,6 +44,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 ```
 
 - API：`http://localhost:8080`
+- Store API：`http://localhost:8081`
 - OpenAPI：`http://localhost:8080/api/doc`
 - worker/scheduler 日志：`docker compose logs -f worker scheduler`
 
@@ -54,7 +56,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 |---|---|---|
 | Platform Kernel | `Core` | 共享框架库，不是服务 |
 | Commerce | `Trade`、`Promotion` | 过渡服务候选 |
-| Store Operations | `Store` | 首批提取候选 |
+| Store Operations | `Store` → `apps/store` | 已提取；单体在过渡期间托管 |
 | Inventory | `Inventory` | 首批提取候选，受安全条件约束 |
 | Payments | `Payment`、微信支付适配器 | 需要先建立持久化生命周期事件 |
 | Wallet/Ledger | `Wallet` | 在 Payment 契约解耦后提取 |

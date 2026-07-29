@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Store\Command;
 
 use App\Store\Command\PublishOutboxCommand;
-use App\Store\Entity\StoreOutboxMessage;
-use App\Store\Repository\StoreOutboxMessageRepository;
+use App\Store\Entity\OutboxMessage;
+use App\Store\Repository\OutboxMessageRepository;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
 use App\Tests\Integration\RecordingMessageBus;
@@ -29,7 +29,7 @@ final class PublishOutboxCommandTest extends IntegrationWebTestCase
 
         $client = static::createClient();
         $client->getContainer()->get(EntityManagerInterface::class)
-            ->createQuery('DELETE FROM App\\Store\\Entity\\StoreOutboxMessage message')
+            ->createQuery('DELETE FROM App\\Store\\Entity\\OutboxMessage message')
             ->execute();
         self::ensureKernelShutdown();
     }
@@ -46,7 +46,7 @@ final class PublishOutboxCommandTest extends IntegrationWebTestCase
             'inventory.reservation.release.requested.v1' => InventoryReservationReleaseRequested::class,
         ];
         foreach ($topics as $topic => $carrier) {
-            $entityManager->persist(new StoreOutboxMessage(
+            $entityManager->persist(new OutboxMessage(
                 $topic,
                 str_starts_with($topic, 'store.') ? 'store_order' : 'inventory_reservation',
                 '00000000-0000-4000-8000-000000000010',
@@ -60,7 +60,7 @@ final class PublishOutboxCommandTest extends IntegrationWebTestCase
 
         $bus = new RecordingMessageBus();
         $command = new PublishOutboxCommand(
-            $container->get(StoreOutboxMessageRepository::class),
+            $container->get(OutboxMessageRepository::class),
             $entityManager,
             $bus,
         );

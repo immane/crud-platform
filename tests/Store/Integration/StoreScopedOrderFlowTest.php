@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Store\Integration;
 
-use App\Store\Repository\StoreOutboxMessageRepository;
+use App\Store\Repository\OutboxMessageRepository;
 use App\Store\Service\StoreServiceInterface;
+use CrudPlatform\IntegrationContracts\Event\V1\StoreDirectoryUpserted;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
 use App\Trade\Entity\Order;
@@ -32,6 +33,18 @@ final class StoreScopedOrderFlowTest extends IntegrationWebTestCase
         $container = $client->getContainer();
         $entityManager = $container->get(EntityManagerInterface::class);
         $store = $container->get(StoreServiceInterface::class)->createStore('xuhui', 'Xuhui Store', 'Asia/Shanghai');
+        $directoryEvent = $container->get(OutboxMessageRepository::class)->findUnpublished()[0];
+        $container->get(\App\Trade\MessageHandler\StoreDirectoryUpsertedHandler::class)(new StoreDirectoryUpserted([
+            'eventId' => $directoryEvent->getEventId(),
+            'type' => 'store.directory.upserted',
+            'version' => 1,
+            'aggregateType' => 'store',
+            'aggregateId' => $store->getUuid(),
+            'occurredAt' => $directoryEvent->getOccurredAt()->format(DATE_ATOM),
+            'correlationId' => $directoryEvent->getCorrelationId() ?? $directoryEvent->getEventId(),
+            'causationId' => null,
+            'payload' => $directoryEvent->getPayload(),
+        ]));
 
         $product = new Product();
         $product->setName('Tea');
@@ -60,7 +73,10 @@ final class StoreScopedOrderFlowTest extends IntegrationWebTestCase
             'payload' => $tradeOutbox[0]->getPayload(),
         ]));
 
-        $storeOutbox = $container->get(StoreOutboxMessageRepository::class)->findUnpublished();
+        $storeOutbox = array_values(array_filter(
+            $container->get(OutboxMessageRepository::class)->findUnpublished(),
+            static fn ($message): bool => $message->getTopic() !== 'store.directory.upserted.v1',
+        ));
         self::assertCount(1, $storeOutbox);
         $container->get(\App\Trade\MessageHandler\StoreOrderAcceptedHandler::class)(new StoreOrderAcceptedMessage([
             'eventId' => $storeOutbox[0]->getEventId(),

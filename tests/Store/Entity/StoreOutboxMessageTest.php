@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Tests\Store\Entity;
 
 use App\Core\Utils\UUID;
-use App\Store\Entity\StoreOutboxMessage;
+use App\Store\Entity\OutboxMessage;
 use PHPUnit\Framework\TestCase;
 
 final class StoreOutboxMessageTest extends TestCase
 {
     public function testTracksPublicationAndRetryMetadata(): void
     {
-        $message = new StoreOutboxMessage('store.order.accepted.v1', 'store_order', 'order-uuid', ['orderUuid' => 'order-uuid']);
+        $message = new OutboxMessage('store.order.accepted.v1', 'store_order', 'order-uuid', ['orderUuid' => 'order-uuid']);
 
         self::assertTrue(UUID::is_valid($message->getEventId()));
         self::assertSame('store.order.accepted.v1', $message->getTopic());

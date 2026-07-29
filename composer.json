@@ -17,6 +17,20 @@
             "options": {
                 "symlink": false
             }
+        },
+        {
+            "type": "path",
+            "url": "packages/legacy-messenger-compat",
+            "options": {
+                "symlink": false
+            }
+        },
+        {
+            "type": "path",
+            "url": "apps/store",
+            "options": {
+                "symlink": false
+            }
         }
     ],
     "require": {
@@ -24,8 +38,10 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "beberlei/doctrineextensions": "^1.5",
-        "crud-platform/integration-contracts": "^1.0@dev",
+        "crud-platform/integration-contracts": "^1.1.1@dev",
+        "crud-platform/legacy-messenger-compat": "^1.0@dev",
         "crud-platform/platform-kernel": "^1.0.1@dev",
+        "crud-platform/store-app": "^1.0.1@dev",
         "doctrine/doctrine-bundle": "^3.2.4",
         "doctrine/doctrine-migrations-bundle": "^4.0",
         "doctrine/orm": "^3.6.7",

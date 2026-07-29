@@ -31,7 +31,9 @@
             restrictWarnings="true"
     >
         <include>
+            <directory>apps/store/src</directory>
             <directory>src</directory>
+            <directory>packages/legacy-messenger-compat/src</directory>
             <directory>packages/platform-kernel/src</directory>
         </include>
 

@@ -1,24 +1,9 @@
-# CRUD Skeleton — PHP Application
-# Targets: ~90 MB final image (Alpine + PHP 8.4 + extensions + app)
+# CRUD Skeleton — FrankenPHP application
 
-FROM php:8.4-fpm-alpine
+FROM dunglas/frankenphp:php8.4-alpine
 
 # PHP extensions
-RUN apk add --no-cache \
-    icu-libs \
-    libzip \
-    openssl \
-    && apk add --no-cache --virtual .build-deps \
-    icu-dev \
-    libzip-dev \
-    linux-headers \
-    && docker-php-ext-install -j$(nproc) \
-    pdo \
-    pdo_mysql \
-    intl \
-    zip \
-    opcache \
-    && apk del .build-deps
+RUN install-php-extensions pdo_mysql intl zip opcache
 
 # Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -26,8 +11,10 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # App
 WORKDIR /var/www/html
 
-# Dependencies first (cache layer)
+# Dependencies first (cache layer). The root requires local packages and Store app.
 COPY composer.json composer.lock symfony.lock ./
+COPY packages ./packages
+COPY apps/store ./apps/store
 RUN composer install --no-dev --no-scripts --no-interaction --no-progress --optimize-autoloader \
     && composer clear-cache
 
@@ -43,7 +30,9 @@ RUN mkdir -p var/jwt var/cache var/log \
 COPY docker/app/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-EXPOSE 9000
+COPY docker/frankenphp/Caddyfile /etc/caddy/Caddyfile
+
+EXPOSE 80
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD ["php-fpm"]
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]

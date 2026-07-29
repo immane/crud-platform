@@ -42,6 +42,11 @@ services:
             - '../src/Wechat/Service/Payment/WechatPayGateway.php'
             - '../src/Promotion/Exception/*'
 
+    App\Store\:
+        resource: '../vendor/crud-platform/store-app/src/'
+        exclude:
+            - '../vendor/crud-platform/store-app/src/Kernel.php'
+
     App\Core\:
         resource: '../vendor/crud-platform/platform-kernel/src/'
         exclude:
@@ -78,7 +83,7 @@ services:
     App\Core\Service\ServiceLocatorInterface: '@App\Core\Service\DefaultServiceLocator'
 
     App\Identity\Service\OtpStorageInterface: '@App\Identity\Service\LocalCacheOtpStorage'
-    App\Trade\Service\StoreContextResolverInterface: '@App\Store\Service\StoreContextResolver'
+    App\Trade\Service\StoreContextResolverInterface: '@App\Trade\Service\StoreContextResolver'
     App\Inventory\Service\MaterialServiceInterface: '@App\Inventory\Service\MaterialService'
     App\Inventory\Service\InventoryStockServiceInterface: '@App\Inventory\Service\InventoryStockService'
     App\Inventory\Service\SpecificationRecipeServiceInterface: '@App\Inventory\Service\SpecificationRecipeService'

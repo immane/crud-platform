@@ -57,7 +57,7 @@ local development, but it must not conceal an undeclared runtime dependency.
 | Platform Kernel | Core | Shared library, never a business service |
 | Identity & Access | Identity plus Wechat login adapter | Later extraction |
 | Commerce | Trade plus Promotion | Transitional service; Catalog and Ordering separate later |
-| Store Operations | Store | First extraction candidate |
+| Store Operations | Store → `apps/store` | Extracted; monolith hosts during transition |
 | Inventory | Inventory | First extraction candidate; production enablement remains blocked by its safety checklist |
 | Payments | Payment plus Wechat Pay adapter | After durable payment lifecycle events exist |
 | Wallet/Ledger | Wallet | After Payment contracts are scalar and durable |
@@ -121,8 +121,9 @@ Events are past-tense facts with manifest `kind: "event"`. Requests such as
 `inventory.reservation.requested.v1` and
 `inventory.reservation.release.requested.v1` are Commands with
 `kind: "command"`, even though they use the same envelope. Legacy Messenger
-wrapper classes remain compatibility input until old native-PHP serialized queue
-rows and failed messages have been drained or migrated.
+wrapper classes live in `packages/legacy-messenger-compat` and remain compatibility
+input until old native-PHP serialized queue rows and failed messages have been
+drained or migrated.
 
 ### 5.1 Carrier Migration Order
 
@@ -134,8 +135,9 @@ dual publishing is forbidden because not every consumer action is Inbox-idempote
 
 After consumers are deployed, publishers may switch one topic at a time from the
 legacy wrapper to the neutral carrier. Rollback changes only that publisher back to
-the legacy wrapper. Consumers and old wrapper classes remain in place until the
-`async` and `failed` queues no longer contain old native-PHP serialized messages.
+the legacy wrapper. Consumers and old wrapper classes remain in the compatibility
+package until the `async` and `failed` queues no longer contain old native-PHP
+serialized messages.
 
 All nine Trade, Store, and Inventory topics now publish their matching neutral
 carrier. The native PHP serializer remains temporarily, so carrier objects are
@@ -144,6 +146,13 @@ FQCNs from newly produced messages without changing the transport. A topic-level
 rollback changes only its Publisher back to the matching legacy wrapper. Consumers
 and wrappers remain until the historical `async` and `failed` queue records have
 been drained or migrated.
+
+Store directory ownership is synchronized separately through
+`store.directory.upserted.v1`. Store changes write this event in the same
+transaction, and Trade maintains a local read-only projection for `X-Store-Code`
+resolution. Before switching Trade to this projection in production, run
+`app:store:outbox:backfill-directory` as a dry run and then with `--apply` to
+initialize events for existing Stores.
 
 ### 5.2 Outbox Metadata Expansion
 

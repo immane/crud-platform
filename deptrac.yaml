@@ -3,8 +3,10 @@ imports:
 
 deptrac:
   paths:
+    - apps/store/src/
     - src/
     - packages/integration-contracts/src/
+    - packages/legacy-messenger-compat/src/
     - packages/platform-kernel/src/
   layers:
     - name: Application

@@ -7,12 +7,12 @@ namespace App\Tests\Store\Integration;
 use App\Store\Entity\Store;
 use App\Store\Entity\StoreOrder;
 use App\Store\Repository\StoreOrderRepository;
-use App\Store\Repository\StoreOutboxMessageRepository;
-use App\Store\Repository\StoreConsumedEventRepository;
+use App\Store\Repository\OutboxMessageRepository;
+use App\Store\Repository\InboxMessageRepository;
 use App\Store\Repository\StoreRepository;
-use App\Store\Repository\StoreTradeOrderCancellationRepository;
+use App\Store\Repository\TradeOrderCancellationRepository;
 use App\Store\Service\StoreOrderServiceInterface;
-use App\Store\Service\StoreOutboxService;
+use App\Store\Service\OutboxService;
 use App\Store\Service\StoreServiceInterface;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
@@ -32,9 +32,9 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
 
         $client = static::createClient();
         $entityManager = $client->getContainer()->get(EntityManagerInterface::class);
-        $entityManager->createQuery('DELETE FROM App\\Store\\Entity\\StoreOutboxMessage message')->execute();
-        $entityManager->createQuery('DELETE FROM App\\Store\\Entity\\StoreConsumedEvent event')->execute();
-        $entityManager->createQuery('DELETE FROM App\\Store\\Entity\\StoreTradeOrderCancellation cancellation')->execute();
+        $entityManager->createQuery('DELETE FROM App\\Store\\Entity\\OutboxMessage message')->execute();
+        $entityManager->createQuery('DELETE FROM App\\Store\\Entity\\InboxMessage event')->execute();
+        $entityManager->createQuery('DELETE FROM App\\Store\\Entity\\TradeOrderCancellation cancellation')->execute();
         $entityManager->createQuery('DELETE FROM App\\Store\\Entity\\StoreOrder storeOrder')->execute();
         $entityManager->createQuery('DELETE FROM App\\Store\\Entity\\Store store')->execute();
         self::ensureKernelShutdown();
@@ -76,7 +76,7 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
         self::assertNotNull($storeOrder);
         self::assertSame('accepted', $storeOrder->getOperationalStatus());
 
-        $outbox = $container->get(StoreOutboxMessageRepository::class)->findUnpublished();
+        $outbox = $this->businessOutbox($container->get(OutboxMessageRepository::class)->findUnpublished());
         self::assertCount(1, $outbox);
         self::assertSame('store.order.accepted.v1', $outbox[0]->getTopic());
         self::assertSame($storeOrder->getTradeOrderUuid(), $outbox[0]->getPayload()['orderUuid']);
@@ -101,7 +101,7 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
         $handler($message);
 
         self::assertNull($container->get(StoreOrderRepository::class)->findOneByTradeOrderUuid('e60b13bd-8e46-453f-b6b3-4b3bc59259b4'));
-        $outbox = $container->get(StoreOutboxMessageRepository::class)->findUnpublished();
+        $outbox = $this->businessOutbox($container->get(OutboxMessageRepository::class)->findUnpublished());
         self::assertCount(1, $outbox);
         self::assertSame('store.order.rejected.v1', $outbox[0]->getTopic());
         self::assertSame('STORE_UNAVAILABLE', $outbox[0]->getPayload()['reasonCode']);
@@ -124,10 +124,10 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
         $store = $container->get(StoreServiceInterface::class)->createStore('inventory-enabled', 'Inventory Enabled', 'UTC');
         $handler = new \App\Store\MessageHandler\TradeOrderCreatedHandler(
             $container->get(StoreRepository::class),
-            $container->get(StoreConsumedEventRepository::class),
-            $container->get(StoreTradeOrderCancellationRepository::class),
+            $container->get(InboxMessageRepository::class),
+            $container->get(TradeOrderCancellationRepository::class),
             $container->get(StoreOrderServiceInterface::class),
-            $container->get(StoreOutboxService::class),
+            $container->get(OutboxService::class),
             $container->get(EntityManagerInterface::class),
             true,
         );
@@ -152,7 +152,7 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
         self::assertNotNull($storeOrder);
         self::assertSame('awaiting_inventory', $storeOrder->getOperationalStatus());
         self::assertNotNull($storeOrder->getReservationId());
-        $outbox = $container->get(StoreOutboxMessageRepository::class)->findUnpublished();
+        $outbox = $this->businessOutbox($container->get(OutboxMessageRepository::class)->findUnpublished());
         self::assertCount(1, $outbox);
         self::assertSame('inventory.reservation.requested.v1', $outbox[0]->getTopic());
         self::assertSame($storeOrder->getReservationId(), $outbox[0]->getPayload()['reservationId']);
@@ -178,7 +178,7 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
         $order = $container->get(StoreOrderRepository::class)->findOneByTradeOrderUuid($orderUuid);
         self::assertSame(StoreOrder::STATUS_CANCELLED, $order?->getOperationalStatus());
         self::assertNull($order?->getReservationId());
-        self::assertSame([], $container->get(StoreOutboxMessageRepository::class)->findUnpublished());
+        self::assertSame([], $this->businessOutbox($container->get(OutboxMessageRepository::class)->findUnpublished()));
     }
 
     public function testDelayedCancellationDoesNotOverwriteRejectedOrFulfilledOrder(): void
@@ -202,6 +202,12 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
         $orders = $container->get(StoreOrderRepository::class);
         self::assertSame(StoreOrder::STATUS_REJECTED, $orders->findOneByUuid($rejected->getUuid())?->getOperationalStatus());
         self::assertSame(StoreOrder::STATUS_FULFILLED, $orders->findOneByUuid($fulfilled->getUuid())?->getOperationalStatus());
+    }
+
+    /** @param list<\App\Store\Entity\OutboxMessage> $messages @return list<\App\Store\Entity\OutboxMessage> */
+    private function businessOutbox(array $messages): array
+    {
+        return array_values(array_filter($messages, static fn ($message): bool => $message->getTopic() !== 'store.directory.upserted.v1'));
     }
 
     public function testCancellationRequiresTimestampAndMatchingStore(): void

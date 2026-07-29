@@ -24,6 +24,12 @@ doctrine:
                 dir: '%kernel.project_dir%/src'
                 prefix: 'App'
                 alias: App
+            Store:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/vendor/crud-platform/store-app/src/Entity'
+                prefix: 'App\Store\Entity'
+                alias: Store
         dql:
             string_functions:
                 regexp: DoctrineExtensions\Query\Mysql\Regexp

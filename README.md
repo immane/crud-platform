@@ -42,6 +42,7 @@ required prerequisite:
 ```bash
 docker compose up -d --build
 docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec store-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec app php bin/console app:identity:user:create admin@example.com admin 'P@ssw0rd' --admin
 
 curl -X POST http://localhost:8080/api/auth/login \
@@ -50,6 +51,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 ```
 
 - API: `http://localhost:8080`
+- Store API: `http://localhost:8081`
 - OpenAPI: `http://localhost:8080/api/doc`
 - Worker and scheduler logs: `docker compose logs -f worker scheduler`
 
@@ -61,7 +63,7 @@ For troubleshooting and native-PHP notes, see [QUICKSTART.md](QUICKSTART.md).
 |---|---|---|
 | Platform Kernel | `Core` | Shared framework library, not a service |
 | Commerce | `Trade`, `Promotion` | Transitional service candidate |
-| Store Operations | `Store` | First extraction candidate |
+| Store Operations | `Store` → `apps/store` | Extracted; monolith hosts during transition |
 | Inventory | `Inventory` | First extraction candidate, safety-gated |
 | Payments | `Payment`, WeChat Pay adapter | Requires durable lifecycle events |
 | Wallet/Ledger | `Wallet` | Follows Payment contract decoupling |
