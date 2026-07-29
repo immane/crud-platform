@@ -8,6 +8,7 @@ use App\Store\Repository\StoreOutboxMessageRepository;
 use CrudPlatform\IntegrationContracts\Command\V1\InventoryReservationReleaseRequested;
 use CrudPlatform\IntegrationContracts\Command\V1\InventoryReservationRequested;
 use CrudPlatform\IntegrationContracts\Event\V1\StoreOrderAccepted;
+use CrudPlatform\IntegrationContracts\Event\V1\StoreDirectoryUpserted;
 use CrudPlatform\IntegrationContracts\Event\V1\StoreOrderRejected;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -49,6 +50,7 @@ final class PublishOutboxCommand extends Command
             $busMessage = match ($message->getTopic()) {
                 'store.order.accepted.v1' => new StoreOrderAccepted($envelope),
                 'store.order.rejected.v1' => new StoreOrderRejected($envelope),
+                'store.directory.upserted.v1' => new StoreDirectoryUpserted($envelope),
                 'inventory.reservation.requested.v1' => new InventoryReservationRequested($envelope),
                 'inventory.reservation.release.requested.v1' => new InventoryReservationReleaseRequested($envelope),
                 default => null,

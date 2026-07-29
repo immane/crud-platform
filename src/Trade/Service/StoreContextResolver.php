@@ -2,18 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Store\Service;
+namespace App\Trade\Service;
 
-use App\Store\Repository\StoreRepository;
 use App\Trade\DTO\StoreContext;
-use App\Trade\Service\StoreContextResolverInterface;
+use App\Trade\Repository\TradeStoreDirectoryRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 final readonly class StoreContextResolver implements StoreContextResolverInterface
 {
     public function __construct(
         private RequestStack $requestStack,
-        private StoreRepository $storeRepository,
+        private TradeStoreDirectoryRepository $directory,
     ) {
     }
 
@@ -25,13 +24,13 @@ final readonly class StoreContextResolver implements StoreContextResolverInterfa
             return null;
         }
 
-        $store = $this->storeRepository->findOneByCode($code);
-        if ($store === null || !$store->isActive()) {
+        $store = $this->directory->findActiveByCode($code);
+        if ($store === null) {
             throw new \RuntimeException('Store is not available.');
         }
 
         return new StoreContext(
-            $store->getUuid(),
+            $store->getStoreUuid(),
             $store->getCode(),
             $store->getName(),
             $request->headers->get('X-Store-Channel', 'api'),

@@ -42,7 +42,10 @@ final class InventoryReservationOutcomeHandlerTest extends IntegrationWebTestCas
         $handler->handleContract(new InventoryReservationConfirmed(['eventId' => '00000000-0000-4000-8000-000000000020', 'correlationId' => '00000000-0000-4000-8000-000000000026', 'type' => 'inventory.reservation.confirmed', 'version' => 1, 'payload' => $this->outcomePayload($order, ['confirmedAt' => '2026-07-26T00:00:00+00:00'])]));
         $handler(new InventoryReservationConfirmedMessage(['eventId' => '00000000-0000-4000-8000-000000000020', 'type' => 'inventory.reservation.confirmed', 'version' => 1, 'payload' => $this->outcomePayload($order, ['confirmedAt' => '2026-07-26T00:00:00+00:00'])]));
         self::assertSame(StoreOrder::STATUS_ACCEPTED, $container->get(StoreOrderRepository::class)->findOneByUuid($order->getUuid())?->getOperationalStatus());
-        $outbox = $container->get(StoreOutboxMessageRepository::class)->findUnpublished();
+        $outbox = array_values(array_filter(
+            $container->get(StoreOutboxMessageRepository::class)->findUnpublished(),
+            static fn ($message): bool => $message->getTopic() !== 'store.directory.upserted.v1',
+        ));
         self::assertCount(1, $outbox);
         self::assertSame('00000000-0000-4000-8000-000000000026', $outbox[0]->getCorrelationId());
         self::assertSame('00000000-0000-4000-8000-000000000020', $outbox[0]->getCausationId());

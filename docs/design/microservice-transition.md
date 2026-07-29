@@ -147,6 +147,13 @@ rollback changes only its Publisher back to the matching legacy wrapper. Consume
 and wrappers remain until the historical `async` and `failed` queue records have
 been drained or migrated.
 
+Store directory ownership is synchronized separately through
+`store.directory.upserted.v1`. Store changes write this event in the same
+transaction, and Trade maintains a local read-only projection for `X-Store-Code`
+resolution. Before switching Trade to this projection in production, run
+`app:store:outbox:backfill-directory` as a dry run and then with `--apply` to
+initialize events for existing Stores.
+
 ### 5.2 Outbox Metadata Expansion
 
 Each producer Outbox stores nullable `correlation_id` and `causation_id` columns

@@ -78,7 +78,7 @@ services:
     App\Core\Service\ServiceLocatorInterface: '@App\Core\Service\DefaultServiceLocator'
 
     App\Identity\Service\OtpStorageInterface: '@App\Identity\Service\LocalCacheOtpStorage'
-    App\Trade\Service\StoreContextResolverInterface: '@App\Store\Service\StoreContextResolver'
+    App\Trade\Service\StoreContextResolverInterface: '@App\Trade\Service\StoreContextResolver'
     App\Inventory\Service\MaterialServiceInterface: '@App\Inventory\Service\MaterialService'
     App\Inventory\Service\InventoryStockServiceInterface: '@App\Inventory\Service\InventoryStockService'
     App\Inventory\Service\SpecificationRecipeServiceInterface: '@App\Inventory\Service\SpecificationRecipeService'

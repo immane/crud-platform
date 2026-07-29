@@ -41,6 +41,7 @@ framework:
             CrudPlatform\IntegrationContracts\Event\V1\TradeOrderCancelled: async
             CrudPlatform\IntegrationContracts\Event\V1\StoreOrderAccepted: async
             CrudPlatform\IntegrationContracts\Event\V1\StoreOrderRejected: async
+            CrudPlatform\IntegrationContracts\Event\V1\StoreDirectoryUpserted: async
             CrudPlatform\IntegrationContracts\Command\V1\InventoryReservationRequested: async
             CrudPlatform\IntegrationContracts\Command\V1\InventoryReservationReleaseRequested: async
             CrudPlatform\IntegrationContracts\Event\V1\InventoryReservationConfirmed: async

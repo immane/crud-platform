@@ -76,7 +76,7 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
         self::assertNotNull($storeOrder);
         self::assertSame('accepted', $storeOrder->getOperationalStatus());
 
-        $outbox = $container->get(StoreOutboxMessageRepository::class)->findUnpublished();
+        $outbox = $this->businessOutbox($container->get(StoreOutboxMessageRepository::class)->findUnpublished());
         self::assertCount(1, $outbox);
         self::assertSame('store.order.accepted.v1', $outbox[0]->getTopic());
         self::assertSame($storeOrder->getTradeOrderUuid(), $outbox[0]->getPayload()['orderUuid']);
@@ -101,7 +101,7 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
         $handler($message);
 
         self::assertNull($container->get(StoreOrderRepository::class)->findOneByTradeOrderUuid('e60b13bd-8e46-453f-b6b3-4b3bc59259b4'));
-        $outbox = $container->get(StoreOutboxMessageRepository::class)->findUnpublished();
+        $outbox = $this->businessOutbox($container->get(StoreOutboxMessageRepository::class)->findUnpublished());
         self::assertCount(1, $outbox);
         self::assertSame('store.order.rejected.v1', $outbox[0]->getTopic());
         self::assertSame('STORE_UNAVAILABLE', $outbox[0]->getPayload()['reasonCode']);
@@ -152,7 +152,7 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
         self::assertNotNull($storeOrder);
         self::assertSame('awaiting_inventory', $storeOrder->getOperationalStatus());
         self::assertNotNull($storeOrder->getReservationId());
-        $outbox = $container->get(StoreOutboxMessageRepository::class)->findUnpublished();
+        $outbox = $this->businessOutbox($container->get(StoreOutboxMessageRepository::class)->findUnpublished());
         self::assertCount(1, $outbox);
         self::assertSame('inventory.reservation.requested.v1', $outbox[0]->getTopic());
         self::assertSame($storeOrder->getReservationId(), $outbox[0]->getPayload()['reservationId']);
@@ -178,7 +178,7 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
         $order = $container->get(StoreOrderRepository::class)->findOneByTradeOrderUuid($orderUuid);
         self::assertSame(StoreOrder::STATUS_CANCELLED, $order?->getOperationalStatus());
         self::assertNull($order?->getReservationId());
-        self::assertSame([], $container->get(StoreOutboxMessageRepository::class)->findUnpublished());
+        self::assertSame([], $this->businessOutbox($container->get(StoreOutboxMessageRepository::class)->findUnpublished()));
     }
 
     public function testDelayedCancellationDoesNotOverwriteRejectedOrFulfilledOrder(): void
@@ -202,6 +202,12 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
         $orders = $container->get(StoreOrderRepository::class);
         self::assertSame(StoreOrder::STATUS_REJECTED, $orders->findOneByUuid($rejected->getUuid())?->getOperationalStatus());
         self::assertSame(StoreOrder::STATUS_FULFILLED, $orders->findOneByUuid($fulfilled->getUuid())?->getOperationalStatus());
+    }
+
+    /** @param list<\App\Store\Entity\StoreOutboxMessage> $messages @return list<\App\Store\Entity\StoreOutboxMessage> */
+    private function businessOutbox(array $messages): array
+    {
+        return array_values(array_filter($messages, static fn ($message): bool => $message->getTopic() !== 'store.directory.upserted.v1'));
     }
 
     public function testCancellationRequiresTimestampAndMatchingStore(): void
