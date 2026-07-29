@@ -1,20 +1,26 @@
 # Store Extraction Readiness
 
-> An implementation inventory for extracting Store into `apps/store` without
-> changing public API routes or losing existing queue and database safety.
+> **Store source has been fully extracted.** This document tracks the completed
+> extraction and remaining cutover steps.
 
 ## Current Scope
 
-Store currently contains 32 source files and 13 Store-specific test files. Its
-owned runtime responsibilities are:
+Store source now lives exclusively in `apps/store/src` (34 files). The monolith
+loads Store through a Composer `crud-platform/store-app` path package as a
+transitional host. Store-owned runtime responsibilities are:
 
 - Store, membership, StoreOrder, Inbox, Outbox, and cancellation-tombstone data.
-- App, manage, and staff HTTP endpoints under the existing `/api/v1` gateway
-  prefix.
-- Trade and Inventory integration consumers.
-- Store Outbox publisher and correlation backfill command.
+- App, manage, and staff HTTP endpoints under the existing `/api/v1` gateway prefix.
+- Trade and Inventory integration consumers (dual-compatible with legacy wrappers).
+- Store Outbox publisher, correlation backfill, and directory backfill commands.
+- Store directory `onFlush` listener feeding the `store.directory.upserted.v1` event.
 
-The intended owned data set is:
+Entities have been de-prefixed within the `App\Store` namespace:
+`StoreMembership` → `Membership`, `StoreConsumedEvent` → `InboxMessage`,
+`StoreOutboxMessage` → `OutboxMessage`, `StoreTradeOrderCancellation` →
+`TradeOrderCancellation`. Physical `store_*` table names are unchanged.
+
+The owned data set is:
 
 ```text
 store
@@ -25,58 +31,52 @@ store_outbox_message
 store_trade_order_cancellation
 ```
 
-`store_trade_order_cancellation` is currently created in the monolith's Inventory
-migration only because it was introduced with Inventory flow work. It belongs to
-Store and is included in `apps/store/migrations/Version20260730000000.php`, the
-final Store application schema baseline for an independent database cutover.
+`store_trade_order_cancellation` is included in the Store application schema
+baseline at `apps/store/migrations/Version20260730000000.php` for independent
+database cutover.
 
 ## Dependency Inventory
 
 | Dependency | Current use | Extraction disposition |
 |---|---|---|
-| `App\Core` | REST controller, view traits, BaseService, UUID | Provided by `packages/platform-kernel`; Store may depend on this library. |
-| `CrudPlatform\IntegrationContracts` | All new async messages | Keep; this is the approved cross-service dependency. |
+| `App\Core` | REST controller, view traits, BaseService, UUID | Provided by `packages/platform-kernel`; Store depends on this library. |
+| `CrudPlatform\IntegrationContracts` | All integration messages | Keep; this is the approved cross-service dependency. |
 | `App\Trade\Message` / `App\Inventory\Message` | Legacy native-Messenger compatibility adapters | Provided by `packages/legacy-messenger-compat` until old `async`/`failed` records are drained or migrated. |
-| Store directory lookup | `store.directory.upserted.v1` feeds Trade's local read model | Resolved. Trade no longer injects a Store repository or service. |
-| `App\Identity\Entity\User` | App/staff controllers used it only to read UUID | Resolved. Store now depends on `App\Core\Security\UserUuidPrincipalInterface`, implemented by Identity User. |
-| `config/routes.yaml` | Imports `src/Store/Controller` | Move to Store-owned routes; preserve public paths through the gateway. |
-| Root scheduler/worker | Runs Store Outbox publishing | Move to Store-owned worker and scheduler after Store application is independently runnable. |
+| Store directory lookup | `store.directory.upserted.v1` feeds Trade's local `trade_store_directory` projection | Resolved. Trade no longer injects a Store repository or service. |
+| `App\Identity\Entity\User` | App/staff controllers used it only to read UUID | Resolved. Store depends on `App\Core\Security\UserUuidPrincipalInterface`, implemented by Identity User. |
+| `config/routes.yaml` | Imports `src/Store/Controller` | Now points to `vendor/crud-platform/store-app/src/Controller` via path package. |
+| Root scheduler/worker | Runs Store Outbox publishing | Runs alongside Trade/Inventory in monolith; Store app has own worker/scheduler capacity post-cutover. |
+| Root Doctrine mapping | `src/Store/Entity` | Now points to `vendor/crud-platform/store-app/src/Entity` via path package. |
 
 No Store Entity or Repository imports another module's Entity or Repository. The
-Deptrac baseline no longer contains a Store-to-Identity persistence exemption.
+Deptrac baseline contains no Store-to-Identity persistence exemption.
 
-## Preconditions For Source Move
+## Remaining Cutover Steps
 
-1. Deploy the neutral-carrier release, run the Outbox metadata migration, and
-   complete bounded correlation backfills in production.
+1. Perform a zero-data production rehearsal: deploy Store app, run baseline
+   migration, smoke-test HTTP routes and Outbox/Inbox behavior.
 2. Drain or migrate legacy native-PHP queue records before Store owns its own
    worker queue. Do not remove legacy wrapper adapters earlier.
-3. Keep the monolith consuming `packages/platform-kernel` before Store introduces
-   an independent Kernel.
-4. Rehearse Store schema copy, increment, and reconciliation against the application
-   baseline before independent database cutover.
+3. Configure Store-owned worker and scheduler after remaining modules are extracted
+   and Gateway shadow routing is ready.
+4. Gateway cutover: point Store routes to the `store-app` container.
+5. Observe, then clean up monolith Store host assembly (Composer path package,
+   Doctrine mapping, routes, service scan).
 
-## Move Sequence
+## Extraction Status
 
 ```text
-packages/platform-kernel
-  -> monolith consumes package
-  -> apps/store skeleton with independent Kernel/config/composer/tests (complete)
-  -> Store source, routes, commands, and tests move to apps/store
-  -> Store schema baseline and shadow database verification
-  -> Store worker/scheduler and gateway shadow routing
-  -> read traffic, then write traffic, then database cutover
+✅ packages/platform-kernel — Core as shared Composer package
+✅ apps/store skeleton with independent Kernel/config/composer/tests
+✅ Store source, routes, commands moved to apps/store/src
+✅ Entities de-prefixed (Membership, InboxMessage, OutboxMessage, TradeOrderCancellation)
+✅ Store schema baseline (6 tables) verifiable in independent MySQL
+✅ Trade local projection for X-Store-Code resolution
+✅ Store directory Outbox listener + backfill command
+✅ Dual-compatible consumers with legacy-messenger-compat
+✅ FrankenPHP Docker stack with independent store-app + store-database
+🔲 Store worker/scheduler cutover
+🔲 Gateway shadow routing
+🔲 Monolith Store host cleanup (Composer path package, Doctrine mapping, routes)
+🔲 Legacy queue drain → remove legacy-messenger-compat
 ```
-
-The first source move must not alter public paths, table names, or JSON request and
-response formats. Gateway ownership changes only after Store has passed data and
-message reconciliation.
-
-## Application Skeleton
-
-`apps/store` is an independently installable Symfony application with its own
-Composer lock, `App\Store\Kernel`, configuration, migration directory, tests, and
-runtime entry points. It maps only `App\Store\Entity` and intentionally contains no
-monolith Store source yet. A successful `php bin/console about --env=test` proves
-that the application boots without loading the root application's `src/Store` or
-Doctrine mapping.

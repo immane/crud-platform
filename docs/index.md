@@ -5,18 +5,26 @@ multi-application microservice platform.
 
 ## Current Status
 
-The codebase is currently a **modular monolith**:
+The codebase is currently a **modular monolith** with Store extracted into
+`apps/store` as an independently bootable application:
 
-- One Symfony Kernel, Composer project, service container, database, migration chain,
-  Messenger queue, worker, scheduler, Docker image, and test suite.
+- One Symfony Kernel for the monolith; Store has its own `App\Store\Kernel`.
+- One Composer project, service container, database, migration chain,
+  Messenger queue, worker, scheduler, and Docker image for the monolith.
+- Store has its own config, database (MySQL 8.4), migration baseline, and
+  FrankenPHP container.
 - Domain modules include Identity, CMS, Commerce, Store, Inventory, Payment, Wallet,
   Promotion, WeChat adapters, and Storage adapters.
 - The `Trade -> Store -> Inventory` Outbox/Inbox flow is the strongest existing
   extraction seam.
+- Store source lives exclusively in `apps/store/src` with de-prefixed entities
+  (`Membership`, `InboxMessage`, `OutboxMessage`, `TradeOrderCancellation`).
+- Trade resolves `X-Store-Code` through a local `trade_store_directory` projection
+  fed by the `store.directory.upserted.v1` event.
 
-This is not yet a set of independently deployable services. In particular, shared
-Doctrine associations, synchronous payment/wallet calls, and in-process plugin APIs
-must be removed before the affected modules are extracted.
+This is not yet a set of independently deployed services. Store cutover (Gateway
+routing, standalone worker/scheduler) is deferred until remaining modules are
+extracted.
 
 ## Target
 
@@ -36,10 +44,12 @@ extraction gates.
 ```bash
 docker compose up -d --build
 docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec store-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec app php bin/console app:identity:user:create admin@example.com admin 'P@ssw0rd' --admin
 ```
 
-- API: `http://localhost:8080`
+- Monolith API: `http://localhost:8080`
+- Store API: `http://localhost:8081`
 - OpenAPI: `http://localhost:8080/api/doc`
 - Mailpit: `http://localhost:8025`
 

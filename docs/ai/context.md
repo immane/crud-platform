@@ -1,6 +1,6 @@
 # CRUD Skeleton - Full Codebase Context
 
-> Context snapshot. Last updated: 2026-07-29
+> Context snapshot. Last updated: 2026-07-30
 
 ---
 
@@ -12,7 +12,7 @@
 - Expression-based dynamic query engine (`@filter`, `@sort`, `@dql`)
 - Modular architecture: **Core** (framework), **Common** (CMS), **Promotion** (DSL-driven promotions), **Identity** (auth), **Trade** (commercial orders), **Store** (multi-store operations), **Payment** (invoices), **Wallet** (balances), **Inventory** (stock & reservation), **Wechat** (login + pay), **Storage** (file upload drivers)
 - EasyWeChat 6.x integration (Mini Program, Official Account OAuth, WeChat Pay V3)
-- NelmioApiDoc (Swagger at `/api/doc`), PHPUnit 12.5, Docker Compose (7 services: app, worker, scheduler, nginx, MySQL, Redis, Mailpit)
+- NelmioApiDoc (Swagger at `/api/doc`), PHPUnit 12.5, Docker Compose (9 services: app, worker, scheduler, store-app, MySQL x2, Redis, Mailpit — FrankenPHP)
 - MkDocs Material + GitHub Pages documentation
 - **i18n**: Symfony Translation with en, zh, zh_Hant, ja — all user-facing messages, entity/field names, and status values translated
 
@@ -53,15 +53,20 @@ ownership, and contracts matter more than a simultaneous internal DDD rewrite.
 RabbitMQ, and gateway settings. Service-specific Doctrine, Messenger, HTTP-client,
 and third-party PHP adapters stay inside their owning `apps/*` application.
 
-`apps/store` now exists as an independently installable Symfony skeleton with its
-own `App\Store\Kernel`, Composer lock, config, migrations, tests, and runtime
-entry points. It intentionally maps no Store source or monolith database entities
-until the Store source-move gates are complete.
+`apps/store` now exists as a fully extracted, independently runnable Symfony
+application with its own `App\Store\Kernel`, Composer lock, config, migrations, tests,
+and FrankenPHP Docker image. It owns all Store source code under `apps/store/src/`
+with de-prefixed entities (`Membership`, `InboxMessage`, `OutboxMessage`,
+`TradeOrderCancellation`). The monolith loads Store through a Composer path package
+(`crud-platform/store-app`) solely as a transition host; it will be removed after
+Gateway cutover.
 
 ### 1.3 Integration Contract Foundation
 
 `packages/integration-contracts` now provides transport-neutral v1 carrier classes
-for the nine Trade/Store/Inventory messages. `contracts/integration` owns the
+for **ten** Trade/Store/Inventory messages (nine original + `store.directory.upserted.v1`).
+Trade maintains a local `trade_store_directory` projection from this event, eliminating
+its synchronous Store service dependency for `X-Store-Code` resolution.
 manifest, Draft 2020-12 envelope schema, per-message schemas, and fixtures. The
 canonical envelope requires `eventId`, unversioned `type`, `version`,
 `aggregateType`, `aggregateId`, `occurredAt`, `correlationId`, `causationId`, and
@@ -102,11 +107,19 @@ root correlations through the default Outbox behavior.
 
 Store extraction readiness is tracked in
 [`docs/design/store-extraction-readiness.md`](../design/store-extraction-readiness.md).
-Store has no remaining direct cross-module Entity or Repository imports: its two
-controller reads of `Identity\Entity\User` now use
-`Core\Security\UserUuidPrincipalInterface`. The active source-move blockers are
-Trade's in-process StoreContext resolver, legacy queue
-drain, and Store database baseline/rehearsal.
+**Store source has been fully moved** to `apps/store/src` (the single owner of
+`App\Store\*`). The monolith loads Store through a Composer `crud-platform/store-app`
+path package. Store's internal PHP entities were de-prefixed (`StoreMembership` →
+`Membership`, `StoreConsumedEvent` → `InboxMessage`, `StoreOutboxMessage` →
+`OutboxMessage`, `StoreTradeOrderCancellation` → `TradeOrderCancellation`) while
+physical `store_*` table names remain unchanged. Trade's synchronous StoreContext
+resolver was replaced by a `trade_store_directory` local projection driven by the
+`store.directory.upserted.v1` neutral event (the 10th integration event). Store
+directory changes write to Store Outbox via a Doctrine `onFlush` listener. The
+Store application boots independently as a FrankenPHP container with its own MySQL
+8.4 database, migration baseline, and 19 registered routes. Cutover is deferred:
+the monolith remains the production host until all remaining modules are extracted
+and Gateway routing is ready.
 
 ## 2. Directory Structure
 
@@ -116,11 +129,23 @@ drain, and Store database baseline/rehearsal.
 ├── src/Kernel.php                # Symfony Kernel (MicroKernelTrait)
 ├── bin/console                   # CLI entry point
 │
-├── apps/store/                   # Independently bootable Store application skeleton
-│   ├── src/Kernel.php             # App\Store\Kernel; no monolith source mapped yet
+├── apps/store/                   # Independently bootable Store application (fully extracted)
+│   ├── src/                      # App\Store namespace — single owner of Store source
+│   │   ├── Kernel.php             # App\Store\Kernel
+│   │   ├── Entity/                # Store, Membership, StoreOrder, InboxMessage, OutboxMessage, TradeOrderCancellation
+│   │   ├── Repository/            # MembershipRepository, InboxMessageRepository, OutboxMessageRepository, ...
+│   │   ├── Service/               # MembershipService, OutboxService, StoreService, StoreOrderService
+│   │   ├── MessageHandler/        # Trade order + Inventory outcome consumers
+│   │   ├── EventListener/         # StoreDirectoryOutboxListener
+│   │   ├── Controller/App/ + Manage/ + Staff/
+│   │   └── Command/               # PublishOutbox, BackfillOutboxCorrelation, BackfillStoreDirectory
 │   ├── config/                    # Store-owned Symfony/Doctrine/Messenger config
-│   ├── migrations/                # Future Store-owned migration history
+│   ├── migrations/                # Store-owned migration baseline (6 tables)
+│   ├── docker/Caddyfile           # FrankenPHP HTTP server config
+│   ├── Dockerfile                 # Independent FrankenPHP container image
 │   └── tests/                     # Store application regression tests
+│
+├── packages/legacy-messenger-compat/  # Historical native-PHP Messenger wrapper FQCNs
 │
 ├── packages/platform-kernel/      # Shared framework core (App\Core namespace)
 │   ├── Controller/RestController.php    # Base API controller (success/warning/pagination)
@@ -156,13 +181,6 @@ drain, and Store database baseline/rehearsal.
 │   ├── EventListener/OrderWorkflowListener.php
 │   ├── Exception/                      # OrderInvalidTransitionException, SpecificationNotFoundException
 │   └── Controller/App/ + Manage/       # CRUD + workflow + pay/refund/fulfill + items + cancel + spec browse/v2
-│
-├── src/Store/                    # Multi-store operational boundary
-│   ├── Entity/                   # Store, membership, StoreOrder, Outbox, Inbox
-│   ├── Service/                  # Context, membership, StoreOrder, Outbox services
-│   ├── MessageHandler/           # Inbox-idempotent Trade order consumer; Inventory outcome consumers
-│   ├── Command/PublishOutboxCommand.php # app:store:outbox:publish
-│   └── Controller/App/ + Manage/ + Staff/
 │
 ├── src/Payment/                  # Payment module
 │   ├── Entity/Invoice.php              # Payment invoice (pending→paying→paid→refunded)
@@ -240,19 +258,22 @@ drain, and Store database baseline/rehearsal.
 │   │   └── bundles/              # Per-module design docs (core, common, trade, wallet, identity, wechat, payment, storage, promotion)
 │   └── openapi/                       # endpoints.yaml + order/payment frontend flow docs
 ├── scripts/tests/                # API smoke, Store orchestration smoke, trade workflow scripts
-├── tests/                        # 1711 PHPUnit tests, 5652 assertions, 90.49% latest full line coverage
+├── tests/                        # 1772 PHPUnit tests, 5652 assertions, 90.49% latest full line coverage
 ├── README.md                     # English README
 ├── README.zh-cn.md               # Chinese (Simplified) README
 ├── README.zh-hant.md             # Chinese (Traditional) README
 ├── README.ja.md                  # Japanese README
 ├── mkdocs.yml                    # MkDocs Material config
-├── compose.yaml                  # Production deployment: app (PHP-FPM), nginx, MySQL, Redis, Mailpit
-├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports)
-├── Dockerfile                    # PHP 8.4-FPM Alpine with openssl + JWT key entrypoint
-├── .dockerignore                 # Build context exclusions (tests, docs, dev files)
+├── compose.yaml                  # Local dev + production: app, store-app, worker, scheduler, MySQL x2, Redis, Mailpit (FrankenPHP)
+├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports for both app and store-app)
+├── Dockerfile                    # FrankenPHP 8.4 Alpine with Caddyfile
+├── .dockerignore                 # Build context exclusions (tests, docs, dev files, vendor dirs)
 ├── docker/
-│   ├── app/entrypoint.sh         # Dev key generation + prod key validation
-│   └── nginx/default.conf        # nginx config (reverse proxy to PHP-FPM)
+│   ├── app/entrypoint.sh         # Dev key generation, prod key validation, .env placeholder
+│   └── frankenphp/Caddyfile      # FrankenPHP HTTP server config
+├── apps/store/
+│   ├── Dockerfile                # Independent Store FrankenPHP image
+│   └── docker/Caddyfile          # Store FrankenPHP HTTP server config
 └── .github/workflows/
     ├── ci.yml                    # CI: PHP 8.4, PHPStan Level 8, 90% coverage, Rector type-rule dry-run
     └── docs.yml                  # GitHub Pages deploy
@@ -371,7 +392,7 @@ draft → pending → confirmed → paid → fulfilled → completed → refunde
 | Method | Description |
 |--------|-------------|
 | `calculatePrices(items, currency, storeCode?, meta?)` | Pipeline: BasePriceCalculator → QuantityCalculator → **TotalAggregator (subtotal, priority 55)** → **PromotionCalculator (priority 60)**. `meta` is an opaque bidirectional channel for calculators. |
-| `createOrder(..., ?StoreContext)` | Creates Order + OrderItems. A resolved StoreContext writes `_store` metadata and `trade.order.created.v1` in the same transaction. |
+| `createOrder(..., ?StoreContext)` | Creates Order + OrderItems. A resolved StoreContext (from local `trade_store_directory` projection populated by `store.directory.upserted.v1`) writes `_store` metadata and `trade.order.created.v1` in the same transaction. |
 | `pay(Order, systemWalletId, paymentMethod)` | User wallet → system wallet via `TransferService`. Sets `paidAt`. |
 | `refund(Order, systemWalletId, reason)` | System wallet → user wallet via `TransferService`. Sets `refundedAt`. |
 | `fulfill(Order, data)` | Set tracking/shipping + `fulfilledAt`. |
@@ -746,7 +767,7 @@ Enriches all endpoints (90+):
 
 44+ named schemas across 13 tags (Auth, Products, Orders, Categories, Tags, Contents, Comments, Pages, Media, Settings, Promotions, PromotionTemplates, Wallet, System, Wechat). Each with field-level type, description, enum, and example values. `path_patterns` includes both `^/api` and `^/system`.
 
-## 15. Database Tables (20 Migrations)
+## 15. Database Tables (22 monolith + 1 Store baseline Migrations)
 
 | Version | Tables |
 |---------|--------|
@@ -765,6 +786,8 @@ Enriches all endpoints (90+):
 | 20260713000000 | `common_picture` (nullable `user_id` FK→`users` ON DELETE SET NULL, required `category_id` FK→`common_category` ON DELETE CASCADE, nullable `title`, required `image`, nullable `metadata` json) |
 | 20260725000000-20260725050000 | Identity User UUID; Store, Store membership/order, Store Outbox/Inbox; Trade Outbox; Specification UUID; Trade order status `VARCHAR(40)` |
 | 20260726000000 | Inventory tables (material, stock, recipe, recipe_line, reservation, reservation_line, ledger_entry, inbox, outbox) + `store_trade_order_cancellation` |
+| 20260729000000 | Outbox correlation/causation trace columns; `trade_store_directory` local projection table for Store directory events |
+| 20260730000000 | Monolith: Store directory projection + correlation metadata (22 total). Store app: independent basline of 6 Store-owned tables (`store`, `store_membership`, `store_order`, `store_outbox_message`, `store_inbox_message`, `store_trade_order_cancellation`) |
 
 ## 16. Documentation Assets
 
@@ -800,7 +823,7 @@ Enriches all endpoints (90+):
 - **Framework**: PHPUnit 12.5
 - **DB**: SQLite `var/test.db` in test environment
 - **Coverage**: 90% minimum (enforced in CI), currently **90.49% lines** from latest local Xdebug run
-- **Test count**: **1711 tests**, **5652 assertions**
+- **Test count**: **1772 tests**, **5652 assertions**
 - **Architecture gate**: Deptrac enforces that Core has no business-module dependency and blocks new cross-module Entity/Repository dependencies. `deptrac-baseline.yaml` records exact legacy source-to-target debt; run `composer deptrac`.
 - **Static analysis**: PHPStan Level 8 with zero errors in its configured scope (`src/`, excluding optional SDK code, exception classes, and documented false-positive suppressions). Generic contract via `@template TEntity` on `BaseServiceInterface`/`BaseService` + `@extends` on 18 concrete service pairs. Rector automates Doctrine Collection/Repository PHPDoc with `composer rector:types`; CI enforces `composer rector:types:check` as a dry-run.
 - **Local PHP note**: default `php` may point to PHP 7.4; use Homebrew PHP 8.5 at `/opt/homebrew/opt/php@8.5/bin/php` for local Symfony/PHPUnit commands.
@@ -847,29 +870,32 @@ Qiniu configuration is intentionally **not** environment-variable based. Configu
 
 ## 19. Docker Deployment
 
-### 17.1 Architecture
+### 19.1 Architecture
 
-7 services in `compose.yaml`: **nginx** (reverse proxy), **app** (PHP-FPM 8.4), **worker** (Messenger async consumer), **scheduler** (Trade/Store Outbox relay; Payment joins when its Outbox is implemented), **database** (MySQL 8), **redis** (Redis 7 Alpine), **mailer** (Mailpit).
+9 services in `compose.yaml`: **app** (FrankenPHP), **worker** (Messenger async consumer, CLI-only), **scheduler** (Trade/Store/Inventory Outbox relay), **store-app** (independent Store FrankenPHP container), **database** (MySQL 8.4 for monolith), **store-database** (MySQL 8.4 for Store app), **redis** (Redis 7 Alpine), **mailer** (Mailpit).
 
-### 17.2 Development (zero-config)
+The Store application (`apps/store`) has its own `Dockerfile`, `docker/Caddyfile`, and independent MySQL instance. The monolith runs Store through a `crud-platform/store-app` Composer path package. Worker and scheduler override `APP_ENV=prod` (DebugBundle not installed in `--no-dev` image) and disable inherited HTTP ports and healthchecks.
+
+### 19.2 Development (zero-config)
 
 ```bash
 docker compose up -d --build
 docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec store-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec app php bin/console app:identity:user:create admin@example.com admin 'P@ssw0rd' --admin
 ```
 
-- `compose.override.yaml` auto-loads — sets `APP_ENV=dev`, `APP_DEBUG=1`, source mount
-- `docker/app/entrypoint.sh` creates development JWT keys once under mounted `./var/jwt` if missing; production fails fast when keys are missing
-- All optional features (WeChat, SMS) default to empty — disabled gracefully
+- `compose.override.yaml` auto-loads — sets `APP_ENV=dev`, `APP_DEBUG=1`, source mount for both app and store-app
+- `docker/app/entrypoint.sh` creates development JWT keys once under mounted `./var/jwt` if missing, and creates an empty `.env` placeholder for Symfony Runtime
+- Root database port is configurable via `MYSQL_PORT` to avoid host-side MySQL collisions
 
-### 17.3 Production
+### 19.3 Production
 
-Requires `.env.prod.local` copied from `.env.prod.example` with `APP_SECRET`, `REFRESH_TOKEN_SECRET`, `MYSQL_PASSWORD`, and `MYSQL_ROOT_PASSWORD`. JWT keys are generated on the host at `./var/jwt/` and mounted into the container. Start production with `docker compose -f compose.yaml -f compose.prod.yaml --env-file .env.prod.local up -d --build`.
+Requires `.env.prod.local` copied from `.env.prod.example` with `APP_SECRET`, `REFRESH_TOKEN_SECRET`, `MYSQL_PASSWORD`, and `MYSQL_ROOT_PASSWORD`. JWT keys are generated on the host at `./var/jwt/` and mounted into the container. Store app requires its own `STORE_APP_SECRET`, `STORE_MYSQL_USER`, `STORE_MYSQL_PASSWORD`, and `STORE_MYSQL_ROOT_PASSWORD`. Start production with `docker compose -f compose.yaml -f compose.prod.yaml --env-file .env.prod.local up -d --build`.
 
-### 17.4 Environment Variables in Docker
+### 19.4 Environment Variables in Docker
 
-`compose.yaml` provides defaults for `DATABASE_URL`, `MAILER_DSN`, `OTP_REDIS_DSN`, and JWT key paths. Required vars use `${VAR:?required}` which fails fast if missing. Optional vars use `${VAR:-}` which defaults to empty.
+`compose.yaml` provides defaults for `DATABASE_URL`, `MAILER_DSN`, `OTP_REDIS_DSN`, and JWT key paths. Store app variables use `STORE_*` prefixed counterparts. Required vars use `${VAR:?required}` which fails fast if missing. Optional vars use `${VAR:-}` which defaults to empty.
 
 ## 20. Console Commands
 
@@ -882,6 +908,7 @@ Requires `.env.prod.local` copied from `.env.prod.example` with `APP_SECRET`, `R
 | `app:inventory:outbox:publish` | Inventory | Relay published Inventory integration events to Messenger |
 | `app:trade:outbox:backfill-correlation` | Trade | Dry-run or `--apply` bounded correlation backfill for unpublished Trade Outbox rows |
 | `app:store:outbox:backfill-correlation` | Store | Dry-run or `--apply` bounded correlation backfill for unpublished Store Outbox rows |
+| `app:store:outbox:backfill-directory` | Store | Dry-run or `--apply` backfill of Store directory events into Outbox for Trade projection |
 | `app:inventory:outbox:backfill-correlation` | Inventory | Dry-run or `--apply` bounded correlation backfill for unpublished Inventory Outbox rows |
 | `app:inventory:reservations:release-expired` | Inventory | Release expired confirmed reservations |
 

@@ -35,6 +35,7 @@ Docker 是建議的本機執行方式。在儲存庫根目錄執行，主機只�
 ```bash
 docker compose up -d --build
 docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec store-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec app php bin/console app:identity:user:create admin@example.com admin 'P@ssw0rd' --admin
 
 curl -X POST http://localhost:8080/api/auth/login \
@@ -43,6 +44,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 ```
 
 - API：`http://localhost:8080`
+- Store API：`http://localhost:8081`
 - OpenAPI：`http://localhost:8080/api/doc`
 - worker/scheduler 日誌：`docker compose logs -f worker scheduler`
 
@@ -54,7 +56,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 |---|---|---|
 | Platform Kernel | `Core` | 共用框架函式庫，不是服務 |
 | Commerce | `Trade`、`Promotion` | 過渡服務候選 |
-| Store Operations | `Store` | 第一批提取候選 |
+| Store Operations | `Store` → `apps/store` | 已提取；單體在過渡期間託管 |
 | Inventory | `Inventory` | 第一批提取候選，受安全條件限制 |
 | Payments | `Payment`、微信支付介接器 | 須先建立持久化生命週期事件 |
 | Wallet/Ledger | `Wallet` | 在 Payment 契約解耦後提取 |
