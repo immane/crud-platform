@@ -1,9 +1,9 @@
-site_name: CRUD Skeleton
-site_description: Symfony 8.1 API backend skeleton with modular architecture
-repo_url: https://github.com/immane/crud-skeleton
+site_name: CRUD Platform
+site_description: A production-oriented Symfony microservices platform evolved from modular monolith architecture, featuring DDD, service isolation, and event-driven communication.
+repo_url: https://github.com/immane/crud-platform
 edit_uri: edit/dev/docs/
 site_dir: site
-site_url: https://immane.github.io/crud-skeleton/
+site_url: https://immane.github.io/crud-platform/
 
 theme:
   name: material
@@ -48,6 +48,7 @@ nav:
       - System Architecture: design/system-architecture.md
       - Microservice Transition: design/microservice-transition.md
       - Store Extraction Readiness: design/store-extraction-readiness.md
+      - Inventory Extraction Readiness: design/inventory-extraction-readiness.md
       - API Design: design/api-design.md
       - Data Model: design/data-model.md
       - Module Design: design/module-design.md
@@ -75,8 +76,8 @@ nav:
 extra:
   alternate:
     - name: English
-      link: /crud-skeleton/
+      link: /crud-platform/
       lang: en
     - name: 中文
-      link: /crud-skeleton/zh/
+      link: /crud-platform/zh/
       lang: zh

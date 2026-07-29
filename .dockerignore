@@ -18,6 +18,7 @@ docker-compose.override.yml
 # Symfony
 vendor/
 apps/store/vendor/
+apps/inventory/vendor/
 var/cache/
 var/log/
 var/test.db

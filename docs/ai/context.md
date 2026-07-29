@@ -12,7 +12,7 @@
 - Expression-based dynamic query engine (`@filter`, `@sort`, `@dql`)
 - Modular architecture: **Core** (framework), **Common** (CMS), **Promotion** (DSL-driven promotions), **Identity** (auth), **Trade** (commercial orders), **Store** (multi-store operations), **Payment** (invoices), **Wallet** (balances), **Inventory** (stock & reservation), **Wechat** (login + pay), **Storage** (file upload drivers)
 - EasyWeChat 6.x integration (Mini Program, Official Account OAuth, WeChat Pay V3)
-- NelmioApiDoc (Swagger at `/api/doc`), PHPUnit 12.5, Docker Compose (9 services: app, worker, scheduler, store-app, MySQL x2, Redis, Mailpit — FrankenPHP)
+- NelmioApiDoc (Swagger at `/api/doc`), PHPUnit 12.5, Docker Compose (10 services: app, worker, scheduler, Store/Inventory apps, MySQL x3, Redis, Mailpit — FrankenPHP)
 - MkDocs Material + GitHub Pages documentation
 - **i18n**: Symfony Translation with en, zh, zh_Hant, ja — all user-facing messages, entity/field names, and status values translated
 
@@ -232,13 +232,11 @@ and Gateway routing is ready.
 │   ├── Controller/Manage/        # Admin CRUD endpoints
 │   └── Exception/
 │
-├── src/Inventory/                # Inventory module (material, stock, recipe, reservation)
-│   ├── Entity/                   # Material, InventoryStock, SpecificationRecipe, RecipeLine, InventoryReservation, ReservationLine, InventoryLedgerEntry, Inbox, Outbox
-│   ├── Repository/
-│   ├── Service/                  # InventoryService (reserve/release/adjust), MaterialService
-│   ├── MessageHandler/           # Reservation request/release consumers with inbox idempotency
-│   ├── Command/                  # PublishOutboxCommand, ReleaseExpiredReservationsCommand
-│   └── Controller/Manage/        # Material, Stock, Recipe, Reservation, Ledger admin APIs
+├── apps/inventory/               # Independently bootable Inventory application (fully extracted)
+│   ├── src/                      # App\Inventory namespace — single owner of Inventory source
+│   ├── migrations/               # Independent baseline for 9 inventory_* tables
+│   ├── docker/Caddyfile          # FrankenPHP HTTP server config
+│   └── Dockerfile                # Independent FrankenPHP container image
 │
 ├── config/
 │   ├── services.yaml             # Service wiring + imports src/*/Resources/config + exclusions
@@ -264,8 +262,8 @@ and Gateway routing is ready.
 ├── README.zh-hant.md             # Chinese (Traditional) README
 ├── README.ja.md                  # Japanese README
 ├── mkdocs.yml                    # MkDocs Material config
-├── compose.yaml                  # Local dev + production: app, store-app, worker, scheduler, MySQL x2, Redis, Mailpit (FrankenPHP)
-├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports for both app and store-app)
+├── compose.yaml                  # Local dev + production: app, Store/Inventory apps, worker, scheduler, MySQL x3, Redis, Mailpit (FrankenPHP)
+├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports for all apps)
 ├── Dockerfile                    # FrankenPHP 8.4 Alpine with Caddyfile
 ├── .dockerignore                 # Build context exclusions (tests, docs, dev files, vendor dirs)
 ├── docker/
@@ -767,7 +765,7 @@ Enriches all endpoints (90+):
 
 44+ named schemas across 13 tags (Auth, Products, Orders, Categories, Tags, Contents, Comments, Pages, Media, Settings, Promotions, PromotionTemplates, Wallet, System, Wechat). Each with field-level type, description, enum, and example values. `path_patterns` includes both `^/api` and `^/system`.
 
-## 15. Database Tables (22 monolith + 1 Store baseline Migrations)
+## 15. Database Tables (22 monolith + 2 extracted-app baselines)
 
 | Version | Tables |
 |---------|--------|
@@ -872,9 +870,9 @@ Qiniu configuration is intentionally **not** environment-variable based. Configu
 
 ### 19.1 Architecture
 
-9 services in `compose.yaml`: **app** (FrankenPHP), **worker** (Messenger async consumer, CLI-only), **scheduler** (Trade/Store/Inventory Outbox relay), **store-app** (independent Store FrankenPHP container), **database** (MySQL 8.4 for monolith), **store-database** (MySQL 8.4 for Store app), **redis** (Redis 7 Alpine), **mailer** (Mailpit).
+10 services in `compose.yaml`: **app** (FrankenPHP), **worker** (Messenger async consumer, CLI-only), **scheduler** (Trade/Store/Inventory Outbox relay), **store-app**, **inventory-app**, **database** (MySQL 8.4 for monolith), **store-database**, **inventory-database**, **redis** (Redis 7 Alpine), **mailer** (Mailpit).
 
-The Store application (`apps/store`) has its own `Dockerfile`, `docker/Caddyfile`, and independent MySQL instance. The monolith runs Store through a `crud-platform/store-app` Composer path package. Worker and scheduler override `APP_ENV=prod` (DebugBundle not installed in `--no-dev` image) and disable inherited HTTP ports and healthchecks.
+Store and Inventory each have a `Dockerfile`, `docker/Caddyfile`, and independent MySQL instance. The monolith runs them through `crud-platform/store-app` and `crud-platform/inventory-app` Composer path packages. Worker and scheduler override `APP_ENV=prod` (DebugBundle not installed in `--no-dev` image) and disable inherited HTTP ports and healthchecks.
 
 ### 19.2 Development (zero-config)
 
@@ -882,10 +880,11 @@ The Store application (`apps/store`) has its own `Dockerfile`, `docker/Caddyfile
 docker compose up -d --build
 docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec store-app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec inventory-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec app php bin/console app:identity:user:create admin@example.com admin 'P@ssw0rd' --admin
 ```
 
-- `compose.override.yaml` auto-loads — sets `APP_ENV=dev`, `APP_DEBUG=1`, source mount for both app and store-app
+- `compose.override.yaml` auto-loads — sets `APP_ENV=dev`, `APP_DEBUG=1`, source mount for app, store-app, and inventory-app
 - `docker/app/entrypoint.sh` creates development JWT keys once under mounted `./var/jwt` if missing, and creates an empty `.env` placeholder for Symfony Runtime
 - Root database port is configurable via `MYSQL_PORT` to avoid host-side MySQL collisions
 
@@ -933,7 +932,7 @@ Requires `.env.prod.local` copied from `.env.prod.example` with `APP_SECRET`, `R
 ## 22. Inventory Module — Stock & Reservation System
 
 ### 22.1 Overview
-The Inventory bundle (`src/Inventory/`) owns materials, per-store stock, Specification recipes, reservations, and the stock ledger. It implements the deferred reservation boundary defined in Store.
+The Inventory application (`apps/inventory/src/`) owns materials, per-store stock, Specification recipes, reservations, and the stock ledger. The monolith hosts it through `crud-platform/inventory-app` during transition. It implements the deferred reservation boundary defined in Store.
 
 **Preview safety notice:** Inventory is implemented but is not production-ready.
 `INVENTORY_ENABLED` must remain `0` outside isolated development and testing until

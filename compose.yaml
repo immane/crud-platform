@@ -151,6 +151,45 @@ services:
     networks:
       - internal
 
+  # Inventory application (FrankenPHP, independent database baseline)
+  # ========================
+  inventory-app:
+    build:
+      context: .
+      dockerfile: apps/inventory/Dockerfile
+    restart: unless-stopped
+    environment:
+      APP_ENV: ${INVENTORY_APP_ENV:-dev}
+      APP_DEBUG: "1"
+      APP_SECRET: ${INVENTORY_APP_SECRET:-inventory-dev-secret-change-me}
+      DATABASE_URL: "mysql://${INVENTORY_MYSQL_USER:-inventory}:${INVENTORY_MYSQL_PASSWORD:-!InventoryChangeMe!}@inventory-database:3306/${INVENTORY_MYSQL_DATABASE:-inventory}?serverVersion=8.4&charset=utf8mb4"
+      MESSENGER_TRANSPORT_DSN: "doctrine://default?auto_setup=0"
+    ports:
+      - "${INVENTORY_APP_PORT:-8082}:80"
+    depends_on:
+      inventory-database:
+        condition: service_healthy
+    networks:
+      - internal
+
+  inventory-database:
+    image: mysql:${MYSQL_VERSION:-8.4}
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${INVENTORY_MYSQL_DATABASE:-inventory}
+      MYSQL_USER: ${INVENTORY_MYSQL_USER:-inventory}
+      MYSQL_PASSWORD: ${INVENTORY_MYSQL_PASSWORD:-!InventoryChangeMe!}
+      MYSQL_ROOT_PASSWORD: ${INVENTORY_MYSQL_ROOT_PASSWORD:-!InventoryRootChangeMe!}
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} --silent"]
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    volumes:
+      - inventory_mysql_data:/var/lib/mysql:rw
+    networks:
+      - internal
+
   # ========================
   # Database (MySQL 8)
   # ========================
@@ -204,3 +243,4 @@ volumes:
   mysql_data:
   redis_data:
   store_mysql_data:
+  inventory_mysql_data:

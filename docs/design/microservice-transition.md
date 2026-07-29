@@ -58,7 +58,7 @@ local development, but it must not conceal an undeclared runtime dependency.
 | Identity & Access | Identity plus Wechat login adapter | Later extraction |
 | Commerce | Trade plus Promotion | Transitional service; Catalog and Ordering separate later |
 | Store Operations | Store → `apps/store` | Extracted; monolith hosts during transition |
-| Inventory | Inventory | First extraction candidate; production enablement remains blocked by its safety checklist |
+| Inventory | Inventory → `apps/inventory` | Extracted; monolith hosts during transition; production enablement remains blocked by its safety checklist |
 | Payments | Payment plus Wechat Pay adapter | After durable payment lifecycle events exist |
 | Wallet/Ledger | Wallet | After Payment contracts are scalar and durable |
 | Content/Media | Common plus Storage adapter | Later; split settings ownership from CMS first |

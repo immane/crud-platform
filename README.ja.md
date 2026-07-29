@@ -43,6 +43,7 @@ Docker が推奨されるローカル実行方法です。リポジトリのル�
 docker compose up -d --build
 docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec store-app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec inventory-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec app php bin/console app:identity:user:create admin@example.com admin 'P@ssw0rd' --admin
 
 curl -X POST http://localhost:8080/api/auth/login \
@@ -52,6 +53,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 
 - API: `http://localhost:8080`
 - Store API: `http://localhost:8081`
+- Inventory API: `http://localhost:8082`
 - OpenAPI: `http://localhost:8080/api/doc`
 - worker/scheduler ログ: `docker compose logs -f worker scheduler`
 
@@ -64,7 +66,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 | Platform Kernel | `Core` | 共通フレームワークライブラリ。サービスではない |
 | Commerce | `Trade`、`Promotion` | 移行中のサービス候補 |
 | Store Operations | `Store` → `apps/store` | 抽出済み。移行中はモノリスがホスト |
-| Inventory | `Inventory` | 最初の抽出候補。安全条件付き |
+| Inventory | `Inventory` → `apps/inventory` | 抽出済み。移行中はモノリスがホスト。安全条件付き |
 | Payments | `Payment`、WeChat Pay アダプタ | 永続的なライフサイクルイベントが必要 |
 | Wallet/Ledger | `Wallet` | Payment 契約の分離後 |
 | Identity & Access | `Identity`、WeChat ログインアダプタ | 後続の抽出対象 |

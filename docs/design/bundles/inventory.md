@@ -1,7 +1,10 @@
 # Inventory Bundle Design
 
-> **Status: preview, implemented but not production-ready.** The Inventory bundle
-> (`src/Inventory/`) owns materials, per-store stock, Specification recipes,
+> **Status: extracted preview, not production-ready.** Inventory source lives
+> exclusively in `apps/inventory/src` and the monolith hosts it through the
+> `crud-platform/inventory-app` Composer path package during transition. The Inventory
+> application has an independent Kernel, MySQL 8.4 baseline, and FrankenPHP image.
+> It owns materials, per-store stock, Specification recipes,
 > reservations, and the stock ledger. It is the deferred reservation boundary defined
 > by the Store bundle. Trade remains the catalog and commercial-order authority; Store
 > remains the authority for store acceptance and operational orders.
@@ -632,7 +635,7 @@ when a reference is supplied.
 ## 8. File Structure
 
 ```text
-src/Inventory/
+apps/inventory/src/
 |-- Command/
 |   `-- PublishOutboxCommand.php
 |-- Controller/Manage/
@@ -671,7 +674,11 @@ repository, or domain service.
 
 ## 9. Persistence And Migration Plan
 
-One Inventory migration creates the phase-one tables and only local foreign keys:
+`apps/inventory/migrations/Version20260730000000.php` creates the final baseline
+with the phase-one tables and only local foreign keys. It includes nullable
+Outbox `correlation_id` and `causation_id` metadata and intentionally excludes the
+Store-owned `store_trade_order_cancellation` table that remains in the monolith's
+historical migration chain.
 
 | Table | Key constraints and indexes |
 |---|---|
