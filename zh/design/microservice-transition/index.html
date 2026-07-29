@@ -1691,7 +1691,7 @@ Symfony 命名空间。更改需要新的消息版本和兼容性
 <h3 id="52">5.2 发件箱元数据扩展<a class="headerlink" href="#52" title="Permanent link">&para;</a></h3>
 <p>每个生产者发件箱都存储可为空的 <code>correlation_id</code> 和 <code>causation_id</code> 列
 在发布规范信封之前。在支持的 MySQL 8 运行时上
-迁移明确请求<code>ALGORITHM=INSTANT, LOCK=NONE</code>；它执行不
+迁移明确请求<code>ALGORITHM=INSTANT</code>；它执行不
 表范围更新并且不添加非空约束。新根
 消息默认 <code>correlationId</code> 为其生成的 <code>eventId</code> 并使用 null
 <code>causationId</code>。发出后续消息的未来处理程序必须显式携带

@@ -1691,7 +1691,7 @@ been drained or migrated.</p>
 <h3 id="52-outbox-metadata-expansion">5.2 Outbox Metadata Expansion<a class="headerlink" href="#52-outbox-metadata-expansion" title="Permanent link">&para;</a></h3>
 <p>Each producer Outbox stores nullable <code>correlation_id</code> and <code>causation_id</code> columns
 before publishing canonical envelopes. On the supported MySQL 8 runtime the
-migration explicitly requests <code>ALGORITHM=INSTANT, LOCK=NONE</code>; it performs no
+migration explicitly requests <code>ALGORITHM=INSTANT</code>; it performs no
 table-wide update and adds no non-null constraint. New root
 messages default <code>correlationId</code> to their generated <code>eventId</code> and use a null
 <code>causationId</code>. Future handlers that emit a follow-up message must explicitly carry
