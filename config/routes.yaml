@@ -4,7 +4,7 @@ controllers:
 api_common:
     prefix: /api/v1
     resource:
-        path: ../src/Common/Controller/
+        path: ../vendor/crud-platform/common-app/src/Main/Controller/
         namespace: App\Common\Controller
     type: attribute
 

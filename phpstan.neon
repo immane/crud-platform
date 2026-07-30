@@ -6,6 +6,7 @@ parameters:
         - apps/payment/src/
         - apps/wallet/src/
         - apps/identity/src/
+        - apps/common/src/
         - src/
         - packages/legacy-messenger-compat/src/
         - packages/platform-kernel/src/
@@ -36,7 +37,7 @@ parameters:
         # --- Optional third-party SDKs not in composer.json ---
         -
             message: '#(Qiniu\\|Class Qiniu)#'
-            path: src/Storage/Service/QiniuStorage.php
+            path: apps/common/src/Storage/Service/QiniuStorage.php
 
         # --- Unused trait (Workflow mixin may be used via class_alias or future) ---
         -
@@ -61,6 +62,9 @@ parameters:
         -
             message: '#Property .+::\$createdAt in isset\(\) is not nullable nor uninitialized#'
             path: apps/identity/src/
+        -
+            message: '#Property .+::\$createdAt in isset\(\) is not nullable nor uninitialized#'
+            path: apps/common/src/
 
 includes:
     - vendor/phpstan/phpstan-symfony/extension.neon

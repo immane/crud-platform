@@ -330,6 +330,46 @@ services:
       - internal
 
   # ========================
+  # Common CMS and media application (FrankenPHP, independent database baseline)
+  # ========================
+  common-app:
+    build:
+      context: .
+      dockerfile: apps/common/Dockerfile
+    restart: unless-stopped
+    environment:
+      APP_ENV: ${COMMON_APP_ENV:-dev}
+      APP_DEBUG: "1"
+      APP_SECRET: ${COMMON_APP_SECRET:-common-dev-secret-change-me}
+      DATABASE_URL: "mysql://${COMMON_MYSQL_USER:-common}:${COMMON_MYSQL_PASSWORD:-!CommonChangeMe!}@common-database:3306/${COMMON_MYSQL_DATABASE:-common}?serverVersion=8.4&charset=utf8mb4"
+      MEDIA_STORAGE_DEFAULT: ${MEDIA_STORAGE_DEFAULT:-local}
+    ports:
+      - "${COMMON_APP_PORT:-8086}:80"
+    depends_on:
+      common-database:
+        condition: service_healthy
+    networks:
+      - internal
+
+  common-database:
+    image: mysql:${MYSQL_VERSION:-8.4}
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${COMMON_MYSQL_DATABASE:-common}
+      MYSQL_USER: ${COMMON_MYSQL_USER:-common}
+      MYSQL_PASSWORD: ${COMMON_MYSQL_PASSWORD:-!CommonChangeMe!}
+      MYSQL_ROOT_PASSWORD: ${COMMON_MYSQL_ROOT_PASSWORD:-!CommonRootChangeMe!}
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} --silent"]
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    volumes:
+      - common_mysql_data:/var/lib/mysql:rw
+    networks:
+      - internal
+
+  # ========================
   # Database (MySQL 8)
   # ========================
   database:
@@ -386,3 +426,4 @@ volumes:
   payment_mysql_data:
   wallet_mysql_data:
   identity_mysql_data:
+  common_mysql_data:
