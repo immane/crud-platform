@@ -34,6 +34,7 @@ final class PictureControllerTest extends IntegrationWebTestCase
     {
         $client = static::createAuthenticatedClient();
         $category = $this->createCategory('manage-cat');
+        $owner = $this->createUser('manage-picture-owner@example.com', 'manage-picture-owner');
 
         $client->request(
             'POST',
@@ -43,6 +44,7 @@ final class PictureControllerTest extends IntegrationWebTestCase
                 'title' => 'Sunset',
                 'category' => $category->getId(),
                 'image' => 'https://cdn.example.com/sunset.png',
+                'user' => $owner->getId(),
                 'metadata' => ['exif' => ['iso' => 200]],
             ]),
         );
@@ -53,6 +55,7 @@ final class PictureControllerTest extends IntegrationWebTestCase
         self::assertSame('https://cdn.example.com/sunset.png', $created['data']['image']);
         self::assertSame($category->getId(), $created['data']['category']['id']);
         self::assertSame(['exif' => ['iso' => 200]], $created['data']['metadata']);
+        self::assertSame($owner->getUuid(), $created['data']['ownerUuid']);
         $id = $created['data']['id'];
 
         $client->request('GET', '/api/v1/manage/pictures');
@@ -146,7 +149,7 @@ final class PictureControllerTest extends IntegrationWebTestCase
         $testUser = $this->em->getRepository(User::class)->findOneBy(['email' => 'testauth@example.com']);
         /** @var Picture $picture */
         $picture = $this->em->getRepository(Picture::class)->find($created['data']['id']);
-        self::assertSame($testUser->getId(), $picture->getUser()?->getId());
+        self::assertSame($testUser->getUuid(), $picture->getOwnerUuid());
     }
 
     public function testAppOnlySeesAndManagesOwnPictures(): void
@@ -156,7 +159,7 @@ final class PictureControllerTest extends IntegrationWebTestCase
 
         $otherUser = $this->createUser('scoped-owner@example.com', 'scoped-owner');
         $foreignPicture = new Picture('https://cdn.example.com/foreign.png', $category);
-        $foreignPicture->setUser($otherUser);
+        $foreignPicture->setOwnerUuid($otherUser->getUuid());
         $this->em->persist($foreignPicture);
         $this->em->flush();
         $foreignId = $foreignPicture->getId();

@@ -8,7 +8,7 @@ use App\Core\View\ApiView;
 use App\Core\View\DeleteApiViewMixin;
 use App\Core\View\DetailApiViewMixin;
 use App\Core\View\ListApiViewMixin;
-use App\Identity\Entity\User;
+use App\Core\Security\UserUuidPrincipalInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +27,8 @@ class MediaController extends RestController
     /** @return array<string, mixed> */
     protected function commonFilter(): array
     {
-        return ['user' => $this->getUser()];
+        $user = $this->getUser();
+        return $user instanceof UserUuidPrincipalInterface ? ['ownerUuid' => $user->getUuid()] : ['id' => -1];
     }
 
     #[Route('/upload', name: 'upload', methods: ['POST'])]
@@ -54,10 +55,10 @@ class MediaController extends RestController
         return $this->success($media, 'Uploaded', 201);
     }
 
-    protected function uploadOwner(): ?User
+    protected function uploadOwner(): ?UserUuidPrincipalInterface
     {
         $user = $this->getUser();
 
-        return $user instanceof User ? $user : null;
+        return $user instanceof UserUuidPrincipalInterface ? $user : null;
     }
 }

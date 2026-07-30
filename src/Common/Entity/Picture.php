@@ -2,7 +2,6 @@
 
 namespace App\Common\Entity;
 
-use App\Identity\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: "App\\Common\\Repository\\PictureRepository")]
@@ -15,9 +14,8 @@ class Picture
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
-    private ?User $user = null;
+    #[ORM\Column(type: 'string', length: 36, nullable: true)]
+    private ?string $ownerUuid = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $title = null;
@@ -56,14 +54,14 @@ class Picture
         return $this->id;
     }
 
-    public function getUser(): ?User
+    public function getOwnerUuid(): ?string
     {
-        return $this->user;
+        return $this->ownerUuid;
     }
 
-    public function setUser(?User $user): self
+    public function setOwnerUuid(?string $ownerUuid): self
     {
-        $this->user = $user;
+        $this->ownerUuid = $ownerUuid;
         $this->touch();
         return $this;
     }

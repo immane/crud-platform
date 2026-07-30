@@ -4,7 +4,6 @@ namespace App\Tests\Common\Entity;
 
 use App\Common\Entity\Category;
 use App\Common\Entity\Picture;
-use App\Identity\Entity\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -17,7 +16,7 @@ final class PictureTest extends TestCase
 
         self::assertSame('https://cdn.example.com/a.png', $entity->getImage());
         self::assertSame($category, $entity->getCategory());
-        self::assertNull($entity->getUser());
+        self::assertNull($entity->getOwnerUuid());
         self::assertNull($entity->getTitle());
         self::assertNull($entity->getMetadata());
         self::assertInstanceOf(\DateTimeImmutable::class, $entity->getCreatedAt());
@@ -48,16 +47,16 @@ final class PictureTest extends TestCase
         self::assertInstanceOf(\DateTimeImmutable::class, $entity->getUpdatedAt());
     }
 
-    public function testUserRelationshipIsNullable(): void
+    public function testOwnerUuidIsNullable(): void
     {
         $entity = new Picture('https://cdn.example.com/a.png');
-        $user = new User();
+        $ownerUuid = 'a4e8c3d0-3f6c-4e96-9f10-bdb0a91ebc7a';
 
-        $entity->setUser($user);
-        self::assertSame($user, $entity->getUser());
+        $entity->setOwnerUuid($ownerUuid);
+        self::assertSame($ownerUuid, $entity->getOwnerUuid());
 
-        $entity->setUser(null);
-        self::assertNull($entity->getUser());
+        $entity->setOwnerUuid(null);
+        self::assertNull($entity->getOwnerUuid());
     }
 
     public function testCategoryRelationship(): void

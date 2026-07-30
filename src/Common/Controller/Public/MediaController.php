@@ -28,6 +28,6 @@ class MediaController extends RestController
             ->createQueryBuilder()
             ->select('media')
             ->from(Media::class, 'media')
-            ->andWhere('media.user IS NULL');
+            ->andWhere('media.ownerUuid IS NULL');
     }
 }

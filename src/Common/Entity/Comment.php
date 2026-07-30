@@ -2,7 +2,6 @@
 
 namespace App\Common\Entity;
 
-use App\Identity\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: "App\\Common\\Repository\\CommentRepository")]
@@ -24,9 +23,8 @@ class Comment
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $authorEmail = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
-    private ?User $author = null;
+    #[ORM\Column(type: 'string', length: 36, nullable: true)]
+    private ?string $authorUuid = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $entityType;
@@ -101,14 +99,14 @@ class Comment
         return $this;
     }
 
-    public function getAuthor(): ?User
+    public function getAuthorUuid(): ?string
     {
-        return $this->author;
+        return $this->authorUuid;
     }
 
-    public function setAuthor(?User $author): self
+    public function setAuthorUuid(?string $authorUuid): self
     {
-        $this->author = $author;
+        $this->authorUuid = $authorUuid;
         $this->touch();
         return $this;
     }

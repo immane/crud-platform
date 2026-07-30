@@ -5,7 +5,7 @@ namespace App\Common\Service;
 use App\Common\Entity\Category;
 use App\Common\Entity\Media;
 use App\Core\Service\BaseService;
-use App\Identity\Entity\User;
+use App\Core\Security\UserUuidPrincipalInterface;
 use App\Storage\Service\MediaStorageRegistry;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -33,7 +33,7 @@ class MediaService extends BaseService implements MediaServiceInterface
     /**
      * @param array<string, mixed> $meta
      */
-    public function createFromUpload(UploadedFile $file, ?string $storage = null, array $meta = [], ?User $owner = null): Media
+    public function createFromUpload(UploadedFile $file, ?string $storage = null, array $meta = [], ?UserUuidPrincipalInterface $owner = null): Media
     {
         $this->validateUpload($file);
 
@@ -56,8 +56,8 @@ class MediaService extends BaseService implements MediaServiceInterface
             $storageName,
         );
 
-        if ($owner instanceof User) {
-            $media->setUser($owner);
+        if ($owner instanceof UserUuidPrincipalInterface) {
+            $media->setOwnerUuid($owner->getUuid());
         }
 
         if (!empty($meta['category'])) {
