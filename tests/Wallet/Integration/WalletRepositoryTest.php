@@ -41,7 +41,7 @@ final class WalletRepositoryTest extends IntegrationKernelTestCase
 
     private function createWallet(User $user, string $currency = 'USD', int $balance = 0): Wallet
     {
-        $wallet = new Wallet($user, $currency);
+        $wallet = new Wallet($user->getUuid(), $currency);
         $this->em->persist($wallet);
         $this->em->flush();
 
@@ -102,52 +102,52 @@ final class WalletRepositoryTest extends IntegrationKernelTestCase
         }
     }
 
-    public function testFindByUser(): void
+    public function testFindByOwnerUuid(): void
     {
         $user = $this->createUser('multiwallet');
         $this->createWallet($user, 'USD', 100);
         $this->createWallet($user, 'EUR', 200);
         $this->createWallet($user, 'GBP', 300);
 
-        $wallets = $this->repo->findByUser($user->getId());
+        $wallets = $this->repo->findByOwnerUuid($user->getUuid());
         self::assertCount(3, $wallets);
         self::assertSame('EUR', $wallets[0]->getCurrency()); // sorted ASC
         self::assertSame('GBP', $wallets[1]->getCurrency());
         self::assertSame('USD', $wallets[2]->getCurrency());
     }
 
-    public function testFindByUserEmpty(): void
+    public function testFindByOwnerUuidEmpty(): void
     {
-        $wallets = $this->repo->findByUser(999999);
+        $wallets = $this->repo->findByOwnerUuid('missing-owner');
         self::assertIsArray($wallets);
         self::assertCount(0, $wallets);
     }
 
-    public function testFindByUserAndCurrency(): void
+    public function testFindByOwnerUuidAndCurrency(): void
     {
         $user = $this->createUser('currency');
         $this->createWallet($user, 'USD', 100);
         $this->createWallet($user, 'EUR', 200);
 
-        $found = $this->repo->findByUserAndCurrency($user->getId(), 'EUR');
+        $found = $this->repo->findByOwnerUuidAndCurrency($user->getUuid(), 'EUR');
         self::assertNotNull($found);
         self::assertSame('EUR', $found->getCurrency());
         self::assertSame(200, $found->getBalance());
     }
 
-    public function testFindByUserAndCurrencyCaseInsensitive(): void
+    public function testFindByOwnerUuidAndCurrencyCaseInsensitive(): void
     {
         $user = $this->createUser('casing');
         $this->createWallet($user, 'BTC', 10000);
 
-        $found = $this->repo->findByUserAndCurrency($user->getId(), 'btc');
+        $found = $this->repo->findByOwnerUuidAndCurrency($user->getUuid(), 'btc');
         self::assertNotNull($found);
         self::assertSame('BTC', $found->getCurrency());
     }
 
-    public function testFindByUserAndCurrencyNotFound(): void
+    public function testFindByOwnerUuidAndCurrencyNotFound(): void
     {
         $user = $this->createUser('nocoin');
-        self::assertNull($this->repo->findByUserAndCurrency($user->getId(), 'XYZ'));
+        self::assertNull($this->repo->findByOwnerUuidAndCurrency($user->getUuid(), 'XYZ'));
     }
 }

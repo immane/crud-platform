@@ -76,7 +76,7 @@ final class WalletPaymentDeductionTest extends TestCase
     {
         $user = new User();
         self::setId($user, 1);
-        $wallet = new Wallet($user, 'CNY');
+        $wallet = new Wallet($user->getUuid(), 'CNY');
         self::setId($wallet, 1);
 
         return ['invoice-id', 'invoice-no', $wallet];

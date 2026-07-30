@@ -85,7 +85,7 @@ final class WalletPaymentDeductionServiceIntegrationTest extends IntegrationKern
     {
         $user = new User();
         $user->setEmail($email)->setUsername(strstr($email, '@', true))->setPassword('password')->setRoles(['ROLE_USER']);
-        $wallet = new Wallet($user, 'CNY');
+        $wallet = new Wallet($user->getUuid(), 'CNY');
         $this->em->persist($user);
         $this->em->persist($wallet);
         $this->em->flush();
@@ -97,6 +97,6 @@ final class WalletPaymentDeductionServiceIntegrationTest extends IntegrationKern
 
     private function payment(User $payer, string $invoiceId, int $amount): WalletPaymentReference
     {
-        return new WalletPaymentReference($invoiceId, 'NO-' . $invoiceId, $payer->getId() ?? throw new \LogicException('Payer must be persisted.'), $amount, 'CNY', 'Wallet deduction');
+        return new WalletPaymentReference($invoiceId, 'NO-' . $invoiceId, $payer->getId() ?? throw new \LogicException('Payer must be persisted.'), $payer->getUuid(), $amount, 'CNY', 'Wallet deduction');
     }
 }

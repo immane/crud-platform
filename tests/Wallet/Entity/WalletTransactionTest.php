@@ -44,8 +44,8 @@ final class WalletTransactionTest extends TestCase
     public function testSetFromAndToWallet(): void
     {
         $user = new User();
-        $from = new Wallet($user);
-        $to = new Wallet($user, 'EUR');
+        $from = new Wallet($user->getUuid());
+        $to = new Wallet($user->getUuid(), 'EUR');
 
         $tx = new WalletTransaction('uid', 100, 'transfer');
         $tx->setFromWallet($from);

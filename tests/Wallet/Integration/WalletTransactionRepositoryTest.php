@@ -43,7 +43,7 @@ final class WalletTransactionRepositoryTest extends IntegrationKernelTestCase
 
     private function createWallet(User $user, string $currency = 'USD', int $balance = 0): Wallet
     {
-        $wallet = new Wallet($user, $currency);
+        $wallet = new Wallet($user->getUuid(), $currency);
         $this->em->persist($wallet);
         $this->em->flush();
         if ($balance > 0) {

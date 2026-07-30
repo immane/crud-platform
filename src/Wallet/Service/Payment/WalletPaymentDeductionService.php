@@ -89,7 +89,7 @@ class WalletPaymentDeductionService
             throw new \InvalidArgumentException('systemWalletId is required for wallet deduction.');
         }
 
-        $wallet = $this->walletRepository->findByUserAndCurrency($payment->payerId, $currency);
+        $wallet = $this->walletRepository->findByOwnerUuidAndCurrency($payment->ownerUuid, $currency);
         if ($wallet === null || $wallet->getId() === null) {
             throw new \RuntimeException(sprintf('No %s wallet found for payer.', strtoupper($currency)));
         }

@@ -22,9 +22,9 @@ class WalletController extends RestController
         CreateApiViewMixin, UpdateApiViewMixin, DeleteApiViewMixin;
 
     /** @var list<string> */
-    protected array $requiredCreateProperties = ['user', 'currency'];
+    protected array $requiredCreateProperties = ['ownerUuid', 'currency'];
     /** @var list<string> */
-    protected array $acceptedCreateProperties = ['user', 'currency', 'status', 'label'];
+    protected array $acceptedCreateProperties = ['ownerUuid', 'currency', 'status', 'label'];
     /** @var list<string> */
     protected array $acceptedUpdateProperties = ['status', 'label', 'currency'];
 

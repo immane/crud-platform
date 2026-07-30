@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Bridge\PaymentWallet;
 
-use App\Core\Security\IdentityUserIdResolverInterface;
 use App\Payment\DTO\PaymentNotifyResult;
 use App\Payment\DTO\PaymentRefundResult;
 use App\Payment\DTO\PaymentResult;
@@ -20,7 +19,6 @@ final class WalletGateway implements PaymentGatewayInterface
 {
     public function __construct(
         private readonly WalletPaymentService $walletPaymentService,
-        private readonly IdentityUserIdResolverInterface $identityUserIdResolver,
         #[Autowire('%payment.system_wallet_id%')]
         private readonly ?int $systemWalletId = null,
     ) {}
@@ -29,9 +27,9 @@ final class WalletGateway implements PaymentGatewayInterface
 
     public function pay(Invoice $invoice, int $amount, array $options = []): PaymentResult
     {
-        $payerId = $this->payerId($invoice, 'payment');
+        $payerUuid = $this->payerUuid($invoice, 'payment');
         $systemWalletId = $this->systemWalletId($options, 'payment');
-        $transfer = $this->walletPaymentService->pay($payerId, $invoice->getCurrency(), $systemWalletId, $amount, 'invoice-pay-' . $invoice->getOutTradeNo(), $invoice->getSubject() ?? ('Payment for invoice ' . $invoice->getOutTradeNo()));
+        $transfer = $this->walletPaymentService->pay($payerUuid, $invoice->getCurrency(), $systemWalletId, $amount, 'invoice-pay-' . $invoice->getOutTradeNo(), $invoice->getSubject() ?? ('Payment for invoice ' . $invoice->getOutTradeNo()));
 
         return new PaymentResult(
             invoice: $invoice,
@@ -52,9 +50,9 @@ final class WalletGateway implements PaymentGatewayInterface
 
     public function refund(Invoice $invoice, int $amount, int $paidAmount, string $reason, array $options = []): PaymentRefundResult
     {
-        $payerId = $this->payerId($invoice, 'refund');
+        $payerUuid = $this->payerUuid($invoice, 'refund');
         $systemWalletId = $this->systemWalletId($options, 'refund');
-        $transfer = $this->walletPaymentService->refund($payerId, $invoice->getCurrency(), $systemWalletId, $amount, 'invoice-refund-' . $invoice->getOutTradeNo() . '-' . ($invoice->getRefundedAmount() + $amount), $reason);
+        $transfer = $this->walletPaymentService->refund($payerUuid, $invoice->getCurrency(), $systemWalletId, $amount, 'invoice-refund-' . $invoice->getOutTradeNo() . '-' . ($invoice->getRefundedAmount() + $amount), $reason);
 
         return new PaymentRefundResult($invoice, $amount, $amount >= ($paidAmount - $invoice->getRefundedAmount()) ? Invoice::STATUS_REFUNDED : Invoice::STATUS_PARTIAL_REFUNDED, $transfer->transaction->getUuid(), ['reason' => $reason, 'transactionId' => $transfer->transaction->getUuid()]);
     }
@@ -75,14 +73,13 @@ final class WalletGateway implements PaymentGatewayInterface
         return $systemWalletId;
     }
 
-    private function payerId(Invoice $invoice, string $operation): int
+    private function payerUuid(Invoice $invoice, string $operation): string
     {
         $payerUuid = $invoice->getPayerUuid();
-        $payerId = $payerUuid === null ? null : $this->identityUserIdResolver->resolveIdentityUserId($payerUuid);
-        if ($payerId === null) {
+        if ($payerUuid === null) {
             throw new \RuntimeException(sprintf('Invoice has no payer for wallet %s.', $operation));
         }
 
-        return $payerId;
+        return $payerUuid;
     }
 }

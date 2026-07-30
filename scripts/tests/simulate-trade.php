@@ -76,11 +76,11 @@ info("Users: " . implode(', ', $userNames) . " (admin: alice)");
 // ================================================================
 info("Creating wallets...");
 $wallets = [];
-$systemWallet = new Wallet($users[0], 'SYS'); // system currency SYS (avoids collision)
+$systemWallet = new Wallet($users[0]->getUuid(), 'SYS'); // system currency SYS (avoids collision)
 $em->persist($systemWallet);
 
 foreach ($users as $i => $u) {
-    $w = new Wallet($u, 'CNY');
+    $w = new Wallet($u->getUuid(), 'CNY');
     $em->persist($w);
     $wallets['CNY'][$i] = $w;
 }

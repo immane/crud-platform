@@ -67,7 +67,7 @@ final class WalletApiRegressionTest extends IntegrationWebTestCase
 
         // Create wallet
         $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode([
-            'user' => $user->getId(), 'currency' => 'USD', 'label' => 'My USD Wallet',
+            'ownerUuid' => $user->getUuid(), 'currency' => 'USD', 'label' => 'My USD Wallet',
         ], JSON_THROW_ON_ERROR));
         self::assertSame(201, $client->getResponse()->getStatusCode());
         $created = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
@@ -89,8 +89,8 @@ final class WalletApiRegressionTest extends IntegrationWebTestCase
 
         $alice = $this->createTestUser($em, 'app_wallet_alice');
         $bob = $this->createTestUser($em, 'app_wallet_bob');
-        $aliceWallet = new Wallet($alice, 'USD');
-        $bobWallet = new Wallet($bob, 'USD');
+        $aliceWallet = new Wallet($alice->getUuid(), 'USD');
+        $bobWallet = new Wallet($bob->getUuid(), 'USD');
         $em->persist($aliceWallet);
         $em->persist($bobWallet);
         $em->flush();
@@ -150,13 +150,13 @@ final class WalletApiRegressionTest extends IntegrationWebTestCase
 
         // First wallet
         $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode([
-            'user' => $user->getId(), 'currency' => 'USD',
+            'ownerUuid' => $user->getUuid(), 'currency' => 'USD',
         ], JSON_THROW_ON_ERROR));
         self::assertSame(201, $client->getResponse()->getStatusCode());
 
         // Second wallet with same user+currency
         $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode([
-            'user' => $user->getId(), 'currency' => 'USD',
+            'ownerUuid' => $user->getUuid(), 'currency' => 'USD',
         ], JSON_THROW_ON_ERROR));
         self::assertNotSame(201, $client->getResponse()->getStatusCode());
     }
@@ -168,7 +168,7 @@ final class WalletApiRegressionTest extends IntegrationWebTestCase
         $user = $this->createTestUser($em, 'statususer');
 
         $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode([
-            'user' => $user->getId(), 'currency' => 'USD',
+            'ownerUuid' => $user->getUuid(), 'currency' => 'USD',
         ], JSON_THROW_ON_ERROR));
         $created = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $id = $created['data']['id'];
@@ -188,7 +188,7 @@ final class WalletApiRegressionTest extends IntegrationWebTestCase
         $user = $this->createTestUser($em, 'deluser');
 
         $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode([
-            'user' => $user->getId(), 'currency' => 'USD',
+            'ownerUuid' => $user->getUuid(), 'currency' => 'USD',
         ], JSON_THROW_ON_ERROR));
         $created = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $id = $created['data']['id'];
@@ -214,13 +214,13 @@ final class WalletApiRegressionTest extends IntegrationWebTestCase
 
         // Create wallets and set balances
         $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode([
-            'user' => $alice->getId(), 'currency' => 'USD',
+            'ownerUuid' => $alice->getUuid(), 'currency' => 'USD',
         ], JSON_THROW_ON_ERROR));
         $aliceWallet = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $aliceId = $aliceWallet['data']['id'];
 
         $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode([
-            'user' => $bob->getId(), 'currency' => 'USD',
+            'ownerUuid' => $bob->getUuid(), 'currency' => 'USD',
         ], JSON_THROW_ON_ERROR));
         $bobWallet = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $bobId = $bobWallet['data']['id'];
@@ -253,12 +253,12 @@ final class WalletApiRegressionTest extends IntegrationWebTestCase
         $bob = $this->createTestUser($em, 'tf_nofunds2');
 
         $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode([
-            'user' => $alice->getId(), 'currency' => 'USD',
+            'ownerUuid' => $alice->getUuid(), 'currency' => 'USD',
         ], JSON_THROW_ON_ERROR));
         $aliceWallet = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode([
-            'user' => $bob->getId(), 'currency' => 'USD',
+            'ownerUuid' => $bob->getUuid(), 'currency' => 'USD',
         ], JSON_THROW_ON_ERROR));
         $bobWallet = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
@@ -286,7 +286,7 @@ final class WalletApiRegressionTest extends IntegrationWebTestCase
 
         $user = $this->createTestUser($em, 'samewallet');
         $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode([
-            'user' => $user->getId(), 'currency' => 'USD',
+            'ownerUuid' => $user->getUuid(), 'currency' => 'USD',
         ], JSON_THROW_ON_ERROR));
         $wallet = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $id = $wallet['data']['id'];
@@ -309,13 +309,13 @@ final class WalletApiRegressionTest extends IntegrationWebTestCase
         $bob = $this->createTestUser($em, 'frozen_bob');
 
         $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode([
-            'user' => $alice->getId(), 'currency' => 'USD',
+            'ownerUuid' => $alice->getUuid(), 'currency' => 'USD',
         ], JSON_THROW_ON_ERROR));
         $aliceWallet = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $aliceId = $aliceWallet['data']['id'];
 
         $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode([
-            'user' => $bob->getId(), 'currency' => 'USD',
+            'ownerUuid' => $bob->getUuid(), 'currency' => 'USD',
         ], JSON_THROW_ON_ERROR));
         $bobWallet = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $bobId = $bobWallet['data']['id'];
@@ -343,13 +343,13 @@ final class WalletApiRegressionTest extends IntegrationWebTestCase
         $bob = $this->createTestUser($em, 'idem_bob');
 
         $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode([
-            'user' => $alice->getId(), 'currency' => 'USD',
+            'ownerUuid' => $alice->getUuid(), 'currency' => 'USD',
         ], JSON_THROW_ON_ERROR));
         $aliceWallet = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $aliceId = $aliceWallet['data']['id'];
 
         $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode([
-            'user' => $bob->getId(), 'currency' => 'USD',
+            'ownerUuid' => $bob->getUuid(), 'currency' => 'USD',
         ], JSON_THROW_ON_ERROR));
         $bobWallet = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $bobId = $bobWallet['data']['id'];
@@ -388,10 +388,10 @@ final class WalletApiRegressionTest extends IntegrationWebTestCase
         $alice = $this->createTestUser($em, 'txlist_alice');
         $bob = $this->createTestUser($em, 'txlist_bob');
 
-        $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode(['user' => $alice->getId(), 'currency' => 'USD'], JSON_THROW_ON_ERROR));
+        $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode(['ownerUuid' => $alice->getUuid(), 'currency' => 'USD'], JSON_THROW_ON_ERROR));
         $aw = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-        $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode(['user' => $bob->getId(), 'currency' => 'USD'], JSON_THROW_ON_ERROR));
+        $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode(['ownerUuid' => $bob->getUuid(), 'currency' => 'USD'], JSON_THROW_ON_ERROR));
         $bw = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         $em->createQuery('UPDATE App\Wallet\Entity\Wallet w SET w.balance = :b WHERE w.id = :id')
@@ -442,10 +442,10 @@ final class WalletApiRegressionTest extends IntegrationWebTestCase
         $alice = $this->createTestUser($em, "blind_a_{$suffix}");
         $bob = $this->createTestUser($em, "blind_b_{$suffix}");
 
-        $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode(['user' => $alice->getId(), 'currency' => 'USD'], JSON_THROW_ON_ERROR));
+        $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode(['ownerUuid' => $alice->getUuid(), 'currency' => 'USD'], JSON_THROW_ON_ERROR));
         $aw = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-        $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode(['user' => $bob->getId(), 'currency' => 'USD'], JSON_THROW_ON_ERROR));
+        $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode(['ownerUuid' => $bob->getUuid(), 'currency' => 'USD'], JSON_THROW_ON_ERROR));
         $bw = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         // Replace IDs in fuzz payloads that expect success
@@ -487,7 +487,7 @@ final class WalletApiRegressionTest extends IntegrationWebTestCase
         $em = $client->getContainer()->get(EntityManagerInterface::class);
 
         $bob = $this->createTestUser($em, 'nosource_bob');
-        $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode(['user' => $bob->getId(), 'currency' => 'USD'], JSON_THROW_ON_ERROR));
+        $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode(['ownerUuid' => $bob->getUuid(), 'currency' => 'USD'], JSON_THROW_ON_ERROR));
         $bw = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         $client->request('POST', '/api/v1/manage/transfers', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode([
@@ -504,10 +504,10 @@ final class WalletApiRegressionTest extends IntegrationWebTestCase
         $alice = $this->createTestUser($em, 'mismatch_al');
         $bob = $this->createTestUser($em, 'mismatch_bo');
 
-        $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode(['user' => $alice->getId(), 'currency' => 'USD'], JSON_THROW_ON_ERROR));
+        $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode(['ownerUuid' => $alice->getUuid(), 'currency' => 'USD'], JSON_THROW_ON_ERROR));
         $aw = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-        $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode(['user' => $bob->getId(), 'currency' => 'EUR'], JSON_THROW_ON_ERROR));
+        $client->request('POST', '/api/v1/manage/wallets', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode(['ownerUuid' => $bob->getUuid(), 'currency' => 'EUR'], JSON_THROW_ON_ERROR));
         $bw = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         $em->createQuery('UPDATE App\Wallet\Entity\Wallet w SET w.balance = :b WHERE w.id = :id')

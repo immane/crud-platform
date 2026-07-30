@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Wallet\Entity;
 
-use App\Identity\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: \App\Wallet\Repository\WalletRepository::class)]
 #[ORM\Table(name: 'wallet')]
 #[ORM\HasLifecycleCallbacks]
-#[ORM\UniqueConstraint(name: 'uniq_wallet_user_currency', columns: ['user_id', 'currency'])]
+#[ORM\UniqueConstraint(name: 'uniq_wallet_owner_uuid_currency', columns: ['owner_uuid', 'currency'])]
 class Wallet
 {
     #[ORM\Id]
@@ -18,12 +17,8 @@ class Wallet
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    private ?User $user = null;
-
-    #[ORM\Column(name: 'owner_uuid', type: 'string', length: 36, nullable: true)]
-    private ?string $ownerUuid = null;
+    #[ORM\Column(name: 'owner_uuid', type: 'string', length: 36)]
+    private string $ownerUuid;
 
     #[ORM\Column(type: 'string', length: 10, options: ['default' => 'USD'])]
     private string $currency = 'USD';
@@ -46,18 +41,16 @@ class Wallet
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    public function __construct(User $user, string $currency = 'USD')
+    public function __construct(string $ownerUuid, string $currency = 'USD')
     {
-        $this->user = $user;
-        $this->ownerUuid = $user->getUuid();
+        $this->ownerUuid = $ownerUuid;
         $this->currency = strtoupper($currency);
         $this->createdAt = new \DateTimeImmutable();
     }
 
     public function __toString(): string
     {
-        $username = $this->user?->getUsername() ?? 'N/A';
-        return sprintf('#%d %s %.2f %s', $this->id ?? 0, $username, $this->balance / 100, $this->currency);
+        return sprintf('#%d %s %.2f %s', $this->id ?? 0, $this->ownerUuid, $this->balance / 100, $this->currency);
     }
 
     public function getId(): ?int
@@ -65,22 +58,12 @@ class Wallet
         return $this->id;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-        $this->ownerUuid = $user?->getUuid();
-        return $this;
-    }
-
-    public function getOwnerUuid(): ?string
+    public function getOwnerUuid(): string
     {
         return $this->ownerUuid;
     }
+
+    public function setOwnerUuid(string $ownerUuid): self { $this->ownerUuid = $ownerUuid; return $this; }
 
     public function getCurrency(): string
     {

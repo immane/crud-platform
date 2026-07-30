@@ -14,14 +14,14 @@ class WalletPaymentService implements WalletTransferPortInterface
         private readonly TransferServiceInterface $transferService,
     ) {}
 
-    public function pay(int $payerId, string $currency, int $systemWalletId, int $amount, string $referenceId, string $description): TransferResult
+    public function pay(string $ownerUuid, string $currency, int $systemWalletId, int $amount, string $referenceId, string $description): TransferResult
     {
-        return $this->transfer($payerId, $currency, $systemWalletId, $amount, $referenceId, $description, false);
+        return $this->transferOwnerResult($ownerUuid, $currency, $systemWalletId, $amount, $referenceId, $description, false);
     }
 
-    public function refund(int $payerId, string $currency, int $systemWalletId, int $amount, string $referenceId, string $description): TransferResult
+    public function refund(string $ownerUuid, string $currency, int $systemWalletId, int $amount, string $referenceId, string $description): TransferResult
     {
-        return $this->transfer($payerId, $currency, $systemWalletId, $amount, $referenceId, $description, true);
+        return $this->transferOwnerResult($ownerUuid, $currency, $systemWalletId, $amount, $referenceId, $description, true);
     }
 
     public function debitOwner(string $ownerUuid, string $currency, int $systemWalletId, int $amount, string $referenceId, string $description): string
@@ -34,9 +34,9 @@ class WalletPaymentService implements WalletTransferPortInterface
         return $this->transferOwner($ownerUuid, $currency, $systemWalletId, $amount, $referenceId, $description, true);
     }
 
-    private function transfer(int $payerId, string $currency, int $systemWalletId, int $amount, string $referenceId, string $description, bool $refund): TransferResult
+    private function transferOwnerResult(string $ownerUuid, string $currency, int $systemWalletId, int $amount, string $referenceId, string $description, bool $refund): TransferResult
     {
-        $wallet = $this->walletRepository->findByUserAndCurrency($payerId, $currency);
+        $wallet = $this->walletRepository->findByOwnerUuidAndCurrency($ownerUuid, $currency);
         if ($wallet === null || $wallet->getId() === null) {
             throw new \RuntimeException(sprintf('No %s wallet found for payer.', $currency));
         }

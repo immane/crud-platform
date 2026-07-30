@@ -236,7 +236,7 @@ final class TradeOrderCancelWithInvoiceIntegrationTest extends IntegrationWebTes
 
     private function createWallet(User $user, int $balance): Wallet
     {
-        $existing = $this->em->getRepository(Wallet::class)->findOneBy(['user' => $user, 'currency' => 'CNY']);
+        $existing = $this->em->getRepository(Wallet::class)->findOneBy(['ownerUuid' => $user->getUuid(), 'currency' => 'CNY']);
         if ($existing instanceof Wallet) {
             $this->em->getConnection()->executeStatement('UPDATE wallet SET balance = :balance WHERE id = :id', [
                 'balance' => $balance,
@@ -246,7 +246,7 @@ final class TradeOrderCancelWithInvoiceIntegrationTest extends IntegrationWebTes
             return $existing;
         }
 
-        $wallet = new Wallet($user, 'CNY');
+        $wallet = new Wallet($user->getUuid(), 'CNY');
         $this->em->persist($wallet);
         $this->em->flush();
         $this->em->getConnection()->executeStatement('UPDATE wallet SET balance = :balance WHERE id = :id', [

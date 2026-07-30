@@ -64,8 +64,9 @@ final class WalletBalanceAdjustmentProvider implements PaymentAdjustmentProvider
         if ($payerId === null) {
             throw new \RuntimeException('Invoice has no payer for wallet deduction.');
         }
+        \assert($payerUuid !== null);
 
-        return new WalletPaymentReference($invoice->getUuid(), $invoice->getOutTradeNo(), $payerId, $invoice->getAmount(), $invoice->getCurrency(), $invoice->getSubject() ?? ('Deduction for invoice ' . $invoice->getOutTradeNo()));
+        return new WalletPaymentReference($invoice->getUuid(), $invoice->getOutTradeNo(), $payerId, $payerUuid, $invoice->getAmount(), $invoice->getCurrency(), $invoice->getSubject() ?? ('Deduction for invoice ' . $invoice->getOutTradeNo()));
     }
 
     private function deductionFromResult(PaymentAdjustmentResult $adjustment): WalletPaymentDeduction

@@ -10,6 +10,7 @@ final readonly class WalletPaymentReference
         public string $invoiceId,
         public string $invoiceNo,
         public int $payerId,
+        public string $ownerUuid,
         public int $amount,
         public string $currency,
         public string $subject,

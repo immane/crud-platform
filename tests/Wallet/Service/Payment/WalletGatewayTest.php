@@ -47,7 +47,7 @@ final class WalletGatewayTest extends TestCase
     {
         $invoice = (new Invoice())->setPayerUuid('payer')->setCurrency('CNY')->setOutTradeNo('ORDER-1');
         $service = $this->createMock(WalletPaymentService::class);
-        $service->expects(self::once())->method('pay')->with(1, 'CNY', 2, 100, 'invoice-pay-ORDER-1', 'Payment for invoice ORDER-1')->willReturn(new TransferResult(new WalletTransaction('transaction-1', 100, 'transfer'), 0, 0));
+        $service->expects(self::once())->method('pay')->with('payer', 'CNY', 2, 100, 'invoice-pay-ORDER-1', 'Payment for invoice ORDER-1')->willReturn(new TransferResult(new WalletTransaction('transaction-1', 100, 'transfer'), 0, 0));
 
         $result = $this->gateway(1, 2, $service)->pay($invoice, 100);
         self::assertSame(Invoice::STATUS_PAID, $result->status);
@@ -56,9 +56,6 @@ final class WalletGatewayTest extends TestCase
 
     private function gateway(?int $payerId = null, ?int $systemWalletId = 2, ?WalletPaymentService $service = null): WalletGateway
     {
-        $resolver = $this->createMock(IdentityUserIdResolverInterface::class);
-        $resolver->method('resolveIdentityUserId')->willReturn($payerId);
-
-        return new WalletGateway($service ?? $this->createMock(WalletPaymentService::class), $resolver, $systemWalletId);
+        return new WalletGateway($service ?? $this->createMock(WalletPaymentService::class), $systemWalletId);
     }
 }
