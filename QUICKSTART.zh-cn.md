@@ -1,8 +1,8 @@
 # 快速上手
 
-当前仓库以一个模块化单体应用和独立 Store、Inventory、Payment、Wallet 应用运行。Docker Compose 会启动
-Web 应用（FrankenPHP）、四个已提取应用、共享 Messenger worker 和共享 scheduler；这还
-不是目标的多服务运行时。
+当前仓库以一个模块化单体应用和独立 Store、Inventory、Payment、Wallet、Identity、
+Common、Trade 应用运行。Docker Compose 会启动 Web 应用（FrankenPHP）、七个已提取应用、
+共享 Messenger worker 和共享 scheduler；这还不是目标的多服务运行时。
 
 ## Docker
 
@@ -15,6 +15,9 @@ docker compose exec store-app php bin/console doctrine:migrations:migrate --no-i
 docker compose exec inventory-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec payment-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec wallet-app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec identity-app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec common-app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec trade-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec app php bin/console app:identity:user:create admin@example.com admin 'P@ssw0rd' --admin
 ```
 
@@ -33,19 +36,25 @@ curl -X POST http://localhost:8080/api/auth/login \
 - Inventory API：`http://localhost:8082`
 - Payment runtime 冒烟：`http://localhost:8083`（尚未可切流）
 - Wallet runtime 冒烟：`http://localhost:8084`（尚未可切流）
+- Identity runtime 冒烟：`http://localhost:8085`（尚未可切流）
+- Common runtime 冒烟：`http://localhost:8086`（尚未可切流）
+- Trade runtime 冒烟：`http://localhost:8087`（尚未可切流）
 - OpenAPI UI：`http://localhost:8080/api/doc`
 - Mailpit：`http://localhost:8025`
 
 常用命令：
 
 ```bash
-docker compose logs -f app worker scheduler store-app inventory-app payment-app wallet-app
+docker compose logs -f app worker scheduler store-app inventory-app payment-app wallet-app identity-app common-app trade-app
 docker compose exec app php bin/console about
 docker compose exec app php bin/console doctrine:migrations:status
 docker compose exec store-app php bin/console doctrine:migrations:status
 docker compose exec inventory-app php bin/console doctrine:migrations:status
 docker compose exec payment-app php bin/console doctrine:migrations:status
 docker compose exec wallet-app php bin/console doctrine:migrations:status
+docker compose exec identity-app php bin/console doctrine:migrations:status
+docker compose exec common-app php bin/console doctrine:migrations:status
+docker compose exec trade-app php bin/console doctrine:migrations:status
 docker compose down
 ```
 

@@ -23,7 +23,7 @@ Kernel、配置、数据库和迁移、消息队列、worker、定时任务、Do
 - 身份与访问：RS256 JWT、Refresh Token 轮换、OTP、密码登录和微信登录适配器。
 - CMS、商品/订单工作流、门店运营、库存预留、发票、钱包账本、促销 DSL 和媒体存储模块。
 - Trade、Store、Inventory 已具备版本化事件与 Outbox/Inbox 模式。
-- `/api/doc` OpenAPI、PHPUnit、PHPStan Level 8、Rector 类型检查与 Docker Compose 开发环境。
+- `/api/doc` OpenAPI、PHPUnit、PHPStan Level 8、Rector 类型检查与 Docker Compose 开发环境（22 个服务）。
 
 Inventory 已实现，但默认关闭且尚未达到生产可用标准。安全限制见
 [库存设计](docs/design/bundles/inventory.md)。
@@ -39,6 +39,9 @@ docker compose exec store-app php bin/console doctrine:migrations:migrate --no-i
 docker compose exec inventory-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec payment-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec wallet-app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec identity-app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec common-app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec trade-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec app php bin/console app:identity:user:create admin@example.com admin 'P@ssw0rd' --admin
 
 curl -X POST http://localhost:8080/api/auth/login \
@@ -51,6 +54,9 @@ curl -X POST http://localhost:8080/api/auth/login \
 - Inventory API：`http://localhost:8082`
 - Payment runtime 冒烟：`http://localhost:8083`（尚未可切流）
 - Wallet runtime 冒烟：`http://localhost:8084`（尚未可切流）
+- Identity runtime 冒烟：`http://localhost:8085`（尚未可切流）
+- Common runtime 冒烟：`http://localhost:8086`（尚未可切流）
+- Trade runtime 冒烟：`http://localhost:8087`（尚未可切流）
 - OpenAPI：`http://localhost:8080/api/doc`
 - worker/scheduler 日志：`docker compose logs -f worker scheduler`
 
@@ -61,13 +67,13 @@ curl -X POST http://localhost:8080/api/auth/login \
 | 目标上下文 | 当前来源 | 当前定位 |
 |---|---|---|
 | Platform Kernel | `Core` | 共享框架库，不是服务 |
-| Commerce | `Trade`、`Promotion` | 过渡服务候选 |
+| Commerce | `Trade`、`Promotion` → `apps/trade` | 已提取；单体在过渡期间托管 |
 | Store Operations | `Store` → `apps/store` | 已提取；单体在过渡期间托管 |
 | Inventory | `Inventory` → `apps/inventory` | 已提取；单体在过渡期间托管，受安全条件约束 |
-| Payments | `Payment` → `apps/payment`、微信支付适配器 | 已提取；单体在过渡期间托管 |
+| Payments | `Payment` → `apps/payment`、微信支付适配器 | 已提取；网关由 Payment 应用持有 |
 | Wallet/Ledger | `Wallet` → `apps/wallet` | 已提取；单体在过渡期间托管 |
-| Identity & Access | `Identity`、微信登录适配器 | 后期提取 |
-| Content/Media | `Common`、`Storage` | 后期；需先拆分 Settings 所有权 |
+| Identity & Access | `Identity` → `apps/identity`、微信登录适配器 | 已提取；单体在过渡期间托管 |
+| Content/Media | `Common`、`Storage` → `apps/common` | 已提取；单体在过渡期间托管 |
 
 服务提取前必须具备标量跨服务契约、无跨服务 Doctrine 关系、所需的 Outbox/Inbox，
 并独立拥有队列、运行时和部署产物。
@@ -79,10 +85,12 @@ curl -X POST http://localhost:8080/api/auth/login \
 composer deptrac
 composer phpstan
 composer rector:types:check
+composer coverage                # 运行所有测试套件 + 聚合覆盖率 >= 90%
 mkdocs build --strict
 ```
 
-本机命令需使用 PHP 8.4+。微服务迁移期间，现有完整测试套件保留为特征测试。
+本机命令需使用 PHP 8.4+。七个独立应用测试套件（common、identity、inventory、
+payment、store、trade、wallet）与根集成测试独立运行，聚合行覆盖率达 91.36%。
 
 ## 文档
 
