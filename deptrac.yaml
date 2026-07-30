@@ -7,6 +7,7 @@ deptrac:
     - apps/inventory/src/
     - apps/payment/src/
     - apps/wallet/src/
+    - apps/trade/src/
     - src/
     - packages/integration-contracts/src/
     - packages/legacy-messenger-compat/src/

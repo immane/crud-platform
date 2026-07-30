@@ -369,6 +369,55 @@ services:
     networks:
       - internal
 
+  # Trade and Promotion application (FrankenPHP, independent database baseline)
+  # ========================
+  trade-app:
+    build:
+      context: .
+      dockerfile: apps/trade/Dockerfile
+    restart: unless-stopped
+    environment:
+      APP_ENV: ${TRADE_APP_ENV:-dev}
+      APP_DEBUG: "1"
+      APP_SECRET: ${TRADE_APP_SECRET:-trade-dev-secret-change-me}
+      DATABASE_URL: "mysql://${TRADE_MYSQL_USER:-trade}:${TRADE_MYSQL_PASSWORD:-!TradeChangeMe!}@trade-database:3306/${TRADE_MYSQL_DATABASE:-trade}?serverVersion=8.4&charset=utf8mb4"
+      MESSENGER_TRANSPORT_DSN: "doctrine://default?auto_setup=0"
+      WECHAT_MINIAPP_APP_ID: ${WECHAT_MINIAPP_APP_ID:-}
+      WECHAT_MINIAPP_SECRET: ${WECHAT_MINIAPP_SECRET:-}
+      WECHAT_PAY_MCH_ID: ${WECHAT_PAY_MCH_ID:-}
+      WECHAT_PAY_SECRET_KEY: ${WECHAT_PAY_SECRET_KEY:-}
+      WECHAT_PAY_PRIVATE_KEY: ${WECHAT_PAY_PRIVATE_KEY:-}
+      WECHAT_PAY_CERTIFICATE: ${WECHAT_PAY_CERTIFICATE:-}
+      WECHAT_PAY_PLATFORM_CERT: ${WECHAT_PAY_PLATFORM_CERT:-}
+      WECHAT_PAY_PUB_KEY_ID: ${WECHAT_PAY_PUB_KEY_ID:-}
+      WECHAT_PAY_PUB_KEY_PATH: ${WECHAT_PAY_PUB_KEY_PATH:-}
+      WECHAT_PAY_NOTIFY_URL: ${WECHAT_PAY_NOTIFY_URL:-}
+    ports:
+      - "${TRADE_APP_PORT:-8087}:80"
+    depends_on:
+      trade-database:
+        condition: service_healthy
+    networks:
+      - internal
+
+  trade-database:
+    image: mysql:${MYSQL_VERSION:-8.4}
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${TRADE_MYSQL_DATABASE:-trade}
+      MYSQL_USER: ${TRADE_MYSQL_USER:-trade}
+      MYSQL_PASSWORD: ${TRADE_MYSQL_PASSWORD:-!TradeChangeMe!}
+      MYSQL_ROOT_PASSWORD: ${TRADE_MYSQL_ROOT_PASSWORD:-!TradeRootChangeMe!}
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} --silent"]
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    volumes:
+      - trade_mysql_data:/var/lib/mysql:rw
+    networks:
+      - internal
+
   # ========================
   # Database (MySQL 8)
   # ========================
@@ -427,3 +476,4 @@ volumes:
   wallet_mysql_data:
   identity_mysql_data:
   common_mysql_data:
+  trade_mysql_data:

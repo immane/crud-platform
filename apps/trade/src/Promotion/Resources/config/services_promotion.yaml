@@ -4,7 +4,7 @@ services:
             tags: ['promotion.strategy']
 
     App\Promotion\Service\Dsl\:
-        resource: '../../Dsl/'
+        resource: '../../Service/Dsl/'
 
     App\Promotion\Strategy\:
         resource: '../../Strategy/'

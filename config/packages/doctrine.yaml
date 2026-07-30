@@ -42,6 +42,18 @@ doctrine:
                 dir: '%kernel.project_dir%/vendor/crud-platform/payment-app/src/Entity'
                 prefix: 'App\Payment\Entity'
                 alias: Payment
+            Trade:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/vendor/crud-platform/trade-app/src/Trade/Entity'
+                prefix: 'App\Trade\Entity'
+                alias: Trade
+            Promotion:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/vendor/crud-platform/trade-app/src/Promotion/Entity'
+                prefix: 'App\Promotion\Entity'
+                alias: Promotion
             Wallet:
                 type: attribute
                 is_bundle: false

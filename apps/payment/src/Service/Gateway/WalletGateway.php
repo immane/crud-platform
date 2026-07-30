@@ -25,7 +25,12 @@ final class WalletGateway implements PaymentGatewayInterface
     public function pay(Invoice $invoice, int $amount, array $options = []): PaymentResult
     {
         $transactionId = $this->walletTransfer->debitOwner($this->payerUuid($invoice, 'payment'), $invoice->getCurrency(), $this->systemWalletId($options, 'payment'), $amount, 'invoice-pay-' . $invoice->getOutTradeNo(), $invoice->getSubject() ?? ('Payment for invoice ' . $invoice->getOutTradeNo()));
-        return new PaymentResult($invoice, Invoice::STATUS_PAID, payload: ['transactionId' => $transactionId], message: 'Wallet payment completed');
+        return new PaymentResult(
+            $invoice,
+            Invoice::STATUS_PAID,
+            payload: ['transactionId' => $transactionId],
+            message: 'Wallet payment completed',
+        );
     }
 
     public function notify(Request $request): PaymentNotifyResult { throw new PaymentVerificationException('Wallet gateway does not accept external notify callbacks.'); }
