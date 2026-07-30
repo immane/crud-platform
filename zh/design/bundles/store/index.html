@@ -4032,7 +4032,7 @@ Store端权威记录，集成事件也有同样的记录
 完成有效负载。</p>
 <h3 id="73-storeorderacceptedv1">7.3 <code>store.order.accepted.v1</code><a class="headerlink" href="#73-storeorderacceptedv1" title="Permanent link">&para;</a></h3>
 <p><strong>发布者：</strong> 商店，经过本地验证和未来库存预留
-契约成功。</p>
+合约成功。</p>
 <p><strong>消费者：</strong> 交易订单决策消费者。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">&quot;orderUuid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;trade-order-uuid&quot;</span><span class="p">,</span>
@@ -4092,7 +4092,7 @@ Store端权威记录，集成事件也有同样的记录
 </tr>
 <tr>
 <td><code>SYSTEM_ERROR</code></td>
-<td>重试预算已用尽；需要操作员采取行动</td>
+<td>重试预算已用完；需要操作员采取行动</td>
 </tr>
 </tbody>
 </table>
@@ -4313,7 +4313,7 @@ Store端权威记录，集成事件也有同样的记录
 </tbody>
 </table>
 <h3 id="94">9.4 店员操作<a class="headerlink" href="#94" title="Permanent link">&para;</a></h3>
-<p>商店员工不得使用通用 Trade <code>manage/orders</code> 路线，该路线是整个平台范围内的
+<p>商店工作人员不得使用通用 Trade <code>manage/orders</code> 路线，该路线是整个平台范围内的
 <code>ROLE_ADMIN</code> 端点。 Store 提供范围化的操作端点：</p>
 <table>
 <thead>
