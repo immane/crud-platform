@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Identity\Security;
 
-use App\Identity\Entity\RefreshToken;
-use App\Identity\Entity\User;
-use App\Identity\Repository\RefreshTokenRepository;
-use App\Identity\Security\TokenManager;
+use App\Identity\Main\Entity\RefreshToken;
+use App\Identity\Main\Entity\User;
+use App\Identity\Main\Repository\RefreshTokenRepository;
+use App\Identity\Main\Security\TokenManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;

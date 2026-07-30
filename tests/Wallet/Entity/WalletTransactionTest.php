@@ -4,7 +4,7 @@ namespace App\Tests\Wallet\Entity;
 
 use App\Wallet\Entity\WalletTransaction;
 use App\Wallet\Entity\Wallet;
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use PHPUnit\Framework\TestCase;
 
 final class WalletTransactionTest extends TestCase

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Identity\Integration;
 
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,8 +21,8 @@ final class AuthBlackBoxIntegrationTest extends IntegrationWebTestCase
 
         $client = static::createClient();
         $em = $client->getContainer()->get(EntityManagerInterface::class);
-        $em->createQuery('DELETE FROM App\\Identity\\Entity\\RefreshToken r')->execute();
-        $em->createQuery('DELETE FROM App\\Identity\\Entity\\User u')->execute();
+        $em->createQuery('DELETE FROM App\\Identity\\Main\\Entity\\RefreshToken r')->execute();
+        $em->createQuery('DELETE FROM App\\Identity\\Main\\Entity\\User u')->execute();
 
         self::ensureKernelShutdown();
     }

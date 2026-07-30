@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Wechat\Service;
 
-use App\Wechat\Service\WechatService;
+use App\Identity\Wechat\Service\WechatService;
 use EasyWeChat\MiniApp\Application as MiniApp;
 use EasyWeChat\OfficialAccount\Application as OfficialAccount;
 use Overtrue\Socialite\Contracts\ProviderInterface;
@@ -24,10 +24,6 @@ final class WechatServiceTest extends TestCase
             officialSecret: 'sec_off',
             officialToken: 'tok',
             officialAesKey: 'aes',
-            payMchId: '123',
-            paySecretKey: 'sk',
-            payPrivateKeyPath: '/tmp/key.pem',
-            payCertificatePath: '/tmp/cert.pem',
         );
     }
 

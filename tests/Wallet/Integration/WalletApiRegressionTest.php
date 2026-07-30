@@ -2,8 +2,8 @@
 
 namespace App\Tests\Wallet\Integration;
 
-use App\Identity\Entity\User;
-use App\Identity\Security\TokenManager;
+use App\Identity\Main\Entity\User;
+use App\Identity\Main\Security\TokenManager;
 use App\Tests\Integration\IntegrationWebTestCase;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Wallet\Entity\Wallet;

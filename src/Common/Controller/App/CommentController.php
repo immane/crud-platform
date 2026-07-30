@@ -4,11 +4,11 @@ namespace App\Common\Controller\App;
 
 use App\Common\Service\CommentServiceInterface;
 use App\Core\Controller\RestController;
+use App\Core\Security\UserUuidPrincipalInterface;
 use App\Core\View\ApiView;
 use App\Core\View\CreateApiViewMixin;
 use App\Core\View\DetailApiViewMixin;
 use App\Core\View\ListApiViewMixin;
-use App\Identity\Entity\User;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/app/comments', name: 'app-comments-')]
@@ -26,11 +26,11 @@ class CommentController extends RestController
     ) {}
 
     /** @return array<string, mixed> */
-    protected function commonFilter()
+    protected function commonFilter(): array
     {
-        return [
-            'author' => $this->getUser(), 
-        ];
+        $user = $this->getUser();
+
+        return $user instanceof UserUuidPrincipalInterface ? ['authorUuid' => $user->getUuid()] : ['id' => -1];
     }
 
     /** @return array<string, mixed> */
@@ -38,12 +38,12 @@ class CommentController extends RestController
     {
         $user = $this->getUser();
 
-        if ($user instanceof User) {
+        if ($user instanceof UserUuidPrincipalInterface) {
             return [
                 'status' => 'pending',
-                'author' => $user->getId(),
-                'authorName' => $user->getUsername(),
-                'authorEmail' => $user->getEmail(),
+                'authorUuid' => $user->getUuid(),
+                'authorName' => method_exists($user, 'getUsername') ? $user->getUsername() : null,
+                'authorEmail' => method_exists($user, 'getEmail') ? $user->getEmail() : null,
             ];
         }
 

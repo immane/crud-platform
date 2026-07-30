@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Identity\Service;
 
-use App\Identity\Entity\Profile;
-use App\Identity\Service\ProfileService;
+use App\Identity\Main\Entity\Profile;
+use App\Identity\Main\Service\ProfileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -80,7 +80,7 @@ final class ProfileServiceTest extends TestCase
 
     public function testGetCallsRepositoryFind(): void
     {
-        $user = new \App\Identity\Entity\User();
+        $user = new \App\Identity\Main\Entity\User();
         $profile = new Profile($user, Profile::LEVEL_GOLD);
 
         $this->repo->method('find')->with(42)->willReturn($profile);
@@ -102,7 +102,7 @@ final class ProfileServiceTest extends TestCase
 
     public function testGetWithArrayCriteria(): void
     {
-        $user = new \App\Identity\Entity\User();
+        $user = new \App\Identity\Main\Entity\User();
         $profile = new Profile($user, Profile::LEVEL_SILVER);
 
         $this->repo->method('findOneBy')->with(['level' => 'silver'])->willReturn($profile);
@@ -114,7 +114,7 @@ final class ProfileServiceTest extends TestCase
 
     public function testUpdatePersistsAndFlushes(): void
     {
-        $user = new \App\Identity\Entity\User();
+        $user = new \App\Identity\Main\Entity\User();
         $profile = new Profile($user);
 
         $this->em->expects(self::once())->method('persist')->with($profile);
@@ -127,7 +127,7 @@ final class ProfileServiceTest extends TestCase
 
     public function testRemovePersistsAndFlushes(): void
     {
-        $user = new \App\Identity\Entity\User();
+        $user = new \App\Identity\Main\Entity\User();
         $profile = new Profile($user);
 
         $this->repo->method('find')->with(1)->willReturn($profile);
@@ -144,7 +144,7 @@ final class ProfileServiceTest extends TestCase
 
     public function testJoinAsMemberCreatesNewProfile(): void
     {
-        $user = new \App\Identity\Entity\User();
+        $user = new \App\Identity\Main\Entity\User();
 
         $this->repo->method('findOneBy')->with(['user' => $user])->willReturn(null);
 
@@ -161,7 +161,7 @@ final class ProfileServiceTest extends TestCase
 
     public function testJoinAsMemberReturnsExistingProfile(): void
     {
-        $user = new \App\Identity\Entity\User();
+        $user = new \App\Identity\Main\Entity\User();
         $existingProfile = new Profile($user, Profile::LEVEL_GOLD);
 
         $this->repo->method('findOneBy')->with(['user' => $user])->willReturn($existingProfile);
@@ -177,7 +177,7 @@ final class ProfileServiceTest extends TestCase
 
     public function testJoinAsMemberDefaultLevel(): void
     {
-        $user = new \App\Identity\Entity\User();
+        $user = new \App\Identity\Main\Entity\User();
 
         $this->repo->method('findOneBy')->with(['user' => $user])->willReturn(null);
 
@@ -188,7 +188,7 @@ final class ProfileServiceTest extends TestCase
 
     public function testUpdateProfileFields(): void
     {
-        $user = new \App\Identity\Entity\User();
+        $user = new \App\Identity\Main\Entity\User();
         $profile = new Profile($user);
 
         $this->em->expects(self::once())->method('persist')->with($profile);
@@ -207,7 +207,7 @@ final class ProfileServiceTest extends TestCase
 
     public function testUpdateClearsProfileFields(): void
     {
-        $user = new \App\Identity\Entity\User();
+        $user = new \App\Identity\Main\Entity\User();
         $profile = new Profile($user);
         $profile->setNickname('OldName');
         $profile->setAvatar('https://old.com/av.jpg');

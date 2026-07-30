@@ -4,12 +4,13 @@ namespace App\Common\Controller\Manage;
 
 use App\Common\Controller\App\MediaController as AppMediaController;
 use App\Common\Service\MediaServiceInterface;
+use App\Core\Security\UserUuidPrincipalInterface;
+use App\Core\Security\UserUuidResolverInterface;
 use App\Core\View\CreateApiViewMixin;
 use App\Core\View\DeleteApiViewMixin;
 use App\Core\View\DetailApiViewMixin;
 use App\Core\View\ListApiViewMixin;
 use App\Core\View\UpdateApiViewMixin;
-use App\Identity\Entity\User;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -23,12 +24,13 @@ class MediaController extends AppMediaController
     /** @var list<string> */
     protected array $requiredCreateProperties = ['filename', 'originalFilename', 'mimeType', 'size', 'path'];
     /** @var list<string> */
-    protected array $acceptedCreateProperties = ['filename', 'originalFilename', 'mimeType', 'size', 'path', 'storage', 'user', 'category', 'alt', 'title', 'width', 'height'];
+    protected array $acceptedCreateProperties = ['filename', 'originalFilename', 'mimeType', 'size', 'path', 'storage', 'ownerUuid', 'user', 'category', 'alt', 'title', 'width', 'height'];
     /** @var list<string> */
-    protected array $acceptedUpdateProperties = ['filename', 'originalFilename', 'mimeType', 'size', 'path', 'storage', 'user', 'category', 'alt', 'title', 'width', 'height'];
+    protected array $acceptedUpdateProperties = ['filename', 'originalFilename', 'mimeType', 'size', 'path', 'storage', 'ownerUuid', 'user', 'category', 'alt', 'title', 'width', 'height'];
 
     public function __construct(
-        MediaServiceInterface $service
+        MediaServiceInterface $service,
+        private readonly UserUuidResolverInterface $userUuidResolver,
     ) {
         parent::__construct($service);
     }
@@ -39,8 +41,44 @@ class MediaController extends AppMediaController
         return [];
     }
 
-    protected function uploadOwner(): ?User
+    protected function uploadOwner(): ?UserUuidPrincipalInterface
     {
         return null;
+    }
+
+    /**
+     * @param array<string, mixed> $content
+     * @return array<string, mixed>
+     */
+    protected function processCreateContent(array $content, object $entity): array
+    {
+        return $this->resolveOwnerUuid($content);
+    }
+
+    /**
+     * @param array<string, mixed> $content
+     * @return array<string, mixed>
+     */
+    protected function processUpdateContent(array $content, ?object $entity = null): array
+    {
+        return $this->resolveOwnerUuid($content);
+    }
+
+    /**
+     * @param array<string, mixed> $content
+     * @return array<string, mixed>
+     */
+    private function resolveOwnerUuid(array $content): array
+    {
+        if (isset($content['user'])) {
+            $ownerUuid = $this->userUuidResolver->resolveUserUuid((int) $content['user']);
+            if ($ownerUuid === null) {
+                throw new \InvalidArgumentException('User not found.');
+            }
+            $content['ownerUuid'] = $ownerUuid;
+            unset($content['user']);
+        }
+
+        return $content;
     }
 }

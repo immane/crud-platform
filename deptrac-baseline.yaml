@@ -1,49 +1,13 @@
 deptrac:
   skip_violations:
-    App\Common\Controller\App\CommentController:
-      - App\Identity\Entity\User
-    App\Common\Controller\App\MediaController:
-      - App\Identity\Entity\User
-    App\Common\Controller\App\PictureController:
-      - App\Identity\Entity\User
-    App\Common\Controller\Manage\MediaController:
-      - App\Identity\Entity\User
-    App\Common\Entity\Comment:
-      - App\Identity\Entity\User
-    App\Common\Entity\Media:
-      - App\Identity\Entity\User
-    App\Common\Entity\Picture:
-      - App\Identity\Entity\User
-    App\Common\Service\MediaService:
-      - App\Identity\Entity\User
-    App\Common\Service\MediaServiceInterface:
-      - App\Identity\Entity\User
-    App\Promotion\Service\Dsl\Evaluator:
-      - App\Identity\Entity\User
-    App\Promotion\Strategy\MemberDiscountStrategy:
-      - App\Identity\Entity\Profile
-      - App\Identity\Entity\User
     App\Storage\Command\InitQiniuSettingsCommand:
       - App\Common\Entity\Setting
       - App\Common\Repository\SettingRepository
     App\Storage\Service\QiniuStorage:
       - App\Common\Repository\SettingRepository
-    App\Trade\Controller\App\OrderController:
-      - App\Identity\Entity\User
-    App\Trade\Entity\Order:
-      - App\Identity\Entity\User
     App\Trade\EventListener\OrderInvoiceListener:
       - App\Payment\Entity\Invoice
     App\Trade\Service\OrderService:
-      - App\Identity\Entity\User
       - App\Payment\Entity\Invoice
-    App\Wechat\Controller\LoginController:
-      - App\Identity\Entity\User
-    App\Wechat\Entity\WechatUser:
-      - App\Identity\Entity\User
-    App\Wechat\Repository\WechatUserRepository:
-      - App\Identity\Entity\User
     App\Wechat\Service\Payment\WechatPayGateway:
       - App\Payment\Entity\Invoice
-    App\Wechat\Service\WechatAuthService:
-      - App\Identity\Entity\User

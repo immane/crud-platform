@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Wechat\Controller\Manage;
 
 use App\Core\Controller\RestController;
-use App\Wechat\Controller\Manage\WechatUserController;
-use App\Wechat\Service\WechatUserServiceInterface;
+use App\Identity\Wechat\Controller\Manage\WechatUserController;
+use App\Identity\Wechat\Service\WechatUserServiceInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Trade\Integration;
 
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use App\Payment\Entity\Invoice;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;

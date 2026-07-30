@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Identity\EventListener;
 
-use App\Identity\Entity\Profile;
-use App\Identity\Entity\User;
-use App\Identity\EventListener\UserProfileListener;
+use App\Identity\Main\Entity\Profile;
+use App\Identity\Main\Entity\User;
+use App\Identity\Main\EventListener\UserProfileListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Event\PostPersistEventArgs;

@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Trade\Service;
 
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
+use App\Identity\Main\Entity\Profile;
 use App\Trade\Entity\Order;
 use App\Trade\Entity\Product;
 use App\Trade\Entity\Specification;
 use App\Trade\Service\OrderService;
 use App\Trade\Service\Pricing\BasePriceCalculator;
 use App\Trade\Service\Pricing\PriceCalculationResult;
+use App\Trade\Service\Pricing\PriceCalculationContext;
+use App\Trade\Service\Pricing\PriceCalculatorInterface;
 use App\Trade\Service\Pricing\QuantityCalculator;
 use App\Trade\Service\Pricing\TotalAggregator;
 use App\Trade\Service\SpecificationServiceInterface;
@@ -102,6 +105,30 @@ final class OrderServiceTest extends TestCase
         self::assertInstanceOf(PriceCalculationResult::class, $result);
         self::assertSame(0, $result->totalAmount);
         self::assertSame([], $result->items);
+    }
+
+    public function testCalculatePricesAddsAuthenticatedIdentitySnapshot(): void
+    {
+        $user = new User();
+        $user->setProfile(new Profile($user, Profile::LEVEL_GOLD));
+        $service = $this->createService([new class implements PriceCalculatorInterface {
+            public function calculate(PriceCalculationContext $context): void
+            {
+            }
+
+            public static function getPriority(): int
+            {
+                return 0;
+            }
+        }]);
+        (new \ReflectionProperty(\App\Core\Service\BaseService::class, 'user'))->setValue($service, $user);
+
+        $result = $service->calculatePrices([]);
+
+        self::assertSame([
+            'id' => null,
+            'profileLevel' => Profile::LEVEL_GOLD,
+        ], $result->meta['identity']);
     }
 
     #[DataProvider('pricingCalculationsProvider')]

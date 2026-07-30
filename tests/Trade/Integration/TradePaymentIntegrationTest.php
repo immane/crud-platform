@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Trade\Integration;
 
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use App\Payment\Entity\Invoice;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
@@ -226,7 +226,7 @@ final class TradePaymentIntegrationTest extends IntegrationWebTestCase
 
     private function jsonRequestAs(User $user, string $method, string $uri, array $data = []): array
     {
-        $tokenManager = $this->client->getContainer()->get(\App\Identity\Security\TokenManager::class);
+        $tokenManager = $this->client->getContainer()->get(\App\Identity\Main\Security\TokenManager::class);
         $this->client->request($method, $uri, [], [], [
             'CONTENT_TYPE' => 'application/json',
             'HTTP_AUTHORIZATION' => 'Bearer ' . $tokenManager->createAccessToken($user),

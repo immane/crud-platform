@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Trade\Entity;
 
 use App\Core\Utils\UUID;
-use App\Identity\Entity\User;
+use App\Core\Security\UserUuidPrincipalInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -33,9 +33,8 @@ class Order
     #[ORM\Column(type: 'string', length: 36, unique: true)]
     private string $uuid;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
-    private ?User $user = null;
+    #[ORM\Column(type: 'string', length: 36, nullable: true)]
+    private ?string $userUuid = null;
 
     #[ORM\Column(type: 'bigint', options: ['default' => 0])]
     private int $totalAmount = 0;
@@ -110,8 +109,7 @@ class Order
 
     public function __toString(): string
     {
-        $username = $this->user?->getUsername() ?? 'N/A';
-        return sprintf('#%d %s %.2f %s', $this->id ?? 0, $username, $this->totalAmount / 100, $this->currency);
+        return sprintf('#%d %s %.2f %s', $this->id ?? 0, $this->userUuid ?? 'N/A', $this->totalAmount / 100, $this->currency);
     }
 
     public function getId(): ?int
@@ -124,15 +122,20 @@ class Order
         return $this->uuid;
     }
 
-    public function getUser(): ?User
+    public function getUserUuid(): ?string
     {
-        return $this->user;
+        return $this->userUuid;
     }
 
-    public function setUser(?User $user): self
+    public function setUserUuid(?string $userUuid): self
     {
-        $this->user = $user;
+        $this->userUuid = $userUuid;
         return $this;
+    }
+
+    public function setUser(?UserUuidPrincipalInterface $user): self
+    {
+        return $this->setUserUuid($user?->getUuid());
     }
 
     public function getTotalAmount(): int

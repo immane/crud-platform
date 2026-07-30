@@ -269,6 +269,67 @@ services:
       - internal
 
   # ========================
+  # Identity application (FrankenPHP, independent database baseline)
+  # ========================
+  identity-app:
+    build:
+      context: .
+      dockerfile: apps/identity/Dockerfile
+    restart: unless-stopped
+    environment:
+      APP_ENV: ${IDENTITY_APP_ENV:-dev}
+      APP_DEBUG: "1"
+      APP_SECRET: ${IDENTITY_APP_SECRET:-identity-dev-secret-change-me}
+      DATABASE_URL: "mysql://${IDENTITY_MYSQL_USER:-identity}:${IDENTITY_MYSQL_PASSWORD:-!IdentityChangeMe!}@identity-database:3306/${IDENTITY_MYSQL_DATABASE:-identity}?serverVersion=8.4&charset=utf8mb4"
+      JWT_PRIVATE_KEY_PATH: ${JWT_PRIVATE_KEY_PATH:-/workspace/apps/identity/var/jwt/jwt_private.pem}
+      JWT_PUBLIC_KEY_PATH: ${JWT_PUBLIC_KEY_PATH:-/workspace/apps/identity/var/jwt/jwt_public.pem}
+      JWT_PASSPHRASE: ${JWT_PASSPHRASE:-}
+      ACCESS_TOKEN_TTL: ${ACCESS_TOKEN_TTL:-7200}
+      REFRESH_TOKEN_TTL: ${REFRESH_TOKEN_TTL:-31536000}
+      REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET:-identity-dev-refresh-secret}
+      OTP_REDIS_DSN: ${OTP_REDIS_DSN:-redis://redis:6379/0}
+      ALIYUN_ACCESS_KEY_ID: ${ALIYUN_ACCESS_KEY_ID:-}
+      ALIYUN_ACCESS_KEY_SECRET: ${ALIYUN_ACCESS_KEY_SECRET:-}
+      ALIYUN_SMS_REGION: ${ALIYUN_SMS_REGION:-cn-hangzhou}
+      ALIYUN_SMS_SIGN_NAME: ${ALIYUN_SMS_SIGN_NAME:-}
+      ALIYUN_SMS_TEMPLATE_LOGIN_OTP: ${ALIYUN_SMS_TEMPLATE_LOGIN_OTP:-}
+      ALIYUN_SMS_TEMPLATE_VERIFY_PHONE: ${ALIYUN_SMS_TEMPLATE_VERIFY_PHONE:-}
+      ALIYUN_SMS_DRY_RUN: ${ALIYUN_SMS_DRY_RUN:-true}
+      WECHAT_MINIAPP_APP_ID: ${WECHAT_MINIAPP_APP_ID:-}
+      WECHAT_MINIAPP_SECRET: ${WECHAT_MINIAPP_SECRET:-}
+      WECHAT_OFFICIAL_APP_ID: ${WECHAT_OFFICIAL_APP_ID:-}
+      WECHAT_OFFICIAL_SECRET: ${WECHAT_OFFICIAL_SECRET:-}
+      WECHAT_OFFICIAL_TOKEN: ${WECHAT_OFFICIAL_TOKEN:-}
+      WECHAT_OFFICIAL_AES_KEY: ${WECHAT_OFFICIAL_AES_KEY:-}
+    ports:
+      - "${IDENTITY_APP_PORT:-8085}:80"
+    depends_on:
+      identity-database:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - internal
+
+  identity-database:
+    image: mysql:${MYSQL_VERSION:-8.4}
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${IDENTITY_MYSQL_DATABASE:-identity}
+      MYSQL_USER: ${IDENTITY_MYSQL_USER:-identity}
+      MYSQL_PASSWORD: ${IDENTITY_MYSQL_PASSWORD:-!IdentityChangeMe!}
+      MYSQL_ROOT_PASSWORD: ${IDENTITY_MYSQL_ROOT_PASSWORD:-!IdentityRootChangeMe!}
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} --silent"]
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    volumes:
+      - identity_mysql_data:/var/lib/mysql:rw
+    networks:
+      - internal
+
+  # ========================
   # Database (MySQL 8)
   # ========================
   database:
@@ -324,3 +385,4 @@ volumes:
   inventory_mysql_data:
   payment_mysql_data:
   wallet_mysql_data:
+  identity_mysql_data:

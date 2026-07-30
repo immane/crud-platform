@@ -98,7 +98,7 @@ namespace AlibabaCloud\Client\Exception {
 namespace App\Tests\Identity\Sms {
     use AlibabaCloud\Client\AlibabaCloud;
     use AlibabaCloud\Client\Exception\ClientException;
-    use App\Identity\Sms\AliyunSmsProvider;
+    use App\Identity\Main\Sms\AliyunSmsProvider;
     use PHPUnit\Framework\TestCase;
     use Psr\Log\LoggerInterface;
 

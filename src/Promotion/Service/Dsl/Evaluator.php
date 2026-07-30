@@ -158,17 +158,17 @@ class Evaluator
             }
         }
 
-        // user.level, user.tags
+        // user.id, user.level
         if ($parts[0] === 'user') {
-            $user = $context->user;
-            if (($parts[1] ?? '') === 'id' && $user !== null && method_exists($user, 'getId')) {
-                return $user->getId();
+            $identity = $context->meta['identity'] ?? [];
+            if (!is_array($identity)) {
+                return null;
             }
-            if (($parts[1] ?? '') === 'level' && $user instanceof \App\Identity\Entity\User) {
-                return $user->getProfile()?->getLevel() ?? '';
+            if (($parts[1] ?? '') === 'id') {
+                return $identity['id'] ?? null;
             }
-            if (($parts[1] ?? '') === 'tags' && $user !== null && method_exists($user, 'getTags')) {
-                return $user->getTags();
+            if (($parts[1] ?? '') === 'level') {
+                return $identity['profileLevel'] ?? '';
             }
         }
 

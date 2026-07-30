@@ -8,7 +8,7 @@ use App\Common\Entity\Category;
 use App\Common\Entity\Media;
 use App\Common\Service\MediaServiceInterface;
 use App\Common\Service\MediaService;
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
 use Doctrine\ORM\EntityManagerInterface;
@@ -80,13 +80,42 @@ final class MediaUploadIntegrationTest extends IntegrationWebTestCase
 
         /** @var Media $media */
         $media = $this->em->getRepository(Media::class)->find($created['data']['id']);
-        self::assertNull($media->getUser());
+        self::assertNull($media->getOwnerUuid());
         self::assertSame($category->getId(), $media->getCategory()?->getId());
 
         $client->request('DELETE', '/api/v1/manage/media/' . $created['data']['id']);
 
         self::assertSame(204, $client->getResponse()->getStatusCode());
         self::assertFileDoesNotExist($storedPath);
+    }
+
+    public function testManageCreateResolvesLegacyNumericUser(): void
+    {
+        $client = static::createAuthenticatedClient();
+        $owner = new User();
+        $owner->setEmail('manage-media-owner@example.com');
+        $owner->setUsername('manage-media-owner');
+        $owner->setPassword('test-password');
+        $this->em->persist($owner);
+        $this->em->flush();
+
+        $client->request(
+            'POST',
+            '/api/v1/manage/media',
+            server: ['CONTENT_TYPE' => 'application/json'],
+            content: json_encode([
+                'filename' => 'managed.png',
+                'originalFilename' => 'managed.png',
+                'mimeType' => 'image/png',
+                'size' => 10,
+                'path' => '/uploads/managed.png',
+                'user' => $owner->getId(),
+            ]),
+        );
+
+        self::assertSame(201, $client->getResponse()->getStatusCode(), (string) $client->getResponse()->getContent());
+        $payload = $this->decodeResponse($client->getResponse()->getContent());
+        self::assertSame($owner->getUuid(), $payload['data']['ownerUuid']);
     }
 
     public function testPublicMediaReadOnlyDoesNotRequireAuthentication(): void
@@ -98,7 +127,7 @@ final class MediaUploadIntegrationTest extends IntegrationWebTestCase
 
         $media = new Media('public.png', 'public.png', 'image/png', 10, '/uploads/public.png');
         $ownedMedia = new Media('owned.png', 'owned.png', 'image/png', 10, '/uploads/owned.png');
-        $ownedMedia->setUser($owner);
+        $ownedMedia->setOwnerUuid($owner->getUuid());
         $this->em->persist($owner);
         $this->em->persist($media);
         $this->em->persist($ownedMedia);
@@ -146,7 +175,7 @@ final class MediaUploadIntegrationTest extends IntegrationWebTestCase
         $media = $this->em->getRepository(Media::class)->find($created['data']['id']);
         /** @var User $user */
         $user = $this->em->getRepository(User::class)->findOneBy(['email' => 'testauth@example.com']);
-        self::assertSame($user->getId(), $media->getUser()?->getId());
+        self::assertSame($user->getUuid(), $media->getOwnerUuid());
 
         $client->request('GET', '/api/v1/app/media');
         self::assertSame(200, $client->getResponse()->getStatusCode(), (string) $client->getResponse()->getContent());
@@ -181,7 +210,7 @@ final class MediaUploadIntegrationTest extends IntegrationWebTestCase
         $otherUser->setUsername('other-media-owner');
         $otherUser->setPassword('test-password');
         $otherMedia = new Media('other.png', 'other.png', 'image/png', 10, '/uploads/other.png');
-        $otherMedia->setUser($otherUser);
+        $otherMedia->setOwnerUuid($otherUser->getUuid());
         $this->em->persist($otherUser);
         $this->em->persist($otherMedia);
         $this->em->flush();
@@ -202,7 +231,7 @@ final class MediaUploadIntegrationTest extends IntegrationWebTestCase
         $client = static::createClient();
         $container = $client->getContainer();
         $controller = new class(new class implements MediaServiceInterface {
-            public function createFromUpload(UploadedFile $file, ?string $storage = null, array $meta = [], ?User $owner = null): Media
+            public function createFromUpload(UploadedFile $file, ?string $storage = null, array $meta = [], ?\App\Core\Security\UserUuidPrincipalInterface $owner = null): Media
             {
                 throw new \Error('Unexpected upload failure');
             }
@@ -213,7 +242,7 @@ final class MediaUploadIntegrationTest extends IntegrationWebTestCase
             public function update($object, ?array $data = null, bool $noFlush = false): object { return new \stdClass(); }
             public function remove($object): bool { return false; }
         }) extends \App\Common\Controller\App\MediaController {
-            protected function uploadOwner(): ?User
+            protected function uploadOwner(): ?\App\Core\Security\UserUuidPrincipalInterface
             {
                 return null;
             }

@@ -7,7 +7,7 @@ namespace App\Tests\Trade\Entity;
 use App\Trade\Entity\Order;
 use App\Trade\Entity\OrderItem;
 use App\Trade\Entity\Specification;
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use PHPUnit\Framework\TestCase;
 
 final class OrderTest extends TestCase
@@ -20,7 +20,7 @@ final class OrderTest extends TestCase
             '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/',
             $order->getUuid()
         );
-        self::assertNull($order->getUser());
+        self::assertNull($order->getUserUuid());
         self::assertSame(0, $order->getTotalAmount());
         self::assertSame(0.0, $order->getTotalAmountAsFloat());
         self::assertSame('CNY', $order->getCurrency());

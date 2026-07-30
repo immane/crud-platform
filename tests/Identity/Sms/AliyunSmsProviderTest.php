@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Identity\Sms;
 
-use App\Identity\Sms\AliyunSmsProvider;
+use App\Identity\Main\Sms\AliyunSmsProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 

@@ -3,7 +3,6 @@
 namespace App\Tests\Common\Entity;
 
 use App\Common\Entity\Comment;
-use App\Identity\Entity\User;
 use PHPUnit\Framework\TestCase;
 
 final class CommentTest extends TestCase
@@ -17,7 +16,7 @@ final class CommentTest extends TestCase
         self::assertSame(42, $entity->getEntityId());
         self::assertNull($entity->getAuthorName());
         self::assertNull($entity->getAuthorEmail());
-        self::assertNull($entity->getAuthor());
+        self::assertNull($entity->getAuthorUuid());
         self::assertNull($entity->getParent());
         self::assertSame('pending', $entity->getStatus());
         self::assertInstanceOf(\DateTimeImmutable::class, $entity->getCreatedAt());
@@ -41,17 +40,16 @@ final class CommentTest extends TestCase
         self::assertSame('approved', $entity->getStatus());
     }
 
-    public function testAuthorRelationship(): void
+    public function testAuthorUuidIsNullable(): void
     {
         $entity = new Comment('body', 'Page', 1);
-        $user = new User();
-        $user->setEmail('test@example.com');
+        $authorUuid = 'a4e8c3d0-3f6c-4e96-9f10-bdb0a91ebc7a';
 
-        $entity->setAuthor($user);
-        self::assertSame($user, $entity->getAuthor());
+        $entity->setAuthorUuid($authorUuid);
+        self::assertSame($authorUuid, $entity->getAuthorUuid());
 
-        $entity->setAuthor(null);
-        self::assertNull($entity->getAuthor());
+        $entity->setAuthorUuid(null);
+        self::assertNull($entity->getAuthorUuid());
     }
 
     public function testParentRelationship(): void

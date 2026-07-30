@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Wechat\Controller\App;
 
-use App\Identity\Entity\User;
-use App\Wechat\Controller\App\WechatUserController;
-use App\Wechat\Service\WechatUserServiceInterface;
+use App\Identity\Main\Entity\User;
+use App\Identity\Wechat\Controller\App\WechatUserController;
+use App\Identity\Wechat\Service\WechatUserServiceInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
@@ -62,7 +62,7 @@ final class WechatUserControllerTest extends TestCase
         $ref = new \ReflectionMethod($this->controller, 'commonFilter');
         $result = $ref->invoke($this->controller);
 
-        self::assertSame(['user' => $user], $result);
+        self::assertSame(['userUuid' => $user->getUuid()], $result);
     }
 
     public function testCommonFilterWithoutUser(): void
@@ -87,7 +87,7 @@ final class WechatUserControllerTest extends TestCase
         $this->injectDependencies($requestStack);
 
         $this->service->method('list')
-            ->with(['user' => $user], null, false)
+            ->with(['userUuid' => $user->getUuid()], null, false)
             ->willReturn([]);
 
         $response = $this->controller->listAction();

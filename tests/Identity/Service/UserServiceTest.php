@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Identity\Service;
 
-use App\Identity\Entity\User;
-use App\Identity\Repository\UserRepository;
-use App\Identity\Service\UserService;
+use App\Identity\Main\Entity\User;
+use App\Identity\Main\Repository\UserRepository;
+use App\Identity\Main\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;

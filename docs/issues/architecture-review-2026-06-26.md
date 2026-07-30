@@ -25,7 +25,7 @@ The main risks are not structural failure, but overly broad generic capabilities
 Add an explicit tag in `services_wechat.yaml`:
 
 ```yaml
-App\Wechat\Service\Gateway\WechatPayGateway:
+App\Identity\Wechat\Service\Gateway\WechatPayGateway:
     arguments:
         $notifyUrl: '%env(WECHAT_PAY_NOTIFY_URL)%'
     tags: ['payment.gateway']

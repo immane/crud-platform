@@ -18,6 +18,7 @@ COPY apps/store ./apps/store
 COPY apps/inventory ./apps/inventory
 COPY apps/payment ./apps/payment
 COPY apps/wallet ./apps/wallet
+COPY apps/identity ./apps/identity
 RUN composer install --no-dev --no-scripts --no-interaction --no-progress --optimize-autoloader \
     && composer clear-cache
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Common\Integration;
 
+use App\Common\Entity\Comment;
+use App\Identity\Main\Entity\User;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,5 +41,28 @@ final class CommentApiExtraTest extends IntegrationWebTestCase
         [$r2, $list] = $this->json('GET', '/api/v1/app/comments');
         self::assertSame(Response::HTTP_OK, $r2->getStatusCode());
         self::assertSame(0, $list['code']);
+    }
+
+    public function testManageCreateResolvesLegacyNumericAuthor(): void
+    {
+        $user = new User();
+        $user->setEmail('manage-comment-author@example.com');
+        $user->setUsername('manage-comment-author');
+        $user->setPassword('test-password');
+
+        $em = $this->client->getContainer()->get('doctrine')->getManager();
+        $em->persist($user);
+        $em->flush();
+
+        [$response, $payload] = $this->json('POST', '/api/v1/manage/comments', [
+            'body' => 'Managed comment',
+            'entityType' => 'content',
+            'entityId' => 1,
+            'author' => $user->getId(),
+        ]);
+
+        self::assertSame(Response::HTTP_CREATED, $response->getStatusCode());
+        self::assertSame($user->getUuid(), $payload['data']['authorUuid']);
+        self::assertSame($user->getUuid(), $em->getRepository(Comment::class)->find($payload['data']['id'])?->getAuthorUuid());
     }
 }

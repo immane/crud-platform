@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Identity\Controller\Manage;
 
-use App\Identity\Controller\Manage\ProfileController;
-use App\Identity\Service\ProfileServiceInterface;
+use App\Identity\Main\Controller\Manage\ProfileController;
+use App\Identity\Main\Service\ProfileServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;

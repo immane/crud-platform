@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Trade\Controller\Manage;
 
 use App\Core\Controller\RestController;
+use App\Core\Security\UserUuidResolverInterface;
 use App\Core\Service\BaseService;
 use App\Core\View\ApiView;
 use App\Core\View\DetailApiViewMixin;
@@ -29,6 +30,7 @@ class OrderController extends RestController
     public function __construct(
         protected readonly OrderServiceInterface $service,
         private readonly StoreContextResolverInterface $storeContextResolver,
+        private readonly UserUuidResolverInterface $userUuidResolver,
         #[Target('state_machine.order')]
         protected readonly WorkflowInterface $workflow,
     ) {
@@ -44,7 +46,10 @@ class OrderController extends RestController
             return $this->warning('Items are required.', 400, '', 400);
         }
 
-        $user = isset($content['user']) ? ['id' => (int) $content['user']] : null;
+        $userUuid = isset($content['user']) ? $this->userUuidResolver->resolveUserUuid((int) $content['user']) : null;
+        if (isset($content['user']) && $userUuid === null) {
+            return $this->warning('User not found.', 404, '', 404);
+        }
         $currency = $content['currency'] ?? 'CNY';
         $notes = $content['notes'] ?? null;
 
@@ -54,7 +59,7 @@ class OrderController extends RestController
 
             $order = $this->service->createOrder(
                 $result->items,
-                $user,
+                $userUuid,
                 $result->totalAmount,
                 $currency,
                 $notes,

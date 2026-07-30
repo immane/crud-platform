@@ -2,7 +2,6 @@
 
 namespace App\Common\Entity;
 
-use App\Identity\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: "App\\Common\\Repository\\MediaRepository")]
@@ -33,9 +32,8 @@ class Media
     #[ORM\Column(type: 'string', length: 20, options: ['default' => 'local'])]
     private string $storage = 'local';
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
-    private ?User $user = null;
+    #[ORM\Column(type: 'string', length: 36, nullable: true)]
+    private ?string $ownerUuid = null;
 
     #[ORM\ManyToOne(targetEntity: Category::class)]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
@@ -152,14 +150,14 @@ class Media
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getOwnerUuid(): ?string
     {
-        return $this->user;
+        return $this->ownerUuid;
     }
 
-    public function setUser(?User $user): self
+    public function setOwnerUuid(?string $ownerUuid): self
     {
-        $this->user = $user;
+        $this->ownerUuid = $ownerUuid;
         $this->touch();
         return $this;
     }

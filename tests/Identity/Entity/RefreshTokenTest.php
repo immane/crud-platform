@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Identity\Entity;
 
-use App\Identity\Entity\RefreshToken;
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\RefreshToken;
+use App\Identity\Main\Entity\User;
 use PHPUnit\Framework\TestCase;
 
 final class RefreshTokenTest extends TestCase

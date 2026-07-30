@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Payment\Integration;
 
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use App\Payment\DTO\CreateInvoiceRequest;
 use App\Payment\Entity\Invoice;
 use App\Payment\Service\InvoiceServiceInterface;

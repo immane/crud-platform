@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Trade\Service;
 
 use App\Core\Service\BaseService;
-use App\Identity\Entity\User;
+use App\Core\Security\IdentityProfilePrincipalInterface;
 use App\Payment\DTO\CreateInvoiceRequest;
 use App\Payment\DTO\PaymentRefundResult;
 use App\Payment\DTO\PaymentResult;
@@ -50,9 +50,14 @@ class OrderService extends BaseService implements OrderServiceInterface
     public function calculatePrices(array $items, string $currency = 'CNY', ?string $storeCode = null, array $meta = []): PriceCalculationResult
     {
         $context = new PriceCalculationContext($items, $currency);
-        $context->user = $this->user;
         $context->storeCode = $storeCode;
         $context->meta = $meta;
+        $identity = $this->identitySnapshot();
+        if ($identity !== null) {
+            $context->meta['identity'] = $identity;
+        } else {
+            unset($context->meta['identity']);
+        }
 
         $sortedCalculators = $this->getSortedCalculators();
         foreach ($sortedCalculators as $calculator) {
@@ -66,15 +71,11 @@ class OrderService extends BaseService implements OrderServiceInterface
      * @param list<array<string, mixed>> $calculatedItems
      * @param array<string, mixed>|null  $metadata
      */
-    public function createOrder(array $calculatedItems, mixed $user, int $totalAmount, string $currency = 'CNY', ?string $notes = null, ?array $metadata = null, ?StoreContext $storeContext = null): Order
+    public function createOrder(array $calculatedItems, ?string $userUuid, int $totalAmount, string $currency = 'CNY', ?string $notes = null, ?array $metadata = null, ?StoreContext $storeContext = null): Order
     {
-        return $this->wrapInTransaction(function () use ($calculatedItems, $user, $totalAmount, $currency, $notes, $metadata, $storeContext) {
+        return $this->wrapInTransaction(function () use ($calculatedItems, $userUuid, $totalAmount, $currency, $notes, $metadata, $storeContext) {
             $order = new Order();
-            if ($user instanceof User) {
-                $order->setUser($user);
-            } elseif (is_array($user) && isset($user['id'])) {
-                $order->setUser($this->getEntityManager()->getReference(User::class, $user['id']));
-            }
+            $order->setUserUuid($userUuid);
             $order->setTotalAmount($totalAmount);
             $order->setCurrency($currency);
             $order->setNotes($notes);
@@ -118,7 +119,7 @@ class OrderService extends BaseService implements OrderServiceInterface
                 $this->outboxService->record('trade.order.created.v1', 'trade_order', $order->getUuid(), [
                     'orderUuid' => $order->getUuid(),
                     'store' => $storeContext->toSnapshot(),
-                    'customerUserUuid' => $order->getUser()?->getUuid(),
+                    'customerUserUuid' => $order->getUserUuid(),
                     'currency' => $order->getCurrency(),
                     'totalAmount' => $order->getTotalAmount(),
                     'items' => array_map(static fn (OrderItem $item): array => [
@@ -155,13 +156,13 @@ class OrderService extends BaseService implements OrderServiceInterface
             throw new \RuntimeException('Wallet module is not configured. Set up wallet before processing payments.');
         }
 
-        $user = $order->getUser();
-        if ($user === null) {
+        $userUuid = $order->getUserUuid();
+        if ($userUuid === null) {
             throw new \RuntimeException('Order has no associated user.');
         }
 
         $this->walletTransferPort->debitOwner(
-            $user->getUuid(),
+            $userUuid,
             $order->getCurrency(),
             $systemWalletId,
             $order->getTotalAmount(),
@@ -187,13 +188,13 @@ class OrderService extends BaseService implements OrderServiceInterface
             throw new \RuntimeException('Wallet module is not configured. Set up wallet before processing refunds.');
         }
 
-        $user = $order->getUser();
-        if ($user === null) {
+        $userUuid = $order->getUserUuid();
+        if ($userUuid === null) {
             throw new \RuntimeException('Order has no associated user.');
         }
 
         $this->walletTransferPort->creditOwner(
-            $user->getUuid(),
+            $userUuid,
             $order->getCurrency(),
             $systemWalletId,
             $order->getTotalAmount(),
@@ -251,7 +252,7 @@ class OrderService extends BaseService implements OrderServiceInterface
                 scene: Invoice::SCENE_ORDER,
                 amount: $order->getTotalAmount(),
                 currency: $order->getCurrency(),
-                payerUuid: $order->getUser()?->getUuid(),
+                payerUuid: $order->getUserUuid(),
                 subject: sprintf('Order #%d', $order->getId() ?? 0),
                 description: $order->getNotes(),
                 extraData: ['orderId' => $order->getId()],
@@ -309,5 +310,18 @@ class OrderService extends BaseService implements OrderServiceInterface
         });
 
         return $calculators;
+    }
+
+    /** @return array{id: int|null, profileLevel: string|null}|null */
+    private function identitySnapshot(): ?array
+    {
+        if (!$this->user instanceof IdentityProfilePrincipalInterface) {
+            return null;
+        }
+
+        return [
+            'id' => $this->user->getId(),
+            'profileLevel' => $this->user->getProfileLevel(),
+        ];
     }
 }

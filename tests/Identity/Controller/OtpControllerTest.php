@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Identity\Controller;
 
-use App\Identity\Controller\OtpController;
-use App\Identity\Entity\User;
-use App\Identity\Repository\UserRepository;
-use App\Identity\Security\TokenManager;
-use App\Identity\Service\OtpService;
+use App\Identity\Main\Controller\OtpController;
+use App\Identity\Main\Entity\User;
+use App\Identity\Main\Repository\UserRepository;
+use App\Identity\Main\Security\TokenManager;
+use App\Identity\Main\Service\OtpService;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;

@@ -312,6 +312,22 @@ final class EvaluatorTest extends TestCase
         self::assertTrue($result);
     }
 
+    public function testResolveUserIdentitySnapshot(): void
+    {
+        $this->context->meta['identity'] = ['id' => 42, 'profileLevel' => 'gold'];
+
+        self::assertTrue($this->evaluator()->evaluateCondition(
+            $this->makeCondition('==', 'user.id', 42),
+            $this->context,
+            $this->config,
+        ));
+        self::assertTrue($this->evaluator()->evaluateCondition(
+            $this->makeCondition('==', 'user.level', 'gold'),
+            $this->context,
+            $this->config,
+        ));
+    }
+
     public function testResolveItemPrice(): void
     {
         $cond = $this->makeCondition('==', 'item.price', 25.00);
@@ -482,17 +498,15 @@ final class EvaluatorTest extends TestCase
         self::assertTrue($result);
     }
 
-    public function testResolvePathWithUserTagsNonUserObject(): void
+    public function testResolveUserPathWithoutIdentitySnapshot(): void
     {
-        $this->context->user = new \stdClass();
         $cond = new AstNode('condition', [
-            'op' => 'includes',
-            'left' => new AstNode('path', ['value' => 'user.tags']),
-            'right' => new AstNode('literal', ['value' => 'vip']),
+            'op' => '==',
+            'left' => new AstNode('path', ['value' => 'user.level']),
+            'right' => new AstNode('literal', ['value' => '']),
         ]);
         $result = $this->evaluator()->evaluateCondition($cond, $this->context, $this->config);
-        // user.tags returns null for non-User, includes(null, 'vip') = false
-        self::assertFalse($result);
+        self::assertTrue($result);
     }
 
     public function testResolveOperandWithRawNonAstNodeValue(): void

@@ -81,12 +81,12 @@ final class TradeRepositoryIntegrationTest extends KernelTestCase
         self::assertNotEmpty($activeByProduct);
     }
 
-    public function testOrderRepositoryFindByUser(): void
+    public function testOrderRepositoryFindByUserUuid(): void
     {
         $em = static::getContainer()->get(EntityManagerInterface::class);
 
         $repo = $em->getRepository(\App\Trade\Entity\Order::class);
-        $orders = $repo->findByUser(0);
+        $orders = $repo->findByUserUuid('00000000-0000-4000-8000-000000000000');
         self::assertIsArray($orders);
     }
 }

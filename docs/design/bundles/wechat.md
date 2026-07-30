@@ -130,7 +130,7 @@ User (users.id) ←── OneToOne ──→ WechatUser (wechat_user.user_id)
 #[ORM\UniqueConstraint(name: 'uniq_wechat_user_openid', columns: ['openid'])]
 class WechatUser
 {
-    #[ORM\OneToOne(targetEntity: \App\Identity\Entity\User::class)]
+    #[ORM\OneToOne(targetEntity: \App\Identity\Main\Entity\User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private User $user;
 
@@ -501,7 +501,7 @@ wechat:
     prefix: /api/wechat
     resource:
         path: ../src/Wechat/Controller/
-        namespace: App\Wechat\Controller
+        namespace: App\Identity\Wechat\Controller
     type: attribute
 ```
 
@@ -554,7 +554,7 @@ services:
         autowire: true
         autoconfigure: true
 
-    App\Wechat\Service\WechatService:
+    App\Identity\Wechat\Service\WechatService:
         arguments:
             $miniappAppId: '%env(WECHAT_MINIAPP_APP_ID)%'
             $miniappSecret: '%env(WECHAT_MINIAPP_SECRET)%'

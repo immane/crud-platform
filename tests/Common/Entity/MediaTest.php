@@ -3,7 +3,6 @@
 namespace App\Tests\Common\Entity;
 
 use App\Common\Entity\Media;
-use App\Identity\Entity\User;
 use PHPUnit\Framework\TestCase;
 
 final class MediaTest extends TestCase
@@ -18,7 +17,7 @@ final class MediaTest extends TestCase
         self::assertSame(1024, $entity->getSize());
         self::assertSame('/uploads/photo.jpg', $entity->getPath());
         self::assertSame('local', $entity->getStorage());
-        self::assertNull($entity->getUser());
+        self::assertNull($entity->getOwnerUuid());
         self::assertNull($entity->getAlt());
         self::assertNull($entity->getTitle());
         self::assertNull($entity->getWidth());
@@ -32,11 +31,11 @@ final class MediaTest extends TestCase
     {
         $entity = new Media('a', 'a', 'image/png', 1, '/a');
 
-        $user = (new User())->setEmail('user@example.com')->setUsername('user')->setPassword('secret');
+        $ownerUuid = 'a4e8c3d0-3f6c-4e96-9f10-bdb0a91ebc7a';
 
         $entity->setFilename('b.jpg')->setOriginalFilename('orig.jpg')
             ->setMimeType('image/webp')->setSize(2048)->setPath('/uploads/b.jpg')
-            ->setStorage('qiniu')->setUser($user)->setAlt('alt text')->setTitle('Image Title')->setWidth(800)->setHeight(600);
+            ->setStorage('qiniu')->setOwnerUuid($ownerUuid)->setAlt('alt text')->setTitle('Image Title')->setWidth(800)->setHeight(600);
 
         self::assertSame('b.jpg', $entity->getFilename());
         self::assertSame('orig.jpg', $entity->getOriginalFilename());
@@ -44,7 +43,7 @@ final class MediaTest extends TestCase
         self::assertSame(2048, $entity->getSize());
         self::assertSame('/uploads/b.jpg', $entity->getPath());
         self::assertSame('qiniu', $entity->getStorage());
-        self::assertSame($user, $entity->getUser());
+        self::assertSame($ownerUuid, $entity->getOwnerUuid());
         self::assertSame('alt text', $entity->getAlt());
         self::assertSame('Image Title', $entity->getTitle());
         self::assertSame(800, $entity->getWidth());
@@ -69,13 +68,13 @@ final class MediaTest extends TestCase
         $entity->setHeight(100);
 
         $entity->setAlt(null)->setTitle(null)->setWidth(null)->setHeight(null);
-        $entity->setUser(null);
+        $entity->setOwnerUuid(null);
 
         self::assertNull($entity->getAlt());
         self::assertNull($entity->getTitle());
         self::assertNull($entity->getWidth());
         self::assertNull($entity->getHeight());
-        self::assertNull($entity->getUser());
+        self::assertNull($entity->getOwnerUuid());
     }
 
     public function testPrePersistWhenCreatedFromReflection(): void
