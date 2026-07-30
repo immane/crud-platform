@@ -3089,9 +3089,9 @@ owner of <code>App\Wallet\*</code>. Wallet identity uses <code>ownerUuid</code> 
 <code>user_id</code> FK and Identity ORM association have been removed. The monolith loads
 Wallet through <code>crud-platform/wallet-app</code> path package. Trade uses the neutral
 <code>WalletTransferPortInterface</code> from <code>packages/integration-contracts</code> for wallet
-transfers. Root <code>App\Bridge\PaymentWallet</code> adapters (<code>WalletGateway</code>,
-<code>WalletBalanceAdjustmentProvider</code>) translate between Payment contracts and
-Wallet-owned scalar references. Cutover is deferred: the monolith remains the
+transfers. Payment owns the Wallet gateway and adjustment-provider composition
+adapters; root <code>App\Bridge\PaymentWallet\WalletBalanceAdjustmentPort</code> translates
+the Payment scalar port to Wallet persistence. Cutover is deferred: the monolith remains the
 production host until all remaining modules are extracted and Gateway routing
 is ready.</p>
 <h2 id="2-directory-structure">2. Directory Structure<a class="headerlink" href="#2-directory-structure" title="Permanent link">&para;</a></h2>
@@ -3823,12 +3823,12 @@ is ready.</p>
 </tr>
 <tr>
 <td><code>wallet</code></td>
-<td>Bridge (<code>src/Bridge/PaymentWallet/WalletGateway.php</code>)</td>
+<td>Payment (<code>apps/payment/src/Service/Gateway/WalletGateway.php</code>)</td>
 <td>Internal wallet balance payment</td>
 </tr>
 <tr>
 <td><code>wechat</code></td>
-<td>Wechat (<code>src/Wechat/Service/Payment/WechatPayGateway.php</code>)</td>
+<td>Payment (<code>apps/payment/src/Service/Gateway/WechatPayGateway.php</code>)</td>
 <td>WeChat Pay V3 adapter</td>
 </tr>
 </tbody>
@@ -3948,7 +3948,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <p>New users get random password (cannot password-login), synthetic email/username from openid.</p>
 <h3 id="93-wechatpaygateway">9.3 WechatPayGateway<a class="headerlink" href="#93-wechatpaygateway" title="Permanent link">&para;</a></h3>
 <p>Implements <code>PaymentGatewayInterface</code> with <code>getName() → 'wechat'</code>:
-- <strong>File</strong>: <code>src/Wechat/Service/Payment/WechatPayGateway.php</code>
+- <strong>File</strong>: <code>apps/payment/src/Service/Gateway/WechatPayGateway.php</code>
 - <strong>pay()</strong>: JSAPI (requires payer openid from WechatUser) or Native (QR code) — receives explicit <code>$amount</code>
 - <strong>notify()</strong>: EasyWeChat server + validator, signature verification
 - <strong>refund()</strong>: Creates refund via WeChat Pay V3 API — receives explicit <code>$paidAmount</code> for <code>total</code>

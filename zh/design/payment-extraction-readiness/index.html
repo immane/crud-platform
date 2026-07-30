@@ -1458,7 +1458,7 @@
 <li>交易通过幂等 <code>trade_consumed_event</code> 收件箱消耗这些合约；同步<code>OrderInvoiceListener</code>暂时保留以供观察。</li>
 <li>钱包使用Core UUID-to-local-ID合约，微信通过UUID解析自己的用户关系。付款不再导入身份实体或存储库。</li>
 <li>钱包扣除持久性将付款引用存储为 <code>invoice_id</code> 和 <code>invoice_no</code> 标量。其实体和存储库不再导入付款发票实体。</li>
-<li>电子钱包支付和扣除服务现在仅接受电子钱包拥有的标量引用。根 <code>App\Bridge\PaymentWallet</code> 适配器包含临时付款发票、HTTP 和 SPI 转换。</li>
+<li>电子钱包支付和扣除服务现在仅接受电子钱包拥有的标量引用。支付拥有网关和调整提供商组合适配器；根 <code>App\Bridge\PaymentWallet\WalletBalanceAdjustmentPort</code> 将支付标量端口转换为钱包持久性。</li>
 <li>钱包现在在其旧版 <code>user_id</code> 关联旁边双重写入 <code>owner_uuid</code>。应用程序钱包过滤和所有者级别对账使用UUID；旧外键将一直保留，直到钱包基线和贸易集成准备就绪。</li>
 <li>Trade 的传统钱包支付/退款路径使用中性的基于 UUID 的<code>WalletTransferPortInterface</code>；它不再导入钱包存储库或传输服务。</li>
 <li>根 Dockerfile 在 <code>composer install</code> 之前复制 <code>apps/payment</code>，并且根调度程序独立发布付款发件箱行。</li>
