@@ -15,7 +15,7 @@
 - Trade consumes those contracts via an idempotent `trade_consumed_event` inbox; the synchronous `OrderInvoiceListener` remains temporarily for observation.
 - Wallet uses a Core UUID-to-local-ID contract, and WeChat resolves its own user relation by UUID. Payment no longer imports Identity entities or repositories.
 - Wallet deduction persistence stores Payment references as `invoice_id` and `invoice_no` scalars. Its entity and repository no longer import the Payment Invoice entity.
-- Wallet payment and deduction services now accept Wallet-owned scalar references only. The root `App\Bridge\PaymentWallet` adapters contain the temporary Payment Invoice, HTTP, and SPI translation.
+- Wallet payment and deduction services now accept Wallet-owned scalar references only. Payment owns the gateway and adjustment-provider composition adapters; the root `App\Bridge\PaymentWallet\WalletBalanceAdjustmentPort` translates the Payment scalar port to Wallet persistence.
 - Wallet now dual-writes an `owner_uuid` beside its legacy `user_id` association. App Wallet filtering and owner-level reconciliation use the UUID; the legacy foreign key remains until the Wallet baseline and Trade integration are ready.
 - Trade's legacy wallet pay/refund path uses the neutral UUID-based `WalletTransferPortInterface`; it no longer imports Wallet repositories or transfer services.
 - Root Dockerfile copies `apps/payment` before `composer install`, and the root scheduler publishes Payment outbox rows independently.
