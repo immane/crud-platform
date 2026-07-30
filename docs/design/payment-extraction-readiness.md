@@ -15,6 +15,7 @@
 - Trade consumes those contracts via an idempotent `trade_consumed_event` inbox; the synchronous `OrderInvoiceListener` remains temporarily for observation.
 - Wallet uses a Core UUID-to-local-ID contract, and WeChat resolves its own user relation by UUID. Payment no longer imports Identity entities or repositories.
 - Wallet deduction persistence stores Payment references as `invoice_id` and `invoice_no` scalars. Its entity and repository no longer import the Payment Invoice entity.
+- Wallet payment and deduction services now accept Wallet-owned scalar references only. The root `App\Bridge\PaymentWallet` adapters contain the temporary Payment Invoice, HTTP, and SPI translation.
 - Root Dockerfile copies `apps/payment` before `composer install`, and the root scheduler publishes Payment outbox rows independently.
 - The Payment app resolves its own `PayerReferenceResolverInterface` through `PayerDirectoryReferenceResolver` in standalone mode; the monolith binds it to the Identity adapter.
 - Payment app includes its own `invoice` workflow state machine.
@@ -49,7 +50,7 @@ Do not remove the synchronous listener until the following have been observed:
    the current standalone security provider is intentionally a placeholder.
 4. Move Payment HTTP traffic, worker, and scheduler behind Gateway shadow
    routing, then remove the monolith host assembly.
-5. Move Wallet's remaining Payment gateway and adjustment adapters out of the
-   Wallet context, then extract Wallet after those contracts no longer expose
-   Payment persistence or framework types. Deduction persistence is already
-   scalarized; the remaining work is the service and HTTP adapter boundary.
+5. Replace Wallet's remaining Identity `User` association and Trade's direct
+   Wallet repository/transfer calls with scalar contracts. Then provide Wallet
+   with its own baseline, app runtime, and shared messaging/auth dependencies
+   before extracting it from the transition host.

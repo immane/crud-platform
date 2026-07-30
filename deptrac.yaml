@@ -15,6 +15,10 @@ deptrac:
       collectors:
         - type: classLike
           value: ^App\\Kernel$
+    - name: Composition
+      collectors:
+        - type: classLike
+          value: ^App\\Bridge\\
     - name: Vendor
       collectors:
         - type: classLike
@@ -109,6 +113,7 @@ deptrac:
           value: ^App\\Wechat\\(?:Entity|Repository)\\
   ruleset:
     Application:
+      - Composition
       - Core
       - Vendor
       - IntegrationContracts
@@ -132,6 +137,7 @@ deptrac:
       - WalletPersistence
       - WechatCode
       - WechatPersistence
+    Composition: [Core, Vendor, IntegrationContracts, CommonCode, CommonPersistence, IdentityCode, IdentityPersistence, InventoryCode, InventoryPersistence, PaymentCode, PaymentPersistence, PromotionCode, PromotionPersistence, StorageCode, StoragePersistence, StoreCode, StorePersistence, TradeCode, TradePersistence, WalletCode, WalletPersistence, WechatCode, WechatPersistence]
     Core: [Vendor]
     Vendor: []
     IntegrationContracts: [Vendor]

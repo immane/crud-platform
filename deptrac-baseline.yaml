@@ -42,12 +42,6 @@ deptrac:
       - App\Identity\Entity\User
     App\Wallet\Entity\Wallet:
       - App\Identity\Entity\User
-    App\Wallet\Service\Payment\WalletBalanceAdjustmentProvider:
-      - App\Payment\Entity\Invoice
-    App\Wallet\Service\Payment\WalletGateway:
-      - App\Payment\Entity\Invoice
-    App\Wallet\Service\Payment\WalletPaymentDeductionService:
-      - App\Payment\Entity\Invoice
     App\Wallet\Service\WalletService:
       - App\Identity\Entity\User
     App\Wechat\Controller\LoginController:

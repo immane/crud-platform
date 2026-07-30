@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Wallet\Service\Payment;
 
-use App\Core\Security\IdentityUserIdResolverInterface;
-use App\Payment\Entity\Invoice;
 use App\Wallet\DTO\WalletPaymentDeductionRequest;
+use App\Wallet\DTO\WalletPaymentReference;
 use App\Wallet\Entity\WalletPaymentDeduction;
 use App\Wallet\Repository\WalletPaymentDeductionRepository;
 use App\Wallet\Repository\WalletRepository;
@@ -21,7 +20,6 @@ class WalletPaymentDeductionService
         private readonly WalletPaymentDeductionRepository $deductionRepository,
         private readonly WalletRepository $walletRepository,
         private readonly TransferServiceInterface $transferService,
-        private readonly IdentityUserIdResolverInterface $identityUserIdResolver,
         #[Autowire('%payment.system_wallet_id%')]
         private readonly ?int $systemWalletId = null,
     ) {}
@@ -29,7 +27,7 @@ class WalletPaymentDeductionService
     /**
      * @param array<string, mixed> $options
      */
-    public function createRequestFromOptions(Invoice $invoice, array $options): ?WalletPaymentDeductionRequest
+    public function createRequestFromOptions(string $currency, array $options): ?WalletPaymentDeductionRequest
     {
         if (isset($options['walletAmount'])) {
             $amount = (int) $options['walletAmount'];
@@ -40,7 +38,7 @@ class WalletPaymentDeductionService
             return new WalletPaymentDeductionRequest(
                 WalletPaymentDeduction::TYPE_WALLET_BALANCE,
                 $amount,
-                (string) ($options['currency'] ?? $invoice->getCurrency()),
+                (string) ($options['currency'] ?? $currency),
                 $options,
             );
         }
@@ -53,7 +51,7 @@ class WalletPaymentDeductionService
         return new WalletPaymentDeductionRequest(
             (string) ($deduction['type'] ?? WalletPaymentDeduction::TYPE_WALLET_BALANCE),
             (int) ($deduction['amount'] ?? 0),
-            (string) ($deduction['currency'] ?? $invoice->getCurrency()),
+            (string) ($deduction['currency'] ?? $currency),
             array_merge($options, $deduction['options'] ?? []),
         );
     }
@@ -61,24 +59,24 @@ class WalletPaymentDeductionService
     /**
      * @param array<string, mixed> $options
      */
-    public function applyFromOptions(Invoice $invoice, array $options): ?WalletPaymentDeduction
+    public function applyFromOptions(WalletPaymentReference $payment, array $options): ?WalletPaymentDeduction
     {
-        $request = $this->createRequestFromOptions($invoice, $options);
+        $request = $this->createRequestFromOptions($payment->currency, $options);
         if ($request === null) {
             return null;
         }
 
-        return $this->apply($invoice, $request->amount, $request->currency, $request->options, $request->type);
+        return $this->apply($payment, $request->amount, $request->currency, $request->options, $request->type);
     }
 
     /**
      * @param array<string, mixed> $options
      */
-    public function apply(Invoice $invoice, int $amount, string $currency, array $options = [], string $type = WalletPaymentDeduction::TYPE_WALLET_BALANCE): WalletPaymentDeduction
+    public function apply(WalletPaymentReference $payment, int $amount, string $currency, array $options = [], string $type = WalletPaymentDeduction::TYPE_WALLET_BALANCE): WalletPaymentDeduction
     {
-        $this->validate($invoice, $amount, $currency, $type);
+        $this->validate($payment, $amount, $currency, $type);
 
-        $existing = $this->deductionRepository->findWalletBalanceByInvoiceId($invoice->getUuid());
+        $existing = $this->deductionRepository->findWalletBalanceByInvoiceId($payment->invoiceId);
         if ($existing instanceof WalletPaymentDeduction) {
             if ($existing->getStatus() === WalletPaymentDeduction::STATUS_APPLIED) {
                 return $existing;
@@ -86,24 +84,18 @@ class WalletPaymentDeductionService
             throw new \RuntimeException(sprintf('Invoice wallet deduction already exists with status "%s".', $existing->getStatus()));
         }
 
-        $payerUuid = $invoice->getPayerUuid();
-        $payerId = $payerUuid === null ? null : $this->identityUserIdResolver->resolveIdentityUserId($payerUuid);
-        if ($payerId === null) {
-            throw new \RuntimeException('Invoice has no payer for wallet deduction.');
-        }
-
         $systemWalletId = (int) ($options['systemWalletId'] ?? $this->systemWalletId ?? 0);
         if ($systemWalletId <= 0) {
             throw new \InvalidArgumentException('systemWalletId is required for wallet deduction.');
         }
 
-        $wallet = $this->walletRepository->findByUserAndCurrency($payerId, $currency);
+        $wallet = $this->walletRepository->findByUserAndCurrency($payment->payerId, $currency);
         if ($wallet === null || $wallet->getId() === null) {
             throw new \RuntimeException(sprintf('No %s wallet found for payer.', strtoupper($currency)));
         }
 
-        $referenceId = $options['deductionReferenceId'] ?? ('invoice-adjustment-wallet-balance-' . $invoice->getUuid());
-        $deduction = new WalletPaymentDeduction($invoice->getUuid(), $invoice->getOutTradeNo(), $payerId, $wallet, $systemWalletId, $amount, $currency, $referenceId);
+        $referenceId = $options['deductionReferenceId'] ?? ('invoice-adjustment-wallet-balance-' . $payment->invoiceId);
+        $deduction = new WalletPaymentDeduction($payment->invoiceId, $payment->invoiceNo, $payment->payerId, $wallet, $systemWalletId, $amount, $currency, $referenceId);
         $this->em->persist($deduction);
 
         try {
@@ -112,7 +104,7 @@ class WalletPaymentDeductionService
                 $systemWalletId,
                 $amount,
                 $referenceId,
-                $invoice->getSubject() ?? ('Deduction for invoice ' . $invoice->getOutTradeNo()),
+                $payment->subject,
             );
 
             $deduction->markApplied($result->transaction->getUuid(), [
@@ -129,47 +121,47 @@ class WalletPaymentDeductionService
         }
     }
 
-    public function release(Invoice $invoice, string $reason): ?WalletPaymentDeduction
+    public function release(string $invoiceId, string $reason): ?WalletPaymentDeduction
     {
-        $deduction = $this->deductionRepository->findAppliedByInvoiceId($invoice->getUuid());
+        $deduction = $this->deductionRepository->findAppliedByInvoiceId($invoiceId);
         if (!$deduction instanceof WalletPaymentDeduction) {
             return null;
         }
 
-        return $this->reverse($deduction, 'invoice-adjustment-wallet-balance-release-' . $invoice->getUuid(), $reason, false);
+        return $this->reverse($deduction, 'invoice-adjustment-wallet-balance-release-' . $invoiceId, $reason, false);
     }
 
-    public function refund(Invoice $invoice, string $reason): ?WalletPaymentDeduction
+    public function refund(string $invoiceId, string $reason): ?WalletPaymentDeduction
     {
-        $deduction = $this->deductionRepository->findAppliedByInvoiceId($invoice->getUuid());
+        $deduction = $this->deductionRepository->findAppliedByInvoiceId($invoiceId);
         if (!$deduction instanceof WalletPaymentDeduction) {
             return null;
         }
 
-        return $this->reverse($deduction, 'invoice-adjustment-wallet-balance-refund-' . $invoice->getUuid(), $reason, true);
+        return $this->reverse($deduction, 'invoice-adjustment-wallet-balance-refund-' . $invoiceId, $reason, true);
     }
 
-    public function sumAppliedAmount(Invoice $invoice): int
+    public function sumAppliedAmount(string $invoiceId): int
     {
         $sum = 0;
-        foreach ($this->deductionRepository->findAppliedDeductionsByInvoiceId($invoice->getUuid()) as $deduction) {
+        foreach ($this->deductionRepository->findAppliedDeductionsByInvoiceId($invoiceId) as $deduction) {
             $sum += $deduction->getAmount();
         }
 
         return $sum;
     }
 
-    public function findApplied(Invoice $invoice): ?WalletPaymentDeduction
+    public function findApplied(string $invoiceId): ?WalletPaymentDeduction
     {
-        return $this->deductionRepository->findAppliedByInvoiceId($invoice->getUuid());
+        return $this->deductionRepository->findAppliedByInvoiceId($invoiceId);
     }
 
-    public function hasApplied(Invoice $invoice): bool
+    public function hasApplied(string $invoiceId): bool
     {
-        return $this->findApplied($invoice) instanceof WalletPaymentDeduction;
+        return $this->findApplied($invoiceId) instanceof WalletPaymentDeduction;
     }
 
-    private function validate(Invoice $invoice, int $amount, string $currency, string $type): void
+    private function validate(WalletPaymentReference $payment, int $amount, string $currency, string $type): void
     {
         if ($type !== WalletPaymentDeduction::TYPE_WALLET_BALANCE) {
             throw new \InvalidArgumentException(sprintf('Unsupported deduction type: %s', $type));
@@ -177,10 +169,10 @@ class WalletPaymentDeductionService
         if ($amount <= 0) {
             throw new \InvalidArgumentException('Deduction amount must be positive.');
         }
-        if ($amount > $invoice->getAmount()) {
+        if ($amount > $payment->amount) {
             throw new \InvalidArgumentException('Deduction amount cannot exceed invoice amount.');
         }
-        if (strtoupper($currency) !== $invoice->getCurrency()) {
+        if (strtoupper($currency) !== strtoupper($payment->currency)) {
             throw new \InvalidArgumentException('Deduction currency must match invoice currency.');
         }
     }
