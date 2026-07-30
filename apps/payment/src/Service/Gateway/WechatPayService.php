@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Wechat\Service\Payment;
+namespace App\Payment\Service\Gateway;
 
 use EasyWeChat\MiniApp\Application as MiniApp;
 use EasyWeChat\Pay\Application as Pay;
@@ -22,8 +22,7 @@ final class WechatPayService
         private readonly string $payPlatformCertPath = '',
         private readonly string $payPubKeyId = '',
         private readonly string $payPubKeyPath = '',
-    ) {
-    }
+    ) {}
 
     public function getMiniApp(): MiniApp
     {

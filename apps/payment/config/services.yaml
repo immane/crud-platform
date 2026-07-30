@@ -1,4 +1,6 @@
-parameters: {}
+parameters:
+    payment.system_wallet_id: 0
+    wechat.pay.notify_url: '%env(WECHAT_PAY_NOTIFY_URL)%'
 
 services:
     _defaults:
@@ -45,6 +47,26 @@ services:
 
     App\Core\Service\ServiceLocatorInterface: '@App\Core\Service\DefaultServiceLocator'
     App\Payment\Service\PayerReferenceResolverInterface: '@App\Payment\Service\PayerDirectoryReferenceResolver'
+    App\Payment\Bridge\Wechat\WechatPayerOpenIdResolverInterface: '@App\Payment\Bridge\Wechat\UnavailableWechatPayerOpenIdResolver'
+    App\Payment\Bridge\Wallet\WalletBalanceAdjustmentPortInterface: '@App\Payment\Bridge\Wallet\UnavailableWalletBalanceAdjustmentPort'
+    CrudPlatform\IntegrationContracts\Wallet\WalletTransferPortInterface: '@App\Payment\Bridge\Wallet\UnavailableWalletTransferPort'
+
+    App\Payment\Service\Gateway\WechatPayService:
+        arguments:
+            $miniappAppId: '%env(WECHAT_MINIAPP_APP_ID)%'
+            $miniappSecret: '%env(WECHAT_MINIAPP_SECRET)%'
+            $payMchId: '%env(WECHAT_PAY_MCH_ID)%'
+            $paySecretKey: '%env(WECHAT_PAY_SECRET_KEY)%'
+            $payPrivateKeyPath: '%env(WECHAT_PAY_PRIVATE_KEY)%'
+            $payCertificatePath: '%env(WECHAT_PAY_CERTIFICATE)%'
+            $payPlatformCertPath: '%env(WECHAT_PAY_PLATFORM_CERT)%'
+            $payPubKeyId: '%env(WECHAT_PAY_PUB_KEY_ID)%'
+            $payPubKeyPath: '%env(WECHAT_PAY_PUB_KEY_PATH)%'
+
+    Nyholm\Psr7\Factory\Psr17Factory: ~
+    Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory:
+        arguments: ['@Nyholm\Psr7\Factory\Psr17Factory', '@Nyholm\Psr7\Factory\Psr17Factory', '@Nyholm\Psr7\Factory\Psr17Factory', '@Nyholm\Psr7\Factory\Psr17Factory']
+    Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface: '@Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory'
     Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
     Psr\Log\LoggerInterface: '@logger'
     Symfony\Component\Serializer\SerializerInterface: '@serializer'

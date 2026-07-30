@@ -577,7 +577,7 @@
             "dist": {
                 "type": "path",
                 "url": "apps/payment",
-                "reference": "512e8ecf527f431cf8158945268b1af8e276eea9"
+                "reference": "3ce794a90c428eab62c05b61bd90d7242147ceac"
             },
             "require": {
                 "crud-platform/integration-contracts": "^1.1.1@dev",
@@ -585,18 +585,21 @@
                 "doctrine/doctrine-bundle": "^3.2",
                 "doctrine/doctrine-migrations-bundle": "^4.0",
                 "doctrine/orm": "^3.6",
+                "nyholm/psr7": "^1.8",
                 "php": ">=8.4",
                 "symfony/console": "8.1.*",
                 "symfony/doctrine-messenger": "8.1.*",
                 "symfony/dotenv": "8.1.*",
                 "symfony/framework-bundle": "8.1.*",
                 "symfony/monolog-bundle": "^3.0|^4.0",
+                "symfony/psr-http-message-bridge": "^8.1",
                 "symfony/runtime": "8.1.*",
                 "symfony/security-bundle": "8.1.*",
                 "symfony/serializer": "8.1.*",
                 "symfony/translation": "8.1.*",
                 "symfony/workflow": "8.1.*",
-                "symfony/yaml": "8.1.*"
+                "symfony/yaml": "8.1.*",
+                "w7corp/easywechat": "^6.19"
             },
             "require-dev": {
                 "phpunit/phpunit": "^12.5"

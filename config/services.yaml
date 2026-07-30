@@ -6,7 +6,6 @@ imports:
     - { resource: '../vendor/crud-platform/identity-app/config/services_identity.yaml' }
     - { resource: '../vendor/crud-platform/common-app/src/Storage/Resources/config/services_storage.yaml' }
     - { resource: '../vendor/crud-platform/identity-app/config/services_wechat.yaml' }
-    - { resource: '../src/Wechat/Resources/config/services_wechat_payment.yaml', ignore_errors: true }
     - { resource: '../src/Promotion/Resources/config/services_promotion.yaml', ignore_errors: true }
 
 services:
@@ -31,8 +30,6 @@ services:
     App\:
         resource: '../src/'
         exclude:
-            - '../src/Wechat/Service/Payment/WechatPayGateway.php'
-            - '../src/Wechat/Service/Payment/WechatPayService.php'
             - '../src/Promotion/Exception/*'
 
     App\Wallet\:
@@ -118,6 +115,23 @@ services:
     App\Core\Service\ServiceLocatorInterface: '@App\Core\Service\DefaultServiceLocator'
 
     App\Identity\Main\Service\OtpStorageInterface: '@App\Identity\Main\Service\LocalCacheOtpStorage'
+    App\Payment\Bridge\Wechat\WechatPayerOpenIdResolverInterface: '@App\Bridge\PaymentIdentity\WechatPayerOpenIdResolver'
+    App\Payment\Bridge\Wallet\WalletBalanceAdjustmentPortInterface: '@App\Bridge\PaymentWallet\WalletBalanceAdjustmentPort'
+    App\Payment\Service\Gateway\WechatPayService:
+        arguments:
+            $miniappAppId: '%env(WECHAT_MINIAPP_APP_ID)%'
+            $miniappSecret: '%env(WECHAT_MINIAPP_SECRET)%'
+            $payMchId: '%env(WECHAT_PAY_MCH_ID)%'
+            $paySecretKey: '%env(WECHAT_PAY_SECRET_KEY)%'
+            $payPrivateKeyPath: '%env(WECHAT_PAY_PRIVATE_KEY)%'
+            $payCertificatePath: '%env(WECHAT_PAY_CERTIFICATE)%'
+            $payPlatformCertPath: '%env(WECHAT_PAY_PLATFORM_CERT)%'
+            $payPubKeyId: '%env(WECHAT_PAY_PUB_KEY_ID)%'
+            $payPubKeyPath: '%env(WECHAT_PAY_PUB_KEY_PATH)%'
+
+    App\Payment\Service\Gateway\WechatPayGateway:
+        arguments:
+            $notifyUrl: '%env(WECHAT_PAY_NOTIFY_URL)%'
     App\Trade\Service\StoreContextResolverInterface: '@App\Trade\Service\StoreContextResolver'
     App\Inventory\Service\MaterialServiceInterface: '@App\Inventory\Service\MaterialService'
     App\Inventory\Service\InventoryStockServiceInterface: '@App\Inventory\Service\InventoryStockService'

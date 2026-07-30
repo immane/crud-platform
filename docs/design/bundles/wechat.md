@@ -567,7 +567,7 @@ services:
             $payPrivateKeyPath: '%env(WECHAT_PAY_PRIVATE_KEY)%'
             $payCertificatePath: '%env(WECHAT_PAY_CERTIFICATE)%'
 
-    App\Wechat\Service\Payment\WechatPayGateway:
+    App\Payment\Service\Gateway\WechatPayGateway:
         arguments:
             $notifyUrl: '%env(WECHAT_PAY_NOTIFY_URL)%'
 ```

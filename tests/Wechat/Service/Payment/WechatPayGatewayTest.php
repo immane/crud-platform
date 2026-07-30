@@ -9,10 +9,9 @@ use App\Payment\DTO\PaymentRefundResult;
 use App\Payment\DTO\PaymentResult;
 use App\Payment\Entity\Invoice;
 use App\Payment\Exception\PaymentVerificationException;
-use App\Identity\Wechat\Entity\WechatUser;
-use App\Identity\Wechat\Repository\WechatUserRepository;
-use App\Wechat\Service\Payment\WechatPayGateway;
-use App\Wechat\Service\Payment\WechatPayService;
+use App\Payment\Bridge\Wechat\WechatPayerOpenIdResolverInterface;
+use App\Payment\Service\Gateway\WechatPayGateway;
+use App\Payment\Service\Gateway\WechatPayService;
 use EasyWeChat\Kernel\HttpClient\Response as WechatResponse;
 use EasyWeChat\MiniApp\Application as MiniApp;
 use EasyWeChat\MiniApp\Account as MiniAccount;
@@ -27,7 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
 final class WechatPayGatewayTest extends TestCase
 {
     private WechatPayService $wechatService;
-    private WechatUserRepository $wechatUserRepo;
+    private WechatPayerOpenIdResolverInterface $openIdResolver;
     private HttpMessageFactoryInterface $psrHttpFactory;
     private WechatPayGateway $gateway;
 
@@ -41,12 +40,12 @@ final class WechatPayGatewayTest extends TestCase
             payPrivateKeyPath: '/tmp/key.pem',
             payCertificatePath: '/tmp/cert.pem',
         );
-        $this->wechatUserRepo = $this->createMock(WechatUserRepository::class);
+        $this->openIdResolver = $this->createMock(WechatPayerOpenIdResolverInterface::class);
         $this->psrHttpFactory = $this->createMock(HttpMessageFactoryInterface::class);
 
         $this->gateway = new WechatPayGateway(
             $this->wechatService,
-            $this->wechatUserRepo,
+            $this->openIdResolver,
             $this->psrHttpFactory,
             'https://example.com/notify/wechat',
         );
@@ -195,9 +194,6 @@ final class WechatPayGatewayTest extends TestCase
 
     public function testPayJsapiSuccess(): void
     {
-        $wechatUser = $this->createMock(WechatUser::class);
-        $wechatUser->method('getOpenid')->willReturn('o_jsapi_user');
-
         $payApp = $this->createMock(PayApp::class);
         $merchant = $this->createMock(Merchant::class);
         $merchant->method('getMerchantId')->willReturn(1234567890);
@@ -239,7 +235,7 @@ final class WechatPayGatewayTest extends TestCase
         $invoice->method('getOutTradeNo')->willReturn('TXN_JSAPI');
         $payerUuid = '5a1454b2-2075-4ebf-8fb5-30d18d869b85';
         $invoice->method('getPayerUuid')->willReturn($payerUuid);
-        $this->wechatUserRepo->method('findByUserUuid')->with($payerUuid)->willReturn($wechatUser);
+        $this->openIdResolver->method('resolveOpenId')->with($payerUuid)->willReturn('o_jsapi_user');
 
         $result = $this->gateway->pay($invoice, 100);
 

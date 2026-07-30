@@ -138,9 +138,9 @@ owner of `App\Wallet\*`. Wallet identity uses `ownerUuid` only; the legacy
 `user_id` FK and Identity ORM association have been removed. The monolith loads
 Wallet through `crud-platform/wallet-app` path package. Trade uses the neutral
 `WalletTransferPortInterface` from `packages/integration-contracts` for wallet
-transfers. Root `App\Bridge\PaymentWallet` adapters (`WalletGateway`,
-`WalletBalanceAdjustmentProvider`) translate between Payment contracts and
-Wallet-owned scalar references. Cutover is deferred: the monolith remains the
+transfers. Payment owns the Wallet gateway and adjustment-provider composition
+adapters; root `App\Bridge\PaymentWallet\WalletBalanceAdjustmentPort` translates
+the Payment scalar port to Wallet persistence. Cutover is deferred: the monolith remains the
 production host until all remaining modules are extracted and Gateway routing
 is ready.
 
@@ -537,8 +537,8 @@ Payment defines `PaymentAdjustmentProviderInterface` — a pre-payment hook that
 | Gateway | Module | Purpose |
 |---------|--------|---------|
 | `mock` | Payment (`apps/payment/src/Service/Gateway/MockGateway.php`) | Deterministic test/development gateway |
-| `wallet` | Bridge (`src/Bridge/PaymentWallet/WalletGateway.php`) | Internal wallet balance payment |
-| `wechat` | Wechat (`src/Wechat/Service/Payment/WechatPayGateway.php`) | WeChat Pay V3 adapter |
+| `wallet` | Payment (`apps/payment/src/Service/Gateway/WalletGateway.php`) | Internal wallet balance payment |
+| `wechat` | Payment (`apps/payment/src/Service/Gateway/WechatPayGateway.php`) | WeChat Pay V3 adapter |
 
 ### 8.3 Payment Endpoints
 
@@ -616,7 +616,7 @@ New users get random password (cannot password-login), synthetic email/username 
 ### 9.3 WechatPayGateway
 
 Implements `PaymentGatewayInterface` with `getName() → 'wechat'`:
-- **File**: `src/Wechat/Service/Payment/WechatPayGateway.php`
+- **File**: `apps/payment/src/Service/Gateway/WechatPayGateway.php`
 - **pay()**: JSAPI (requires payer openid from WechatUser) or Native (QR code) — receives explicit `$amount`
 - **notify()**: EasyWeChat server + validator, signature verification
 - **refund()**: Creates refund via WeChat Pay V3 API — receives explicit `$paidAmount` for `total`

@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Wallet\Service\Payment;
 
-use App\Bridge\PaymentWallet\WalletGateway;
-use App\Core\Security\IdentityUserIdResolverInterface;
+use App\Payment\Service\Gateway\WalletGateway;
 use App\Payment\DTO\PaymentNotifyResult;
 use App\Payment\Entity\Invoice;
 use App\Payment\Exception\PaymentVerificationException;
-use App\Wallet\Entity\WalletTransaction;
-use App\Wallet\Service\TransferResult;
-use App\Wallet\Service\WalletPaymentService;
+use CrudPlatform\IntegrationContracts\Wallet\WalletTransferPortInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -46,16 +43,16 @@ final class WalletGatewayTest extends TestCase
     public function testPayDelegatesToWalletService(): void
     {
         $invoice = (new Invoice())->setPayerUuid('payer')->setCurrency('CNY')->setOutTradeNo('ORDER-1');
-        $service = $this->createMock(WalletPaymentService::class);
-        $service->expects(self::once())->method('pay')->with('payer', 'CNY', 2, 100, 'invoice-pay-ORDER-1', 'Payment for invoice ORDER-1')->willReturn(new TransferResult(new WalletTransaction('transaction-1', 100, 'transfer'), 0, 0));
+        $service = $this->createMock(WalletTransferPortInterface::class);
+        $service->expects(self::once())->method('debitOwner')->with('payer', 'CNY', 2, 100, 'invoice-pay-ORDER-1', 'Payment for invoice ORDER-1')->willReturn('transaction-1');
 
         $result = $this->gateway(1, 2, $service)->pay($invoice, 100);
         self::assertSame(Invoice::STATUS_PAID, $result->status);
         self::assertSame('transaction-1', $result->payload['transactionId']);
     }
 
-    private function gateway(?int $payerId = null, ?int $systemWalletId = 2, ?WalletPaymentService $service = null): WalletGateway
+    private function gateway(?int $payerId = null, ?int $systemWalletId = 2, ?WalletTransferPortInterface $service = null): WalletGateway
     {
-        return new WalletGateway($service ?? $this->createMock(WalletPaymentService::class), $systemWalletId);
+        return new WalletGateway($service ?? $this->createMock(WalletTransferPortInterface::class), $systemWalletId);
     }
 }
