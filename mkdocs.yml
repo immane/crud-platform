@@ -72,6 +72,18 @@ nav:
       - Huifu Payment API: research/huifu-payment-api.md
   - Issues:
       - Architecture Review 2026-06-26: issues/architecture-review-2026-06-26.md
+  - Development Manual:
+      - Overview: manual/index.md
+      - Architecture: manual/architecture.md
+      - Getting Started: manual/getting-started.md
+      - Project Structure: manual/project-structure.md
+      - Development Workflow: manual/development-workflow.md
+      - Testing: manual/testing.md
+      - Integration Events: manual/integration-events.md
+      - Database & Migrations: manual/database-and-migrations.md
+      - Deployment: manual/deployment.md
+      - Extracting a Service: manual/extracting-a-service.md
+      - Internationalization: manual/i18n.md
   - AI Context: ai/context.md
   - API Reference: openapi/endpoints.yaml
 
