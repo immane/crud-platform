@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Wechat\Repository;
 
-use App\Identity\Entity\User;
 use App\Wechat\Entity\WechatUser;
 use App\Wechat\Repository\WechatUserRepository;
 use Doctrine\ORM\Configuration;
@@ -70,10 +69,8 @@ final class WechatUserRepositoryTest extends TestCase
         self::assertNull($result);
     }
 
-    public function testFindByUserReturnsNullWhenNoMatch(): void
+    public function testFindByUserUuidReturnsNullWhenNoMatch(): void
     {
-        $user = new User();
-
         $qb = $this->createMock(QueryBuilder::class);
         $qb->method('select')->willReturnSelf();
         $qb->method('from')->willReturnSelf();
@@ -85,7 +82,7 @@ final class WechatUserRepositoryTest extends TestCase
         $qb->method('getQuery')->willReturn($query);
         $this->em->method('createQueryBuilder')->willReturn($qb);
 
-        $result = $this->repository->findByUser($user);
+        $result = $this->repository->findByUserUuid('5a1454b2-2075-4ebf-8fb5-30d18d869b85');
         self::assertNull($result);
     }
 

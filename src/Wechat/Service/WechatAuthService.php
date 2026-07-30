@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Wechat\Service;
 
 use App\Identity\Entity\User;
+use App\Identity\Repository\UserRepository;
 use App\Wechat\Entity\WechatUser;
 use App\Wechat\Repository\WechatUserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,6 +15,7 @@ class WechatAuthService
     public function __construct(
         private readonly WechatService $wechatService,
         private readonly WechatUserRepository $wechatUserRepository,
+        private readonly UserRepository $userRepository,
         private readonly EntityManagerInterface $em,
     ) {}
 
@@ -52,7 +54,7 @@ class WechatAuthService
             $wechatUser->setRawData($data);
             $this->em->flush();
 
-            return $wechatUser->getUser();
+            return $this->resolveUser($wechatUser);
         }
 
         return $this->findOrCreateUser(
@@ -110,7 +112,7 @@ class WechatAuthService
             $wechatUser->setRawData($rawData);
             $this->em->flush();
 
-            return $wechatUser->getUser();
+            return $this->resolveUser($wechatUser);
         }
 
         $openidSuffix = mb_substr($openid, -8);
@@ -120,7 +122,7 @@ class WechatAuthService
         $user->setPassword(bin2hex(random_bytes(32)));
         $this->em->persist($user);
 
-        $wechatUser = new WechatUser($user, $openid, $appType);
+        $wechatUser = new WechatUser($user->getUuid(), $openid, $appType);
         $wechatUser->setUnionid($unionid);
         $wechatUser->setSessionKey($sessionKey);
         $wechatUser->setNickname($nickname);
@@ -132,6 +134,16 @@ class WechatAuthService
         $wechatUser->setRawData($rawData);
         $this->em->persist($wechatUser);
         $this->em->flush();
+
+        return $user;
+    }
+
+    private function resolveUser(WechatUser $wechatUser): User
+    {
+        $user = $this->userRepository->findByUuid($wechatUser->getUserUuid());
+        if ($user === null) {
+            throw new \RuntimeException('WeChat user identity not found.');
+        }
 
         return $user;
     }

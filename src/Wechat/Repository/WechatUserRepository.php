@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Wechat\Repository;
 
-use App\Identity\Entity\User;
 use App\Wechat\Entity\WechatUser;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -24,18 +23,8 @@ class WechatUserRepository extends ServiceEntityRepository
         return $this->findOneBy(['openid' => $openid]);
     }
 
-    public function findByUser(User $user): ?WechatUser
-    {
-        return $this->findOneBy(['user' => $user]);
-    }
-
     public function findByUserUuid(string $userUuid): ?WechatUser
     {
-        return $this->createQueryBuilder('wechatUser')
-            ->innerJoin('wechatUser.user', 'user')
-            ->andWhere('user.uuid = :userUuid')
-            ->setParameter('userUuid', $userUuid)
-            ->getQuery()
-            ->getOneOrNullResult();
+        return $this->findOneBy(['userUuid' => $userUuid]);
     }
 }

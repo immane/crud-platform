@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\Wechat\Entity;
 
-use App\Identity\Entity\User;
 use App\Wechat\Repository\WechatUserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: WechatUserRepository::class)]
 #[ORM\Table(name: 'wechat_user')]
 #[ORM\UniqueConstraint(name: 'uniq_wechat_user_openid', columns: ['openid'])]
-#[ORM\UniqueConstraint(name: 'uniq_wechat_user_user', columns: ['user_id'])]
+#[ORM\UniqueConstraint(name: 'uniq_wechat_user_user_uuid', columns: ['user_uuid'])]
 #[ORM\HasLifecycleCallbacks]
 class WechatUser
 {
@@ -23,9 +22,8 @@ class WechatUser
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\OneToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    private User $user;
+    #[ORM\Column(name: 'user_uuid', type: 'string', length: 36, unique: true)]
+    private string $userUuid;
 
     #[ORM\Column(type: 'string', length: 64)]
     private string $openid;
@@ -70,9 +68,9 @@ class WechatUser
     #[ORM\Column(name: 'updated_at', type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    public function __construct(User $user, string $openid, string $appType)
+    public function __construct(string $userUuid, string $openid, string $appType)
     {
-        $this->user = $user;
+        $this->userUuid = $userUuid;
         $this->openid = $openid;
         $this->appType = $appType;
         $this->lastLoginAt = new \DateTimeImmutable();
@@ -86,7 +84,7 @@ class WechatUser
 
     public function getId(): ?int { return $this->id; }
 
-    public function getUser(): User { return $this->user; }
+    public function getUserUuid(): string { return $this->userUuid; }
 
     public function getOpenid(): string { return $this->openid; }
 
@@ -160,7 +158,7 @@ class WechatUser
     {
         return [
             'id' => $this->id,
-            'userId' => $this->user->getId(),
+            'userUuid' => $this->userUuid,
             'openid' => $this->openid,
             'appType' => $this->appType,
         ];

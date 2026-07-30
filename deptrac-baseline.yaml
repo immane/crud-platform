@@ -16,11 +16,8 @@ deptrac:
       - App\Payment\Entity\Invoice
     App\Wechat\Controller\LoginController:
       - App\Identity\Entity\User
-    App\Wechat\Entity\WechatUser:
-      - App\Identity\Entity\User
-    App\Wechat\Repository\WechatUserRepository:
-      - App\Identity\Entity\User
     App\Wechat\Service\Payment\WechatPayGateway:
       - App\Payment\Entity\Invoice
     App\Wechat\Service\WechatAuthService:
       - App\Identity\Entity\User
+      - App\Identity\Repository\UserRepository

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Wechat\Service\Gateway;
 
-use App\Identity\Entity\User;
 use App\Payment\DTO\PaymentNotifyResult;
 use App\Payment\DTO\PaymentRefundResult;
 use App\Payment\DTO\PaymentResult;
@@ -189,14 +188,8 @@ final class WechatPayGatewayTest extends TestCase
 
     public function testPayJsapiSuccess(): void
     {
-        $payer = new \App\Identity\Entity\User();
-
         $wechatUser = $this->createMock(WechatUser::class);
         $wechatUser->method('getOpenid')->willReturn('o_jsapi_user');
-
-        $this->wechatUserRepo->method('findByUser')
-            ->with($payer)
-            ->willReturn($wechatUser);
 
         $payApp = $this->createMock(PayApp::class);
         $merchant = $this->createMock(Merchant::class);
@@ -237,8 +230,9 @@ final class WechatPayGatewayTest extends TestCase
         $invoice->method('getSubject')->willReturn('Test JSAPI Order');
         $invoice->method('getDescription')->willReturn(null);
         $invoice->method('getOutTradeNo')->willReturn('TXN_JSAPI');
-        $invoice->method('getPayerUuid')->willReturn($payer->getUuid());
-        $this->wechatUserRepo->method('findByUserUuid')->with($payer->getUuid())->willReturn($wechatUser);
+        $payerUuid = '5a1454b2-2075-4ebf-8fb5-30d18d869b85';
+        $invoice->method('getPayerUuid')->willReturn($payerUuid);
+        $this->wechatUserRepo->method('findByUserUuid')->with($payerUuid)->willReturn($wechatUser);
 
         $result = $this->gateway->pay($invoice, 100);
 
