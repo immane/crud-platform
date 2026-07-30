@@ -112,8 +112,8 @@ services:
             $storage: '@App\Identity\Service\LocalCacheOtpStorage'
             $sms: '@App\Identity\Sms\AliyunSmsProvider'
 
-    App\Payment\Service\PayerReferenceResolverInterface: '@App\Identity\Service\IdentityPayerDirectoryAdapter'
-    App\Core\Security\IdentityUserIdResolverInterface: '@App\Identity\Service\IdentityPayerDirectoryAdapter'
+    App\Payment\Service\PayerReferenceResolverInterface: '@App\Bridge\IdentityPayment\IdentityPayerDirectoryReferenceResolver'
+    App\Core\Security\IdentityUserIdResolverInterface: '@App\Bridge\Identity\IdentityUserIdResolver'
     CrudPlatform\IntegrationContracts\Wallet\WalletTransferPortInterface: '@App\Wallet\Service\WalletPaymentService'
 
 when@test:

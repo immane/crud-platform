@@ -2,18 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Identity\Service;
+namespace App\Bridge\IdentityPayment;
 
-use App\Core\Security\IdentityUserIdResolverInterface;
 use App\Identity\Repository\UserRepository;
 use App\Payment\Service\PayerDirectoryService;
 use App\Payment\Service\PayerReferenceResolverInterface;
 
-final class IdentityPayerDirectoryAdapter implements PayerReferenceResolverInterface, IdentityUserIdResolverInterface
+final readonly class IdentityPayerDirectoryReferenceResolver implements PayerReferenceResolverInterface
 {
     public function __construct(
-        private readonly UserRepository $userRepository,
-        private readonly PayerDirectoryService $payerDirectoryService,
+        private UserRepository $userRepository,
+        private PayerDirectoryService $payerDirectoryService,
     ) {}
 
     public function resolve(string $reference): ?string
@@ -21,8 +20,8 @@ final class IdentityPayerDirectoryAdapter implements PayerReferenceResolverInter
         if (!ctype_digit($reference)) {
             return null;
         }
-        $userId = (int) $reference;
-        $user = $this->userRepository->find($userId);
+
+        $user = $this->userRepository->find((int) $reference);
         if ($user === null || $user->getId() === null) {
             return null;
         }
@@ -30,10 +29,5 @@ final class IdentityPayerDirectoryAdapter implements PayerReferenceResolverInter
         $this->payerDirectoryService->upsert($user->getId(), $user->getUuid());
 
         return $user->getUuid();
-    }
-
-    public function resolveIdentityUserId(string $userUuid): ?int
-    {
-        return $this->userRepository->findByUuid($userUuid)?->getId();
     }
 }
