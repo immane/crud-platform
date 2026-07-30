@@ -1426,7 +1426,7 @@
 <li>单体通过<code>crud-platform/payment-app</code> Composer路径包临时加载Payment；根路由、Doctrine 映射、服务、PHPStan、Deptrac 和 Rector 都指向该包。</li>
 <li>付款基线迁移拥有 <code>payment_invoice</code>、<code>payment_outbox_message</code> 和 <code>payment_payer_directory</code> — 三个付款拥有的表，没有非付款表的外键。</li>
 <li>付款发票使用付款拥有的 <code>payer_uuid</code> 标量，而不是与身份 <code>users</code> 的 ORM 关联。 <code>payment_payer_directory</code> 在转换期间将旧数字身份 ID 映射到 UUID。</li>
-<li>Payment的<code>InvoiceService</code>写入持久的发件箱行； <code>app:payment:outbox:publish</code> 通过根异步传输发布已付款/失败/取消/退款的 v1 合约。</li>
+<li>Payment的<code>InvoiceService</code>写入持久的发件箱行；转换主机的 <code>app:payment:outbox:publish</code> 通过根异步传输发布已付款/失败/取消/退款的 v1 合约。</li>
 <li>交易通过幂等 <code>trade_consumed_event</code> 收件箱消耗这些合约；同步<code>OrderInvoiceListener</code>暂时保留以供观察。</li>
 <li>钱包使用Core UUID-to-local-ID合约，微信通过UUID解析自己的用户关系。付款不再导入身份实体或存储库。</li>
 <li>根 Dockerfile 在 <code>composer install</code> 之前复制 <code>apps/payment</code>，并且根调度程序独立发布付款发件箱行。</li>
@@ -1452,11 +1452,13 @@ Inbox 使异步副本可以安全地重播：它记录事件 ID 并
 <h2 id="_4">剩余提取工作<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ol>
 <li>引入共享代理和架构版本化序列化程序所需的
-   独立的支付工作者和数据库。</li>
+   独立的支付工作者和数据库。不要将支付流量路由至
+   <code>payment-app</code>在此完成之前：其本地学说传输不能
+   将生命周期事件传递给 Trade。</li>
 <li>禁用并移除持久化后的同步<code>OrderInvoiceListener</code>
    路径已满足观察标准。</li>
-<li>提取支付来源、其基线模式和专用的
-   <code>apps/payment</code> 运行时使用 Store 和 Inventory 转换主机模式。</li>
+<li>在公开受保护的支付路由之前添加网关发出的身份验证；
+   当前的独立安全提供程序故意充当占位符。</li>
 <li>将支付 HTTP 流量、工作线程和调度程序移至网关影子后面
    布线，然后移除整体式主机组件。</li>
 <li>仅在其支付网关和调整合约没有后才提取钱包
