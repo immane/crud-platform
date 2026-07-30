@@ -365,7 +365,7 @@ foreach (['draft', 'pending', 'confirmed', 'paid', 'fulfilled', 'completed', 're
 // Wallet summary
 $walletSummary = $db->executeQuery(
     "SELECT u.username, w.currency, w.balance, w.label
-     FROM wallet w LEFT JOIN users u ON w.user_id = u.id
+     FROM wallet w LEFT JOIN users u ON w.owner_uuid = u.uuid
      ORDER BY w.currency, w.balance DESC"
 )->fetchAllAssociative();
 echo "\n  \033[1mWallet Balances:\033[0m\n";

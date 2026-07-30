@@ -45,6 +45,13 @@
             "options": {
                 "symlink": false
             }
+        },
+        {
+            "type": "path",
+            "url": "apps/wallet",
+            "options": {
+                "symlink": false
+            }
         }
     ],
     "require": {
@@ -57,6 +64,7 @@
         "crud-platform/platform-kernel": "^1.0.2@dev",
         "crud-platform/inventory-app": "^1.0@dev",
         "crud-platform/payment-app": "^1.0@dev",
+        "crud-platform/wallet-app": "^1.0@dev",
         "crud-platform/store-app": "^1.0.1@dev",
         "doctrine/doctrine-bundle": "^3.2.4",
         "doctrine/doctrine-migrations-bundle": "^4.0",

@@ -41,6 +41,11 @@ services:
             - '../src/Wechat/Service/Payment/WechatPayGateway.php'
             - '../src/Promotion/Exception/*'
 
+    App\Wallet\:
+        resource: '../vendor/crud-platform/wallet-app/src/'
+        exclude:
+            - '../vendor/crud-platform/wallet-app/src/Kernel.php'
+
     App\Store\:
         resource: '../vendor/crud-platform/store-app/src/'
         exclude:

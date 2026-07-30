@@ -232,6 +232,42 @@ services:
     networks:
       - internal
 
+  wallet-app:
+    build:
+      context: .
+      dockerfile: apps/wallet/Dockerfile
+    restart: unless-stopped
+    environment:
+      APP_ENV: ${WALLET_APP_ENV:-dev}
+      APP_DEBUG: "1"
+      APP_SECRET: ${WALLET_APP_SECRET:-wallet-dev-secret-change-me}
+      DATABASE_URL: "mysql://${WALLET_MYSQL_USER:-wallet}:${WALLET_MYSQL_PASSWORD:-!WalletChangeMe!}@wallet-database:3306/${WALLET_MYSQL_DATABASE:-wallet}?serverVersion=8.4&charset=utf8mb4"
+    ports:
+      - "${WALLET_APP_PORT:-8084}:80"
+    depends_on:
+      wallet-database:
+        condition: service_healthy
+    networks:
+      - internal
+
+  wallet-database:
+    image: mysql:${MYSQL_VERSION:-8.4}
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${WALLET_MYSQL_DATABASE:-wallet}
+      MYSQL_USER: ${WALLET_MYSQL_USER:-wallet}
+      MYSQL_PASSWORD: ${WALLET_MYSQL_PASSWORD:-!WalletChangeMe!}
+      MYSQL_ROOT_PASSWORD: ${WALLET_MYSQL_ROOT_PASSWORD:-!WalletRootChangeMe!}
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} --silent"]
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    volumes:
+      - wallet_mysql_data:/var/lib/mysql:rw
+    networks:
+      - internal
+
   # ========================
   # Database (MySQL 8)
   # ========================
@@ -287,3 +323,4 @@ volumes:
   store_mysql_data:
   inventory_mysql_data:
   payment_mysql_data:
+  wallet_mysql_data:
