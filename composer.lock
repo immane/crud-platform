@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1545c5db0a75f837de078d4d63608c4e",
+    "content-hash": "bcb17577d85bbcf573ee56faa3849688",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -147,11 +147,11 @@
         },
         {
             "name": "crud-platform/integration-contracts",
-            "version": "1.1.2-dev",
+            "version": "1.1.3-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/integration-contracts",
-                "reference": "5cf0453f0cdfde53b9123f0dd4cb1d4f799471dd"
+                "reference": "31c5fb3c6271c12adc05983ec4fb54f4ccb161d1"
             },
             "require": {
                 "php": ">=8.4"

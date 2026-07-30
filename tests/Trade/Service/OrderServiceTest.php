@@ -14,10 +14,7 @@ use App\Trade\Service\Pricing\PriceCalculationResult;
 use App\Trade\Service\Pricing\QuantityCalculator;
 use App\Trade\Service\Pricing\TotalAggregator;
 use App\Trade\Service\SpecificationServiceInterface;
-use App\Wallet\Entity\Wallet;
-use App\Wallet\Repository\WalletRepository;
-use App\Wallet\Service\TransferResult;
-use App\Wallet\Service\TransferServiceInterface;
+use CrudPlatform\IntegrationContracts\Wallet\WalletTransferPortInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -25,8 +22,7 @@ final class OrderServiceTest extends TestCase
 {
     private function createService(
         array $calculators,
-        ?WalletRepository $walletRepository = null,
-        ?TransferServiceInterface $transferService = null,
+        ?WalletTransferPortInterface $walletTransferPort = null,
     ): OrderService
     {
         $reflection = new \ReflectionClass(OrderService::class);
@@ -35,11 +31,8 @@ final class OrderServiceTest extends TestCase
         $prop = $reflection->getProperty('priceCalculators');
         $prop->setValue($service, $calculators);
 
-        $walletRepositoryProp = $reflection->getProperty('walletRepository');
-        $walletRepositoryProp->setValue($service, $walletRepository);
-
-        $transferServiceProp = $reflection->getProperty('transferService');
-        $transferServiceProp->setValue($service, $transferService);
+        $walletTransferPortProp = $reflection->getProperty('walletTransferPort');
+        $walletTransferPortProp->setValue($service, $walletTransferPort);
 
         return $service;
     }
@@ -175,8 +168,7 @@ final class OrderServiceTest extends TestCase
         $order = (new Order())->setStatus(Order::STATUS_CONFIRMED);
         $service = $this->createService(
             [],
-            $this->createMock(WalletRepository::class),
-            $this->createMock(TransferServiceInterface::class),
+            $this->createMock(WalletTransferPortInterface::class),
         );
 
         $this->expectException(\RuntimeException::class);
@@ -193,20 +185,15 @@ final class OrderServiceTest extends TestCase
             ->setStatus(Order::STATUS_CONFIRMED)
             ->setCurrency('CNY');
 
-        $walletRepository = $this->createMock(WalletRepository::class);
-        $walletRepository->expects(self::once())
-            ->method('findByUserAndCurrency')
-            ->with(42, 'CNY')
-            ->willReturn(null);
+        $walletTransferPort = $this->createMock(WalletTransferPortInterface::class);
+        $walletTransferPort->expects(self::once())
+            ->method('debitOwner')
+            ->willThrowException(new \RuntimeException('No CNY wallet found for owner.'));
 
-        $service = $this->createService(
-            [],
-            $walletRepository,
-            $this->createMock(TransferServiceInterface::class),
-        );
+        $service = $this->createService([], $walletTransferPort);
 
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('No CNY wallet found for user #42');
+        $this->expectExceptionMessage('No CNY wallet found for owner.');
 
         $service->pay($order, 9);
     }
@@ -214,26 +201,19 @@ final class OrderServiceTest extends TestCase
     public function testPayTransfersFromUserWalletAndMarksPayment(): void
     {
         $user = $this->createUser(42);
-        $wallet = $this->createWallet($user, 7);
         $order = (new Order())
             ->setUser($user)
             ->setStatus(Order::STATUS_CONFIRMED)
             ->setTotalAmount(1234)
             ->setCurrency('CNY');
 
-        $walletRepository = $this->createMock(WalletRepository::class);
-        $walletRepository->expects(self::once())
-            ->method('findByUserAndCurrency')
-            ->with(42, 'CNY')
-            ->willReturn($wallet);
+        $walletTransferPort = $this->createMock(WalletTransferPortInterface::class);
+        $walletTransferPort->expects(self::once())
+            ->method('debitOwner')
+            ->with($user->getUuid(), 'CNY', 9, 1234, 'manual-pay-ref', 'Payment for order #0')
+            ->willReturn('transaction-1');
 
-        $transferService = $this->createMock(TransferServiceInterface::class);
-        $transferService->expects(self::once())
-            ->method('transfer')
-            ->with(7, 9, 1234, 'manual-pay-ref', 'Payment for order #0')
-            ->willReturn($this->createMock(TransferResult::class));
-
-        $service = $this->createService([], $walletRepository, $transferService);
+        $service = $this->createService([], $walletTransferPort);
 
         $service->pay($order, 9, 'wallet', 'manual-pay-ref');
 
@@ -255,23 +235,19 @@ final class OrderServiceTest extends TestCase
     public function testRefundTransfersToUserWalletAndMarksRefund(): void
     {
         $user = $this->createUser(42);
-        $wallet = $this->createWallet($user, 7);
         $order = (new Order())
             ->setUser($user)
             ->setStatus(Order::STATUS_COMPLETED)
             ->setTotalAmount(1234)
             ->setCurrency('CNY');
 
-        $walletRepository = $this->createMock(WalletRepository::class);
-        $walletRepository->method('findByUserAndCurrency')->willReturn($wallet);
+        $walletTransferPort = $this->createMock(WalletTransferPortInterface::class);
+        $walletTransferPort->expects(self::once())
+            ->method('creditOwner')
+            ->with($user->getUuid(), 'CNY', 9, 1234, 'manual-refund-ref', 'Refund for order #0: duplicate')
+            ->willReturn('transaction-1');
 
-        $transferService = $this->createMock(TransferServiceInterface::class);
-        $transferService->expects(self::once())
-            ->method('transfer')
-            ->with(9, 7, 1234, 'manual-refund-ref', 'Refund for order #0: duplicate')
-            ->willReturn($this->createMock(TransferResult::class));
-
-        $service = $this->createService([], $walletRepository, $transferService);
+        $service = $this->createService([], $walletTransferPort);
 
         $service->refund($order, 9, 'duplicate', 'manual-refund-ref');
 
@@ -318,13 +294,4 @@ final class OrderServiceTest extends TestCase
         return $user;
     }
 
-    private function createWallet(User $user, int $id): Wallet
-    {
-        $wallet = new Wallet($user, 'CNY');
-
-        $idProperty = new \ReflectionProperty(Wallet::class, 'id');
-        $idProperty->setValue($wallet, $id);
-
-        return $wallet;
-    }
 }

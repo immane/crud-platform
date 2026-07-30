@@ -109,6 +109,7 @@ services:
 
     App\Payment\Service\PayerReferenceResolverInterface: '@App\Identity\Service\IdentityPayerDirectoryAdapter'
     App\Core\Security\IdentityUserIdResolverInterface: '@App\Identity\Service\IdentityPayerDirectoryAdapter'
+    CrudPlatform\IntegrationContracts\Wallet\WalletTransferPortInterface: '@App\Wallet\Service\WalletPaymentService'
 
 when@test:
     services:

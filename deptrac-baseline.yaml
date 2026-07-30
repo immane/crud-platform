@@ -37,7 +37,6 @@ deptrac:
     App\Trade\Service\OrderService:
       - App\Identity\Entity\User
       - App\Payment\Entity\Invoice
-      - App\Wallet\Repository\WalletRepository
     App\Wallet\Entity\Wallet:
       - App\Identity\Entity\User
     App\Wechat\Controller\LoginController:
