@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Wallet\Service;
 
 use App\Core\Service\BaseService;
-use App\Identity\Entity\User;
 use App\Wallet\Entity\Wallet;
 use App\Wallet\Entity\WalletTransaction;
 use App\Wallet\Repository\WalletTransactionRepository;
@@ -42,11 +41,11 @@ class WalletService extends BaseService
     /**
      * @return array<string, bool|int>
      */
-    public function verifyBalanceForUser(User $user): array
+    public function verifyBalanceForOwnerUuid(string $ownerUuid): array
     {
-        $totalBalance = $this->getWalletRepository()->getTotalBalanceForUser((int) $user->getId());
-        $totalDeposited = $this->transactionRepo->getTotalDepositedForUser((int) $user->getId());
-        $walletCount = $this->getWalletRepository()->count(['user' => $user]);
+        $totalBalance = $this->getWalletRepository()->getTotalBalanceForOwnerUuid($ownerUuid);
+        $totalDeposited = $this->transactionRepo->getTotalDepositedForOwnerUuid($ownerUuid);
+        $walletCount = $this->getWalletRepository()->count(['ownerUuid' => $ownerUuid]);
 
         return [
             'totalBalance' => $totalBalance,

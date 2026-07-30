@@ -8,7 +8,7 @@ use App\Core\Controller\RestController;
 use App\Core\View\ApiView;
 use App\Core\View\DetailApiViewMixin;
 use App\Core\View\ListApiViewMixin;
-use App\Identity\Entity\User;
+use App\Core\Security\UserUuidPrincipalInterface;
 use App\Wallet\Repository\WalletTransactionRepository;
 use App\Wallet\Service\TransactionService;
 use Doctrine\ORM\QueryBuilder;
@@ -30,11 +30,15 @@ class TransactionController extends RestController
     {
         $user = $this->getUser();
 
+        if (!$user instanceof UserUuidPrincipalInterface) {
+            return $this->transactionRepository->createQueryBuilder('entity')->where('1 = 0');
+        }
+
         return $this->transactionRepository->createQueryBuilder('entity')
             ->leftJoin('entity.fromWallet', 'fromWallet')
             ->leftJoin('entity.toWallet', 'toWallet')
-            ->andWhere('fromWallet.user = :user OR toWallet.user = :user')
-            ->setParameter('user', $user)
+            ->andWhere('fromWallet.ownerUuid = :ownerUuid OR toWallet.ownerUuid = :ownerUuid')
+            ->setParameter('ownerUuid', $user->getUuid())
             ->addOrderBy('entity.createdAt', 'DESC');
     }
 }

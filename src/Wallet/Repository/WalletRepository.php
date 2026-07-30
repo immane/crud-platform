@@ -52,9 +52,25 @@ class WalletRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /** @return Wallet[] */
+    public function findByOwnerUuid(string $ownerUuid): array
+    {
+        return $this->createQueryBuilder('w')
+            ->where('w.ownerUuid = :ownerUuid')
+            ->setParameter('ownerUuid', $ownerUuid)
+            ->orderBy('w.currency', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findByUserAndCurrency(int $userId, string $currency): ?Wallet
     {
         return $this->findOneBy(['user' => $userId, 'currency' => strtoupper($currency)]);
+    }
+
+    public function findByOwnerUuidAndCurrency(string $ownerUuid, string $currency): ?Wallet
+    {
+        return $this->findOneBy(['ownerUuid' => $ownerUuid, 'currency' => strtoupper($currency)]);
     }
 
     public function getTotalBalance(): int
@@ -77,5 +93,15 @@ class WalletRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
 
         return (int) $result;
+    }
+
+    public function getTotalBalanceForOwnerUuid(string $ownerUuid): int
+    {
+        return (int) $this->createQueryBuilder('w')
+            ->select('COALESCE(SUM(w.balance), 0)')
+            ->where('w.ownerUuid = :ownerUuid')
+            ->setParameter('ownerUuid', $ownerUuid)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

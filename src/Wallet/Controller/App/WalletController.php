@@ -8,7 +8,7 @@ use App\Core\Controller\RestController;
 use App\Core\View\ApiView;
 use App\Core\View\DetailApiViewMixin;
 use App\Core\View\ListApiViewMixin;
-use App\Identity\Entity\User;
+use App\Core\Security\UserUuidPrincipalInterface;
 use App\Wallet\Service\WalletService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -29,16 +29,16 @@ class WalletController extends RestController
     {
         $user = $this->getUser();
 
-        return $user instanceof User ? ['user' => $user] : ['id' => -1];
+        return $user instanceof UserUuidPrincipalInterface ? ['ownerUuid' => $user->getUuid()] : ['id' => -1];
     }
 
     #[Route('/balance', name: 'balance', methods: ['GET'])]
     public function verifyBalanceAction(): Response
     {
         $user = $this->getUser();
-        \assert($user instanceof User);
+        \assert($user instanceof UserUuidPrincipalInterface);
 
-        $result = $this->service->verifyBalanceForUser($user);
+        $result = $this->service->verifyBalanceForOwnerUuid($user->getUuid());
 
         return $this->success($result, $result['matches'] ? 'Balance is consistent' : 'Balance MISMATCH detected');
     }

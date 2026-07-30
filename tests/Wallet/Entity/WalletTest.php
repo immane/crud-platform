@@ -14,6 +14,7 @@ final class WalletTest extends TestCase
         $wallet = new Wallet($user);
 
         self::assertSame($user, $wallet->getUser());
+        self::assertSame($user->getUuid(), $wallet->getOwnerUuid());
         self::assertSame('USD', $wallet->getCurrency());
         self::assertSame(0, $wallet->getBalance());
         self::assertSame(0.0, $wallet->getBalanceAsFloat());
@@ -38,9 +39,11 @@ final class WalletTest extends TestCase
 
         $wallet->setUser($user2);
         self::assertSame($user2, $wallet->getUser());
+        self::assertSame($user2->getUuid(), $wallet->getOwnerUuid());
 
         $wallet->setUser(null);
         self::assertNull($wallet->getUser());
+        self::assertNull($wallet->getOwnerUuid());
     }
 
     public function testConstructorCurrencyUppercase(): void

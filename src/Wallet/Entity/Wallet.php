@@ -22,6 +22,9 @@ class Wallet
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private ?User $user = null;
 
+    #[ORM\Column(name: 'owner_uuid', type: 'string', length: 36, nullable: true)]
+    private ?string $ownerUuid = null;
+
     #[ORM\Column(type: 'string', length: 10, options: ['default' => 'USD'])]
     private string $currency = 'USD';
 
@@ -46,6 +49,7 @@ class Wallet
     public function __construct(User $user, string $currency = 'USD')
     {
         $this->user = $user;
+        $this->ownerUuid = $user->getUuid();
         $this->currency = strtoupper($currency);
         $this->createdAt = new \DateTimeImmutable();
     }
@@ -69,7 +73,13 @@ class Wallet
     public function setUser(?User $user): self
     {
         $this->user = $user;
+        $this->ownerUuid = $user?->getUuid();
         return $this;
+    }
+
+    public function getOwnerUuid(): ?string
+    {
+        return $this->ownerUuid;
     }
 
     public function getCurrency(): string
