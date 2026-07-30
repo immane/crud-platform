@@ -24,7 +24,7 @@ an Outbox, failure between the DB write and the message publish creates inconsis
 │  │  2. INSERT Outbox row │  │ SELECT unclaimed   │  │
 │  │  3. COMMIT            │  │ UPDATE claimed=true│  │
 │  └───────────────────────┘  │ Dispatch to queue  │  │
-│                             └────────┬───────────┘  │
+│                             └─────────┬──────────┘  │
 └───────────────────────────────────────┼─────────────┘
                                         │
                           Messenger Transport (Doctrine)
