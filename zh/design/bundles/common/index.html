@@ -1875,7 +1875,7 @@
 
 <h1 id="_1">通用捆绑设计<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>通用捆绑包 (<code>src/Common/</code>) 是 CMS（内容管理系统）模块。它提供
+<p>通用捆绑包 (<code>src/Main/</code>) 是 CMS（内容管理系统）模块。它提供
 标准内容实体（类别、标签、内容、评论、页面、媒体、设置）
 公共只读 API 和管理 CRUD 端点。</p>
 </blockquote>
@@ -1931,7 +1931,7 @@
 </table>
 <hr />
 <h2 id="2">2. 文件结构<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>src/Common/
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>src/Main/
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>|-- Controller/
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>|   |-- App/
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>|   |   |-- CategoryController.php      # GET list/detail (enabled only)
@@ -2105,7 +2105,7 @@
 <tr>
 <td>获取</td>
 <td><code>/api/v1/app/media</code></td>
-<td>媒体列表</td>
+<td>列表媒体</td>
 </tr>
 <tr>
 <td>获取</td>

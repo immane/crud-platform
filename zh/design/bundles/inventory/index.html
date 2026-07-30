@@ -2644,7 +2644,7 @@
 是允许的，或者其他未来的股票突变。</p>
 <h3 id="25">2.5 本地交易和至少一次交付<a class="headerlink" href="#25" title="Permanent link">&para;</a></h3>
 <p>每个 Inventory 突变都会在一个 SQL 中写入其本地聚合及其传出事件
-交易。收件箱表通过 <code>eventId</code> 至少删除一次传送的重复数据；商业
+交易。收件箱表通过 <code>eventId</code> 至少删除一次传递的重复数据；商业
 记录添加唯一键以实现竞赛安全幂等性。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Inventory transaction:
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  consumed event + reservation + stock changes + ledger entries + outbox event
@@ -3123,7 +3123,7 @@
 <p>业务拒绝提交被拒绝的预订、收件箱记录以及被拒绝的预订
 发件箱事件。传输或数据库故障通过 Messenger 回滚并重试。</p>
 <h3 id="44">4.4 确认和拒绝事件<a class="headerlink" href="#44" title="Permanent link">&para;</a></h3>
-<p>Inventory 只发布每个预订的一个初始结果。</p>
+<p>库存只为每个预订发布一个初始结果。</p>
 <p><code>inventory.reservation.confirmed.v1</code>：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">&quot;reservationId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;inventory-reservation-uuid&quot;</span><span class="p">,</span>
@@ -3201,7 +3201,7 @@
 取消发布一并实施；它不能默默地保留过期的
 无限期保留。</p>
 <p>库存调节将每个余额与其分类账增量进行比较。任何维修都是
-新的<code>adjustment</code>分类账条目，绝不直接余额覆盖。</p>
+新的 <code>adjustment</code> 分类帐条目，永远不会直接覆盖余额。</p>
 <hr />
 <h2 id="6">6. 收件箱、发件箱和信使<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
 <h3 id="61">6.1 持久化消息记录<a class="headerlink" href="#61" title="Permanent link">&para;</a></h3>
