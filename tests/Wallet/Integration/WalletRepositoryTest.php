@@ -2,7 +2,7 @@
 
 namespace App\Tests\Wallet\Integration;
 
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use App\Wallet\Entity\Wallet;
 use App\Wallet\Repository\WalletRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,7 +23,7 @@ final class WalletRepositoryTest extends IntegrationKernelTestCase
 
         $this->em = static::getContainer()->get(EntityManagerInterface::class);
         $this->em->createQuery('DELETE FROM App\\Wallet\\Entity\\Wallet')->execute();
-        $this->em->createQuery('DELETE FROM App\\Identity\\Entity\\User')->execute();
+        $this->em->createQuery('DELETE FROM App\\Identity\\Main\\Entity\\User')->execute();
 
         $this->repo = $this->em->getRepository(Wallet::class);
     }

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Wechat\Controller;
 
-use App\Identity\Entity\User;
-use App\Identity\Security\TokenManager;
-use App\Wechat\Controller\LoginController;
-use App\Wechat\Service\WechatAuthService;
-use App\Wechat\Service\WechatService;
+use App\Identity\Main\Entity\User;
+use App\Identity\Main\Security\TokenManager;
+use App\Identity\Wechat\Controller\LoginController;
+use App\Identity\Wechat\Service\WechatAuthService;
+use App\Identity\Wechat\Service\WechatService;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;

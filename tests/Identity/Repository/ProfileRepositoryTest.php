@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Identity\Repository;
 
-use App\Identity\Entity\Profile;
-use App\Identity\Entity\User;
-use App\Identity\Repository\ProfileRepository;
+use App\Identity\Main\Entity\Profile;
+use App\Identity\Main\Entity\User;
+use App\Identity\Main\Repository\ProfileRepository;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,8 +23,8 @@ final class ProfileRepositoryTest extends IntegrationWebTestCase
 
         $client = static::createClient();
         $em = $client->getContainer()->get(EntityManagerInterface::class);
-        $em->createQuery('DELETE FROM App\\Identity\\Entity\\Profile p')->execute();
-        $em->createQuery('DELETE FROM App\\Identity\\Entity\\User u')->execute();
+        $em->createQuery('DELETE FROM App\\Identity\\Main\\Entity\\Profile p')->execute();
+        $em->createQuery('DELETE FROM App\\Identity\\Main\\Entity\\User u')->execute();
 
         self::ensureKernelShutdown();
     }

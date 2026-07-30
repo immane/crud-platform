@@ -5,12 +5,13 @@ parameters:
         - apps/inventory/src/
         - apps/payment/src/
         - apps/wallet/src/
+        - apps/identity/src/
         - src/
         - packages/legacy-messenger-compat/src/
         - packages/platform-kernel/src/
     excludePaths:
         - src/*/Exception/*
-        - src/Identity/Sms/AliyunSmsProvider.php
+        - apps/identity/src/Main/Sms/AliyunSmsProvider.php
     bootstrapFiles:
         - vendor/autoload.php
     tmpDir: var/cache/phpstan
@@ -57,6 +58,9 @@ parameters:
         -
             message: '#Property .+::\$createdAt in isset\(\) is not nullable nor uninitialized#'
             path: apps/wallet/src/
+        -
+            message: '#Property .+::\$createdAt in isset\(\) is not nullable nor uninitialized#'
+            path: apps/identity/src/
 
 includes:
     - vendor/phpstan/phpstan-symfony/extension.neon

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Identity\Security;
 
-use App\Identity\Entity\User;
-use App\Identity\Repository\UserRepository;
-use App\Identity\Security\JwtAuthenticator;
-use App\Identity\Security\TokenManager;
+use App\Identity\Main\Entity\User;
+use App\Identity\Main\Repository\UserRepository;
+use App\Identity\Main\Security\JwtAuthenticator;
+use App\Identity\Main\Security\TokenManager;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;

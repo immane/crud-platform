@@ -411,7 +411,7 @@ final class BaseServiceReadListTraitTest extends TestCase
         $repo = new ReadListFakeRepository([]);
         $em = new ReadListFakeEntityManager($repo);
         $container = new ReadListFakeContainer($em, $this->createRequestStack(new Request(['@select' => 'entity.username'])));
-        $service = $this->createService($container, 'App\\Identity\\Entity\\User');
+        $service = $this->createService($container, 'App\\Identity\\Main\\Entity\\User');
 
         $this->expectException(AccessDeniedHttpException::class);
         $service->list(null, null, false);

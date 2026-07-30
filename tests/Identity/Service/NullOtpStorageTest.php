@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Identity\Service;
 
-use App\Identity\Service\NullOtpStorage;
+use App\Identity\Main\Service\NullOtpStorage;
 use PHPUnit\Framework\TestCase;
 
 final class NullOtpStorageTest extends TestCase

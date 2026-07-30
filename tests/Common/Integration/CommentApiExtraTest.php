@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Common\Integration;
 
 use App\Common\Entity\Comment;
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
 use Symfony\Component\HttpFoundation\Response;

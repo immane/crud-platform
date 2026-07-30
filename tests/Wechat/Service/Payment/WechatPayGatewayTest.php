@@ -9,10 +9,10 @@ use App\Payment\DTO\PaymentRefundResult;
 use App\Payment\DTO\PaymentResult;
 use App\Payment\Entity\Invoice;
 use App\Payment\Exception\PaymentVerificationException;
-use App\Wechat\Entity\WechatUser;
-use App\Wechat\Repository\WechatUserRepository;
+use App\Identity\Wechat\Entity\WechatUser;
+use App\Identity\Wechat\Repository\WechatUserRepository;
 use App\Wechat\Service\Payment\WechatPayGateway;
-use App\Wechat\Service\WechatService;
+use App\Wechat\Service\Payment\WechatPayService;
 use EasyWeChat\Kernel\HttpClient\Response as WechatResponse;
 use EasyWeChat\MiniApp\Application as MiniApp;
 use EasyWeChat\MiniApp\Account as MiniAccount;
@@ -26,14 +26,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class WechatPayGatewayTest extends TestCase
 {
-    private WechatService $wechatService;
+    private WechatPayService $wechatService;
     private WechatUserRepository $wechatUserRepo;
     private HttpMessageFactoryInterface $psrHttpFactory;
     private WechatPayGateway $gateway;
 
     protected function setUp(): void
     {
-        $this->wechatService = $this->createMock(WechatService::class);
+        $this->wechatService = new WechatPayService(
+            miniappAppId: 'wx_mini_app',
+            miniappSecret: 'mini_secret',
+            payMchId: '1234567890',
+            paySecretKey: 'pay_secret',
+            payPrivateKeyPath: '/tmp/key.pem',
+            payCertificatePath: '/tmp/cert.pem',
+        );
         $this->wechatUserRepo = $this->createMock(WechatUserRepository::class);
         $this->psrHttpFactory = $this->createMock(HttpMessageFactoryInterface::class);
 
@@ -96,7 +103,7 @@ final class WechatPayGatewayTest extends TestCase
         $payApp = $this->createMock(PayApp::class);
         $server = $this->createMock(\EasyWeChat\Pay\Server::class);
 
-        $this->wechatService->method('getPayApp')->willReturn($payApp);
+        $this->setPayApp($payApp);
         $payApp->method('getServer')->willReturn($server);
 
         $server->method('handlePaid')->willReturnSelf();
@@ -168,7 +175,7 @@ final class WechatPayGatewayTest extends TestCase
         $payClient->method('postJson')->willReturn($clientResponse);
         $payApp->method('getClient')->willReturn($payClient);
 
-        $this->wechatService->method('getPayApp')->willReturn($payApp);
+        $this->setPayApp($payApp);
 
         $invoice = $this->createMock(Invoice::class);
         $invoice->method('getTradeType')->willReturn('native');
@@ -215,13 +222,13 @@ final class WechatPayGatewayTest extends TestCase
             ]);
         $payApp->method('getUtils')->willReturn($payUtils);
 
-        $this->wechatService->method('getPayApp')->willReturn($payApp);
+        $this->setPayApp($payApp);
 
         $miniApp = $this->createMock(MiniApp::class);
         $miniAccount = $this->createMock(MiniAccount::class);
         $miniAccount->method('getAppId')->willReturn('wx_mini_app');
         $miniApp->method('getAccount')->willReturn($miniAccount);
-        $this->wechatService->method('getMiniApp')->willReturn($miniApp);
+        $this->setMiniApp($miniApp);
 
         $invoice = $this->createMock(Invoice::class);
         $invoice->method('getTradeType')->willReturn('jsapi');
@@ -259,7 +266,7 @@ final class WechatPayGatewayTest extends TestCase
         $payClient->method('postJson')->willReturn($clientResponse);
         $payApp->method('getClient')->willReturn($payClient);
 
-        $this->wechatService->method('getPayApp')->willReturn($payApp);
+        $this->setPayApp($payApp);
 
         $invoice = $this->createMock(Invoice::class);
         $invoice->method('getTradeType')->willReturn('native');
@@ -289,7 +296,7 @@ final class WechatPayGatewayTest extends TestCase
         $payClient->method('postJson')->willReturn($clientResponse);
         $payApp->method('getClient')->willReturn($payClient);
 
-        $this->wechatService->method('getPayApp')->willReturn($payApp);
+        $this->setPayApp($payApp);
 
         $invoice = $this->createMock(Invoice::class);
         $invoice->method('getTradeType')->willReturn('native');
@@ -318,7 +325,7 @@ final class WechatPayGatewayTest extends TestCase
         $payClient->method('postJson')->willReturn($clientResponse);
         $payApp->method('getClient')->willReturn($payClient);
 
-        $this->wechatService->method('getPayApp')->willReturn($payApp);
+        $this->setPayApp($payApp);
 
         $invoice = $this->createMock(Invoice::class);
         $invoice->method('getOutTradeNo')->willReturn('TXN001');
@@ -348,7 +355,7 @@ final class WechatPayGatewayTest extends TestCase
         $payClient->method('postJson')->willReturn($clientResponse);
         $payApp->method('getClient')->willReturn($payClient);
 
-        $this->wechatService->method('getPayApp')->willReturn($payApp);
+        $this->setPayApp($payApp);
 
         $invoice = $this->createMock(Invoice::class);
         $invoice->method('getOutTradeNo')->willReturn('TXN002');
@@ -373,7 +380,7 @@ final class WechatPayGatewayTest extends TestCase
         $payClient->method('postJson')->willReturn($clientResponse);
         $payApp->method('getClient')->willReturn($payClient);
 
-        $this->wechatService->method('getPayApp')->willReturn($payApp);
+        $this->setPayApp($payApp);
 
         $invoice = $this->createMock(Invoice::class);
         $invoice->method('getOutTradeNo')->willReturn('TXN003');
@@ -427,7 +434,7 @@ final class WechatPayGatewayTest extends TestCase
         $payApp->method('getValidator')->willReturn($validator);
         $payApp->method('getServer')->willReturn($server);
 
-        $this->wechatService->method('getPayApp')->willReturn($payApp);
+        $this->setPayApp($payApp);
 
         $request = Request::create('/notify', 'POST', [], [], [], [], $requestBody);
         $result = $this->gateway->notify($request);
@@ -438,5 +445,15 @@ final class WechatPayGatewayTest extends TestCase
         self::assertSame(200, $result->amount);
         self::assertSame(Invoice::STATUS_PAID, $result->status);
         self::assertSame('CNY', $result->currency);
+    }
+
+    private function setPayApp(PayApp $payApp): void
+    {
+        (new \ReflectionProperty(WechatPayService::class, 'payApp'))->setValue($this->wechatService, $payApp);
+    }
+
+    private function setMiniApp(MiniApp $miniApp): void
+    {
+        (new \ReflectionProperty(WechatPayService::class, 'miniApp'))->setValue($this->wechatService, $miniApp);
     }
 }

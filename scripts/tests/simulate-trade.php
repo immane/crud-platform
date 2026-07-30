@@ -7,7 +7,7 @@
  */
 declare(strict_types=1);
 
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use App\Kernel;
 use App\Trade\Entity\Order;
 use App\Trade\Entity\OrderItem;

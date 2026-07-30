@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Bridge\Identity;
 
 use App\Core\Security\UserUuidResolverInterface;
-use App\Identity\Repository\UserRepository;
+use App\Identity\Main\Repository\UserRepository;
 
 final readonly class IdentityUserUuidResolver implements UserUuidResolverInterface
 {

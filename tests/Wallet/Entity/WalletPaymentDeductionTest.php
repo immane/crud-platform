@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Wallet\Entity;
 
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use App\Wallet\Entity\Wallet;
 use App\Wallet\Entity\WalletPaymentDeduction;
 use PHPUnit\Framework\TestCase;

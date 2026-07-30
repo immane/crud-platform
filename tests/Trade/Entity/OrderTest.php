@@ -7,7 +7,7 @@ namespace App\Tests\Trade\Entity;
 use App\Trade\Entity\Order;
 use App\Trade\Entity\OrderItem;
 use App\Trade\Entity\Specification;
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use PHPUnit\Framework\TestCase;
 
 final class OrderTest extends TestCase

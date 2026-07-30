@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Wechat\Repository;
 
-use App\Wechat\Entity\WechatUser;
-use App\Wechat\Repository\WechatUserRepository;
+use App\Identity\Wechat\Entity\WechatUser;
+use App\Identity\Wechat\Repository\WechatUserRepository;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;

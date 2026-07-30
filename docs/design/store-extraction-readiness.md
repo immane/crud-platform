@@ -43,7 +43,7 @@ database cutover.
 | `CrudPlatform\IntegrationContracts` | All integration messages | Keep; this is the approved cross-service dependency. |
 | `App\Trade\Message` / `App\Inventory\Message` | Legacy native-Messenger compatibility adapters | Provided by `packages/legacy-messenger-compat` until old `async`/`failed` records are drained or migrated. |
 | Store directory lookup | `store.directory.upserted.v1` feeds Trade's local `trade_store_directory` projection | Resolved. Trade no longer injects a Store repository or service. |
-| `App\Identity\Entity\User` | App/staff controllers used it only to read UUID | Resolved. Store depends on `App\Core\Security\UserUuidPrincipalInterface`, implemented by Identity User. |
+| `App\Identity\Main\Entity\User` | App/staff controllers used it only to read UUID | Resolved. Store depends on `App\Core\Security\UserUuidPrincipalInterface`, implemented by Identity User. |
 | `config/routes.yaml` | Imports `src/Store/Controller` | Now points to `vendor/crud-platform/store-app/src/Controller` via path package. |
 | Root scheduler/worker | Runs Store Outbox publishing | Runs alongside Trade/Inventory in monolith; Store app has own worker/scheduler capacity post-cutover. |
 | Root Doctrine mapping | `src/Store/Entity` | Now points to `vendor/crud-platform/store-app/src/Entity` via path package. |

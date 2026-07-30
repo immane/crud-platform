@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Identity\Service;
 
-use App\Identity\Service\LocalCacheOtpStorage;
+use App\Identity\Main\Service\LocalCacheOtpStorage;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 

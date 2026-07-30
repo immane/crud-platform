@@ -6,7 +6,7 @@ namespace App\Tests\Promotion\Integration;
 
 use App\Promotion\Entity\Promotion;
 use App\Promotion\Entity\PromotionTemplate;
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Trade\Entity\Product;
 use App\Trade\Entity\Specification;

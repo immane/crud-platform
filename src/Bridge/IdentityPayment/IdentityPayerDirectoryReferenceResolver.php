@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Bridge\IdentityPayment;
 
-use App\Identity\Repository\UserRepository;
+use App\Identity\Main\Repository\UserRepository;
 use App\Payment\Service\PayerDirectoryService;
 use App\Payment\Service\PayerReferenceResolverInterface;
 

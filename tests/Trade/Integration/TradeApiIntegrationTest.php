@@ -54,9 +54,9 @@ final class TradeApiIntegrationTest extends WebTestCase
     private function authHeader(): array
     {
         $this->createAuthenticatedUser();
-        $tokenManager = $this->client->getContainer()->get(\App\Identity\Security\TokenManager::class);
+        $tokenManager = $this->client->getContainer()->get(\App\Identity\Main\Security\TokenManager::class);
         $userRepo = $this->client->getContainer()->get('doctrine')->getManager()
-            ->getRepository(\App\Identity\Entity\User::class);
+            ->getRepository(\App\Identity\Main\Entity\User::class);
         $user = $userRepo->findOneBy(['email' => 'trade@test.com']);
 
         $accessToken = $tokenManager->createAccessToken($user);

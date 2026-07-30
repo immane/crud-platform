@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Wechat\Entity;
 
-use App\Wechat\Entity\WechatUser;
+use App\Identity\Wechat\Entity\WechatUser;
 use PHPUnit\Framework\TestCase;
 
 final class WechatUserTest extends TestCase

@@ -48,6 +48,18 @@ doctrine:
                 dir: '%kernel.project_dir%/vendor/crud-platform/wallet-app/src/Entity'
                 prefix: 'App\Wallet\Entity'
                 alias: Wallet
+            Identity:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/vendor/crud-platform/identity-app/src/Main/Entity'
+                prefix: 'App\Identity\Main\Entity'
+                alias: Identity
+            Wechat:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/vendor/crud-platform/identity-app/src/Wechat/Entity'
+                prefix: 'App\Identity\Wechat\Entity'
+                alias: Wechat
         dql:
             string_functions:
                 regexp: DoctrineExtensions\Query\Mysql\Regexp

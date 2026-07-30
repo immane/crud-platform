@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Identity\Controller\App;
 
-use App\Identity\Controller\App\UserController;
-use App\Identity\Service\UserService;
+use App\Identity\Main\Controller\App\UserController;
+use App\Identity\Main\Service\UserService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;

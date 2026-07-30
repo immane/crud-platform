@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Identity\Controller;
 
-use App\Identity\Controller\AuthController;
-use App\Identity\Entity\User;
-use App\Identity\Repository\UserRepository;
-use App\Identity\Security\TokenManager;
-use App\Identity\Service\OtpService;
+use App\Identity\Main\Controller\AuthController;
+use App\Identity\Main\Entity\User;
+use App\Identity\Main\Repository\UserRepository;
+use App\Identity\Main\Security\TokenManager;
+use App\Identity\Main\Service\OtpService;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -33,7 +33,7 @@ final class AuthControllerTest extends TestCase
         $this->hasher = $this->createMock(UserPasswordHasherInterface::class);
         $this->otpService = $this->createMock(OtpService::class);
         $this->em = $this->createMock(EntityManagerInterface::class);
-        $userService = $this->createMock(\App\Identity\Service\UserService::class);
+        $userService = $this->createMock(\App\Identity\Main\Service\UserService::class);
         $translator = $this->createMock(TranslatorInterface::class);
         $translator->method('trans')->willReturnCallback(fn(string $msg) => $msg);
 
@@ -316,7 +316,7 @@ final class AuthControllerTest extends TestCase
             ->setEmail('new@example.com')
             ->setUsername('newuser');
 
-        $userService = $this->createMock(\App\Identity\Service\UserService::class);
+        $userService = $this->createMock(\App\Identity\Main\Service\UserService::class);
         $userService->method('register')
             ->with('new@example.com', 'newuser', 'P@ssw0rd', null)
             ->willReturn($user);
@@ -348,7 +348,7 @@ final class AuthControllerTest extends TestCase
 
     public function testRegisterWithInvalidArgumentsReturnsBadRequest(): void
     {
-        $userService = $this->createMock(\App\Identity\Service\UserService::class);
+        $userService = $this->createMock(\App\Identity\Main\Service\UserService::class);
         $userService->method('register')
             ->willThrowException(new \InvalidArgumentException('Email, username, and password are required.'));
 

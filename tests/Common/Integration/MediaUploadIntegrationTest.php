@@ -8,7 +8,7 @@ use App\Common\Entity\Category;
 use App\Common\Entity\Media;
 use App\Common\Service\MediaServiceInterface;
 use App\Common\Service\MediaService;
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
 use Doctrine\ORM\EntityManagerInterface;

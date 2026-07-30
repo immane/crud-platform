@@ -2,7 +2,7 @@
 
 namespace App\Tests\Wallet\Integration;
 
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use App\Wallet\Entity\Wallet;
 use App\Wallet\Entity\WalletTransaction;
 use App\Wallet\Exception\InsufficientFundsException;

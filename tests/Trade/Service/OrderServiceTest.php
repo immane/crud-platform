@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Trade\Service;
 
-use App\Identity\Entity\User;
-use App\Identity\Entity\Profile;
+use App\Identity\Main\Entity\User;
+use App\Identity\Main\Entity\Profile;
 use App\Trade\Entity\Order;
 use App\Trade\Entity\Product;
 use App\Trade\Entity\Specification;

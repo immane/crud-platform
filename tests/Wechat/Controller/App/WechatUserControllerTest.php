@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Wechat\Controller\App;
 
-use App\Identity\Entity\User;
-use App\Wechat\Controller\App\WechatUserController;
-use App\Wechat\Service\WechatUserServiceInterface;
+use App\Identity\Main\Entity\User;
+use App\Identity\Wechat\Controller\App\WechatUserController;
+use App\Identity\Wechat\Service\WechatUserServiceInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;

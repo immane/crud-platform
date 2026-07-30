@@ -52,6 +52,13 @@
             "options": {
                 "symlink": false
             }
+        },
+        {
+            "type": "path",
+            "url": "apps/identity",
+            "options": {
+                "symlink": false
+            }
         }
     ],
     "require": {
@@ -63,6 +70,7 @@
         "crud-platform/legacy-messenger-compat": "^1.0@dev",
         "crud-platform/platform-kernel": "^1.0.3@dev",
         "crud-platform/inventory-app": "^1.0@dev",
+        "crud-platform/identity-app": "^1.0@dev",
         "crud-platform/payment-app": "^1.0@dev",
         "crud-platform/wallet-app": "^1.0@dev",
         "crud-platform/store-app": "^1.0.1@dev",

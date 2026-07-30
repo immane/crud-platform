@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Identity\Command;
 
-use App\Identity\Command\CreateUserCommand;
-use App\Identity\Entity\User;
-use App\Identity\Repository\UserRepository;
+use App\Identity\Main\Command\CreateUserCommand;
+use App\Identity\Main\Entity\User;
+use App\Identity\Main\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;

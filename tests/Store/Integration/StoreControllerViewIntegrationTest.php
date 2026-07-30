@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Store\Integration;
 
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use App\Store\Entity\Store;
 use App\Store\Entity\StoreOrder;
 use App\Tests\Integration\DatabaseBootstrapTrait;

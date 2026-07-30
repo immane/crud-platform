@@ -6,7 +6,7 @@ namespace App\Tests\Identity\Entity;
 
 use App\Core\Utils\UUID;
 use App\Core\Security\UserUuidPrincipalInterface;
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use PHPUnit\Framework\TestCase;
 
 final class UserTest extends TestCase

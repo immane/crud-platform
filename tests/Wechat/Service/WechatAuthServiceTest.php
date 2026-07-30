@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Wechat\Service;
 
-use App\Identity\Entity\User;
-use App\Identity\Repository\UserRepository;
-use App\Wechat\Entity\WechatUser;
-use App\Wechat\Repository\WechatUserRepository;
-use App\Wechat\Service\WechatAuthService;
-use App\Wechat\Service\WechatService;
+use App\Identity\Main\Entity\User;
+use App\Identity\Main\Repository\UserRepository;
+use App\Identity\Wechat\Entity\WechatUser;
+use App\Identity\Wechat\Repository\WechatUserRepository;
+use App\Identity\Wechat\Service\WechatAuthService;
+use App\Identity\Wechat\Service\WechatService;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;

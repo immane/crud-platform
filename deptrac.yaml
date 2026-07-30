@@ -43,11 +43,11 @@ deptrac:
     - name: IdentityCode
       collectors:
         - type: classLike
-          value: ^App\\Identity\\(?!(?:Entity|Repository)\\)
+          value: ^App\\Identity\\Main\\(?!(?:Entity|Repository)\\)
     - name: IdentityPersistence
       collectors:
         - type: classLike
-          value: ^App\\Identity\\(?:Entity|Repository)\\
+          value: ^App\\Identity\\Main\\(?:Entity|Repository)\\
     - name: InventoryCode
       collectors:
         - type: classLike
@@ -107,11 +107,11 @@ deptrac:
     - name: WechatCode
       collectors:
         - type: classLike
-          value: ^App\\Wechat\\(?!(?:Entity|Repository)\\)
+          value: ^(?:App\\Identity\\Wechat|App\\Wechat)\\(?!(?:Entity|Repository)\\)
     - name: WechatPersistence
       collectors:
         - type: classLike
-          value: ^App\\Wechat\\(?:Entity|Repository)\\
+          value: ^(?:App\\Identity\\Wechat|App\\Wechat)\\(?:Entity|Repository)\\
   ruleset:
     Application:
       - Composition

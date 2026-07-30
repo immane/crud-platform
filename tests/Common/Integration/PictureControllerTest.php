@@ -6,7 +6,7 @@ namespace App\Tests\Common\Integration;
 
 use App\Common\Entity\Category;
 use App\Common\Entity\Picture;
-use App\Identity\Entity\User;
+use App\Identity\Main\Entity\User;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
 use Doctrine\ORM\EntityManagerInterface;

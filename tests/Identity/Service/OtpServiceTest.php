@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Identity\Service;
 
-use App\Identity\Service\OtpService;
-use App\Identity\Service\OtpStorageInterface;
-use App\Identity\Sms\SmsProviderInterface;
+use App\Identity\Main\Service\OtpService;
+use App\Identity\Main\Service\OtpStorageInterface;
+use App\Identity\Main\Sms\SmsProviderInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
