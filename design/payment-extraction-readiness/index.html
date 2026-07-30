@@ -1429,6 +1429,7 @@ completed transition-host work and the remaining runtime cutover steps.</p>
 <li>Payment's <code>InvoiceService</code> writes durable outbox rows; the transition host's <code>app:payment:outbox:publish</code> publishes paid/failed/cancelled/refunded v1 contracts through the root async transport.</li>
 <li>Trade consumes those contracts via an idempotent <code>trade_consumed_event</code> inbox; the synchronous <code>OrderInvoiceListener</code> remains temporarily for observation.</li>
 <li>Wallet uses a Core UUID-to-local-ID contract, and WeChat resolves its own user relation by UUID. Payment no longer imports Identity entities or repositories.</li>
+<li>Wallet deduction persistence stores Payment references as <code>invoice_id</code> and <code>invoice_no</code> scalars. Its entity and repository no longer import the Payment Invoice entity.</li>
 <li>Root Dockerfile copies <code>apps/payment</code> before <code>composer install</code>, and the root scheduler publishes Payment outbox rows independently.</li>
 <li>The Payment app resolves its own <code>PayerReferenceResolverInterface</code> through <code>PayerDirectoryReferenceResolver</code> in standalone mode; the monolith binds it to the Identity adapter.</li>
 <li>Payment app includes its own <code>invoice</code> workflow state machine.</li>
@@ -1461,8 +1462,10 @@ reused with a different payload.</p>
    the current standalone security provider is intentionally a placeholder.</li>
 <li>Move Payment HTTP traffic, worker, and scheduler behind Gateway shadow
    routing, then remove the monolith host assembly.</li>
-<li>Extract Wallet only after its Payment gateway and adjustment contracts no
-   longer expose Payment persistence or framework types.</li>
+<li>Move Wallet's remaining Payment gateway and adjustment adapters out of the
+   Wallet context, then extract Wallet after those contracts no longer expose
+   Payment persistence or framework types. Deduction persistence is already
+   scalarized; the remaining work is the service and HTTP adapter boundary.</li>
 </ol>
 
 
