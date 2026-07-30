@@ -6,7 +6,6 @@ imports:
     - { resource: '../vendor/crud-platform/identity-app/config/services_identity.yaml' }
     - { resource: '../vendor/crud-platform/common-app/src/Storage/Resources/config/services_storage.yaml' }
     - { resource: '../vendor/crud-platform/identity-app/config/services_wechat.yaml' }
-    - { resource: '../src/Promotion/Resources/config/services_promotion.yaml', ignore_errors: true }
 
 services:
     _defaults:
@@ -26,11 +25,11 @@ services:
             tags: ['payment.adjustment_provider']
         App\Storage\Service\MediaStorageInterface:
             tags: ['media.storage']
+        App\Promotion\Strategy\PromotionStrategyInterface:
+            tags: ['promotion.strategy']
 
     App\:
         resource: '../src/'
-        exclude:
-            - '../src/Promotion/Exception/*'
 
     App\Wallet\:
         resource: '../vendor/crud-platform/wallet-app/src/'
@@ -78,6 +77,17 @@ services:
         resource: '../vendor/crud-platform/payment-app/src/'
         exclude:
             - '../vendor/crud-platform/payment-app/src/Kernel.php'
+
+    App\Trade\:
+        resource: '../vendor/crud-platform/trade-app/src/Trade/'
+        exclude:
+            - '../vendor/crud-platform/trade-app/src/Trade/Kernel.php'
+
+    App\Promotion\:
+        resource: '../vendor/crud-platform/trade-app/src/Promotion/'
+        exclude:
+            - '../vendor/crud-platform/trade-app/src/Promotion/Exception/*'
+            - '../vendor/crud-platform/trade-app/src/Promotion/Resources/'
 
     App\Core\:
         resource: '../vendor/crud-platform/platform-kernel/src/'

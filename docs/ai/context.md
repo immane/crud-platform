@@ -131,6 +131,12 @@ Inbox handler for durable lifecycle integration. Cutover is deferred: the monoli
 remains the production host until all remaining modules are extracted and Gateway
 routing is ready.
 
+`apps/trade` now exists as a fully extracted Symfony application with its own
+`App\Trade\Kernel`, Composer lock, configuration, migrations, tests, and FrankenPHP
+Docker image. It owns both `App\Trade\*` and `App\Promotion\*`; Payment remains a
+temporary direct composition dependency while Trade consumes its durable invoice
+lifecycle carriers. The monolith loads Trade through `crud-platform/trade-app`.
+
 `apps/wallet` now exists as a fully extracted Symfony application with its own
 `App\Wallet\Kernel`, Composer lock, config, migrations, tests, and FrankenPHP
 Docker image. It owns all Wallet source under `apps/wallet/src/` — the single

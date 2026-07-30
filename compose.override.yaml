@@ -17,6 +17,10 @@ services:
     volumes:
       - ./:/workspace
 
+  trade-app:
+    volumes:
+      - ./:/workspace
+
   database:
     ports:
       - "${MYSQL_PORT:-3306}:3306"
@@ -32,6 +36,10 @@ services:
   payment-database:
     ports:
       - "3310:3306"
+
+  trade-database:
+    ports:
+      - "3311:3306"
 
   mailer:
     ports:

@@ -1,6 +1,6 @@
 # Promotion Bundle Design
 
-> The Promotion module (`src/Promotion/`) provides a custom DSL-driven promotion engine.
+> The Promotion module (`apps/trade/src/Promotion/`) provides a custom DSL-driven promotion engine.
 > Promotions are defined as human-readable DSL text stored in `PromotionTemplate`,
 > with per-store config values in `Promotion` instances. The engine hooks into Trade's
 > price calculation pipeline as a tagged calculator. It is an in-process Trade plugin,
