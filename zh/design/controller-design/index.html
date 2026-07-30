@@ -730,10 +730,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#23-detail-detailapiviewmixin" class="md-nav__link">
+  <a href="#23-detailapiviewmixin" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.3 Detail: DetailApiViewMixin
+        2.3 详细信息：DetailApiViewMixin
       
     </span>
   </a>
@@ -929,10 +929,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#45-delete-pipeline" class="md-nav__link">
+  <a href="#45" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.5 DELETE Pipeline
+        4.5 删除管道
       
     </span>
   </a>
@@ -1722,10 +1722,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#23-detail-detailapiviewmixin" class="md-nav__link">
+  <a href="#23-detailapiviewmixin" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.3 Detail: DetailApiViewMixin
+        2.3 详细信息：DetailApiViewMixin
       
     </span>
   </a>
@@ -1921,10 +1921,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#45-delete-pipeline" class="md-nav__link">
+  <a href="#45" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.5 DELETE Pipeline
+        4.5 删除管道
       
     </span>
   </a>
@@ -2074,7 +2074,7 @@
 <table>
 <thead>
 <tr>
-<th>Hook</th>
+<th>钩</th>
 <th>签名</th>
 <th>当被呼叫时</th>
 <th>目的</th>
@@ -2103,7 +2103,7 @@
 </table>
 <p><strong>OpenAPI 参数</strong>（已记录）：
 <code>page</code>、<code>limit</code>、<code>@order</code>、<code>@dql</code>、<code>@select</code>、<code>@groupBy</code>、<code>@hints</code>、<code>@filter</code>、<code>@sort</code>、<code>@expands</code>、<code>@display</code>、<code>@showDQL</code></p>
-<h3 id="23-detail-detailapiviewmixin">2.3 Detail: <code>DetailApiViewMixin</code><a class="headerlink" href="#23-detail-detailapiviewmixin" title="Permanent link">&para;</a></h3>
+<h3 id="23-detailapiviewmixin">2.3 详细信息：<code>DetailApiViewMixin</code><a class="headerlink" href="#23-detailapiviewmixin" title="Permanent link">&para;</a></h3>
 <p><strong>文件</strong>：<code>packages/platform-kernel/src/View/DetailApiViewMixin.php</code></p>
 <p>寄存器<code>GET /{id}</code>（需要数字ID）：</p>
 <table>
@@ -2149,12 +2149,12 @@
 <td><code>detailResponse($entity)</code></td>
 <td><code>protected</code></td>
 <td>JSON 序列化之前</td>
-<td>Shaping the response</td>
+<td>塑造反应</td>
 </tr>
 </tbody>
 </table>
 <h3 id="24-createapiviewmixin">2.4 创建：<code>CreateApiViewMixin</code><a class="headerlink" href="#24-createapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>File</strong>: <code>packages/platform-kernel/src/View/CreateApiViewMixin.php</code></p>
+<p><strong>文件</strong>：<code>packages/platform-kernel/src/View/CreateApiViewMixin.php</code></p>
 <p>注册 <code>POST /</code> 以支持单个对象和数组输入：</p>
 <table>
 <thead>
@@ -2167,7 +2167,7 @@
 <tbody>
 <tr>
 <td><code>POST /</code></td>
-<td>createAction</td>
+<td>创建动作</td>
 <td>创建单个或批量实体</td>
 </tr>
 </tbody>
@@ -2195,7 +2195,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Hook Methods</strong>:</p>
+<p><strong>挂钩方法</strong>：</p>
 <table>
 <thead>
 <tr>
@@ -2222,13 +2222,13 @@
 <td><code>processEntity($content, $entity)</code></td>
 <td><code>protected</code></td>
 <td>new() 之后，更新之前</td>
-<td>Modify the new entity</td>
+<td>修改新实体</td>
 </tr>
 <tr>
 <td><code>afterCreated($entity)</code></td>
 <td><code>protected</code></td>
 <td>保存成功后</td>
-<td>Post-create hook</td>
+<td>创建后挂钩</td>
 </tr>
 </tbody>
 </table>
@@ -2237,7 +2237,7 @@
 - 数组<code>[{}, {}, ...]</code>：返回已创建实体的数组，包装在事务中（除非<code>@partial=true</code>）</p>
 <h3 id="25-updateapiviewmixin">2.5 更新：<code>UpdateApiViewMixin</code><a class="headerlink" href="#25-updateapiviewmixin" title="Permanent link">&para;</a></h3>
 <p><strong>文件</strong>：<code>packages/platform-kernel/src/View/UpdateApiViewMixin.php</code></p>
-<p>Registers two routes:</p>
+<p>注册两条路由：</p>
 <table>
 <thead>
 <tr>
@@ -2250,7 +2250,7 @@
 <tr>
 <td><code>PUT /{id}</code></td>
 <td>更新操作</td>
-<td>Single entity update</td>
+<td>单一实体更新</td>
 </tr>
 <tr>
 <td><code>POST /batch-update</code></td>
@@ -2286,7 +2286,7 @@
 <table>
 <thead>
 <tr>
-<th>Hook</th>
+<th>钩</th>
 <th>签名</th>
 <th>当被呼叫时</th>
 <th>目的</th>
@@ -2296,7 +2296,7 @@
 <tr>
 <td><code>defaultUpdateValues()</code></td>
 <td><code>protected</code></td>
-<td>Before processing</td>
+<td>加工前</td>
 <td>提供更新的默认值</td>
 </tr>
 <tr>
@@ -2308,7 +2308,7 @@
 <tr>
 <td><code>afterUpdated($entity)</code></td>
 <td><code>protected</code></td>
-<td>After successful save</td>
+<td>保存成功后</td>
 <td>更新后挂钩</td>
 </tr>
 </tbody>
@@ -2317,7 +2317,7 @@
 <table>
 <thead>
 <tr>
-<th>Hook</th>
+<th>钩</th>
 <th>默认代表</th>
 </tr>
 </thead>
@@ -2419,7 +2419,7 @@
 </table>
 <p>使用 <code>commonFilter()</code> 来标识哪一行。</p>
 <h3 id="29-workflowapiviewmixin">2.9 工作流程：<code>WorkflowApiViewMixin</code><a class="headerlink" href="#29-workflowapiviewmixin" title="Permanent link">&para;</a></h3>
-<p><strong>File</strong>: <code>packages/platform-kernel/src/View/WorkflowApiViewMixin.php</code></p>
+<p><strong>文件</strong>：<code>packages/platform-kernel/src/View/WorkflowApiViewMixin.php</code></p>
 <p>对于 Symfony Workflow 状态机管理的实体：</p>
 <table>
 <thead>
@@ -2571,7 +2571,7 @@
 <a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>                  -&gt; afterUpdated(entity)
 <a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>                    -&gt; success(response)
 </code></pre></div>
-<h3 id="45-delete-pipeline">4.5 DELETE Pipeline<a class="headerlink" href="#45-delete-pipeline" title="Permanent link">&para;</a></h3>
+<h3 id="45">4.5 删除管道<a class="headerlink" href="#45" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>mixIdToCommonFilter(id)
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>  -&gt; deletionFilter(filter)
 <a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    -&gt; service.get(filter)
@@ -2696,18 +2696,18 @@
 <thead>
 <tr>
 <th>方面</th>
-<th>farm-neighbor</th>
-<th>crud-skeleton</th>
+<th>农场邻居</th>
+<th>粗骨架</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Base class</td>
+<td>基类</td>
 <td><code>LamProject\CoreBundle\Controller\RestController</code></td>
 <td><code>App\Core\Controller\RestController</code></td>
 </tr>
 <tr>
-<td>Mixin location</td>
+<td>混音地点</td>
 <td><code>LamProject\CoreBundle\View\</code></td>
 <td><code>App\Core\View\</code></td>
 </tr>
@@ -2717,27 +2717,27 @@
 <td>相同的名字</td>
 </tr>
 <tr>
-<td>Hook method signatures</td>
+<td>钩子方法签名</td>
 <td>相同</td>
 <td>相同</td>
 </tr>
 <tr>
-<td>Service binding</td>
+<td>服务绑定</td>
 <td><code>$serviceClass</code></td>
 <td><code>$serviceClass</code></td>
 </tr>
 <tr>
-<td>Field whitelisting</td>
+<td>字段白名单</td>
 <td><code>$requiredCreateProperties</code>等</td>
 <td>相同</td>
 </tr>
 <tr>
-<td><code>@</code> query syntax</td>
-<td>Same expression engine</td>
+<td><code>@</code> 查询语法</td>
+<td>相同的表达引擎</td>
 <td>相同</td>
 </tr>
 <tr>
-<td>Mixed batch upsert</td>
+<td>混合批量更新插入</td>
 <td><code>@mode=mixed</code> + <code>@basis</code></td>
 <td>相同</td>
 </tr>

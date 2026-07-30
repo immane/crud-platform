@@ -666,7 +666,7 @@
   <a href="#22" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2 列名称
+        2.2 列名
       
     </span>
   </a>
@@ -1787,7 +1787,7 @@
   <a href="#22" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2 列名称
+        2.2 列名
       
     </span>
   </a>
@@ -2260,7 +2260,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="22">2.2 列名称<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
+<h3 id="22">2.2 列名<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2604,7 +2604,7 @@
 <li>域聚合，稍后可能会移动到自己的数据库/服务。</li>
 <li>由幂等性、审计、支付、库存或外部关联流引用。</li>
 </ul>
-<p>纯粹的内部实现记录不需要单独的实体UUID。示例
+<p>纯粹的内部实现记录不需要单独的实体 UUID。示例
 包括私有连接表或已由其唯一标识的收件箱记录
 传入<code>eventId</code>。通过 API 公开的独立管理关系应该
 仍然收到 UUID。</p>
@@ -2626,7 +2626,7 @@
 <h3 id="711-uuid">7.1.1 UUID 版本策略<a class="headerlink" href="#711-uuid" title="Permanent link">&para;</a></h3>
 <ul>
 <li>使用 UUID v4 的现有实体保留其当前标识符；迁移不得
-  重写标识符仅仅是为了版本统一。</li>
+  仅仅为了版本统一而重写标识符。</li>
 <li>一旦共享 UUID 实用程序支持，新的跨服务聚合应该使用 UUID v7
   它，因为时间排序提高了索引局部性。</li>
 <li>在 UUID v7 可用之前，UUID v4 对于新实体和事件是可接受的。</li>
