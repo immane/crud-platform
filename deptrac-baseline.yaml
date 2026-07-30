@@ -1,10 +1,5 @@
 deptrac:
   skip_violations:
-    App\Promotion\Service\Dsl\Evaluator:
-      - App\Identity\Entity\User
-    App\Promotion\Strategy\MemberDiscountStrategy:
-      - App\Identity\Entity\Profile
-      - App\Identity\Entity\User
     App\Storage\Command\InitQiniuSettingsCommand:
       - App\Common\Entity\Setting
       - App\Common\Repository\SettingRepository

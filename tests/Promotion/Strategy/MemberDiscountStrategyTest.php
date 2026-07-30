@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Promotion\Strategy;
 
-use App\Identity\Entity\Profile;
-use App\Identity\Entity\User;
 use App\Promotion\Service\Dsl\AstNode;
 use App\Promotion\Strategy\MemberDiscountStrategy;
 use App\Trade\Service\Pricing\PriceCalculationContext;
@@ -20,14 +18,6 @@ final class MemberDiscountStrategyTest extends TestCase
         $this->strategy = new MemberDiscountStrategy();
     }
 
-    private function createUserWithLevel(string $level): User
-    {
-        $user = new User();
-        $profile = new Profile($user, $level);
-        (new \ReflectionClass(User::class))->getProperty('profile')->setValue($user, $profile);
-        return $user;
-    }
-
     public function testSupportedType(): void
     {
         self::assertSame('member_discount', MemberDiscountStrategy::supportedType());
@@ -35,15 +25,13 @@ final class MemberDiscountStrategyTest extends TestCase
 
     public function testApplyWithMatchingLevel(): void
     {
-        $user = $this->createUserWithLevel(Profile::LEVEL_GOLD);
-
         $context = new PriceCalculationContext([]);
         $context->totalAmount = 50000;
-        $context->user = $user;
+        $context->meta['identity'] = ['profileLevel' => 'gold'];
 
         $action = new AstNode('action_member_discount', ['rate' => 90]);
 
-        $this->strategy->apply($action, $context, ['min_level' => Profile::LEVEL_SILVER]);
+        $this->strategy->apply($action, $context, ['min_level' => 'silver']);
 
         // 10% off: 50000 * (100-90) / 100 = 5000, new total = 45000
         self::assertSame(45000, $context->totalAmount);
@@ -51,15 +39,13 @@ final class MemberDiscountStrategyTest extends TestCase
 
     public function testApplyWithDiamondLevel(): void
     {
-        $user = $this->createUserWithLevel(Profile::LEVEL_DIAMOND);
-
         $context = new PriceCalculationContext([]);
         $context->totalAmount = 100000;
-        $context->user = $user;
+        $context->meta['identity'] = ['profileLevel' => 'diamond'];
 
         $action = new AstNode('action_member_discount', ['rate' => 80]);
 
-        $this->strategy->apply($action, $context, ['min_level' => Profile::LEVEL_GOLD]);
+        $this->strategy->apply($action, $context, ['min_level' => 'gold']);
 
         // 20% off: 100000 * 20 / 100 = 20000, new total = 80000
         self::assertSame(80000, $context->totalAmount);
@@ -67,15 +53,13 @@ final class MemberDiscountStrategyTest extends TestCase
 
     public function testApplyWithLowerLevelThanMin(): void
     {
-        $user = $this->createUserWithLevel(Profile::LEVEL_BRONZE);
-
         $context = new PriceCalculationContext([]);
         $context->totalAmount = 50000;
-        $context->user = $user;
+        $context->meta['identity'] = ['profileLevel' => 'bronze'];
 
         $action = new AstNode('action_member_discount', ['rate' => 90]);
 
-        $this->strategy->apply($action, $context, ['min_level' => Profile::LEVEL_GOLD]);
+        $this->strategy->apply($action, $context, ['min_level' => 'gold']);
 
         // User is bronze, min is gold — no discount
         self::assertSame(50000, $context->totalAmount);
@@ -85,48 +69,45 @@ final class MemberDiscountStrategyTest extends TestCase
     {
         $context = new PriceCalculationContext([]);
         $context->totalAmount = 50000;
-        $context->user = null;
 
         $action = new AstNode('action_member_discount', ['rate' => 90]);
 
-        $this->strategy->apply($action, $context, ['min_level' => Profile::LEVEL_SILVER]);
+        $this->strategy->apply($action, $context, ['min_level' => 'silver']);
 
         self::assertSame(50000, $context->totalAmount);
     }
 
-    public function testApplyWithoutProfile(): void
+    public function testApplyWithoutProfileLevel(): void
     {
         $context = new PriceCalculationContext([]);
         $context->totalAmount = 50000;
-        $context->user = new User();
+        $context->meta['identity'] = [];
 
         $action = new AstNode('action_member_discount', ['rate' => 90]);
 
-        $this->strategy->apply($action, $context, ['min_level' => Profile::LEVEL_SILVER]);
+        $this->strategy->apply($action, $context, ['min_level' => 'silver']);
 
         self::assertSame(50000, $context->totalAmount);
     }
 
-    public function testApplyWithNonUserObject(): void
+    public function testApplyWithInvalidIdentitySnapshot(): void
     {
         $context = new PriceCalculationContext([]);
         $context->totalAmount = 50000;
-        $context->user = new \stdClass();
+        $context->meta['identity'] = 'not-a-snapshot';
 
         $action = new AstNode('action_member_discount', ['rate' => 90]);
 
-        $this->strategy->apply($action, $context, ['min_level' => Profile::LEVEL_GOLD]);
+        $this->strategy->apply($action, $context, ['min_level' => 'gold']);
 
         self::assertSame(50000, $context->totalAmount);
     }
 
     public function testApplyWithDefaultMinLevel(): void
     {
-        $user = $this->createUserWithLevel(Profile::LEVEL_BRONZE);
-
         $context = new PriceCalculationContext([]);
         $context->totalAmount = 50000;
-        $context->user = $user;
+        $context->meta['identity'] = ['profileLevel' => 'bronze'];
 
         $action = new AstNode('action_member_discount', ['rate' => 90]);
 

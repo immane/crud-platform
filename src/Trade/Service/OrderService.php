@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Trade\Service;
 
 use App\Core\Service\BaseService;
+use App\Core\Security\IdentityProfilePrincipalInterface;
 use App\Payment\DTO\CreateInvoiceRequest;
 use App\Payment\DTO\PaymentRefundResult;
 use App\Payment\DTO\PaymentResult;
@@ -49,9 +50,14 @@ class OrderService extends BaseService implements OrderServiceInterface
     public function calculatePrices(array $items, string $currency = 'CNY', ?string $storeCode = null, array $meta = []): PriceCalculationResult
     {
         $context = new PriceCalculationContext($items, $currency);
-        $context->user = $this->user;
         $context->storeCode = $storeCode;
         $context->meta = $meta;
+        $identity = $this->identitySnapshot();
+        if ($identity !== null) {
+            $context->meta['identity'] = $identity;
+        } else {
+            unset($context->meta['identity']);
+        }
 
         $sortedCalculators = $this->getSortedCalculators();
         foreach ($sortedCalculators as $calculator) {
@@ -304,5 +310,18 @@ class OrderService extends BaseService implements OrderServiceInterface
         });
 
         return $calculators;
+    }
+
+    /** @return array{id: int|null, profileLevel: string|null}|null */
+    private function identitySnapshot(): ?array
+    {
+        if (!$this->user instanceof IdentityProfilePrincipalInterface) {
+            return null;
+        }
+
+        return [
+            'id' => $this->user->getId(),
+            'profileLevel' => $this->user->getProfileLevel(),
+        ];
     }
 }

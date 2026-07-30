@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Identity\Entity;
 
 use App\Core\Security\UserUuidPrincipalInterface;
+use App\Core\Security\IdentityProfilePrincipalInterface;
 use App\Core\Utils\UUID;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -16,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\UniqueConstraint(name: 'uniq_users_email', columns: ['email'])]
 #[ORM\UniqueConstraint(name: 'uniq_users_phone', columns: ['phone'])]
 #[ORM\UniqueConstraint(name: 'uniq_users_uuid', columns: ['uuid'])]
-class User implements UserInterface, PasswordAuthenticatedUserInterface, UserUuidPrincipalInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, UserUuidPrincipalInterface, IdentityProfilePrincipalInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -149,6 +150,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserUui
     public function getProfile(): ?Profile
     {
         return $this->profile;
+    }
+
+    public function getProfileLevel(): ?string
+    {
+        return $this->profile?->getLevel();
     }
 
     public function setProfile(?Profile $profile): self

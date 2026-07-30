@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Promotion\Strategy;
 
-use App\Identity\Entity\Profile;
-use App\Identity\Entity\User;
 use App\Promotion\Service\Dsl\AstNode;
 use App\Trade\Service\Pricing\PriceCalculationContext;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
@@ -15,11 +13,11 @@ class MemberDiscountStrategy implements PromotionStrategyInterface
 {
     /** @var array<string, int> */
     private const LEVEL_RANK = [
-        Profile::LEVEL_BRONZE => 0,
-        Profile::LEVEL_SILVER => 1,
-        Profile::LEVEL_GOLD => 2,
-        Profile::LEVEL_PLATINUM => 3,
-        Profile::LEVEL_DIAMOND => 4,
+        'bronze' => 0,
+        'silver' => 1,
+        'gold' => 2,
+        'platinum' => 3,
+        'diamond' => 4,
     ];
 
     public static function supportedType(): string
@@ -35,12 +33,12 @@ class MemberDiscountStrategy implements PromotionStrategyInterface
         $minLevel = $config['min_level'] ?? 'bronze';
         $rate = (float) ($action->data['rate'] ?? 100);
 
-        $user = $context->user;
-        if (!$user instanceof User || !$user->getProfile()) {
+        $identity = $context->meta['identity'] ?? null;
+        if (!is_array($identity) || !is_string($identity['profileLevel'] ?? null)) {
             return;
         }
 
-        $userLevel = $user->getProfile()->getLevel();
+        $userLevel = $identity['profileLevel'];
         $minRank = self::LEVEL_RANK[$minLevel] ?? 0;
         $userRank = self::LEVEL_RANK[$userLevel] ?? 0;
 
