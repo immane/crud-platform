@@ -31,7 +31,7 @@ Open:
 - API: `http://localhost:8080`
 - Store API: `http://localhost:8081`
 - Inventory API: `http://localhost:8082`
-- Payment API: `http://localhost:8083`
+- Payment runtime smoke: `http://localhost:8083` (not traffic-ready)
 - OpenAPI UI: `http://localhost:8080/api/doc`
 - Mailpit: `http://localhost:8025`
 

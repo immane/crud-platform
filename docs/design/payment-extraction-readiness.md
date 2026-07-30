@@ -11,7 +11,7 @@
 - The monolith temporarily loads Payment through the `crud-platform/payment-app` Composer path package; root routes, Doctrine mapping, services, PHPStan, Deptrac, and Rector point to that package.
 - The Payment baseline migration owns `payment_invoice`, `payment_outbox_message`, and `payment_payer_directory` — three Payment-owned tables with no foreign keys to non-Payment tables.
 - Payment invoices use a Payment-owned `payer_uuid` scalar instead of an ORM association to Identity `users`. The `payment_payer_directory` maps legacy numeric Identity IDs to UUIDs during the transition.
-- Payment's `InvoiceService` writes durable outbox rows; `app:payment:outbox:publish` publishes paid/failed/cancelled/refunded v1 contracts through the root async transport.
+- Payment's `InvoiceService` writes durable outbox rows; the transition host's `app:payment:outbox:publish` publishes paid/failed/cancelled/refunded v1 contracts through the root async transport.
 - Trade consumes those contracts via an idempotent `trade_consumed_event` inbox; the synchronous `OrderInvoiceListener` remains temporarily for observation.
 - Wallet uses a Core UUID-to-local-ID contract, and WeChat resolves its own user relation by UUID. Payment no longer imports Identity entities or repositories.
 - Root Dockerfile copies `apps/payment` before `composer install`, and the root scheduler publishes Payment outbox rows independently.
@@ -39,11 +39,13 @@ Do not remove the synchronous listener until the following have been observed:
 ## Remaining Extraction Work
 
 1. Introduce the shared broker and schema-versioned serializer required for an
-   independent Payment worker and database.
+   independent Payment worker and database. Do not route Payment traffic to
+   `payment-app` before this is complete: its local Doctrine transport cannot
+   deliver lifecycle events to Trade.
 2. Disable and remove the synchronous `OrderInvoiceListener` after the durable
    path has met the observation criteria.
-3. Extract Payment source, its baseline schema, and a dedicated
-   `apps/payment` runtime using the Store and Inventory transition-host pattern.
+3. Add Gateway-issued authentication before exposing protected Payment routes;
+   the current standalone security provider is intentionally a placeholder.
 4. Move Payment HTTP traffic, worker, and scheduler behind Gateway shadow
    routing, then remove the monolith host assembly.
 5. Extract Wallet only after its Payment gateway and adjustment contracts no

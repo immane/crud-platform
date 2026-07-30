@@ -48,7 +48,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 - API：`http://localhost:8080`
 - Store API：`http://localhost:8081`
 - Inventory API：`http://localhost:8082`
-- Payment API：`http://localhost:8083`
+- Payment runtime 冒煙：`http://localhost:8083`（尚未可切流）
 - OpenAPI：`http://localhost:8080/api/doc`
 - worker/scheduler 日誌：`docker compose logs -f worker scheduler`
 

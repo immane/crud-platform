@@ -17,10 +17,6 @@ services:
     volumes:
       - ./:/workspace
 
-  payment-app:
-    volumes:
-      - ./:/workspace
-
   database:
     ports:
       - "${MYSQL_PORT:-3306}:3306"

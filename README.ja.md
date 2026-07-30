@@ -55,7 +55,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 - API: `http://localhost:8080`
 - Store API: `http://localhost:8081`
 - Inventory API: `http://localhost:8082`
-- Payment API: `http://localhost:8083`
+- Payment runtime smoke: `http://localhost:8083`（トラフィック切替前）
 - OpenAPI: `http://localhost:8080/api/doc`
 - worker/scheduler ログ: `docker compose logs -f worker scheduler`
 
