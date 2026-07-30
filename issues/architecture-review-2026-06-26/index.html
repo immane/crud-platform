@@ -1757,7 +1757,7 @@
 </ul>
 <p><strong>Recommendation:</strong></p>
 <p>Add an explicit tag in <code>services_wechat.yaml</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">App\Wechat\Service\Gateway\WechatPayGateway</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">App\Identity\Wechat\Service\Gateway\WechatPayGateway</span><span class="p">:</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nt">arguments</span><span class="p">:</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">        </span><span class="nt">$notifyUrl</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(WECHAT_PAY_NOTIFY_URL)%&#39;</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;payment.gateway&#39;</span><span class="p p-Indicator">]</span>

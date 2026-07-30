@@ -1757,7 +1757,7 @@
 </ul>
 <p><strong>推荐：</strong></p>
 <p>在 <code>services_wechat.yaml</code> 中添加显式标签：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">App\Wechat\Service\Gateway\WechatPayGateway</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">App\Identity\Wechat\Service\Gateway\WechatPayGateway</span><span class="p">:</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nt">arguments</span><span class="p">:</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">        </span><span class="nt">$notifyUrl</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(WECHAT_PAY_NOTIFY_URL)%&#39;</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;payment.gateway&#39;</span><span class="p p-Indicator">]</span>
@@ -1849,7 +1849,7 @@
 <p><strong>影响：</strong> 客户端可能会请求非常大的 <code>limit</code>，从而导致大量数据库查询或大量序列化响应。</p>
 <p><strong>证据：</strong></p>
 <ul>
-<li><code>RestController::pagination()</code> 使用 <code>max(1, request limit)</code> 和默认的 <code>100</code>，但不限制上限。</li>
+<li><code>RestController::pagination()</code> 使用带有默认 <code>100</code> 的 <code>max(1, request limit)</code>，但不限制上限。</li>
 </ul>
 <p><strong>推荐：</strong></p>
 <p>添加全局最大值，例如 <code>min(200, max(1, $request-&gt;query-&gt;getInt('limit', 100)))</code>，或使最大值可配置。</p>

@@ -3453,7 +3453,7 @@ is ready.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>UserService</strong> (<code>App\Identity\Service\UserService</code>): encapsulates register, verifyPassword, changePassword, adminChangePassword, updateProfile. Auto-hashes passwords in <code>update()</code>.</p>
+<p><strong>UserService</strong> (<code>App\Identity\Main\Service\UserService</code>): encapsulates register, verifyPassword, changePassword, adminChangePassword, updateProfile. Auto-hashes passwords in <code>update()</code>.</p>
 <p><strong>Token management</strong>: RS256 JWT (7200s TTL), HMAC-SHA256 refresh tokens with rotation + reuse detection.</p>
 <p><strong>Translation</strong>: AuthController, OtpController, LoginController inject <code>TranslatorInterface</code> and pass error messages through <code>trans()</code>. JwtAuthenticator also translates <code>onAuthenticationFailure()</code> messages.</p>
 <h2 id="5-dynamic-query-system">5. Dynamic Query System<a class="headerlink" href="#5-dynamic-query-system" title="Permanent link">&para;</a></h2>

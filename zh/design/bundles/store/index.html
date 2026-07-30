@@ -4001,7 +4001,7 @@ Store端权威记录，集成事件也有同样的记录
   付款凭据、原始提供商回调或不必要的 PII。</li>
 </ul>
 <h3 id="72-tradeordercreatedv1">7.2 <code>trade.order.created.v1</code><a class="headerlink" href="#72-tradeordercreatedv1" title="Permanent link">&para;</a></h3>
-<p><strong>发布者：</strong> 订单创建提交后进行交易发件箱转发。</p>
+<p><strong>发布者：</strong> 订单创建提交后进行交易发件箱中继。</p>
 <p><strong>消费者：</strong> 商店<code>TradeOrderCreatedConsumer</code>。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">&quot;orderUuid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;trade-order-uuid&quot;</span><span class="p">,</span>
@@ -4092,7 +4092,7 @@ Store端权威记录，集成事件也有同样的记录
 </tr>
 <tr>
 <td><code>SYSTEM_ERROR</code></td>
-<td>重试预算已用完；需要操作员采取行动</td>
+<td>重试预算已用尽；需要操作员采取行动</td>
 </tr>
 </tbody>
 </table>
@@ -4313,7 +4313,7 @@ Store端权威记录，集成事件也有同样的记录
 </tbody>
 </table>
 <h3 id="94">9.4 店员操作<a class="headerlink" href="#94" title="Permanent link">&para;</a></h3>
-<p>商店工作人员不得使用通用 Trade <code>manage/orders</code> 路线，该路线是整个平台范围内的
+<p>商店员工不得使用通用 Trade <code>manage/orders</code> 路线，该路线是整个平台范围内的
 <code>ROLE_ADMIN</code> 端点。 Store 提供范围化的操作端点：</p>
 <table>
 <thead>

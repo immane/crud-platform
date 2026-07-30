@@ -2624,7 +2624,7 @@
 </tbody>
 </table>
 <p>负库存被记录而不是隐藏：余额和分类账保留
-由此产生的过度预订或随后的负现有数量。旗帜不能
+由此产生的过度预订或后来的负现有数量。旗帜不能
 默默地绕过账本条目或幂等性。</p>
 <h3 id="24">2.4 读取永远不会实现余额<a class="headerlink" href="#24" title="Permanent link">&para;</a></h3>
 <p>缺少<code>InventoryStock</code>记录意味着默认本地策略的余额为零；</p>
@@ -2644,7 +2644,7 @@
 是允许的，或者其他未来的股票突变。</p>
 <h3 id="25">2.5 本地交易和至少一次交付<a class="headerlink" href="#25" title="Permanent link">&para;</a></h3>
 <p>每个 Inventory 突变都会在一个 SQL 中写入其本地聚合及其传出事件
-交易。收件箱表通过 <code>eventId</code> 至少删除一次传递的重复数据；商业
+交易。收件箱表通过 <code>eventId</code> 至少删除一次传送的重复数据；商业
 记录添加唯一键以实现竞赛安全幂等性。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Inventory transaction:
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  consumed event + reservation + stock changes + ledger entries + outbox event
