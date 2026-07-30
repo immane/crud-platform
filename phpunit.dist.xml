@@ -36,9 +36,20 @@
             <directory>apps/payment/src</directory>
             <directory>apps/wallet/src</directory>
             <directory>apps/identity/src</directory>
+            <directory>apps/trade/src</directory>
             <directory>src</directory>
             <directory>packages/legacy-messenger-compat/src</directory>
             <directory>packages/platform-kernel/src</directory>
+            <!-- Root composition executes path packages from vendor/. -->
+            <directory>vendor/crud-platform/common-app/src</directory>
+            <directory>vendor/crud-platform/identity-app/src</directory>
+            <directory>vendor/crud-platform/inventory-app/src</directory>
+            <directory>vendor/crud-platform/legacy-messenger-compat/src</directory>
+            <directory>vendor/crud-platform/payment-app/src</directory>
+            <directory>vendor/crud-platform/store-app/src</directory>
+            <directory>vendor/crud-platform/trade-app/src</directory>
+            <directory>vendor/crud-platform/wallet-app/src</directory>
+            <directory>vendor/crud-platform/platform-kernel/src</directory>
         </include>
 
         <deprecationTrigger>
