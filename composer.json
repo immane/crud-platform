@@ -181,8 +181,8 @@
         "rector:types": "@php vendor/bin/rector process --config=rector-types.php --no-progress-bar --memory-limit=512M",
         "rector:types:check": "@php vendor/bin/rector process --config=rector-types.php --dry-run --no-progress-bar --memory-limit=512M",
         "deptrac": "@php vendor/bin/deptrac --config-file=deptrac.yaml --no-cache --fail-on-uncovered",
-        "coverage": "sh tools/coverage.sh",
-        "coverage:merge": "sh tools/coverage-merge.sh"
+        "coverage": "sh scripts/coverage/run.sh",
+        "coverage:merge": "sh scripts/coverage/merge.sh"
     },
     "conflict": {
         "symfony/symfony": "*"
