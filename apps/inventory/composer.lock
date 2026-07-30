@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "be9c2598a0d3bcb336c0e414e4a6e311",
+    "content-hash": "4920a498549ecc8367608d80ff7bb15a",
     "packages": [
         {
             "name": "crud-platform/integration-contracts",
@@ -61,11 +61,11 @@
         },
         {
             "name": "crud-platform/platform-kernel",
-            "version": "1.0.2-dev",
+            "version": "1.0.3-dev",
             "dist": {
                 "type": "path",
                 "url": "../../packages/platform-kernel",
-                "reference": "c5310d03bef4fc53d5907fd7e8cc1a7302586580"
+                "reference": "301cd21928ac282eb8f471f6a3705ac3706dd51b"
             },
             "require": {
                 "doctrine/collections": "^2.4",

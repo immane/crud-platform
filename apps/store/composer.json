@@ -33,7 +33,7 @@
         "php": ">=8.4",
         "crud-platform/integration-contracts": "^1.1.1@dev",
         "crud-platform/legacy-messenger-compat": "^1.0@dev",
-        "crud-platform/platform-kernel": "^1.0.1@dev",
+        "crud-platform/platform-kernel": "^1.0.3@dev",
         "doctrine/doctrine-bundle": "^3.2",
         "doctrine/doctrine-migrations-bundle": "^4.0",
         "doctrine/orm": "^3.6",
@@ -58,7 +58,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Store\\Tests\\": "tests/"
+            "App\\Tests\\": "tests/"
         }
     },
     "config": {
