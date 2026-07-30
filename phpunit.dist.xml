@@ -31,12 +31,16 @@
             restrictWarnings="true"
     >
         <include>
-            <directory>apps/store/src</directory>
+            <directory>src</directory>
+            <!-- Path repositories are symlinked so every suite records these canonical paths. -->
+            <directory>apps/common/src</directory>
+            <directory>apps/identity/src</directory>
             <directory>apps/inventory/src</directory>
             <directory>apps/payment/src</directory>
+            <directory>apps/store/src</directory>
+            <directory>apps/trade/src</directory>
             <directory>apps/wallet/src</directory>
-            <directory>apps/identity/src</directory>
-            <directory>src</directory>
+            <directory>packages/integration-contracts/src</directory>
             <directory>packages/legacy-messenger-compat/src</directory>
             <directory>packages/platform-kernel/src</directory>
         </include>

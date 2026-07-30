@@ -25,10 +25,10 @@ services:
             - '../src/Kernel.php'
 
     App\Core\:
-        resource: '../vendor/crud-platform/platform-kernel/src/'
+        resource: '%kernel.project_dir%/vendor/crud-platform/platform-kernel/src/'
         exclude:
-            - '../vendor/crud-platform/platform-kernel/src/Serializer/Normalizer/FlatNormalizer.php'
-            - '../vendor/crud-platform/platform-kernel/src/EventListener/*'
+            - '%kernel.project_dir%/vendor/crud-platform/platform-kernel/src/Serializer/Normalizer/FlatNormalizer.php'
+            - '%kernel.project_dir%/vendor/crud-platform/platform-kernel/src/EventListener/*'
 
     App\Core\EventListener\ExceptionInterceptor:
         tags:

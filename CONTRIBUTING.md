@@ -82,8 +82,9 @@ composer deptrac
 # Verify Doctrine Collection/Repository PHPDoc rules without modifying files
 composer rector:types:check
 
-# Run all tests (CI enforces 90% minimum coverage)
-XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text
+# Run every suite and enforce the 90% aggregate line-coverage gate
+# (prepare the root test database first)
+composer coverage
 
 # Run tests for a specific module
 vendor/bin/phpunit tests/Trade/

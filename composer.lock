@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f2705fb702686a06ac25811f04dc5153",
+    "content-hash": "7eb4c43787ac0deb8a618eaa20b71328",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -340,7 +340,7 @@
             "dist": {
                 "type": "path",
                 "url": "apps/common",
-                "reference": "ee64cd5bb06289c6e712369ada6fd960b8de9b5c"
+                "reference": "e95cda608d238d038600e09613c92fbc0d5981de"
             },
             "require": {
                 "crud-platform/platform-kernel": "^1.0.3@dev",
@@ -389,7 +389,7 @@
             ],
             "description": "Common CMS and media storage application for CRUD Platform",
             "transport-options": {
-                "symlink": false,
+                "symlink": true,
                 "relative": true
             }
         },
@@ -399,7 +399,7 @@
             "dist": {
                 "type": "path",
                 "url": "apps/identity",
-                "reference": "7243285f8bfbd8c65ae43706086574f6d5bc1a54"
+                "reference": "379991b5bcf825633977a01ba8d0d3938c7e57cf"
             },
             "require": {
                 "alibabacloud/client": "^1.5",
@@ -420,6 +420,8 @@
                 "w7corp/easywechat": "^6.19"
             },
             "require-dev": {
+                "crud-platform/integration-contracts": "^1.1.3@dev",
+                "crud-platform/payment-app": "^1.0@dev",
                 "phpunit/phpunit": "^12.5"
             },
             "type": "project",
@@ -437,7 +439,7 @@
             },
             "autoload-dev": {
                 "psr-4": {
-                    "App\\Identity\\Main\\Tests\\": "tests/"
+                    "App\\Tests\\": "tests/"
                 }
             },
             "scripts": {
@@ -450,7 +452,7 @@
             ],
             "description": "Identity and WeChat login application for CRUD Platform",
             "transport-options": {
-                "symlink": false,
+                "symlink": true,
                 "relative": true
             }
         },
@@ -460,7 +462,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/integration-contracts",
-                "reference": "31c5fb3c6271c12adc05983ec4fb54f4ccb161d1"
+                "reference": "ebbe6557ee220b4ce92a8ee29d5a278afedaa141"
             },
             "require": {
                 "php": ">=8.4"
@@ -476,7 +478,7 @@
             ],
             "description": "Transport-neutral integration message carriers for CRUD Platform.",
             "transport-options": {
-                "symlink": false,
+                "symlink": true,
                 "relative": true
             }
         },
@@ -486,12 +488,12 @@
             "dist": {
                 "type": "path",
                 "url": "apps/inventory",
-                "reference": "686b946a5d75b1d9ef37ba6e1b2867daadc7478c"
+                "reference": "dcb3d49ab831bbad10f8017e8f3ff1307f72ebff"
             },
             "require": {
                 "crud-platform/integration-contracts": "^1.1.1@dev",
                 "crud-platform/legacy-messenger-compat": "^1.0@dev",
-                "crud-platform/platform-kernel": "^1.0.1@dev",
+                "crud-platform/platform-kernel": "^1.0.3@dev",
                 "doctrine/doctrine-bundle": "^3.2",
                 "doctrine/doctrine-migrations-bundle": "^4.0",
                 "doctrine/orm": "^3.6",
@@ -524,7 +526,7 @@
             },
             "autoload-dev": {
                 "psr-4": {
-                    "App\\Inventory\\Tests\\": "tests/"
+                    "App\\Tests\\": "tests/"
                 }
             },
             "scripts": {
@@ -540,7 +542,7 @@
             ],
             "description": "Inventory application for CRUD Platform",
             "transport-options": {
-                "symlink": false,
+                "symlink": true,
                 "relative": true
             }
         },
@@ -550,7 +552,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/legacy-messenger-compat",
-                "reference": "7f0998970ba67e0e88a17a5625cc1fca9869065c"
+                "reference": "6063a62d2d40d0d901a3609dbf707d201445ead5"
             },
             "require": {
                 "php": ">=8.4"
@@ -567,7 +569,7 @@
             ],
             "description": "Historical native-PHP Messenger wrappers for queued CRUD Platform messages.",
             "transport-options": {
-                "symlink": false,
+                "symlink": true,
                 "relative": true
             }
         },
@@ -577,11 +579,11 @@
             "dist": {
                 "type": "path",
                 "url": "apps/payment",
-                "reference": "3ce794a90c428eab62c05b61bd90d7242147ceac"
+                "reference": "739995c5a43301cea5af70eeae90927a07e612ce"
             },
             "require": {
                 "crud-platform/integration-contracts": "^1.1.1@dev",
-                "crud-platform/platform-kernel": "^1.0.1@dev",
+                "crud-platform/platform-kernel": "^1.0.3@dev",
                 "doctrine/doctrine-bundle": "^3.2",
                 "doctrine/doctrine-migrations-bundle": "^4.0",
                 "doctrine/orm": "^3.6",
@@ -618,7 +620,7 @@
             },
             "autoload-dev": {
                 "psr-4": {
-                    "App\\Payment\\Tests\\": "tests/"
+                    "App\\Tests\\": "tests/"
                 }
             },
             "scripts": {
@@ -634,7 +636,7 @@
             ],
             "description": "Payment application for CRUD Platform",
             "transport-options": {
-                "symlink": false,
+                "symlink": true,
                 "relative": true
             }
         },
@@ -644,7 +646,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/platform-kernel",
-                "reference": "301cd21928ac282eb8f471f6a3705ac3706dd51b"
+                "reference": "4f540dd13666a921055d411c117dd5748135e762"
             },
             "require": {
                 "doctrine/collections": "^2.4",
@@ -680,7 +682,7 @@
             ],
             "description": "Shared Symfony platform kernel for CRUD Platform applications",
             "transport-options": {
-                "symlink": false,
+                "symlink": true,
                 "relative": true
             }
         },
@@ -690,12 +692,12 @@
             "dist": {
                 "type": "path",
                 "url": "apps/store",
-                "reference": "7b0098ca2d5479dc5b1f67af1c16eb36e0b5adde"
+                "reference": "64aaeae1fca2226b23aa2c9fd63e3fa2f9f4fa8e"
             },
             "require": {
                 "crud-platform/integration-contracts": "^1.1.1@dev",
                 "crud-platform/legacy-messenger-compat": "^1.0@dev",
-                "crud-platform/platform-kernel": "^1.0.1@dev",
+                "crud-platform/platform-kernel": "^1.0.3@dev",
                 "doctrine/doctrine-bundle": "^3.2",
                 "doctrine/doctrine-migrations-bundle": "^4.0",
                 "doctrine/orm": "^3.6",
@@ -728,7 +730,7 @@
             },
             "autoload-dev": {
                 "psr-4": {
-                    "App\\Store\\Tests\\": "tests/"
+                    "App\\Tests\\": "tests/"
                 }
             },
             "scripts": {
@@ -744,7 +746,7 @@
             ],
             "description": "Store application for CRUD Platform",
             "transport-options": {
-                "symlink": false,
+                "symlink": true,
                 "relative": true
             }
         },
@@ -754,7 +756,7 @@
             "dist": {
                 "type": "path",
                 "url": "apps/trade",
-                "reference": "74f276507b6afecfc1d256496adf90b8501b1690"
+                "reference": "98076f6b0ce81c98dba5c7923a2900518b7fa901"
             },
             "require": {
                 "crud-platform/integration-contracts": "^1.1.3@dev",
@@ -780,6 +782,7 @@
                 "symfony/yaml": "8.1.*"
             },
             "require-dev": {
+                "crud-platform/identity-app": "^1.0@dev",
                 "phpunit/phpunit": "^12.5"
             },
             "type": "project",
@@ -797,7 +800,7 @@
             },
             "autoload-dev": {
                 "psr-4": {
-                    "App\\Trade\\Tests\\": "tests/"
+                    "App\\Tests\\": "tests/"
                 }
             },
             "scripts": {
@@ -813,7 +816,7 @@
             ],
             "description": "Trade and Promotion application for CRUD Platform",
             "transport-options": {
-                "symlink": false,
+                "symlink": true,
                 "relative": true
             }
         },
@@ -823,11 +826,11 @@
             "dist": {
                 "type": "path",
                 "url": "apps/wallet",
-                "reference": "ffda57ee5bb428f596d40290d9b2f0e2c9e00a6e"
+                "reference": "50f40a0d28e2e002e46a42226e00869f768376af"
             },
             "require": {
                 "crud-platform/integration-contracts": "^1.1.3@dev",
-                "crud-platform/platform-kernel": "^1.0.2@dev",
+                "crud-platform/platform-kernel": "^1.0.3@dev",
                 "doctrine/doctrine-bundle": "^3.2",
                 "doctrine/doctrine-migrations-bundle": "^4.0",
                 "doctrine/orm": "^3.6",
@@ -838,6 +841,7 @@
                 "symfony/translation": "8.1.*"
             },
             "require-dev": {
+                "crud-platform/identity-app": "^1.0@dev",
                 "phpunit/phpunit": "^12.5"
             },
             "type": "project",
@@ -846,12 +850,22 @@
                     "App\\Wallet\\": "src/"
                 }
             },
+            "autoload-dev": {
+                "psr-4": {
+                    "App\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "@php vendor/bin/phpunit --configuration phpunit.xml"
+                ]
+            },
             "license": [
                 "Apache-2.0"
             ],
             "description": "Wallet application for CRUD Platform",
             "transport-options": {
-                "symlink": false,
+                "symlink": true,
                 "relative": true
             }
         },
@@ -11183,25 +11197,87 @@
             "time": "2025-02-07T04:59:38+00:00"
         },
         {
-            "name": "phpunit/phpunit",
-            "version": "12.5.30",
+            "name": "phpunit/phpcov",
+            "version": "11.0.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "900400a5b616d6fb306f9549f6da33ba615d3fbb"
+                "url": "https://github.com/sebastianbergmann/phpcov.git",
+                "reference": "33d0c31e5fbed58ecef62283fe14974eea80bb5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/900400a5b616d6fb306f9549f6da33ba615d3fbb",
-                "reference": "900400a5b616d6fb306f9549f6da33ba615d3fbb",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpcov/zipball/33d0c31e5fbed58ecef62283fe14974eea80bb5a",
+                "reference": "33d0c31e5fbed58ecef62283fe14974eea80bb5a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.3",
+                "phpunit/php-code-coverage": "^12.5.3",
+                "phpunit/php-file-iterator": "^6.0.1",
+                "phpunit/phpunit": "^12.5.9",
+                "sebastian/cli-parser": "^4.2",
+                "sebastian/diff": "^7.0",
+                "sebastian/version": "^6.0"
+            },
+            "bin": [
+                "phpcov"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "11.0-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian Bergmann",
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
+                }
+            ],
+            "description": "CLI frontend for php-code-coverage",
+            "homepage": "https://github.com/sebastianbergmann/phpcov",
+            "support": {
+                "issues": "https://github.com/sebastianbergmann/phpcov/issues",
+                "source": "https://github.com/sebastianbergmann/phpcov/tree/11.0.4"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-02-06T06:43:00+00:00"
+        },
+        {
+            "name": "phpunit/phpunit",
+            "version": "12.5.33",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/phpunit.git",
+                "reference": "b98e028a26c5c5ba7e4a54be96ccf35f2914d184"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b98e028a26c5c5ba7e4a54be96ccf35f2914d184",
+                "reference": "b98e028a26c5c5ba7e4a54be96ccf35f2914d184",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
+                "ext-filter": "*",
                 "ext-json": "*",
                 "ext-libxml": "*",
                 "ext-mbstring": "*",
-                "ext-xml": "*",
                 "ext-xmlwriter": "*",
                 "myclabs/deep-copy": "^1.13.4",
                 "phar-io/manifest": "^2.0.4",
@@ -11262,7 +11338,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.30"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.33"
             },
             "funding": [
                 {
@@ -11270,7 +11346,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-06-15T13:12:30+00:00"
+            "time": "2026-07-28T13:58:09+00:00"
         },
         {
             "name": "predis/predis",

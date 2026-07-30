@@ -75,20 +75,20 @@ class Math
     public static function is_finite(int|float $x): bool { return is_finite($x); }
     public static function is_infinite(int|float $x): bool { return is_infinite($x); }
     public static function is_nan(int|float $x): bool { return is_nan($x); }
-    public static function lcg_value(): float { return lcg_value(); }
+    public static function lcg_value(): float { return random_int(0, PHP_INT_MAX) / PHP_INT_MAX; }
     public static function log(int|float $x): float { return log($x); }
     public static function log10(int|float $x): float { return log10($x); }
     public static function log1p(int|float $x): float { return log1p($x); }
     public static function max(mixed $value, mixed ...$values): mixed { return max($value, ...$values); }
     public static function min(mixed $value, mixed ...$values): mixed { return min($value, ...$values); }
     public static function mt_getrandmax(): int { return mt_getrandmax(); }
-    public static function mt_rand(int $x): int { return mt_rand($x); }
+    public static function mt_rand(int $min, int $max): int { return mt_rand($min, $max); }
     public static function mt_srand(?int $seed = null, int $mode = MT_RAND_MT19937): void { mt_srand($seed, $mode); }
     public static function octdec(string $x): int|float { return octdec($x); }
     public static function pi(): float { return pi(); }
     public static function pow(int|float $x, int|float $y): int|float { return pow($x, $y); }
     public static function rad2deg(int|float $x): float { return rad2deg($x); }
-    public static function rand(int $x): int { return rand($x); }
+    public static function rand(int $min, int $max): int { return rand($min, $max); }
     public static function round(int|float $num, int $precision = 0, int $mode = PHP_ROUND_HALF_UP): float
     {
         return match ($mode) {
