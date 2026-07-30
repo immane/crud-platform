@@ -78,7 +78,7 @@ class WalletPaymentDeductionService
     {
         $this->validate($invoice, $amount, $currency, $type);
 
-        $existing = $this->deductionRepository->findWalletBalanceByInvoice($invoice);
+        $existing = $this->deductionRepository->findWalletBalanceByInvoiceId($invoice->getUuid());
         if ($existing instanceof WalletPaymentDeduction) {
             if ($existing->getStatus() === WalletPaymentDeduction::STATUS_APPLIED) {
                 return $existing;
@@ -103,7 +103,7 @@ class WalletPaymentDeductionService
         }
 
         $referenceId = $options['deductionReferenceId'] ?? ('invoice-adjustment-wallet-balance-' . $invoice->getUuid());
-        $deduction = new WalletPaymentDeduction($invoice, $payerId, $wallet, $systemWalletId, $amount, $currency, $referenceId);
+        $deduction = new WalletPaymentDeduction($invoice->getUuid(), $invoice->getOutTradeNo(), $payerId, $wallet, $systemWalletId, $amount, $currency, $referenceId);
         $this->em->persist($deduction);
 
         try {
@@ -131,7 +131,7 @@ class WalletPaymentDeductionService
 
     public function release(Invoice $invoice, string $reason): ?WalletPaymentDeduction
     {
-        $deduction = $this->deductionRepository->findAppliedByInvoice($invoice);
+        $deduction = $this->deductionRepository->findAppliedByInvoiceId($invoice->getUuid());
         if (!$deduction instanceof WalletPaymentDeduction) {
             return null;
         }
@@ -141,7 +141,7 @@ class WalletPaymentDeductionService
 
     public function refund(Invoice $invoice, string $reason): ?WalletPaymentDeduction
     {
-        $deduction = $this->deductionRepository->findAppliedByInvoice($invoice);
+        $deduction = $this->deductionRepository->findAppliedByInvoiceId($invoice->getUuid());
         if (!$deduction instanceof WalletPaymentDeduction) {
             return null;
         }
@@ -152,7 +152,7 @@ class WalletPaymentDeductionService
     public function sumAppliedAmount(Invoice $invoice): int
     {
         $sum = 0;
-        foreach ($this->deductionRepository->findAppliedDeductions($invoice) as $deduction) {
+        foreach ($this->deductionRepository->findAppliedDeductionsByInvoiceId($invoice->getUuid()) as $deduction) {
             $sum += $deduction->getAmount();
         }
 
@@ -161,7 +161,7 @@ class WalletPaymentDeductionService
 
     public function findApplied(Invoice $invoice): ?WalletPaymentDeduction
     {
-        return $this->deductionRepository->findAppliedByInvoice($invoice);
+        return $this->deductionRepository->findAppliedByInvoiceId($invoice->getUuid());
     }
 
     public function hasApplied(Invoice $invoice): bool

@@ -46,7 +46,7 @@ final class WalletPaymentDeductionServiceIntegrationTest extends IntegrationKern
         self::assertSame(WalletPaymentDeduction::STATUS_APPLIED, $deduction->getStatus());
         self::assertSame(250, $this->deductionService->sumAppliedAmount($invoice));
         self::assertSame($deduction, $this->deductionService->findApplied($invoice));
-        self::assertSame($deduction, $this->deductionRepository->findWalletBalanceByInvoice($invoice));
+        self::assertSame($deduction, $this->deductionRepository->findWalletBalanceByInvoiceId($invoice->getUuid()));
 
         $same = $this->deductionService->apply($invoice, 250, 'CNY', ['systemWalletId' => $systemWallet->getId()]);
         self::assertSame($deduction->getId(), $same->getId());
@@ -211,7 +211,7 @@ final class WalletPaymentDeductionServiceIntegrationTest extends IntegrationKern
         } catch (\Throwable) {
         }
 
-        $deduction = $this->deductionRepository->findWalletBalanceByInvoice($invoice);
+        $deduction = $this->deductionRepository->findWalletBalanceByInvoiceId($invoice->getUuid());
         self::assertNotNull($deduction);
         self::assertSame(WalletPaymentDeduction::STATUS_FAILED, $deduction->getStatus());
         self::assertNotEmpty($deduction->getMetadata()['failedReason']);

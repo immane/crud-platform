@@ -42,10 +42,6 @@ deptrac:
       - App\Identity\Entity\User
     App\Wallet\Entity\Wallet:
       - App\Identity\Entity\User
-    App\Wallet\Entity\WalletPaymentDeduction:
-      - App\Payment\Entity\Invoice
-    App\Wallet\Repository\WalletPaymentDeductionRepository:
-      - App\Payment\Entity\Invoice
     App\Wallet\Service\Payment\WalletBalanceAdjustmentProvider:
       - App\Payment\Entity\Invoice
     App\Wallet\Service\Payment\WalletGateway:

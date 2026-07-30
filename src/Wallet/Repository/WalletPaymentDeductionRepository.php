@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Wallet\Repository;
 
-use App\Payment\Entity\Invoice;
 use App\Wallet\Entity\WalletPaymentDeduction;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,23 +18,23 @@ class WalletPaymentDeductionRepository extends ServiceEntityRepository
         parent::__construct($registry, WalletPaymentDeduction::class);
     }
 
-    public function findWalletBalanceByInvoice(Invoice $invoice): ?WalletPaymentDeduction
+    public function findWalletBalanceByInvoiceId(string $invoiceId): ?WalletPaymentDeduction
     {
-        return $this->findOneBy(['invoiceId' => $invoice->getUuid(), 'type' => WalletPaymentDeduction::TYPE_WALLET_BALANCE]);
+        return $this->findOneBy(['invoiceId' => $invoiceId, 'type' => WalletPaymentDeduction::TYPE_WALLET_BALANCE]);
     }
 
-    public function findAppliedByInvoice(Invoice $invoice): ?WalletPaymentDeduction
+    public function findAppliedByInvoiceId(string $invoiceId): ?WalletPaymentDeduction
     {
         return $this->findOneBy([
-            'invoiceId' => $invoice->getUuid(),
+            'invoiceId' => $invoiceId,
             'type' => WalletPaymentDeduction::TYPE_WALLET_BALANCE,
             'status' => WalletPaymentDeduction::STATUS_APPLIED,
         ]);
     }
 
     /** @return WalletPaymentDeduction[] */
-    public function findAppliedDeductions(Invoice $invoice): array
+    public function findAppliedDeductionsByInvoiceId(string $invoiceId): array
     {
-        return $this->findBy(['invoiceId' => $invoice->getUuid(), 'status' => WalletPaymentDeduction::STATUS_APPLIED]);
+        return $this->findBy(['invoiceId' => $invoiceId, 'status' => WalletPaymentDeduction::STATUS_APPLIED]);
     }
 }

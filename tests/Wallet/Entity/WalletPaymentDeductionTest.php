@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Wallet\Entity;
 
 use App\Identity\Entity\User;
-use App\Payment\Entity\Invoice;
 use App\Wallet\Entity\Wallet;
 use App\Wallet\Entity\WalletPaymentDeduction;
 use PHPUnit\Framework\TestCase;
@@ -14,13 +13,13 @@ final class WalletPaymentDeductionTest extends TestCase
 {
     public function testDefaultsAndStateMarkers(): void
     {
-        [$invoice, $wallet] = self::invoiceAndWallet();
-        $deduction = new WalletPaymentDeduction($invoice, 1, $wallet, 2, 300, 'cny', 'ref-1');
+        [$invoiceId, $invoiceNo, $wallet] = self::invoiceAndWallet();
+        $deduction = new WalletPaymentDeduction($invoiceId, $invoiceNo, 1, $wallet, 2, 300, 'cny', 'ref-1');
 
         self::assertNull($deduction->getId());
         self::assertNotSame('', $deduction->getUuid());
-        self::assertSame($invoice->getUuid(), $deduction->getInvoiceId());
-        self::assertSame($invoice->getOutTradeNo(), $deduction->getInvoiceNo());
+        self::assertSame($invoiceId, $deduction->getInvoiceId());
+        self::assertSame($invoiceNo, $deduction->getInvoiceNo());
         self::assertSame(1, $deduction->getPayerId());
         self::assertSame($wallet, $deduction->getWallet());
         self::assertSame(2, $deduction->getSystemWalletId());
@@ -65,23 +64,22 @@ final class WalletPaymentDeductionTest extends TestCase
 
     public function testStoresProvidedPayerId(): void
     {
-        [, $wallet] = self::invoiceAndWallet();
+        [, , $wallet] = self::invoiceAndWallet();
 
-        $deduction = new WalletPaymentDeduction(new Invoice(), 2, $wallet, 2, 300, 'CNY', 'ref-1');
+        $deduction = new WalletPaymentDeduction('invoice-id', 'invoice-no', 2, $wallet, 2, 300, 'CNY', 'ref-1');
 
         self::assertSame(2, $deduction->getPayerId());
     }
 
-    /** @return array{Invoice, Wallet} */
+    /** @return array{string, string, Wallet} */
     private static function invoiceAndWallet(): array
     {
         $user = new User();
         self::setId($user, 1);
-        $invoice = (new Invoice())->setAmount(1000)->setCurrency('cny')->setPayerUuid($user->getUuid());
         $wallet = new Wallet($user, 'CNY');
         self::setId($wallet, 1);
 
-        return [$invoice, $wallet];
+        return ['invoice-id', 'invoice-no', $wallet];
     }
 
     private static function setId(object $object, int $id): void

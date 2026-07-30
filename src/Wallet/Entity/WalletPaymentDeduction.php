@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Wallet\Entity;
 
 use App\Core\Utils\UUID;
-use App\Payment\Entity\Invoice;
 use App\Wallet\Repository\WalletPaymentDeductionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -87,11 +86,11 @@ class WalletPaymentDeduction
     #[ORM\Column(name: 'refunded_at', type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $refundedAt = null;
 
-    public function __construct(Invoice $invoice, int $payerId, Wallet $wallet, int $systemWalletId, int $amount, string $currency, string $referenceId)
+    public function __construct(string $invoiceId, string $invoiceNo, int $payerId, Wallet $wallet, int $systemWalletId, int $amount, string $currency, string $referenceId)
     {
         $this->uuid = UUID::v4();
-        $this->invoiceId = $invoice->getUuid();
-        $this->invoiceNo = $invoice->getOutTradeNo();
+        $this->invoiceId = $invoiceId;
+        $this->invoiceNo = $invoiceNo;
         $this->payerId = $payerId;
         $this->wallet = $wallet;
         $this->systemWalletId = $systemWalletId;
