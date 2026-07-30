@@ -2319,7 +2319,7 @@
 
 <h1 id="_1">贸易捆绑设计<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>Trade 捆绑包 (<code>src/Trade/</code>) 是电子商务模块。它实现了产品、规格、
+<p>Trade 应用程序 (<code>apps/trade/src/Trade/</code>) 是电子商务模块。它实现了产品、规格、
 具有可插入价格计算管道和基于 Symfony Workflow 的订单、订单项目
 命令状态机。</p>
 </blockquote>
@@ -2327,7 +2327,7 @@
 <h2 id="1">1. 概述<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
 <p>Trade提供完整的订单管理系统：</p>
 <ul>
-<li><strong>产品</strong>具有多种<strong>规格</strong>（类似 SKU 的变体和定价）</li>
+<li><strong>产品</strong>具有多种<strong>规格</strong>（具有定价的类似SKU的变体）</li>
 <li><strong>订单</strong> 具有状态机生命周期（草稿 -&gt; 已完成）</li>
 <li><strong>订单商品</strong>带有价格快照以确保历史准确性</li>
 <li><strong>价格计算管道</strong>：具有优先顺序的可插拔计算器</li>

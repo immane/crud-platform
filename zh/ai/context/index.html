@@ -3082,6 +3082,11 @@ consumes <code>payment.invoice.{paid,failed,cancelled,refunded}.v1</code> neutra
 Inbox handler for durable lifecycle integration. Cutover is deferred: the monolith
 remains the production host until all remaining modules are extracted and Gateway
 routing is ready.</p>
+<p><code>apps/trade</code> now exists as a fully extracted Symfony application with its own
+<code>App\Trade\Kernel</code>, Composer lock, configuration, migrations, tests, and FrankenPHP
+Docker image. It owns both <code>App\Trade\*</code> and <code>App\Promotion\*</code>; Payment remains a
+temporary direct composition dependency while Trade consumes its durable invoice
+lifecycle carriers. The monolith loads Trade through <code>crud-platform/trade-app</code>.</p>
 <p><code>apps/wallet</code> now exists as a fully extracted Symfony application with its own
 <code>App\Wallet\Kernel</code>, Composer lock, config, migrations, tests, and FrankenPHP
 Docker image. It owns all Wallet source under <code>apps/wallet/src/</code> — the single
