@@ -1,8 +1,6 @@
 # CRUD Platform
 
-CRUD Platform is the evolution of `crud-skeleton`: a Symfony 8.1 backend that
-starts from a modular CRUD foundation and is being prepared for a
-multi-application microservice architecture.
+CRUD Platform is the evolution of [crud-skeleton](https://github.com/immane/crud-skeleton): A production-oriented Symfony microservices platform evolved from modular monolith architecture, featuring DDD, service isolation, and event-driven communication.
 
 > Chinese (Simplified): [README.zh-cn.md](README.zh-cn.md) · Chinese (Traditional): [README.zh-hant.md](README.zh-hant.md) · Japanese: [README.ja.md](README.ja.md)
 
@@ -31,14 +29,14 @@ The transition rules, target directory structure, and extraction gates are in
 ```
                     ┌──────────────────────────────────────────────┐
                     │              API Gateway / Edge              │
-                    └──────┬──────┬──────┬──────┬──────┬──────┬────┘
-                           │      │      │      │      │      │
-    ┌──────────┐  ┌────────┴─┐ ┌──┴───┐ ┌┴──────┐ ┌┴─────┐ ┌┴──────┐
+                    └──────┬──────┬──────┬───────────┬────────┬────┘
+                           │      │      │           │        │ 
+    ┌──────────┐  ┌────────┴─┐ ┌──┴───┐ ┌┴──────┐ ┌──┴───┐ ┌──┴────┐
     │ Identity │  │ Commerce │ │Store │ │Media  │ │Wallet│ │Payment│
     │  :8085   │  │  :8087   │ │:8081 │ │:8086  │ │:8084 │ │:8083  │
     └────┬─────┘  └────┬─────┘ └──┬───┘ └──┬────┘ └──┬───┘ └───┬───┘
-         │              │          │        │         │         │
-    ┌────┴────┐   ┌─────┴─────┐ ┌─┴───┐ ┌──┴───┐ ┌───┴───┐ ┌───┴───┐
+         │             │          │        │         │         │
+    ┌────┴────┐   ┌────┴──────┐ ┌─┴───┐ ┌──┴───┐ ┌───┴───┐ ┌───┴───┐
     │   DB    │   │    DB     │ │ DB  │ │  DB  │ │  DB   │ │  DB   │
     │identity │   │  trade    │ │store│ │common│ │wallet │ │payment│
     └─────────┘   └───────────┘ └─────┘ └──────┘ └───────┘ └───────┘
@@ -57,12 +55,12 @@ The transition rules, target directory structure, and extraction gates are in
 
 ```
   Trade                    Store                   Inventory
-  ┌──────────┐ outbox     ┌──────────┐ outbox     ┌──────────┐
+  ┌──────────┐ outbox      ┌──────────┐ outbox     ┌──────────┐
   │ order    │───order────→│store     │──reserve──→│material  │
   │ created  │  created.v1 │ order    │ request.v1 │ reserve  │
-  │          │←──accept───│ accepted │←─confirm───│ confirm  │
+  │          │←──accept────│ accepted │←─confirm───│ confirm  │
   │          │  accepted   │          │ confirmed  │          │
-  └──────────┘            └──────────┘            └──────────┘
+  └──────────┘             └──────────┘            └──────────┘
        │                        │                       │
        └── store.directory.upserted.v1 ──→ local projection
 ```
