@@ -1430,6 +1430,7 @@
 <li>交易通过幂等 <code>trade_consumed_event</code> 收件箱消耗这些合约；同步<code>OrderInvoiceListener</code>暂时保留以供观察。</li>
 <li>钱包使用Core UUID-to-local-ID合约，微信通过UUID解析自己的用户关系。付款不再导入身份实体或存储库。</li>
 <li>钱包扣除持久性将付款引用存储为 <code>invoice_id</code> 和 <code>invoice_no</code> 标量。其实体和存储库不再导入付款发票实体。</li>
+<li>电子钱包支付和扣除服务现在仅接受电子钱包拥有的标量引用。根 <code>App\Bridge\PaymentWallet</code> 适配器包含临时付款发票、HTTP 和 SPI 转换。</li>
 <li>根 Dockerfile 在 <code>composer install</code> 之前复制 <code>apps/payment</code>，并且根调度程序独立发布付款发件箱行。</li>
 <li>支付应用在独立模式下通过<code>PayerDirectoryReferenceResolver</code>解析自己的<code>PayerReferenceResolverInterface</code>；整体将其绑定到身份适配器。</li>
 <li>支付应用程序包含其自己的 <code>invoice</code> 工作流状态机。</li>
@@ -1454,18 +1455,18 @@ Inbox 使异步副本可以安全地重播：它记录事件 ID 并
 <ol>
 <li>引入共享代理和架构版本化序列化程序所需的
    独立的支付工作者和数据库。不要将支付流量路由至
-   <code>payment-app</code> 在此完成之前：其本地学说传输无法
+   <code>payment-app</code>在此完成之前：其本地学说传输无法
    将生命周期事件传递给 Trade。</li>
 <li>禁用并移除持久化后的同步<code>OrderInvoiceListener</code>
    路径已满足观察标准。</li>
 <li>在公开受保护的支付路由之前添加网关发出的身份验证；
    当前的独立安全提供程序故意充当占位符。</li>
 <li>将支付 HTTP 流量、工作线程和调度程序移至网关影子后面
-   布线，然后移除整体式主机组件。</li>
-<li>将钱包剩余的支付网关和调整适配器移出
-   钱包上下文，然后在这些合约不再公开后提取钱包
-   支付持久性或框架类型。演绎坚持已然
-   标量化；剩下的工作就是服务和 HTTP 适配器的边界。</li>
+   布线，然后移除整体式主机组件。
+5.替换Wallet剩余的Identity<code>User</code>关联和Trade的直接
+   使用标量合约进行钱包存储库/传输调用。然后提供钱包
+   具有自己的基线、应用程序运行时和共享消息传递/身份验证依赖项
+   在从过渡主机中提取它之前。</li>
 </ol>
 
 
