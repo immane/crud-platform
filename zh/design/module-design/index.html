@@ -1987,7 +1987,7 @@ CRUD 模块可以使用这种形状：</p>
 <ul>
 <li><strong>位置</strong>：<code>src/{Module}/Repository/{Name}Repository.php</code></li>
 <li><strong>命名空间</strong>：<code>App\{Module}\Repository</code></li>
-<li><strong>必须</strong>：扩展<code>ServiceEntityRepository</code></li>
+<li><strong>必须</strong>：扩展 <code>ServiceEntityRepository</code></li>
 <li><strong>必须</strong>：在构造函数中接受 <code>ManagerRegistry</code></li>
 <li><strong>五月</strong>：添加返回实体/数组/标量的自定义查询方法</li>
 <li><strong>不能</strong>：返回原始 <code>QueryBuilder</code> （这是服务层关心的问题）</li>
@@ -1998,10 +1998,10 @@ CRUD 模块可以使用这种形状：</p>
 <li><strong>位置</strong>：<code>src/{Module}/Service/{Name}ServiceInterface.php</code></li>
 <li><strong>命名空间</strong>：<code>App\{Module}\Service</code></li>
 <li><strong>必须</strong>：仅针对有意的进程内扩展点或
-  依赖倒置需求</li>
+  依赖倒置需要</li>
 <li><strong>五月</strong>：扩展旧版 CRUD 模块的 <code>App\Core\Service\BaseServiceInterface</code></li>
 <li><strong>应该</strong>：声明特定于用例的方法而不是公开通用的 CRUD
-  跨模块边界的API</li>
+  跨模块边界的 API</li>
 <li><strong>可能</strong>：添加特定于模块的方法签名</li>
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">interface CategoryServiceInterface extends BaseServiceInterface</span>

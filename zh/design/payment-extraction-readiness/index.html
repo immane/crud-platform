@@ -1432,6 +1432,7 @@
 <li>钱包扣除持久性将付款引用存储为 <code>invoice_id</code> 和 <code>invoice_no</code> 标量。其实体和存储库不再导入付款发票实体。</li>
 <li>电子钱包支付和扣除服务现在仅接受电子钱包拥有的标量引用。根 <code>App\Bridge\PaymentWallet</code> 适配器包含临时付款发票、HTTP 和 SPI 转换。</li>
 <li>钱包现在在其旧版 <code>user_id</code> 关联旁边双重写入 <code>owner_uuid</code>。应用程序钱包过滤和所有者级别对账使用UUID；旧外键将一直保留，直到钱包基线和贸易集成准备就绪。</li>
+<li>Trade 的传统钱包支付/退款路径使用中性的基于 UUID 的<code>WalletTransferPortInterface</code>；它不再导入钱包存储库或传输服务。</li>
 <li>根 Dockerfile 在 <code>composer install</code> 之前复制 <code>apps/payment</code>，并且根调度程序独立发布付款发件箱行。</li>
 <li>支付应用在独立模式下通过<code>PayerDirectoryReferenceResolver</code>解析自己的<code>PayerReferenceResolverInterface</code>；整体将其绑定到身份适配器。</li>
 <li>支付应用程序包含其自己的 <code>invoice</code> 工作流程状态机。</li>
@@ -1464,11 +1465,10 @@ Inbox 使异步副本可以安全地重播：它记录事件 ID 并
    当前的独立安全提供程序故意充当占位符。</li>
 <li>将支付 HTTP 流量、工作线程和调度程序移至网关影子后面
    布线，然后移除整体式主机组件。</li>
-<li>在生产中观察到 <code>owner_uuid</code> 后，删除 Wallet 的遗留问题
-   身份<code>User</code>关联并替换Trade的直接钱包
-   使用标量合约进行存储库/传输调用。然后向钱包提供
-   之前有自己的基线、应用程序运行时和共享消息传递/身份验证依赖项
-   从过渡宿主中提取它。</li>
+<li>在生产中观察到<code>owner_uuid</code>后，删除钱包的遗留问题
+   身份<code>User</code>关联。然后为 Wallet 提供自己的基线、app
+   运行时和共享消息传递/身份验证依赖项，然后再从
+   过渡主机。</li>
 </ol>
 
 
