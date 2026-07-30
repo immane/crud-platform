@@ -134,7 +134,14 @@ jobs:
         run: composer install --working-dir=apps/${{ matrix.app }} --prefer-dist --no-progress --no-interaction
 
       - name: Run unit suite with coverage
-        run: XDEBUG_MODE=coverage composer --working-dir=apps/${{ matrix.app }} test -- --coverage-text --display-deprecations
+        run: XDEBUG_MODE=coverage composer --working-dir=apps/${{ matrix.app }} test -- --coverage-php ../../build/coverage/raw/${{ matrix.app }}.cov --display-deprecations
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.app }}
+          path: build/coverage/raw/${{ matrix.app }}.cov
+          if-no-files-found: error
 
   root-tests:
     name: Root integration and remaining unit tests
@@ -203,7 +210,52 @@ jobs:
           php bin/console doctrine:schema:update --env=test --force --quiet
 
       - name: Run root suite with coverage
-        run: XDEBUG_MODE=coverage php -d memory_limit=512M bin/phpunit tests/ --coverage-text --display-deprecations
+        run: XDEBUG_MODE=coverage php -d memory_limit=512M vendor/bin/phpunit tests/ --coverage-php build/coverage/raw/root.cov --display-deprecations
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-root
+          path: build/coverage/raw/root.cov
+          if-no-files-found: error
+
+  coverage:
+    name: Aggregate coverage gate
+    needs: [app-unit-tests, root-tests]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: ctype, iconv, pdo
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Download coverage artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage-*
+          path: build/coverage/raw
+          merge-multiple: true
+
+      - name: Merge coverage and enforce line coverage
+        run: composer coverage:merge
+
+      - name: Upload aggregate coverage reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-aggregate
+          path: |
+            build/coverage/clover.xml
+            build/coverage/text.txt
+          if-no-files-found: error
 
   rector:
     runs-on: ubuntu-latest

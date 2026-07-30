@@ -5,6 +5,7 @@ namespace App\Tests\Core\Service;
 use App\Core\Service\DefaultServiceLocator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -61,6 +62,18 @@ final class DefaultServiceLocatorTest extends TestCase
         self::assertNull($locator->getTokenStorage());
     }
 
+    public function testGetRequestStackWhenExists(): void
+    {
+        $requestStack = new RequestStack();
+        $container = $this->createMock(ContainerInterface::class);
+        $container->method('has')->with('request_stack')->willReturn(true);
+        $container->method('get')->with('request_stack')->willReturn($requestStack);
+
+        $locator = new DefaultServiceLocator($container);
+
+        self::assertSame($requestStack, $locator->getRequestStack());
+    }
+
     public function testGetSerializerWhenExists(): void
     {
         $serializer = $this->createMock(\Symfony\Component\Serializer\SerializerInterface::class);
@@ -78,6 +91,23 @@ final class DefaultServiceLocatorTest extends TestCase
 
         $locator = new DefaultServiceLocator($container);
         self::assertNull($locator->getSerializer());
+    }
+
+    public function testGetSerializerFallsBackToTheLegacyServiceId(): void
+    {
+        $serializer = $this->createMock(\Symfony\Component\Serializer\SerializerInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
+        $container->method('get')->willReturnCallback(static function (string $id) use ($serializer): object {
+            if ($id === \Symfony\Component\Serializer\SerializerInterface::class) {
+                throw new \RuntimeException('not found');
+            }
+
+            return $serializer;
+        });
+
+        $locator = new DefaultServiceLocator($container);
+
+        self::assertSame($serializer, $locator->getSerializer());
     }
 
     public function testGetValidatorWhenExists(): void

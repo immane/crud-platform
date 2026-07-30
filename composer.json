@@ -8,70 +8,70 @@
             "type": "path",
             "url": "packages/integration-contracts",
             "options": {
-                "symlink": false
+                "symlink": true
             }
         },
         {
             "type": "path",
             "url": "packages/platform-kernel",
             "options": {
-                "symlink": false
+                "symlink": true
             }
         },
         {
             "type": "path",
             "url": "packages/legacy-messenger-compat",
             "options": {
-                "symlink": false
+                "symlink": true
             }
         },
         {
             "type": "path",
             "url": "apps/store",
             "options": {
-                "symlink": false
+                "symlink": true
             }
         },
         {
             "type": "path",
             "url": "apps/inventory",
             "options": {
-                "symlink": false
+                "symlink": true
             }
         },
         {
             "type": "path",
             "url": "apps/payment",
             "options": {
-                "symlink": false
+                "symlink": true
             }
         },
         {
             "type": "path",
             "url": "apps/wallet",
             "options": {
-                "symlink": false
+                "symlink": true
             }
         },
         {
             "type": "path",
             "url": "apps/identity",
             "options": {
-                "symlink": false
+                "symlink": true
             }
         },
         {
             "type": "path",
             "url": "apps/common",
             "options": {
-                "symlink": false
+                "symlink": true
             }
         },
         {
             "type": "path",
             "url": "apps/trade",
             "options": {
-                "symlink": false
+                "symlink": true
             }
         }
     ],
@@ -180,7 +180,9 @@
         "rector:fix": "@php vendor/bin/rector process --no-progress-bar --memory-limit=512M",
         "rector:types": "@php vendor/bin/rector process --config=rector-types.php --no-progress-bar --memory-limit=512M",
         "rector:types:check": "@php vendor/bin/rector process --config=rector-types.php --dry-run --no-progress-bar --memory-limit=512M",
-        "deptrac": "@php vendor/bin/deptrac --config-file=deptrac.yaml --no-cache --fail-on-uncovered"
+        "deptrac": "@php vendor/bin/deptrac --config-file=deptrac.yaml --no-cache --fail-on-uncovered",
+        "coverage": "sh tools/coverage.sh",
+        "coverage:merge": "sh tools/coverage-merge.sh"
     },
     "conflict": {
         "symfony/symfony": "*"
@@ -197,6 +199,7 @@
         "phpstan/phpstan": "^2.2",
         "phpstan/phpstan-doctrine": "^2.0",
         "phpstan/phpstan-symfony": "^2.0",
+        "phpunit/phpcov": "^11.0.4",
         "phpunit/phpunit": "^12.5.30",
         "predis/predis": "^3.5.1",
         "rector/rector": "^2.5",

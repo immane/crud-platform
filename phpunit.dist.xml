@@ -32,17 +32,17 @@
     >
         <include>
             <directory>src</directory>
-            <!-- Root composition executes path packages from vendor/. -->
-            <directory>vendor/crud-platform/common-app/src</directory>
-            <directory>vendor/crud-platform/identity-app/src</directory>
-            <directory>vendor/crud-platform/inventory-app/src</directory>
-            <directory>vendor/crud-platform/integration-contracts/src</directory>
-            <directory>vendor/crud-platform/legacy-messenger-compat/src</directory>
-            <directory>vendor/crud-platform/payment-app/src</directory>
-            <directory>vendor/crud-platform/store-app/src</directory>
-            <directory>vendor/crud-platform/trade-app/src</directory>
-            <directory>vendor/crud-platform/wallet-app/src</directory>
-            <directory>vendor/crud-platform/platform-kernel/src</directory>
+            <!-- Path repositories are symlinked so every suite records these canonical paths. -->
+            <directory>apps/common/src</directory>
+            <directory>apps/identity/src</directory>
+            <directory>apps/inventory/src</directory>
+            <directory>apps/payment/src</directory>
+            <directory>apps/store/src</directory>
+            <directory>apps/trade/src</directory>
+            <directory>apps/wallet/src</directory>
+            <directory>packages/integration-contracts/src</directory>
+            <directory>packages/legacy-messenger-compat/src</directory>
+            <directory>packages/platform-kernel/src</directory>
         </include>
 
         <deprecationTrigger>

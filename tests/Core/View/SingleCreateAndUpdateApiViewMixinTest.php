@@ -33,6 +33,7 @@ final class SingleCreateAndUpdateApiViewMixinTest extends TestCase
             public array $acceptedCreateProperties = [];
             public array $requiredUpdateProperties = [];
             public array $acceptedUpdateProperties = [];
+            public BaseServiceInterface $service;
 
             public function __construct(BaseServiceInterface $service, ?array $config)
             {

@@ -133,6 +133,24 @@ final class MathExtendedTest extends TestCase
         self::assertSame(8, Math::octdec('10'));
     }
 
+    public function testAdditionalTranscendentalFunctions(): void
+    {
+        self::assertSame(acosh(2), Math::acosh(2));
+        self::assertSame(asinh(2), Math::asinh(2));
+        self::assertSame(atanh(0.5), Math::atanh(0.5));
+    }
+
+    public function testAdditionalNumericFunctions(): void
+    {
+        self::assertSame(getrandmax(), Math::getrandmax());
+        self::assertSame(mt_getrandmax(), Math::mt_getrandmax());
+        self::assertGreaterThanOrEqual(0, Math::lcg_value());
+        self::assertGreaterThanOrEqual(0, Math::rand(0, 3));
+        self::assertGreaterThanOrEqual(0, Math::mt_rand(0, 4));
+        Math::srand(123);
+        Math::mt_srand(123);
+    }
+
 
 
 
