@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Trade\Controller\Manage;
 
 use App\Trade\Controller\Manage\OrderController;
+use App\Core\Security\UserUuidResolverInterface;
 use App\Trade\Service\OrderServiceInterface;
 use App\Trade\Service\StoreContextResolverInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -21,6 +22,7 @@ final class OrderControllerTest extends TestCase
     private OrderServiceInterface $service;
     private WorkflowInterface $workflow;
     private StoreContextResolverInterface $storeContextResolver;
+    private UserUuidResolverInterface $userUuidResolver;
     private OrderController $controller;
 
     protected function setUp(): void
@@ -28,8 +30,9 @@ final class OrderControllerTest extends TestCase
         $this->service = $this->createMock(OrderServiceInterface::class);
         $this->workflow = $this->createMock(WorkflowInterface::class);
         $this->storeContextResolver = $this->createMock(StoreContextResolverInterface::class);
+        $this->userUuidResolver = $this->createMock(UserUuidResolverInterface::class);
 
-        $this->controller = new OrderController($this->service, $this->storeContextResolver, $this->workflow);
+        $this->controller = new OrderController($this->service, $this->storeContextResolver, $this->userUuidResolver, $this->workflow);
     }
 
     private function injectDependencies(RequestStack $requestStack): void

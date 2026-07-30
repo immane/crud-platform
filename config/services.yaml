@@ -114,6 +114,7 @@ services:
 
     App\Payment\Service\PayerReferenceResolverInterface: '@App\Bridge\IdentityPayment\IdentityPayerDirectoryReferenceResolver'
     App\Core\Security\IdentityUserIdResolverInterface: '@App\Bridge\Identity\IdentityUserIdResolver'
+    App\Core\Security\UserUuidResolverInterface: '@App\Bridge\Identity\IdentityUserUuidResolver'
     CrudPlatform\IntegrationContracts\Wallet\WalletTransferPortInterface: '@App\Wallet\Service\WalletPaymentService'
 
 when@test:

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Trade\Controller\App;
 
-use App\Identity\Entity\User;
+use App\Core\Security\UserUuidPrincipalInterface;
 use App\Core\Controller\RestController;
 use App\Core\View\ApiView;
 use App\Core\View\DetailApiViewMixin;
@@ -40,7 +40,7 @@ class OrderController extends RestController
         if ($user === null) {
             return ['id' => -1];
         }
-        return ['user' => $user];
+        return ['userUuid' => $user->getUuid()];
     }
 
     #[Route('', name: 'create', methods: ['POST'])]
@@ -64,7 +64,7 @@ class OrderController extends RestController
 
             $order = $this->service->createOrder(
                 $result->items,
-                $user,
+                $user?->getUuid(),
                 $result->totalAmount,
                 $currency,
                 $notes,
@@ -113,7 +113,7 @@ class OrderController extends RestController
         }
 
         $user = $this->getCurrentUser();
-        if ($user === null || $order->getUser()?->getId() !== $user->getId()) {
+        if ($user === null || $order->getUserUuid() !== $user->getUuid()) {
             return $this->warning('Order not found.', 404, '', 404);
         }
 
@@ -151,7 +151,7 @@ class OrderController extends RestController
         }
 
         $user = $this->getCurrentUser();
-        if ($user === null || $order->getUser()?->getId() !== $user->getId()) {
+        if ($user === null || $order->getUserUuid() !== $user->getUuid()) {
             return $this->warning('Order not found.', 404, '', 404);
         }
 
@@ -166,11 +166,11 @@ class OrderController extends RestController
         return $this->success($order, $successMessage);
     }
 
-    private function getCurrentUser(): ?User
+    private function getCurrentUser(): ?UserUuidPrincipalInterface
     {
         $user = $this->getUser();
 
-        return $user instanceof User ? $user : null;
+        return $user instanceof UserUuidPrincipalInterface ? $user : null;
     }
 
     #[Route('/{id<\d+>}/cancel', name: 'cancel', methods: ['POST'])]
@@ -183,7 +183,7 @@ class OrderController extends RestController
         }
 
         $user = $this->getCurrentUser();
-        if ($user === null || $order->getUser()?->getId() !== $user->getId()) {
+        if ($user === null || $order->getUserUuid() !== $user->getUuid()) {
             return $this->warning('Order not found.', 404, '', 404);
         }
 
@@ -212,7 +212,7 @@ class OrderController extends RestController
         }
 
         $user = $this->getCurrentUser();
-        if ($user === null || $order->getUser()?->getId() !== $user->getId()) {
+        if ($user === null || $order->getUserUuid() !== $user->getUuid()) {
             return $this->warning('Order not found.', 404, '', 404);
         }
 

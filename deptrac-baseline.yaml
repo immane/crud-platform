@@ -28,14 +28,9 @@ deptrac:
       - App\Common\Repository\SettingRepository
     App\Storage\Service\QiniuStorage:
       - App\Common\Repository\SettingRepository
-    App\Trade\Controller\App\OrderController:
-      - App\Identity\Entity\User
-    App\Trade\Entity\Order:
-      - App\Identity\Entity\User
     App\Trade\EventListener\OrderInvoiceListener:
       - App\Payment\Entity\Invoice
     App\Trade\Service\OrderService:
-      - App\Identity\Entity\User
       - App\Payment\Entity\Invoice
     App\Wechat\Controller\LoginController:
       - App\Identity\Entity\User

@@ -94,7 +94,7 @@ final class TradeRepoFullTest extends KernelTestCase
         self::assertNotContains('InactiveSpec', $activeNames);
     }
 
-    public function testOrderRepoFindByUser(): void
+    public function testOrderRepoFindByUserUuid(): void
     {
         $order = new Order();
         $order->setTotalAmount(100);
@@ -105,7 +105,7 @@ final class TradeRepoFullTest extends KernelTestCase
         $found = $repo->findById($order->getId() ?? 0);
         self::assertNotNull($found);
 
-        $byUser = $repo->findByUser(0);
+        $byUser = $repo->findByUserUuid('00000000-0000-4000-8000-000000000000');
         self::assertIsArray($byUser);
     }
 
