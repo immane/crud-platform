@@ -1,0 +1,3327 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A production-oriented Symfony microservices platform evolved from modular monolith architecture, featuring DDD, service isolation, and event-driven communication.">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-platform/zh/manual/deployment/">
+      
+      
+        <link rel="prev" href="../database-and-migrations/">
+      
+      
+        <link rel="next" href="../extracting-a-service/">
+      
+      
+        
+          <link rel="alternate" href="/crud-platform/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-platform/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Deployment - CRUD Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="CRUD Platform" class="md-header__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Deployment
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-platform/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-platform/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-platform" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CRUD Platform" class="md-nav__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Platform
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-platform" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    设计契约
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    设计契约
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统架构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/microservice-transition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微服务转型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/store-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    商店撤离准备情况
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/inventory-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    库存提取准备情况
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/payment-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付款提取准备情况
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/wallet-extraction-readiness.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    钱包提取准备就绪
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    控制器设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 文档
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统契约
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    模块设计
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core 框架
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (电商)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    商店（多商店运营）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment (支付)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet (钱包)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (鉴权)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微信（登录+支付）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    调研
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    调研
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x 用法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    汇付支付 API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../issues/architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构回顾 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开发手册
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    开发手册
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    项目结构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开发流程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    整合活动
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-and-migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据库和迁移
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Docker Compose 拓扑
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 服务表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 服务表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        应用服务
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        基础设施服务
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 开发与生产叠加
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 开发与生产叠加">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#composeoverrideyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        开发（compose.override.yaml — 自动加载）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#composeprodyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        生产 (compose.prod.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.环境变量参考
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.环境变量参考">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#symfony" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Symfony 核心
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jwt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JWT 身份验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一次性密码/短信
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        微信
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        基础设施
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        每个应用程序变量
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-docker-jwt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Docker 中的 JWT 密钥管理
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Docker 中的 JWT 密钥管理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        发展
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        生产
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 构建图像
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 构建图像">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        根巨石
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        每应用程序服务
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        构建全部
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 在生产中运行迁移
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 在生产中运行迁移">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        创建管理员用户
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-mailpit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 用于电子邮件测试的 Mailpit
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-otp-redis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 用于 OTP 的 Redis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10frankenphp-caddyfile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.FrankenPHP / Caddyfile 配置
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.FrankenPHP / Caddyfile 配置">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caddyfile-dockerfrankenphpcaddyfile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        根整体 Caddyfile (docker/frankenphp/Caddyfile)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caddyfiles-appsnamedockercaddyfile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        每个应用程序 Caddyfiles (apps/{name}/docker/Caddyfile)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-composeprodyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. compose.prod.yaml 用法
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. compose.prod.yaml 用法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        生产与开发的差异
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extracting-a-service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    提取服务
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../i18n/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Internationalization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 快照
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 参考
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Docker Compose 拓扑
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 服务表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 服务表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        应用服务
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        基础设施服务
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 开发与生产叠加
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 开发与生产叠加">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#composeoverrideyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        开发（compose.override.yaml — 自动加载）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#composeprodyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        生产 (compose.prod.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.环境变量参考
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.环境变量参考">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#symfony" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Symfony 核心
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jwt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JWT 身份验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一次性密码/短信
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        微信
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        基础设施
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        每个应用程序变量
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-docker-jwt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Docker 中的 JWT 密钥管理
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Docker 中的 JWT 密钥管理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        发展
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        生产
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 构建图像
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 构建图像">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        根巨石
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        每应用程序服务
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        构建全部
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 在生产中运行迁移
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 在生产中运行迁移">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        创建管理员用户
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-mailpit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 用于电子邮件测试的 Mailpit
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-otp-redis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 用于 OTP 的 Redis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10frankenphp-caddyfile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.FrankenPHP / Caddyfile 配置
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.FrankenPHP / Caddyfile 配置">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caddyfile-dockerfrankenphpcaddyfile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        根整体 Caddyfile (docker/frankenphp/Caddyfile)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caddyfiles-appsnamedockercaddyfile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        每个应用程序 Caddyfiles (apps/{name}/docker/Caddyfile)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-composeprodyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. compose.prod.yaml 用法
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. compose.prod.yaml 用法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        生产与开发的差异
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="_1">部署<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h2 id="1-docker-compose">1. Docker Compose 拓扑<a class="headerlink" href="#1-docker-compose" title="Permanent link">&para;</a></h2>
+<p>该平台使用 Docker Compose 和 <strong>22 项服务</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>＃</th>
+<th>服务</th>
+<th>图片</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>app</code></td>
+<td>弗兰肯PHP 8.4</td>
+<td>根整体（API + HTTP）</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>worker</code></td>
+<td>弗兰肯PHP 8.4</td>
+<td>Messenger 异步使用者（仅限 CLI）</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>scheduler</code></td>
+<td>弗兰肯PHP 8.4</td>
+<td>发件箱中继（贸易、商店、库存、付款）</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>store-app</code></td>
+<td>弗兰肯PHP 8.4</td>
+<td>商店申请</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>inventory-app</code></td>
+<td>弗兰肯PHP 8.4</td>
+<td>库存申请</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>payment-app</code></td>
+<td>弗兰肯PHP 8.4</td>
+<td>支付申请</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>wallet-app</code></td>
+<td>弗兰肯PHP 8.4</td>
+<td>钱包应用</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>identity-app</code></td>
+<td>弗兰肯PHP 8.4</td>
+<td>身份申请</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>common-app</code></td>
+<td>弗兰肯PHP 8.4</td>
+<td>常见应用</td>
+</tr>
+<tr>
+<td>10</td>
+<td>10 <code>trade-app</code></td>
+<td>弗兰肯PHP 8.4</td>
+<td>贸易申请</td>
+</tr>
+<tr>
+<td>11</td>
+<td>11 <code>database</code></td>
+<td>MySQL 8.4</td>
+<td>MySQL 8.4根整体数据库</td>
+</tr>
+<tr>
+<td>12</td>
+<td>12 <code>store-database</code></td>
+<td>MySQL 8.4</td>
+<td>MySQL 8.4存储数据库</td>
+</tr>
+<tr>
+<td>13</td>
+<td><code>inventory-database</code></td>
+<td>MySQL 8.4</td>
+<td>MySQL 8.4库存数据库</td>
+</tr>
+<tr>
+<td>14</td>
+<td>14 <code>payment-database</code></td>
+<td>MySQL 8.4</td>
+<td>MySQL 8.4支付数据库</td>
+</tr>
+<tr>
+<td>15</td>
+<td>15 <code>wallet-database</code></td>
+<td>MySQL 8.4</td>
+<td>MySQL 8.4钱包数据库</td>
+</tr>
+<tr>
+<td>16</td>
+<td>16 <code>identity-database</code></td>
+<td>MySQL 8.4</td>
+<td>MySQL 8.4身份数据库</td>
+</tr>
+<tr>
+<td>17</td>
+<td>17 <code>common-database</code></td>
+<td>MySQL 8.4</td>
+<td>MySQL 8.4通用数据库</td>
+</tr>
+<tr>
+<td>18</td>
+<td>18 <code>trade-database</code></td>
+<td>MySQL 8.4</td>
+<td>MySQL 8.4贸易数据库</td>
+</tr>
+<tr>
+<td>19</td>
+<td>19 <code>redis</code></td>
+<td>Redis 7 高山</td>
+<td>OTP 存储</td>
+</tr>
+<tr>
+<td>20</td>
+<td><code>mailer</code></td>
+<td>邮件坑</td>
+<td>电子邮件测试（SMTP + Web UI）</td>
+</tr>
+<tr>
+<td>—</td>
+<td><code>database-test</code></td>
+<td>MySQL 8.4</td>
+<td>MySQL 8.4 （仅限 compose.override.yaml）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2">2. 服务表<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<h3 id="_2">应用服务<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>内部端口</th>
+<th>主机端口</th>
+<th>数据库</th>
+<th>数据库端口（主机）</th>
+<th>健康检查</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>app</code></td>
+<td>80</td>
+<td><code>${APP_PORT:-8080}</code></td>
+<td><code>database:3306</code></td>
+<td><code>${MYSQL_PORT:-33306}</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>worker</code></td>
+<td>—</td>
+<td>—</td>
+<td><code>database:3306</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>scheduler</code></td>
+<td>—</td>
+<td>—</td>
+<td><code>database:3306</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>store-app</code></td>
+<td>80</td>
+<td><code>${STORE_PORT:-8081}</code></td>
+<td><code>store-database:3306</code></td>
+<td><code>${STORE_MYSQL_PORT:-33307}</code></td>
+<td><code>curl /</code></td>
+</tr>
+<tr>
+<td><code>inventory-app</code></td>
+<td>80</td>
+<td><code>${INVENTORY_PORT:-8082}</code></td>
+<td><code>inventory-database:3306</code></td>
+<td><code>${INVENTORY_MYSQL_PORT:-33308}</code></td>
+<td><code>curl /</code></td>
+</tr>
+<tr>
+<td><code>payment-app</code></td>
+<td>80</td>
+<td><code>${PAYMENT_PORT:-8083}</code></td>
+<td><code>payment-database:3306</code></td>
+<td><code>${PAYMENT_MYSQL_PORT:-33309}</code></td>
+<td><code>curl /</code></td>
+</tr>
+<tr>
+<td><code>wallet-app</code></td>
+<td>80</td>
+<td><code>${WALLET_PORT:-8084}</code></td>
+<td><code>wallet-database:3306</code></td>
+<td><code>${WALLET_MYSQL_PORT:-33310}</code></td>
+<td><code>curl /</code></td>
+</tr>
+<tr>
+<td><code>identity-app</code></td>
+<td>80</td>
+<td><code>${IDENTITY_PORT:-8085}</code></td>
+<td><code>identity-database:3306</code></td>
+<td><code>${IDENTITY_MYSQL_PORT:-33311}</code></td>
+<td><code>curl /</code></td>
+</tr>
+<tr>
+<td><code>common-app</code></td>
+<td>80</td>
+<td><code>${COMMON_PORT:-8086}</code></td>
+<td><code>common-database:3306</code></td>
+<td><code>${COMMON_MYSQL_PORT:-33312}</code></td>
+<td><code>curl /</code></td>
+</tr>
+<tr>
+<td><code>trade-app</code></td>
+<td>80</td>
+<td><code>${TRADE_PORT:-8087}</code></td>
+<td><code>trade-database:3306</code></td>
+<td><code>${TRADE_MYSQL_PORT:-33313}</code></td>
+<td><code>curl /</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_3">基础设施服务<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>内部端口</th>
+<th>主机端口</th>
+<th>笔记</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>redis</code></td>
+<td>6379</td>
+<td>6379</td>
+<td>Redis 7 高山</td>
+</tr>
+<tr>
+<td><code>mailer</code></td>
+<td>1025（SMTP）、8025（用户界面）</td>
+<td>1025, 8025</td>
+<td>邮件坑</td>
+</tr>
+<tr>
+<td><code>database</code></td>
+<td>3306</td>
+<td><code>${MYSQL_PORT:-33306}</code></td>
+<td>MySQL 8.4，<code>app</code>数据库</td>
+</tr>
+</tbody>
+</table>
+<p>Worker 和调度程序覆盖 <code>APP_ENV=prod</code> 并禁用继承的 HTTP 端口
+和健康检查（它们是 CLI 服务）。</p>
+<h2 id="3">3. 开发与生产叠加<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="composeoverrideyaml">开发（<code>compose.override.yaml</code> — 自动加载）<a class="headerlink" href="#composeoverrideyaml" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">      </span><span class="nt">APP_ENV</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">      </span><span class="nt">APP_DEBUG</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.:/var/www/html</span><span class="w">  </span><span class="c1"># Source mount for live reload</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8080:80&quot;</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="nt">store-app</span><span class="p">:</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">      </span><span class="nt">APP_ENV</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">      </span><span class="nt">APP_DEBUG</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./apps/store:/var/www/html</span>
+</code></pre></div>
+<ul>
+<li>源代码直接安装到容器中</li>
+<li><code>APP_DEBUG</code>已启用</li>
+<li>自动生成 Dev JWT 密钥 (<code>docker/app/entrypoint.sh</code>)</li>
+<li>为 Symfony Runtime 创建的空 <code>.env</code> 占位符</li>
+</ul>
+<h3 id="composeprodyaml">生产 (<code>compose.prod.yaml</code>)<a class="headerlink" href="#composeprodyaml" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>compose.yaml<span class="w"> </span>-f<span class="w"> </span>compose.prod.yaml<span class="w"> </span>--env-file<span class="w"> </span>.env.prod.local<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
+</code></pre></div>
+<p>生产要求：
+- <code>.env.prod.local</code> 基于<code>.env.prod.example</code>
+- 必须设置：<code>APP_SECRET</code>、<code>REFRESH_TOKEN_SECRET</code>、<code>MYSQL_PASSWORD</code>、<code>MYSQL_ROOT_PASSWORD</code>
+- 每个应用程序都需要自己的秘密（例如，<code>STORE_APP_SECRET</code>、<code>STORE_MYSQL_PASSWORD</code>）
+- 在 <code>./var/jwt/</code> 主机上生成的 JWT 密钥，安装到容器中
+- <code>APP_DEBUG=0</code>，没有源安装
+- 所有服务上的 <code>restart: unless-stopped</code></p>
+<h2 id="4">4.环境变量参考<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<h3 id="symfony">Symfony 核心<a class="headerlink" href="#symfony" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>必填</th>
+<th>默认</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>APP_ENV</code></td>
+<td>是的</td>
+<td><code>prod</code></td>
+<td><code>dev</code>、<code>test</code> 或 <code>prod</code></td>
+</tr>
+<tr>
+<td><code>APP_DEBUG</code></td>
+<td>没有</td>
+<td><code>0</code></td>
+<td>调试模式（0 或 1）</td>
+</tr>
+<tr>
+<td><code>APP_SECRET</code></td>
+<td><strong>是</strong></td>
+<td>—</td>
+<td>Symfony 应用程序秘密（产品）</td>
+</tr>
+<tr>
+<td><code>DATABASE_URL</code></td>
+<td>是的</td>
+<td>—</td>
+<td>MySQL DSN</td>
+</tr>
+</tbody>
+</table>
+<h3 id="jwt">JWT 身份验证<a class="headerlink" href="#jwt" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>必填</th>
+<th>默认</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JWT_PRIVATE_KEY_PATH</code></td>
+<td>是的</td>
+<td><code>/var/www/html/var/jwt/jwt_private.pem</code></td>
+<td>RSA 私钥路径</td>
+</tr>
+<tr>
+<td><code>JWT_PUBLIC_KEY_PATH</code></td>
+<td>是的</td>
+<td><code>/var/www/html/var/jwt/jwt_public.pem</code></td>
+<td>RSA 公钥的路径</td>
+</tr>
+<tr>
+<td><code>JWT_PASSPHRASE</code></td>
+<td>没有</td>
+<td>—</td>
+<td>私钥密码</td>
+</tr>
+<tr>
+<td><code>ACCESS_TOKEN_TTL</code></td>
+<td>没有</td>
+<td><code>7200</code></td>
+<td>访问令牌生命周期（秒）</td>
+</tr>
+<tr>
+<td><code>REFRESH_TOKEN_TTL</code></td>
+<td>没有</td>
+<td><code>31536000</code></td>
+<td>刷新令牌生命周期（1 年）</td>
+</tr>
+<tr>
+<td><code>REFRESH_TOKEN_SECRET</code></td>
+<td><strong>是</strong></td>
+<td>—</td>
+<td>HMAC-SHA256 秘密（产品，≥32 个字符）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_4">一次性密码/短信<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>必填</th>
+<th>默认</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OTP_REDIS_DSN</code></td>
+<td>没有</td>
+<td><code>redis://redis:6379/0</code></td>
+<td>用于 OTP 存储的 Redis</td>
+</tr>
+<tr>
+<td><code>ALIYUN_ACCESS_KEY_ID</code></td>
+<td>没有</td>
+<td>—</td>
+<td>阿里云短信</td>
+</tr>
+<tr>
+<td><code>ALIYUN_ACCESS_KEY_SECRET</code></td>
+<td>没有</td>
+<td>—</td>
+<td>阿里云短信</td>
+</tr>
+<tr>
+<td><code>ALIYUN_SMS_REGION</code></td>
+<td>没有</td>
+<td><code>cn-hangzhou</code></td>
+<td>短信区域</td>
+</tr>
+<tr>
+<td><code>ALIYUN_SMS_SIGN_NAME</code></td>
+<td>没有</td>
+<td>—</td>
+<td>短信签名</td>
+</tr>
+<tr>
+<td><code>ALIYUN_SMS_TEMPLATE_LOGIN_OTP</code></td>
+<td>没有</td>
+<td>—</td>
+<td>登录一次性密码模板</td>
+</tr>
+<tr>
+<td><code>ALIYUN_SMS_DRY_RUN</code></td>
+<td>没有</td>
+<td><code>true</code></td>
+<td>禁用实际短信发送</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_5">微信<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>必填</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WECHAT_MINIAPP_APP_ID</code></td>
+<td>没有</td>
+<td>小程序App ID</td>
+</tr>
+<tr>
+<td><code>WECHAT_MINIAPP_SECRET</code></td>
+<td>没有</td>
+<td>小程序揭秘</td>
+</tr>
+<tr>
+<td><code>WECHAT_OFFICIAL_APP_ID</code></td>
+<td>没有</td>
+<td>公众号App ID</td>
+</tr>
+<tr>
+<td><code>WECHAT_OFFICIAL_SECRET</code></td>
+<td>没有</td>
+<td>公众号揭秘</td>
+</tr>
+<tr>
+<td><code>WECHAT_PAY_MCH_ID</code></td>
+<td>没有</td>
+<td>微信支付商户ID</td>
+</tr>
+<tr>
+<td><code>WECHAT_PAY_SECRET_KEY</code></td>
+<td>没有</td>
+<td>微信支付 APIv3 密钥</td>
+</tr>
+<tr>
+<td><code>WECHAT_PAY_PRIVATE_KEY</code></td>
+<td>没有</td>
+<td>商户私钥路径</td>
+</tr>
+<tr>
+<td><code>WECHAT_PAY_CERTIFICATE</code></td>
+<td>没有</td>
+<td>平台证书路径</td>
+</tr>
+<tr>
+<td><code>WECHAT_PAY_NOTIFY_URL</code></td>
+<td>没有</td>
+<td>付款通知回调网址</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_6">基础设施<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>必填</th>
+<th>默认</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MAILER_DSN</code></td>
+<td>没有</td>
+<td><code>smtp://mailer:1025</code></td>
+<td>邮寄运输</td>
+</tr>
+<tr>
+<td><code>MESSENGER_TRANSPORT_DSN</code></td>
+<td>没有</td>
+<td><code>doctrine://default?auto_setup=0</code></td>
+<td>异步传输</td>
+</tr>
+<tr>
+<td><code>DEFAULT_URI</code></td>
+<td>没有</td>
+<td><code>http://localhost</code></td>
+<td>基本网址</td>
+</tr>
+<tr>
+<td><code>INVENTORY_ENABLED</code></td>
+<td>没有</td>
+<td><code>0</code></td>
+<td>全球库存切换</td>
+</tr>
+<tr>
+<td><code>OUTBOX_PUBLISH_INTERVAL</code></td>
+<td>没有</td>
+<td><code>5</code></td>
+<td>发件箱中继间隔（秒）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_7">每个应用程序变量<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p>每个应用程序都使用带前缀的环境变量：</p>
+<table>
+<thead>
+<tr>
+<th>应用程序</th>
+<th>前缀</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>商店</td>
+<td><code>STORE_</code></td>
+<td><code>STORE_APP_SECRET</code>、<code>STORE_DATABASE_URL</code>、<code>STORE_MYSQL_PASSWORD</code></td>
+</tr>
+<tr>
+<td>库存</td>
+<td><code>INVENTORY_</code></td>
+<td><code>INVENTORY_APP_SECRET</code>、<code>INVENTORY_DATABASE_URL</code></td>
+</tr>
+<tr>
+<td>付款</td>
+<td><code>PAYMENT_</code></td>
+<td><code>PAYMENT_APP_SECRET</code>、<code>PAYMENT_DATABASE_URL</code></td>
+</tr>
+<tr>
+<td>钱包</td>
+<td><code>WALLET_</code></td>
+<td><code>WALLET_APP_SECRET</code>、<code>WALLET_DATABASE_URL</code></td>
+</tr>
+<tr>
+<td>身份</td>
+<td><code>IDENTITY_</code></td>
+<td><code>IDENTITY_APP_SECRET</code>、<code>IDENTITY_DATABASE_URL</code></td>
+</tr>
+<tr>
+<td>常见</td>
+<td><code>COMMON_</code></td>
+<td><code>COMMON_APP_SECRET</code>、<code>COMMON_DATABASE_URL</code></td>
+</tr>
+<tr>
+<td>贸易</td>
+<td><code>TRADE_</code></td>
+<td><code>TRADE_APP_SECRET</code>、<code>TRADE_DATABASE_URL</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-docker-jwt">5. Docker 中的 JWT 密钥管理<a class="headerlink" href="#5-docker-jwt" title="Permanent link">&para;</a></h2>
+<h3 id="_8">发展<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<p>开发入口点 (<code>docker/app/entrypoint.sh</code>) 自动生成密钥：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-f<span class="w"> </span>/var/www/html/var/jwt/jwt_private.pem<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/var/www/html/var/jwt
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span>openssl<span class="w"> </span>genpkey<span class="w"> </span>-algorithm<span class="w"> </span>RSA<span class="w"> </span>-out<span class="w"> </span>/var/www/html/var/jwt/jwt_private.pem<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">      </span>-pkeyopt<span class="w"> </span>rsa_keygen_bits:4096
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span>openssl<span class="w"> </span>rsa<span class="w"> </span>-pubout<span class="w"> </span>-in<span class="w"> </span>/var/www/html/var/jwt/jwt_private.pem<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">      </span>-out<span class="w"> </span>/var/www/html/var/jwt/jwt_public.pem
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="k">fi</span>
+</code></pre></div>
+<p>密钥在挂载的 <code>./var/jwt</code> 目录下生成一次并保留
+跨容器重新启动。</p>
+<h3 id="_9">生产<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<p>密钥在 <strong>主机</strong> 机器上生成并安装：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># On host</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>var/jwt
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>openssl<span class="w"> </span>genpkey<span class="w"> </span>-algorithm<span class="w"> </span>RSA<span class="w"> </span>-out<span class="w"> </span>var/jwt/jwt_private.pem<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>-pkeyopt<span class="w"> </span>rsa_keygen_bits:4096<span class="w"> </span>-aes256<span class="w"> </span>-pass<span class="w"> </span>pass:<span class="si">${</span><span class="nv">JWT_PASSPHRASE</span><span class="si">}</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>openssl<span class="w"> </span>rsa<span class="w"> </span>-pubout<span class="w"> </span>-in<span class="w"> </span>var/jwt/jwt_private.pem<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span>-out<span class="w"> </span>var/jwt/jwt_public.pem<span class="w"> </span>-passin<span class="w"> </span>pass:<span class="si">${</span><span class="nv">JWT_PASSPHRASE</span><span class="si">}</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>var/jwt/jwt_private.pem
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>chmod<span class="w"> </span><span class="m">644</span><span class="w"> </span>var/jwt/jwt_public.pem
+</code></pre></div>
+<p>生产入口点验证 JWT 密钥是否存在并退出并出现错误
+如果钥匙丢失。</p>
+<h2 id="6">6. 构建图像<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<h3 id="_10">根巨石<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>build<span class="w"> </span>app
+</code></pre></div>
+<p>使用根<code>Dockerfile</code>（FrankenPHP 8.4 Alpine，Caddyfile位于<code>docker/frankenphp/Caddyfile</code>）。</p>
+<h3 id="_11">每应用程序服务<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
+<p>每个应用程序都有自己的 <code>Dockerfile</code> 和 <code>docker/Caddyfile</code>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>build<span class="w"> </span>store-app
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>build<span class="w"> </span>payment-app
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1"># ... etc</span>
+</code></pre></div>
+<p>Dockerfile 位于 <code>apps/{name}/Dockerfile</code> 中。构建上下文是存储库
+整体应用程序的根目录，以及每个应用程序服务的单独应用程序目录。</p>
+<h3 id="_12">构建全部<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>build
+</code></pre></div>
+<h2 id="7">7. 在生产中运行迁移<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Root monolith</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Each app</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>store-app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>inventory-app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>payment-app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>wallet-app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>identity-app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>common-app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>trade-app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
+</code></pre></div>
+<p><strong>重要</strong>：首先运行根整体迁移，然后运行每个应用程序迁移。
+每个迁移链都是独立的。</p>
+<h3 id="_13">创建管理员用户<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">&#39;P@ssw0rd&#39;</span><span class="w"> </span>--admin
+</code></pre></div>
+<h2 id="8-mailpit">8. 用于电子邮件测试的 Mailpit<a class="headerlink" href="#8-mailpit" title="Permanent link">&para;</a></h2>
+<p>Mailpit 捕获所有外发电子邮件：</p>
+<ul>
+<li><strong>SMTP 端点</strong>：<code>mailer:1025</code>（内部）、<code>localhost:1025</code>（主机）</li>
+<li><strong>网络用户界面</strong>：<code>http://localhost:8025</code></li>
+<li>所有电子邮件均被拦截并可在用户界面中查看</li>
+<li>不会将电子邮件发送给真正的收件人</li>
+</ul>
+<p>在<code>.env</code>中配置：
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="na">MAILER_DSN</span><span class="o">=</span><span class="s">smtp://mailer:1025</span>
+</code></pre></div></p>
+<h2 id="9-otp-redis">9. 用于 OTP 的 Redis<a class="headerlink" href="#9-otp-redis" title="Permanent link">&para;</a></h2>
+<p>Redis 使用 TTL 存储 OTP 代码。无需持久存储。</p>
+<ul>
+<li><strong>连接</strong>：<code>redis://redis:6379/0</code></li>
+<li><strong>数据库索引</strong>：0</li>
+<li>OTP 代码自动过期（可配置 TTL）</li>
+</ul>
+<h2 id="10frankenphp-caddyfile">10.FrankenPHP / Caddyfile 配置<a class="headerlink" href="#10frankenphp-caddyfile" title="Permanent link">&para;</a></h2>
+<h3 id="caddyfile-dockerfrankenphpcaddyfile">根整体 Caddyfile (<code>docker/frankenphp/Caddyfile</code>)<a class="headerlink" href="#caddyfile-dockerfrankenphpcaddyfile" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>{
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    frankenphp
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>}
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>:80 {
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>    header {
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>        Access-Control-Allow-Origin *
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>        Access-Control-Allow-Methods &quot;GET, POST, PUT, DELETE, OPTIONS&quot;
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>        Access-Control-Allow-Headers &quot;Content-Type, Authorization&quot;
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>    }
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>    root * /var/www/html/public/
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>    php_server {
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>        resolve_root_symlink
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>    }
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>    encode gzip
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>    file_server
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>}
+</code></pre></div>
+<h3 id="caddyfiles-appsnamedockercaddyfile">每个应用程序 Caddyfiles (<code>apps/{name}/docker/Caddyfile</code>)<a class="headerlink" href="#caddyfiles-appsnamedockercaddyfile" title="Permanent link">&para;</a></h3>
+<p>每个应用程序都有一个为其自己的 <code>public/</code> 目录配置的类似 Caddyfile
+和内部端口 80。</p>
+<h2 id="11-composeprodyaml">11. <code>compose.prod.yaml</code> 用法<a class="headerlink" href="#11-composeprodyaml" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># 1. Create env file from example</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>cp<span class="w"> </span>.env.prod.example<span class="w"> </span>.env.prod.local
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="c1"># Edit with real secrets</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="c1"># 2. Generate JWT keys on host</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="c1"># (see section 5)</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="c1"># 3. Start production stack</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>compose.yaml<span class="w"> </span>-f<span class="w"> </span>compose.prod.yaml<span class="w"> </span>--env-file<span class="w"> </span>.env.prod.local<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="c1"># 4. Run migrations</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="c1"># ... repeat for each app</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="c1"># 5. Create admin user</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">&#39;P@ssw0rd&#39;</span><span class="w"> </span>--admin
+</code></pre></div>
+<h3 id="_14">生产与开发的差异<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>特色</th>
+<th>开发</th>
+<th>产品</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>源安装</td>
+<td>是的</td>
+<td>没有</td>
+</tr>
+<tr>
+<td><code>APP_DEBUG</code></td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>JWT 密钥</td>
+<td>自动生成</td>
+<td>主机生成+挂载</td>
+</tr>
+<tr>
+<td>秘密</td>
+<td>compose.yaml 中的默认值</td>
+<td><code>.env.prod.local</code></td>
+</tr>
+<tr>
+<td>港口</td>
+<td>直接暴露</td>
+<td>通过反向代理（推荐）</td>
+</tr>
+<tr>
+<td>记录</td>
+<td>标准错误</td>
+<td>文件或收集器</td>
+</tr>
+<tr>
+<td>健康检查</td>
+<td>在工作程序/调度程序上禁用</td>
+<td>必填</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
