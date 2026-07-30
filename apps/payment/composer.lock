@@ -8,11 +8,11 @@
     "packages": [
         {
             "name": "crud-platform/integration-contracts",
-            "version": "1.1.1-dev",
+            "version": "1.1.2-dev",
             "dist": {
                 "type": "path",
                 "url": "../../packages/integration-contracts",
-                "reference": "8d1737684641078609f0b53da209f8f7e08b9961"
+                "reference": "5cf0453f0cdfde53b9123f0dd4cb1d4f799471dd"
             },
             "require": {
                 "php": ">=8.4"
