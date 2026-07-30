@@ -2971,7 +2971,7 @@
 
 <h1 id="crud-skeleton-full-codebase-context">CRUD Skeleton - Full Codebase Context<a class="headerlink" href="#crud-skeleton-full-codebase-context" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>Context snapshot. Last updated: 2026-07-30</p>
+<p>Context snapshot. Last updated: 2026-07-31</p>
 </blockquote>
 <hr />
 <h2 id="1-project-overview">1. Project Overview<a class="headerlink" href="#1-project-overview" title="Permanent link">&para;</a></h2>
@@ -2981,7 +2981,7 @@
 - Expression-based dynamic query engine (<code>@filter</code>, <code>@sort</code>, <code>@dql</code>)
 - Modular architecture: <strong>Core</strong> (framework), <strong>Common</strong> (CMS), <strong>Promotion</strong> (DSL-driven promotions), <strong>Identity</strong> (auth), <strong>Trade</strong> (commercial orders), <strong>Store</strong> (multi-store operations), <strong>Payment</strong> (invoices), <strong>Wallet</strong> (balances), <strong>Inventory</strong> (stock &amp; reservation), <strong>Wechat</strong> (login + pay), <strong>Storage</strong> (file upload drivers)
 - EasyWeChat 6.x integration (Mini Program, Official Account OAuth, WeChat Pay V3)
-- NelmioApiDoc (Swagger at <code>/api/doc</code>), PHPUnit 12.5, Docker Compose (12 services: app, worker, scheduler, Store/Inventory/Payment/Wallet apps, MySQL x4, Redis, Mailpit — FrankenPHP)
+- NelmioApiDoc (Swagger at <code>/api/doc</code>), PHPUnit 12.5, Docker Compose (16 services: app, worker, scheduler, Store/Inventory/Payment/Wallet/Identity/Common/Trade apps, MySQL x9, Redis, Mailpit — FrankenPHP)
 - MkDocs Material + GitHub Pages documentation
 - <strong>i18n</strong>: Symfony Translation with en, zh, zh_Hant, ja — all user-facing messages, entity/field names, and status values translated</p>
 <h3 id="11-architecture-status-and-migration-direction">1.1 Architecture Status And Migration Direction<a class="headerlink" href="#11-architecture-status-and-migration-direction" title="Permanent link">&para;</a></h3>
@@ -3003,6 +3003,8 @@ association have been removed; Wallet identity uses <code>ownerUuid</code> only.
 <code>packages/platform-kernel</code>, while
 Promotion and Storage remain in-process plugins/adapters until scalar service
 contracts exist.</p>
+<p>All business modules have been extracted to <code>apps/</code>: Store, Inventory, Payment,
+Wallet, Identity, Common, and Trade (which includes Promotion).</p>
 <h3 id="12-target-monorepo-layout">1.2 Target Monorepo Layout<a class="headerlink" href="#12-target-monorepo-layout" title="Permanent link">&para;</a></h3>
 <p>The future repository layout uses <code>apps/</code> for independently deployable business
 services, <code>packages/</code> for reusable PHP libraries, <code>contracts/</code> for published
@@ -3082,11 +3084,6 @@ consumes <code>payment.invoice.{paid,failed,cancelled,refunded}.v1</code> neutra
 Inbox handler for durable lifecycle integration. Cutover is deferred: the monolith
 remains the production host until all remaining modules are extracted and Gateway
 routing is ready.</p>
-<p><code>apps/trade</code> now exists as a fully extracted Symfony application with its own
-<code>App\Trade\Kernel</code>, Composer lock, configuration, migrations, tests, and FrankenPHP
-Docker image. It owns both <code>App\Trade\*</code> and <code>App\Promotion\*</code>; Payment remains a
-temporary direct composition dependency while Trade consumes its durable invoice
-lifecycle carriers. The monolith loads Trade through <code>crud-platform/trade-app</code>.</p>
 <p><code>apps/wallet</code> now exists as a fully extracted Symfony application with its own
 <code>App\Wallet\Kernel</code>, Composer lock, config, migrations, tests, and FrankenPHP
 Docker image. It owns all Wallet source under <code>apps/wallet/src/</code> — the single
@@ -3099,6 +3096,19 @@ adapters; root <code>App\Bridge\PaymentWallet\WalletBalanceAdjustmentPort</code>
 the Payment scalar port to Wallet persistence. Cutover is deferred: the monolith remains the
 production host until all remaining modules are extracted and Gateway routing
 is ready.</p>
+<p><code>apps/identity</code> now exists as a fully extracted Symfony application with its own
+<code>App\Identity\Kernel</code>, Composer lock, config, migrations, tests, and FrankenPHP
+Docker image. It owns both <code>App\Identity\Main\*</code> and <code>App\Identity\Wechat\*</code>.
+The monolith loads Identity through <code>crud-platform/identity-app</code> path package. Cutover is deferred: the monolith remains the production host until all remaining modules are extracted and Gateway routing is ready.</p>
+<p><code>apps/common</code> now exists as a fully extracted Symfony application with its own
+<code>App\Common\Kernel</code>, Composer lock, config, migrations, tests, and FrankenPHP
+Docker image. It owns both <code>App\Common\Main\*</code> and <code>App\Common\Storage\*</code>.
+The monolith loads Common through <code>crud-platform/common-app</code> path package. Cutover is deferred: the monolith remains the production host until all remaining modules are extracted and Gateway routing is ready.</p>
+<p><code>apps/trade</code> now exists as a fully extracted Symfony application with its own
+<code>App\Trade\Kernel</code>, Composer lock, configuration, migrations, tests, and FrankenPHP
+Docker image. It owns both <code>App\Trade\*</code> and <code>App\Promotion\*</code>; Payment remains a
+temporary direct composition dependency while Trade consumes its durable invoice
+lifecycle carriers. The monolith loads Trade through <code>crud-platform/trade-app</code>. Cutover is deferred: the monolith remains the production host until all remaining modules are extracted and Gateway routing is ready.</p>
 <h2 id="2-directory-structure">2. Directory Structure<a class="headerlink" href="#2-directory-structure" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>├── public/index.php              # Front controller
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── public/.htaccess              # Apache rewrite rules + Authorization header forwarding
@@ -3141,140 +3151,165 @@ is ready.</p>
 <a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>│   ├── Service/
 <a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>│   └── Controller/App/ + Manage/ + Public/
 <a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>│
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>├── src/Identity/                 # Authentication &amp; Identity
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>│   ├── Entity/User.php, RefreshToken.php, Profile.php     # User has __toString(): username fallback to email; User::$profile (OneToOne→Profile)
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>│   ├── Security/JwtAuthenticator.php, TokenManager.php
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>│   ├── Service/OtpService.php, UserService.php, SMS providers
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>│   ├── Command/CreateUserCommand.php
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>│   └── Controller/AuthController.php, App/UserController.php, App/ProfileController.php, Manage/UserController.php, Manage/ProfileController.php
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>│
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>├── src/Trade/                    # E-commerce module
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>│   ├── Entity/                   # Product, Specification, Order, OrderItem, TradeOutboxMessage
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>│   ├── Service/OrderService.php        # StoreContext-aware creation + price pipeline
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>│   ├── Command/PublishOutboxCommand.php # app:trade:outbox:publish
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>│   ├── MessageHandler/           # Store acceptance/rejection consumers
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>│   ├── Service/Pricing/                # PriceCalculatorInterface (Base, Quantity, Total)
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>│   ├── EventListener/OrderWorkflowListener.php
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>│   ├── Exception/                      # OrderInvalidTransitionException, SpecificationNotFoundException
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>│   └── Controller/App/ + Manage/       # CRUD + workflow + pay/refund/fulfill + items + cancel + spec browse/v2
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>│
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>├── src/Payment/                  # Payment module
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>│   ├── Entity/Invoice.php              # Payment invoice (pending→paying→paid→refunded)
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>│   ├── DTO/                            # PaymentResult, PaymentNotifyResult, PaymentRefundResult, PaymentAdjustmentContext, PaymentAdjustmentResult
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>│   ├── Event/                          # InvoicePaidEvent, InvoiceRefundedEvent, etc.
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>│   ├── Service/PaymentGatewayInterface.php  # Gateway contract (pay(explicit amount), notify, refund(explicit amount))
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>│   ├── Service/Adjustment/PaymentAdjustmentProviderInterface.php  # Adjustments before gateway payment (implemented by Wallet)
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>│   ├── Service/Adjustment/PaymentAdjustmentRegistry.php  # #[AutowireIterator(&#39;payment.adjustment_provider&#39;)] registry
-<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>│   ├── Service/Gateway/MockGateway.php       # Deterministic test gateway (only gateway remaining in Payment)
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>│   ├── Service/PaymentGatewayRegistry.php    # #[AutowireIterator(&#39;payment.gateway&#39;)] registry
-<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>│   └── Controller/App/ + Manage/ + Webhook/
-<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>│       # Current Trade result propagation is synchronous Invoice domain events.
-<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>│       # Planned phase 1: Payment Outbox -&gt; Trade Inbox; Payment Inbox is deferred.
-<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>│
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>├── src/Bridge/PaymentWallet/     # Root Payment→Wallet composition adapters (transition host only)
-<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>│   ├── WalletGateway.php              # Implements PaymentGatewayInterface, delegates to Wallet-owned services
-<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>│   └── WalletBalanceAdjustmentProvider.php  # Wallet deduction as Payment adjustment provider
-<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>│
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>├── src/Wechat/                   # WeChat module
-<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>│   ├── Entity/WechatUser.php           # OneToOne→User
-<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>│   ├── Repository/WechatUserRepository.php
-<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>│   ├── Service/WechatService.php       # EasyWeChat factory
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>│   ├── Service/WechatAuthService.php   # Login orchestration
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>│   ├── Service/WechatUserService.php   # CRUD service
-<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>│   ├── Service/Payment/WechatPayGateway.php  # implements PaymentGatewayInterface
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>│   └── Controller/
-<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>│
-<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>├── src/Storage/                  # Storage module (pluggable file upload drivers)
-<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>│   ├── Service/MediaStorageInterface.php       # Driver contract (store/delete)
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>│   ├── Service/MediaStorageRegistry.php        # Tagged iterator collection
-<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>│   ├── Service/LocalStorage.php                # Local filesystem (public/uploads/)
-<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>│   ├── Service/QiniuStorage.php                # Qiniu Kodo cloud storage (optional SDK)
-<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>│   └── Resources/config/services_storage.yaml
-<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>│
-<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>├── src/Promotion/                # Promotion module (DSL-driven promotion engine)
-<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>│   ├── Entity/                   # PromotionTemplate, Promotion
-<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>│   ├── Repository/
-<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>│   ├── Service/                  # PromotionService, PromotionTemplateService, PromotionCalculator
-<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>│   │   └── Dsl/                  # DSL lexer/parser/evaluator
-<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>│   ├── Strategy/                 # 7 strategies: FullReduction, Discount, Gift, NthItemDiscount, Tiered, FreeShipping, MemberDiscount
-<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>│   ├── Controller/App/           # Read-only endpoints
-<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>│   ├── Controller/Manage/        # Admin CRUD endpoints
-<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>│   └── Exception/
-<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>│
-<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>├── apps/payment/                 # Independently bootable Payment application (fully extracted)
-<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>│   ├── src/                      # App\Payment namespace — single owner of Payment source
-<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>│   │   ├── Kernel.php             # App\Payment\Kernel
-<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>│   │   ├── Entity/                # Invoice, PayerDirectory, PaymentOutboxMessage
-<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>│   │   ├── Repository/            # InvoiceRepository, PayerDirectoryRepository, PaymentOutboxMessageRepository
-<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>│   │   ├── Service/               # InvoiceService, PaymentOutboxService, PayerDirectoryService, PaymentGatewayInterface, MockGateway, Adjustment/*
-<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>│   │   ├── DTO/                   # CreateInvoiceRequest, PaymentResult, PaymentNotifyResult, etc.
-<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>│   │   ├── Event/                 # InvoicePaidEvent, InvoiceRefundedEvent, etc.
-<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>│   │   ├── Command/               # PublishOutboxCommand
-<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>│   │   └── Controller/App/ + Manage/ + Webhook/
-<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>│   ├── config/                    # Payment-owned Symfony/Doctrine/Messenger config
-<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>│   ├── migrations/                # Payment-owned migration baseline (3 tables)
-<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>│   ├── docker/Caddyfile           # FrankenPHP HTTP server config
-<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>│   ├── Dockerfile                 # Independent FrankenPHP container image
-<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>│   └── tests/                     # Payment application regression tests
-<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>│
-<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>├── apps/wallet/                   # Independently bootable Wallet application (fully extracted)
-<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>│   ├── src/                      # App\Wallet namespace — single owner of Wallet source
-<a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>│   │   ├── Kernel.php             # App\Wallet\Kernel
-<a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>│   │   ├── Entity/                # Wallet, WalletTransaction, WalletPaymentDeduction
-<a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>│   │   ├── Repository/            # WalletRepository, WalletTransactionRepository, WalletPaymentDeductionRepository
-<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>│   │   ├── Service/               # WalletService, TransferService, TransactionService, WalletPaymentService, Payment/WalletPaymentDeductionService
-<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>│   │   ├── DTO/                   # WalletPaymentDeductionRequest, WalletPaymentReference
-<a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>│   │   ├── Exception/             # InsufficientFundsException, SameWalletTransferException, WalletFrozenException
-<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>│   │   └── Controller/App/ + Manage/
-<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>│   ├── config/                    # Wallet-owned Symfony/Doctrine config
-<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>│   ├── migrations/                # Wallet-owned migration baseline (3 tables)
-<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>│   ├── docker/Caddyfile           # FrankenPHP HTTP server config
-<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>│   ├── Dockerfile                 # Independent FrankenPHP container image
-<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>│   └── tests/                     # Wallet application regression tests
-<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>│
-<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>├── config/
-<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>│   ├── services.yaml             # Service wiring + imports src/*/Resources/config + exclusions
-<a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>│   ├── routes.yaml               # Route imports (wechat, wechat_app, wechat_manage added)
-<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>│   └── packages/
-<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>│       ├── nelmio_api_doc.yaml   # OpenAPI 3.1 config: System + Wechat tags
-<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>│       ├── security.yaml         # PUBLIC_ACCESS: docs/auth/webhooks/wechat + GET /api/v1/public/*
-<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>│       ├── translation.yaml      # Translator config: default_locale en, translations/ path
-<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>│       ├── workflow.yaml         # Order state machine, including Store acceptance
-<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>│       ├── messenger.yaml        # Trade/Store integration messages to async transport
-<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>│       └── ...
-<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>├── migrations/                   # 20 migrations (latest: Inventory tables + store_trade_order_cancellation)
-<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>├── translations/                 # i18n translation files (messages.en/zh/zh_Hant/ja.yaml)
-<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>├── docs/
-<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>│   ├── ai/context.md             # This file
-<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>│   ├── design/                   # Design contracts
-<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>│   │   └── bundles/              # Per-module design docs (core, common, trade, wallet, identity, wechat, payment, storage, promotion)
-<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>│   └── openapi/                       # endpoints.yaml + order/payment frontend flow docs
-<a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>├── scripts/tests/                # API smoke, Store orchestration smoke, trade workflow scripts
-<a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>├── tests/                        # 1772 PHPUnit tests, 5652 assertions, 90.49% latest full line coverage
-<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>├── README.md                     # English README
-<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>├── README.zh-cn.md               # Chinese (Simplified) README
-<a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>├── README.zh-hant.md             # Chinese (Traditional) README
-<a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>├── README.ja.md                  # Japanese README
-<a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>├── mkdocs.yml                    # MkDocs Material config
-<a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>├── compose.yaml                  # Local dev + production: app, Store/Inventory/Payment/Wallet apps, worker, scheduler, MySQL x4, Redis, Mailpit (FrankenPHP)
-<a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports for all apps)
-<a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>├── Dockerfile                    # FrankenPHP 8.4 Alpine with Caddyfile
-<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>├── .dockerignore                 # Build context exclusions (tests, docs, dev files, vendor dirs)
-<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>├── docker/
-<a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>│   ├── app/entrypoint.sh         # Dev key generation, prod key validation, .env placeholder
-<a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>│   └── frankenphp/Caddyfile      # FrankenPHP HTTP server config
-<a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>├── apps/store/
-<a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>│   ├── Dockerfile                # Independent Store FrankenPHP image
-<a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>│   └── docker/Caddyfile          # Store FrankenPHP HTTP server config
-<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>├── apps/payment/
-<a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>│   ├── Dockerfile                # Independent Payment FrankenPHP image
-<a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>│   └── docker/Caddyfile          # Payment FrankenPHP HTTP server config
-<a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>├── apps/wallet/
-<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>│   ├── Dockerfile                # Independent Wallet FrankenPHP image
-<a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>│   └── docker/Caddyfile          # Wallet FrankenPHP HTTP server config
-<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>└── .github/workflows/
-<a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>    ├── ci.yml                    # CI: PHP 8.4, PHPStan Level 8, 90% coverage, Rector type-rule dry-run
-<a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>    └── docs.yml                  # GitHub Pages deploy
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>├── src/Wechat/                   # WeChat module
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>│   ├── Entity/WechatUser.php           # OneToOne→User
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>│   ├── Repository/WechatUserRepository.php
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>│   ├── Service/WechatService.php       # EasyWeChat factory
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>│   ├── Service/WechatAuthService.php   # Login orchestration
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>│   ├── Service/WechatUserService.php   # CRUD service
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>│   └── Controller/
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>│
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>├── src/Storage/                  # Storage module (pluggable file upload drivers)
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>│   ├── Service/MediaStorageInterface.php       # Driver contract (store/delete)
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>│   ├── Service/MediaStorageRegistry.php        # Tagged iterator collection
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>│   ├── Service/LocalStorage.php                # Local filesystem (public/uploads/)
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>│   ├── Service/QiniuStorage.php                # Qiniu Kodo cloud storage (optional SDK)
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>│   └── Resources/config/services_storage.yaml
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>│
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>├── apps/payment/                 # Independently bootable Payment application (fully extracted; owns all gateways: WechatPayGateway, WalletGateway, WalletBalanceAdjustmentProvider)
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>│   ├── src/                      # App\Payment namespace — single owner of Payment source
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>│   │   ├── Kernel.php             # App\Payment\Kernel
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>│   │   ├── Entity/                # Invoice, PayerDirectory, PaymentOutboxMessage
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>│   │   ├── Repository/            # InvoiceRepository, PayerDirectoryRepository, PaymentOutboxMessageRepository
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>│   │   ├── Service/               # InvoiceService, PaymentOutboxService, PayerDirectoryService, PaymentGatewayInterface, Gateway/WechatPayGateway, Gateway/WalletGateway, Gateway/MockGateway, Adjustment/*
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>│   │   ├── DTO/                   # CreateInvoiceRequest, PaymentResult, PaymentNotifyResult, etc.
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>│   │   ├── Event/                 # InvoicePaidEvent, InvoiceRefundedEvent, etc.
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>│   │   ├── Command/               # PublishOutboxCommand
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>│   │   └── Controller/App/ + Manage/ + Webhook/
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>│   ├── config/                    # Payment-owned Symfony/Doctrine/Messenger config
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>│   ├── migrations/                # Payment-owned migration baseline (3 tables)
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>│   ├── docker/Caddyfile           # FrankenPHP HTTP server config
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>│   ├── Dockerfile                 # Independent FrankenPHP container image
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>│   └── tests/                     # Payment application regression tests
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>│
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>├── apps/wallet/                   # Independently bootable Wallet application (fully extracted)
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>│   ├── src/                      # App\Wallet namespace — single owner of Wallet source
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>│   │   ├── Kernel.php             # App\Wallet\Kernel
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>│   │   ├── Entity/                # Wallet, WalletTransaction, WalletPaymentDeduction
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>│   │   ├── Repository/            # WalletRepository, WalletTransactionRepository, WalletPaymentDeductionRepository
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>│   │   ├── Service/               # WalletService, TransferService, TransactionService, WalletPaymentService, Payment/WalletPaymentDeductionService
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>│   │   ├── DTO/                   # WalletPaymentDeductionRequest, WalletPaymentReference
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>│   │   ├── Exception/             # InsufficientFundsException, SameWalletTransferException, WalletFrozenException
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>│   │   └── Controller/App/ + Manage/
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>│   ├── config/                    # Wallet-owned Symfony/Doctrine config
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>│   ├── migrations/                # Wallet-owned migration baseline (3 tables)
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>│   ├── docker/Caddyfile           # FrankenPHP HTTP server config
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>│   ├── Dockerfile                 # Independent FrankenPHP container image
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>│   └── tests/                     # Wallet application regression tests
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>│
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>├── apps/trade/                    # Independently bootable Trade application (fully extracted; owns Trade + Promotion)
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>│   ├── src/                      # App\Trade namespace — single owner of Trade + Promotion source
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>│   │   ├── Trade/
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>│   │   │   ├── Kernel.php         # App\Trade\Kernel
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>│   │   │   ├── Entity/            # Product, Specification, Order, OrderItem, TradeOutboxMessage, TradeStoreDirectory
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>│   │   │   ├── Repository/
+<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>│   │   │   ├── Service/           # OrderService, Pricing/*
+<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>│   │   │   ├── MessageHandler/    # Store acceptance/rejection consumers
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>│   │   │   ├── EventListener/
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>│   │   │   ├── Command/           # PublishOutboxCommand, BackfillOutboxCorrelation
+<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>│   │   │   ├── Exception/
+<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>│   │   │   └── Controller/App/ + Manage/
+<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>│   │   └── Promotion/
+<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>│   │       ├── Entity/            # PromotionTemplate, Promotion
+<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>│   │       ├── Repository/
+<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>│   │       ├── Service/           # PromotionService, PromotionTemplateService, PromotionCalculator, Dsl/*
+<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>│   │       ├── Strategy/          # 7 strategies
+<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>│   │       ├── Exception/
+<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>│   │       └── Controller/App/ + Manage/
+<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>│   ├── config/                    # Trade-owned Symfony/Doctrine/Messenger config
+<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>│   ├── migrations/                # Trade-owned migration baseline
+<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>│   ├── docker/Caddyfile           # FrankenPHP HTTP server config
+<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>│   ├── Dockerfile                 # Independent FrankenPHP container image
+<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>│   └── tests/                     # Trade application regression tests
+<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>│
+<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>├── apps/identity/                 # Independently bootable Identity application (fully extracted; owns Main + Wechat)
+<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>│   ├── src/                      # App\Identity namespace — single owner of Identity + Wechat source
+<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>│   │   ├── Main/
+<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>│   │   │   ├── Entity/            # User, RefreshToken, Profile
+<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>│   │   │   ├── Security/          # JwtAuthenticator, TokenManager
+<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>│   │   │   ├── Service/           # OtpService, UserService, SMS providers
+<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>│   │   │   ├── Command/           # CreateUserCommand
+<a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>│   │   │   └── Controller/        # AuthController, App/, Manage/
+<a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>│   │   └── Wechat/
+<a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>│   │       ├── Entity/            # WechatUser
+<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>│   │       ├── Repository/
+<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>│   │       ├── Service/           # WechatService, WechatAuthService, WechatUserService
+<a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>│   │       └── Controller/
+<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>│   ├── config/                    # Identity-owned Symfony/Doctrine config
+<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>│   ├── migrations/                # Identity-owned migration baseline
+<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>│   ├── docker/Caddyfile           # FrankenPHP HTTP server config
+<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>│   ├── Dockerfile                 # Independent FrankenPHP container image
+<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>│   └── tests/                     # Identity application regression tests
+<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>│
+<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>├── apps/common/                   # Independently bootable Common application (fully extracted; owns Main + Storage)
+<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>│   ├── src/                      # App\Common namespace — single owner of Common + Storage source
+<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>│   │   ├── Main/
+<a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>│   │   │   ├── Entity/            # Category, Tag, Content, Comment, Page, Media, Setting, Picture
+<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>│   │   │   ├── Repository/
+<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>│   │   │   ├── Service/
+<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>│   │   │   └── Controller/App/ + Manage/ + Public/
+<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>│   │   └── Storage/
+<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>│   │       ├── Service/           # MediaStorageInterface, MediaStorageRegistry, LocalStorage, QiniuStorage
+<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>│   │       └── Resources/         # services_storage.yaml
+<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>│   ├── config/                    # Common-owned Symfony/Doctrine config
+<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>│   ├── migrations/                # Common-owned migration baseline
+<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>│   ├── docker/Caddyfile           # FrankenPHP HTTP server config
+<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>│   ├── Dockerfile                 # Independent FrankenPHP container image
+<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>│   └── tests/                     # Common application regression tests
+<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>│
+<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>├── config/
+<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>│   ├── services.yaml             # Service wiring + imports src/*/Resources/config + exclusions
+<a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>│   ├── routes.yaml               # Route imports (wechat, wechat_app, wechat_manage added)
+<a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>│   └── packages/
+<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>│       ├── nelmio_api_doc.yaml   # OpenAPI 3.1 config: System + Wechat tags
+<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>│       ├── security.yaml         # PUBLIC_ACCESS: docs/auth/webhooks/wechat + GET /api/v1/public/*
+<a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>│       ├── translation.yaml      # Translator config: default_locale en, translations/ path
+<a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>│       ├── workflow.yaml         # Order state machine, including Store acceptance
+<a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>│       ├── messenger.yaml        # Trade/Store integration messages to async transport
+<a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>│       └── ...
+<a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>├── migrations/                   # 20 migrations (latest: Inventory tables + store_trade_order_cancellation)
+<a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>├── translations/                 # i18n translation files (messages.en/zh/zh_Hant/ja.yaml)
+<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>├── docs/
+<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>│   ├── ai/context.md             # This file
+<a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>│   ├── design/                   # Design contracts
+<a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>│   │   └── bundles/              # Per-module design docs (core, common, trade, wallet, identity, wechat, payment, storage, promotion)
+<a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>│   └── openapi/                       # endpoints.yaml + order/payment frontend flow docs
+<a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>├── scripts/tests/                # API smoke, Store orchestration smoke, trade workflow scripts
+<a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>├── scripts/coverage/              # Coverage collection and merge scripts, phpcov tooling
+<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>├── tests/                        # 1785 PHPUnit tests, 6098 assertions, 91.36% aggregate coverage
+<a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>├── README.md                     # English README
+<a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>├── README.zh-cn.md               # Chinese (Simplified) README
+<a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>├── README.zh-hant.md             # Chinese (Traditional) README
+<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>├── README.ja.md                  # Japanese README
+<a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>├── mkdocs.yml                    # MkDocs Material config
+<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>├── compose.yaml                  # Local dev + production: app, Store/Inventory/Payment/Wallet/Identity/Common/Trade apps, worker, scheduler, MySQL x9, Redis, Mailpit (FrankenPHP)
+<a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports for all apps)
+<a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>├── Dockerfile                    # FrankenPHP 8.4 Alpine with Caddyfile
+<a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>├── .dockerignore                 # Build context exclusions (tests, docs, dev files, vendor dirs)
+<a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>├── docker/
+<a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>│   ├── app/entrypoint.sh         # Dev key generation, prod key validation, .env placeholder
+<a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>│   └── frankenphp/Caddyfile      # FrankenPHP HTTP server config
+<a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>├── apps/store/
+<a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>│   ├── Dockerfile                # Independent Store FrankenPHP image
+<a id="__codelineno-0-182" name="__codelineno-0-182" href="#__codelineno-0-182"></a>│   └── docker/Caddyfile          # Store FrankenPHP HTTP server config
+<a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>├── apps/payment/
+<a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>│   ├── Dockerfile                # Independent Payment FrankenPHP image
+<a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>│   └── docker/Caddyfile          # Payment FrankenPHP HTTP server config
+<a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>├── apps/wallet/
+<a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>│   ├── Dockerfile                # Independent Wallet FrankenPHP image
+<a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>│   └── docker/Caddyfile          # Wallet FrankenPHP HTTP server config
+<a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>├── apps/trade/
+<a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>│   ├── Dockerfile                # Independent Trade FrankenPHP image
+<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>│   └── docker/Caddyfile          # Trade FrankenPHP HTTP server config
+<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>├── apps/identity/
+<a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>│   ├── Dockerfile                # Independent Identity FrankenPHP image
+<a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>│   └── docker/Caddyfile          # Identity FrankenPHP HTTP server config
+<a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>├── apps/common/
+<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>│   ├── Dockerfile                # Independent Common FrankenPHP image
+<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>│   └── docker/Caddyfile          # Common FrankenPHP HTTP server config
+<a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>└── .github/workflows/
+<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>    ├── ci.yml                    # CI: PHP 8.4, per-app unit suites, root integration, aggregate &gt;=90% coverage gate via phpcov, PHPStan, Deptrac, Rector
+<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>    └── docs.yml                  # GitHub Pages deploy
 </code></pre></div>
 <h2 id="3-request-lifecycle">3. Request Lifecycle<a class="headerlink" href="#3-request-lifecycle" title="Permanent link">&para;</a></h2>
 <ol>
@@ -3812,6 +3847,7 @@ is ready.</p>
 2. Compute <code>gatewayAmount = invoice.amount - adjustmentAmount</code>
 3. Call gateway with explicit amount</p>
 <h3 id="822-first-phase-gateways">8.2.2 First-Phase Gateways<a class="headerlink" href="#822-first-phase-gateways" title="Permanent link">&para;</a></h3>
+<p>All gateway implementations now live in <code>apps/payment/src/Service/Gateway/</code>.</p>
 <table>
 <thead>
 <tr>
@@ -4714,26 +4750,22 @@ deployable; this dependency must be removed before extraction.</p>
 <ul>
 <li><strong>Framework</strong>: PHPUnit 12.5</li>
 <li><strong>DB</strong>: SQLite <code>var/test.db</code> in test environment</li>
-<li><strong>Coverage</strong>: 90% minimum (enforced in CI), currently <strong>90.49% lines</strong> from latest local Xdebug run</li>
-<li><strong>Test count</strong>: <strong>1772 tests</strong>, <strong>5652 assertions</strong></li>
+<li><strong>Coverage</strong>: 90% minimum (enforced in CI), currently <strong>91.36% aggregate line coverage via phpcov merge</strong></li>
+<li><strong>Test count</strong>: <strong>1785 tests</strong>, <strong>6098 assertions</strong></li>
+<li><strong>CI</strong>: Per-app unit suites (common, identity, inventory, payment, store, trade, wallet) produce coverage artifacts; root integration tests run against the monolith. Aggregate coverage gate is enforced via <code>phpcov merge</code> across all suites.</li>
 <li><strong>Architecture gate</strong>: Deptrac enforces that Core has no business-module dependency and blocks new cross-module Entity/Repository dependencies. <code>deptrac-baseline.yaml</code> records exact legacy source-to-target debt; run <code>composer deptrac</code>.</li>
 <li><strong>Static analysis</strong>: PHPStan Level 8 with zero errors in its configured scope (<code>src/</code>, excluding optional SDK code, exception classes, and documented false-positive suppressions). Generic contract via <code>@template TEntity</code> on <code>BaseServiceInterface</code>/<code>BaseService</code> + <code>@extends</code> on 18 concrete service pairs. Rector automates Doctrine Collection/Repository PHPDoc with <code>composer rector:types</code>; CI enforces <code>composer rector:types:check</code> as a dry-run.</li>
 <li><strong>Local PHP note</strong>: default <code>php</code> may point to PHP 7.4; use Homebrew PHP 8.5 at <code>/opt/homebrew/opt/php@8.5/bin/php</code> for local Symfony/PHPUnit commands.</li>
 <li><strong>HTML coverage report</strong>: <code>XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html var/coverage</code></li>
-<li><strong>Key test groups</strong>:</li>
-<li><code>tests/Trade/</code>: 216+ tests + Controller/Manage/OrderControllerTest (16 tests for not-found, workflow guards, payment validation)</li>
-<li><code>tests/Wallet/</code>: ~105 tests (Entity, Integration, Transfer Service, WalletService, Payment/Gateway, API regression)</li>
-<li><code>tests/Common/</code>: 118 tests (Entity, Integration, Batch update, media upload/delete, Picture CRUD)</li>
-<li><code>tests/Identity/</code>: 116+ tests (Auth, OTP, Token, Black box, UserService, UserController, UserApiIntegration, Profile entity, ProfileController)</li>
-<li><code>tests/Promotion/</code>: 320+ tests (Entity, DSL lexer/parser/evaluator, Strategies, Engine, Calculator, App/Manage controllers, real SQLite pipeline integration with Doctrine + OrderService)</li>
-<li><code>tests/Payment/</code>: ~60 tests (Gateway, Registry, Adjustment/Provider, Invoice, Multi-gateway integration)</li>
-<li><code>tests/Wechat/</code>: 59 tests (Entity, Service, AuthService, Payment/Gateway, Controller, Repository)</li>
-<li><code>tests/Core/</code>: 70+ tests (BaseService, RestController, Parser, Serializer, LocaleListener, MutationTrait, Utils, System controllers — all PHPStan Level 8 compliant)</li>
-<li><code>tests/Promotion/Integration/</code>: 8 real SQLite quote pipeline tests (store isolation, global campaigns, member-targeted item discounts, stacking, best-price conflict, Nth-item, multi-SKU, expiry, mixed rules)</li>
-<li><code>tests/Integration/</code>: ~20 cross-module tests</li>
-<li><code>tests/Store/</code>: Store entities/services plus Trade -&gt; Store -&gt; Trade integration and Store-scoped HTTP flow</li>
-<li><code>tests/Inventory/</code>: 23 tests (Entity, Service, Integration, Message, API, Handler)</li>
-<li><code>tests/Store/Integration/</code>: Store-Inventory integration tests (confirmation, rejection, cancellation before creation, delayed cancellation, duplicate SKU)</li>
+<li><strong>Key test groups</strong> (per-app suites produce coverage artifacts, root integration tests run against the monolith):</li>
+<li><code>apps/common/tests/</code>: 74 tests (moved from <code>tests/Common/</code>; Entity, Integration, media upload/delete, Picture CRUD)</li>
+<li><code>apps/identity/tests/</code>: 209 tests (moved from <code>tests/Identity/</code> and <code>tests/Wechat/</code>; Auth, OTP, Token, UserService, Wechat, controllers)</li>
+<li><code>apps/trade/tests/</code>: 412 tests (moved from <code>tests/Trade/</code> and <code>tests/Promotion/</code>; Entity, OrderService, Pricing, DSL lexer/parser/evaluator, Strategies, controllers, integration)</li>
+<li><code>apps/wallet/tests/</code>: 60 tests (moved from <code>tests/Wallet/</code>; Entity, Integration, Transfer Service, WalletService, Payment/Gateway, API regression)</li>
+<li><code>apps/payment/tests/</code>: 37 tests (moved from <code>tests/Payment/</code>; Gateway, Registry, Adjustment/Provider, Invoice)</li>
+<li><code>apps/store/tests/</code>: 20 tests (moved from <code>tests/Store/</code>; Store entities/services, Trade→Store→Trade integration, Store-Inventory integration)</li>
+<li><code>apps/inventory/tests/</code>: 11 tests (moved from <code>tests/Inventory/</code>; Entity, Service, Integration, Message, API, Handler)</li>
+<li><code>tests/Integration/</code>: 963 root integration tests (cross-module, Core, BaseService, RestController, Parser, Serializer, LocaleListener, controllers)</li>
 <li><code>scripts/tests/api-smoke.sh</code>: real HTTP auth/catalog/wallet/order/payment smoke; strict 401/403/404 checks</li>
 <li><code>scripts/tests/store-smoke.sh</code>: real HTTP Store-scoped order, Trade Outbox, Messenger consumer, Store Outbox, and <code>store_accepted</code> assertion</li>
 </ul>
@@ -4815,8 +4847,8 @@ deployable; this dependency must be removed before extraction.</p>
 <p>Qiniu configuration is intentionally <strong>not</strong> environment-variable based. Configure these records in <code>common_setting</code> when <code>storage=qiniu</code> is needed: <code>qiniu.access_key</code>, <code>qiniu.secret_key</code>, <code>qiniu.bucket</code>, <code>qiniu.domain</code>.</p>
 <h2 id="19-docker-deployment">19. Docker Deployment<a class="headerlink" href="#19-docker-deployment" title="Permanent link">&para;</a></h2>
 <h3 id="191-architecture">19.1 Architecture<a class="headerlink" href="#191-architecture" title="Permanent link">&para;</a></h3>
-<p>12 services in <code>compose.yaml</code>: <strong>app</strong> (FrankenPHP), <strong>worker</strong> (Messenger async consumer, CLI-only), <strong>scheduler</strong> (Trade/Store/Inventory Outbox relay), <strong>store-app</strong>, <strong>inventory-app</strong>, <strong>payment-app</strong>, <strong>wallet-app</strong>, <strong>database</strong> (MySQL 8.4 for monolith), <strong>store-database</strong>, <strong>inventory-database</strong>, <strong>payment-database</strong>, <strong>wallet-database</strong>, <strong>redis</strong> (Redis 7 Alpine), <strong>mailer</strong> (Mailpit).</p>
-<p>Store, Inventory, Payment, and Wallet each have a <code>Dockerfile</code>, <code>docker/Caddyfile</code>, and independent MySQL instance. The monolith runs them through <code>crud-platform/store-app</code>, <code>crud-platform/inventory-app</code>, <code>crud-platform/payment-app</code>, and <code>crud-platform/wallet-app</code> Composer path packages. Worker and scheduler override <code>APP_ENV=prod</code> (DebugBundle not installed in <code>--no-dev</code> image) and disable inherited HTTP ports and healthchecks.</p>
+<p>22 services in <code>compose.yaml</code>: <strong>app</strong> (FrankenPHP), <strong>worker</strong> (Messenger async consumer, CLI-only), <strong>scheduler</strong> (Trade/Store/Inventory Outbox relay), <strong>store-app</strong>, <strong>inventory-app</strong>, <strong>payment-app</strong>, <strong>wallet-app</strong>, <strong>identity-app</strong>, <strong>common-app</strong>, <strong>trade-app</strong>, <strong>database</strong> (MySQL 8.4 for monolith), <strong>store-database</strong>, <strong>inventory-database</strong>, <strong>payment-database</strong>, <strong>wallet-database</strong>, <strong>identity-database</strong>, <strong>common-database</strong>, <strong>trade-database</strong>, <strong>redis</strong> (Redis 7 Alpine), <strong>mailer</strong> (Mailpit).</p>
+<p>Store, Inventory, Payment, Wallet, Identity, Common, and Trade each have a <code>Dockerfile</code>, <code>docker/Caddyfile</code>, and independent MySQL instance. The monolith runs them through <code>crud-platform/store-app</code>, <code>crud-platform/inventory-app</code>, <code>crud-platform/payment-app</code>, <code>crud-platform/wallet-app</code>, <code>crud-platform/identity-app</code>, <code>crud-platform/common-app</code>, and <code>crud-platform/trade-app</code> Composer path packages. Worker and scheduler override <code>APP_ENV=prod</code> (DebugBundle not installed in <code>--no-dev</code> image) and disable inherited HTTP ports and healthchecks.</p>
 <h3 id="192-development-zero-config">19.2 Development (zero-config)<a class="headerlink" href="#192-development-zero-config" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
@@ -4824,10 +4856,13 @@ deployable; this dependency must be removed before extraction.</p>
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>inventory-app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
 <a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>payment-app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
 <a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>wallet-app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">&#39;P@ssw0rd&#39;</span><span class="w"> </span>--admin
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>identity-app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>common-app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>trade-app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">&#39;P@ssw0rd&#39;</span><span class="w"> </span>--admin
 </code></pre></div>
 <ul>
-<li><code>compose.override.yaml</code> auto-loads — sets <code>APP_ENV=dev</code>, <code>APP_DEBUG=1</code>, source mount for app, store-app, inventory-app, payment-app, and wallet-app</li>
+<li><code>compose.override.yaml</code> auto-loads — sets <code>APP_ENV=dev</code>, <code>APP_DEBUG=1</code>, source mount for app, store-app, inventory-app, payment-app, wallet-app, identity-app, common-app, and trade-app</li>
 <li><code>docker/app/entrypoint.sh</code> creates development JWT keys once under mounted <code>./var/jwt</code> if missing, and creates an empty <code>.env</code> placeholder for Symfony Runtime</li>
 <li>Root database port is configurable via <code>MYSQL_PORT</code> to avoid host-side MySQL collisions</li>
 </ul>
@@ -4889,6 +4924,16 @@ deployable; this dependency must be removed before extraction.</p>
 <td><code>app:inventory:outbox:backfill-correlation</code></td>
 <td>Inventory</td>
 <td>Dry-run or <code>--apply</code> bounded correlation backfill for unpublished Inventory Outbox rows</td>
+</tr>
+<tr>
+<td><code>app:payment:outbox:publish</code></td>
+<td>Payment</td>
+<td>Relay unpublished Payment integration events to Messenger</td>
+</tr>
+<tr>
+<td><code>app:payment:outbox:backfill-correlation</code></td>
+<td>Payment</td>
+<td>Dry-run or <code>--apply</code> bounded correlation backfill for unpublished Payment Outbox rows</td>
 </tr>
 <tr>
 <td><code>app:inventory:reservations:release-expired</code></td>
