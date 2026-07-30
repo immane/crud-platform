@@ -35,11 +35,11 @@ deptrac:
     - name: CommonCode
       collectors:
         - type: classLike
-          value: ^App\\Common\\(?!(?:Entity|Repository)\\)
+          value: ^App\\Common\\Main\\(?!(?:Entity|Repository)\\)
     - name: CommonPersistence
       collectors:
         - type: classLike
-          value: ^App\\Common\\(?:Entity|Repository)\\
+          value: ^App\\Common\\Main\\(?:Entity|Repository)\\
     - name: IdentityCode
       collectors:
         - type: classLike

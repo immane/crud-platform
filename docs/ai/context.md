@@ -182,7 +182,7 @@ is ready.
 │   ├── EventListener/                   # ExceptionInterceptor, ControllerListener, OpenApiEnricherListener, LocaleListener, AccessLogListener
 │   └── Utils/                           # UUID, Math, RSA, Location, Inflect, etc.
 │
-├── src/Common/                   # CMS module: Category, Tag, Content, Comment, Page, Media, Setting, Picture
+├── src/Main/                   # CMS module: Category, Tag, Content, Comment, Page, Media, Setting, Picture
 │   ├── Entity/                   # 8 entities
 │   ├── Repository/
 │   ├── Service/

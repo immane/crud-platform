@@ -18,4 +18,3 @@ class ContentController extends RestController
         protected readonly ContentServiceInterface $service
     ) {}
 }
-

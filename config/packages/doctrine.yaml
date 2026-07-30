@@ -54,6 +54,12 @@ doctrine:
                 dir: '%kernel.project_dir%/vendor/crud-platform/identity-app/src/Main/Entity'
                 prefix: 'App\Identity\Main\Entity'
                 alias: Identity
+            Common:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/vendor/crud-platform/common-app/src/Main/Entity'
+                prefix: 'App\Common\Entity'
+                alias: Common
             Wechat:
                 type: attribute
                 is_bundle: false

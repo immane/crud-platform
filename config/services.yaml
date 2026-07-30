@@ -4,7 +4,7 @@ parameters: {}
 
 imports:
     - { resource: '../vendor/crud-platform/identity-app/config/services_identity.yaml' }
-    - { resource: '../src/Storage/Resources/config/services_storage.yaml', ignore_errors: true }
+    - { resource: '../vendor/crud-platform/common-app/src/Storage/Resources/config/services_storage.yaml' }
     - { resource: '../vendor/crud-platform/identity-app/config/services_wechat.yaml' }
     - { resource: '../src/Wechat/Resources/config/services_wechat_payment.yaml', ignore_errors: true }
     - { resource: '../src/Promotion/Resources/config/services_promotion.yaml', ignore_errors: true }
@@ -31,8 +31,6 @@ services:
     App\:
         resource: '../src/'
         exclude:
-            - '../src/Storage/Service/LocalStorage.php'
-            - '../src/Storage/Service/QiniuStorage.php'
             - '../src/Wechat/Service/Payment/WechatPayGateway.php'
             - '../src/Wechat/Service/Payment/WechatPayService.php'
             - '../src/Promotion/Exception/*'
@@ -41,6 +39,18 @@ services:
         resource: '../vendor/crud-platform/wallet-app/src/'
         exclude:
             - '../vendor/crud-platform/wallet-app/src/Kernel.php'
+
+    App\Common\:
+        resource: '../vendor/crud-platform/common-app/src/Main/'
+        exclude:
+            - '../vendor/crud-platform/common-app/src/Main/Kernel.php'
+
+    App\Storage\:
+        resource: '../vendor/crud-platform/common-app/src/Storage/'
+        exclude:
+            - '../vendor/crud-platform/common-app/src/Storage/Resources/'
+            - '../vendor/crud-platform/common-app/src/Storage/Service/LocalStorage.php'
+            - '../vendor/crud-platform/common-app/src/Storage/Service/QiniuStorage.php'
 
     App\Identity\Main\:
         resource: '../vendor/crud-platform/identity-app/src/Main/'
