@@ -49,7 +49,7 @@ final class PaymentAdjustmentIntegrationTest extends IntegrationKernelTestCase
         self::assertSame(Invoice::STATUS_PAID, $result->status);
         self::assertSame(Invoice::STATUS_PAID, $invoice->getStatus());
         self::assertSame(Invoice::PAYMENT_MOCK, $invoice->getPayment());
-        self::assertSame(300, $this->deductionService->sumAppliedAmount($invoice));
+        self::assertSame(300, $this->deductionService->sumAppliedAmount($invoice->getUuid()));
         self::assertSame(700, $invoice->getExtraData()['pay']['amount']);
 
         $this->em->refresh($payerWallet);
@@ -136,7 +136,7 @@ final class PaymentAdjustmentIntegrationTest extends IntegrationKernelTestCase
         $this->em->refresh($systemWallet);
         self::assertSame(1000, $payerWallet->getBalance());
         self::assertSame(0, $systemWallet->getBalance());
-        $deduction = $this->deductionService->findApplied($invoice);
+        $deduction = $this->deductionService->findApplied($invoice->getUuid());
         self::assertNull($deduction);
     }
 
@@ -169,7 +169,7 @@ final class PaymentAdjustmentIntegrationTest extends IntegrationKernelTestCase
         $user->setUsername(strstr($email, '@', true));
         $user->setPassword('password');
         $user->setRoles(['ROLE_USER']);
-        $wallet = new Wallet($user, 'CNY');
+        $wallet = new Wallet($user->getUuid(), 'CNY');
         $this->em->persist($user);
         $this->em->persist($wallet);
         $this->em->flush();

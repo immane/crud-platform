@@ -18,8 +18,7 @@ use App\Trade\Entity\Specification;
 use App\Trade\Service\Pricing\PriceCalculationContext;
 use App\Trade\Service\Pricing\PriceCalculationResult;
 use App\Trade\Service\Pricing\PriceCalculatorInterface;
-use App\Wallet\Repository\WalletRepository;
-use App\Wallet\Service\TransferServiceInterface;
+use CrudPlatform\IntegrationContracts\Wallet\WalletTransferPortInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -35,8 +34,7 @@ class OrderService extends BaseService implements OrderServiceInterface
         ContainerInterface $container,
         #[AutowireIterator('trade.price_calculator')]
         private readonly iterable $priceCalculators,
-        private readonly ?WalletRepository $walletRepository = null,
-        private readonly ?TransferServiceInterface $transferService = null,
+        private readonly ?WalletTransferPortInterface $walletTransferPort = null,
         private readonly ?InvoiceServiceInterface $invoiceService = null,
         private readonly ?TradeOutboxService $outboxService = null,
         #[Target('state_machine.order')]
@@ -153,7 +151,7 @@ class OrderService extends BaseService implements OrderServiceInterface
             ));
         }
 
-        if ($this->walletRepository === null || $this->transferService === null) {
+        if ($this->walletTransferPort === null) {
             throw new \RuntimeException('Wallet module is not configured. Set up wallet before processing payments.');
         }
 
@@ -162,26 +160,9 @@ class OrderService extends BaseService implements OrderServiceInterface
             throw new \RuntimeException('Order has no associated user.');
         }
 
-        $userId = $user->getId();
-        if ($userId === null) {
-            throw new \RuntimeException('User has not been persisted yet (no ID).');
-        }
-
-        $userWallet = $this->walletRepository->findByUserAndCurrency($userId, $order->getCurrency());
-        if ($userWallet === null) {
-            throw new \RuntimeException(sprintf(
-                'No %s wallet found for user #%d.',
-                $order->getCurrency(),
-                $user->getId(),
-            ));
-        }
-        $userWalletId = $userWallet->getId();
-        if ($userWalletId === null) {
-            throw new \RuntimeException('Wallet has not been persisted yet (no ID).');
-        }
-
-        $this->transferService->transfer(
-            $userWalletId,
+        $this->walletTransferPort->debitOwner(
+            $user->getUuid(),
+            $order->getCurrency(),
             $systemWalletId,
             $order->getTotalAmount(),
             $referenceId ?? 'order-pay-' . $order->getUuid(),
@@ -202,7 +183,7 @@ class OrderService extends BaseService implements OrderServiceInterface
             ));
         }
 
-        if ($this->walletRepository === null || $this->transferService === null) {
+        if ($this->walletTransferPort === null) {
             throw new \RuntimeException('Wallet module is not configured. Set up wallet before processing refunds.');
         }
 
@@ -211,27 +192,10 @@ class OrderService extends BaseService implements OrderServiceInterface
             throw new \RuntimeException('Order has no associated user.');
         }
 
-        $userId = $user->getId();
-        if ($userId === null) {
-            throw new \RuntimeException('User has not been persisted yet (no ID).');
-        }
-
-        $userWallet = $this->walletRepository->findByUserAndCurrency($userId, $order->getCurrency());
-        if ($userWallet === null) {
-            throw new \RuntimeException(sprintf(
-                'No %s wallet found for user #%d.',
-                $order->getCurrency(),
-                $user->getId(),
-            ));
-        }
-        $userWalletId = $userWallet->getId();
-        if ($userWalletId === null) {
-            throw new \RuntimeException('Wallet has not been persisted yet (no ID).');
-        }
-
-        $this->transferService->transfer(
+        $this->walletTransferPort->creditOwner(
+            $user->getUuid(),
+            $order->getCurrency(),
             $systemWalletId,
-            $userWalletId,
             $order->getTotalAmount(),
             $referenceId ?? 'order-refund-' . $order->getUuid(),
             sprintf('Refund for order #%d: %s', $order->getId() ?? 0, $reason),

@@ -76,11 +76,11 @@ info("Users: " . implode(', ', $userNames) . " (admin: alice)");
 // ================================================================
 info("Creating wallets...");
 $wallets = [];
-$systemWallet = new Wallet($users[0], 'SYS'); // system currency SYS (avoids collision)
+$systemWallet = new Wallet($users[0]->getUuid(), 'SYS'); // system currency SYS (avoids collision)
 $em->persist($systemWallet);
 
 foreach ($users as $i => $u) {
-    $w = new Wallet($u, 'CNY');
+    $w = new Wallet($u->getUuid(), 'CNY');
     $em->persist($w);
     $wallets['CNY'][$i] = $w;
 }
@@ -365,7 +365,7 @@ foreach (['draft', 'pending', 'confirmed', 'paid', 'fulfilled', 'completed', 're
 // Wallet summary
 $walletSummary = $db->executeQuery(
     "SELECT u.username, w.currency, w.balance, w.label
-     FROM wallet w LEFT JOIN users u ON w.user_id = u.id
+     FROM wallet w LEFT JOIN users u ON w.owner_uuid = u.uuid
      ORDER BY w.currency, w.balance DESC"
 )->fetchAllAssociative();
 echo "\n  \033[1mWallet Balances:\033[0m\n";

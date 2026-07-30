@@ -14,6 +14,10 @@
 - Payment's `InvoiceService` writes durable outbox rows; the transition host's `app:payment:outbox:publish` publishes paid/failed/cancelled/refunded v1 contracts through the root async transport.
 - Trade consumes those contracts via an idempotent `trade_consumed_event` inbox; the synchronous `OrderInvoiceListener` remains temporarily for observation.
 - Wallet uses a Core UUID-to-local-ID contract, and WeChat resolves its own user relation by UUID. Payment no longer imports Identity entities or repositories.
+- Wallet deduction persistence stores Payment references as `invoice_id` and `invoice_no` scalars. Its entity and repository no longer import the Payment Invoice entity.
+- Wallet payment and deduction services now accept Wallet-owned scalar references only. The root `App\Bridge\PaymentWallet` adapters contain the temporary Payment Invoice, HTTP, and SPI translation.
+- Wallet now dual-writes an `owner_uuid` beside its legacy `user_id` association. App Wallet filtering and owner-level reconciliation use the UUID; the legacy foreign key remains until the Wallet baseline and Trade integration are ready.
+- Trade's legacy wallet pay/refund path uses the neutral UUID-based `WalletTransferPortInterface`; it no longer imports Wallet repositories or transfer services.
 - Root Dockerfile copies `apps/payment` before `composer install`, and the root scheduler publishes Payment outbox rows independently.
 - The Payment app resolves its own `PayerReferenceResolverInterface` through `PayerDirectoryReferenceResolver` in standalone mode; the monolith binds it to the Identity adapter.
 - Payment app includes its own `invoice` workflow state machine.
@@ -48,5 +52,7 @@ Do not remove the synchronous listener until the following have been observed:
    the current standalone security provider is intentionally a placeholder.
 4. Move Payment HTTP traffic, worker, and scheduler behind Gateway shadow
    routing, then remove the monolith host assembly.
-5. Extract Wallet only after its Payment gateway and adjustment contracts no
-   longer expose Payment persistence or framework types.
+5. After `owner_uuid` has been observed in production, remove Wallet's legacy
+   Identity `User` association. Then provide Wallet with its own baseline, app
+   runtime, and shared messaging/auth dependencies before extracting it from the
+   transition host.

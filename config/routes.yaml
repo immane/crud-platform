@@ -18,7 +18,7 @@ api_trade:
 api_wallet:
     prefix: /api/v1
     resource:
-        path: ../src/Wallet/Controller/
+        path: ../vendor/crud-platform/wallet-app/src/Controller/
         namespace: App\Wallet\Controller
     type: attribute
 

@@ -493,7 +493,7 @@ final class PaymentAdjustmentMultiGatewayIntegrationTest extends IntegrationKern
 
     private function createWalletForUser(User $user, int $balance): Wallet
     {
-        $wallet = new Wallet($user, 'CNY');
+        $wallet = new Wallet($user->getUuid(), 'CNY');
         $this->em->persist($wallet);
         $this->em->flush();
         $this->em->getConnection()->executeStatement(

@@ -262,7 +262,7 @@ final class TradePaymentIntegrationTest extends IntegrationWebTestCase
 
     private function createWallet(User $user, int $balance): Wallet
     {
-        $wallet = new Wallet($user, 'CNY');
+        $wallet = new Wallet($user->getUuid(), 'CNY');
         $this->em->persist($wallet);
         $this->em->flush();
         $this->em->getConnection()->executeStatement('UPDATE wallet SET balance = :balance WHERE id = :id', [

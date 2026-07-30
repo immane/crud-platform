@@ -6,6 +6,7 @@ deptrac:
     - apps/store/src/
     - apps/inventory/src/
     - apps/payment/src/
+    - apps/wallet/src/
     - src/
     - packages/integration-contracts/src/
     - packages/legacy-messenger-compat/src/
@@ -15,6 +16,10 @@ deptrac:
       collectors:
         - type: classLike
           value: ^App\\Kernel$
+    - name: Composition
+      collectors:
+        - type: classLike
+          value: ^App\\Bridge\\
     - name: Vendor
       collectors:
         - type: classLike
@@ -109,6 +114,7 @@ deptrac:
           value: ^App\\Wechat\\(?:Entity|Repository)\\
   ruleset:
     Application:
+      - Composition
       - Core
       - Vendor
       - IntegrationContracts
@@ -132,6 +138,7 @@ deptrac:
       - WalletPersistence
       - WechatCode
       - WechatPersistence
+    Composition: [Core, Vendor, IntegrationContracts, CommonCode, CommonPersistence, IdentityCode, IdentityPersistence, InventoryCode, InventoryPersistence, PaymentCode, PaymentPersistence, PromotionCode, PromotionPersistence, StorageCode, StoragePersistence, StoreCode, StorePersistence, TradeCode, TradePersistence, WalletCode, WalletPersistence, WechatCode, WechatPersistence]
     Core: [Vendor]
     Vendor: []
     IntegrationContracts: [Vendor]
@@ -151,7 +158,7 @@ deptrac:
     StorePersistence: [Core, Vendor, CommonCode, IdentityCode, InventoryCode, PaymentCode, PromotionCode, StorageCode, StoreCode, TradeCode, WalletCode, WechatCode]
     TradeCode: [Core, Vendor, IntegrationContracts, CommonCode, IdentityCode, InventoryCode, PaymentCode, PromotionCode, StorageCode, StoreCode, TradePersistence, WalletCode, WechatCode]
     TradePersistence: [Core, Vendor, CommonCode, IdentityCode, InventoryCode, PaymentCode, PromotionCode, StorageCode, StoreCode, TradeCode, WalletCode, WechatCode]
-    WalletCode: [Core, Vendor, CommonCode, IdentityCode, InventoryCode, PaymentCode, PromotionCode, StorageCode, StoreCode, TradeCode, WalletPersistence, WechatCode]
+    WalletCode: [Core, Vendor, IntegrationContracts, CommonCode, IdentityCode, InventoryCode, PaymentCode, PromotionCode, StorageCode, StoreCode, TradeCode, WalletPersistence, WechatCode]
     WalletPersistence: [Core, Vendor, CommonCode, IdentityCode, InventoryCode, PaymentCode, PromotionCode, StorageCode, StoreCode, TradeCode, WalletCode, WechatCode]
     WechatCode: [Core, Vendor, CommonCode, IdentityCode, InventoryCode, PaymentCode, PromotionCode, StorageCode, StoreCode, TradeCode, WalletCode, WechatPersistence]
     WechatPersistence: [Core, Vendor, CommonCode, IdentityCode, InventoryCode, PaymentCode, PromotionCode, StorageCode, StoreCode, TradeCode, WalletCode, WechatCode]

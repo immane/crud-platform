@@ -70,7 +70,7 @@ final class TransferServiceTest extends TestCase
     {
         $user = new User();
         $user->setEmail('t@t.com')->setUsername('t');
-        $wallet = new Wallet($user, $currency);
+        $wallet = new Wallet($user->getUuid(), $currency);
         $rId = new \ReflectionProperty(Wallet::class, 'id');
         $rId->setValue($wallet, $id);
         $rBal = new \ReflectionProperty(Wallet::class, 'balance');

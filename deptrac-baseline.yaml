@@ -37,23 +37,6 @@ deptrac:
     App\Trade\Service\OrderService:
       - App\Identity\Entity\User
       - App\Payment\Entity\Invoice
-      - App\Wallet\Repository\WalletRepository
-    App\Wallet\Controller\App\WalletController:
-      - App\Identity\Entity\User
-    App\Wallet\Entity\Wallet:
-      - App\Identity\Entity\User
-    App\Wallet\Entity\WalletPaymentDeduction:
-      - App\Payment\Entity\Invoice
-    App\Wallet\Repository\WalletPaymentDeductionRepository:
-      - App\Payment\Entity\Invoice
-    App\Wallet\Service\Payment\WalletBalanceAdjustmentProvider:
-      - App\Payment\Entity\Invoice
-    App\Wallet\Service\Payment\WalletGateway:
-      - App\Payment\Entity\Invoice
-    App\Wallet\Service\Payment\WalletPaymentDeductionService:
-      - App\Payment\Entity\Invoice
-    App\Wallet\Service\WalletService:
-      - App\Identity\Entity\User
     App\Wechat\Controller\LoginController:
       - App\Identity\Entity\User
     App\Wechat\Entity\WechatUser:

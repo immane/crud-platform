@@ -50,6 +50,7 @@ nav:
       - Store Extraction Readiness: design/store-extraction-readiness.md
       - Inventory Extraction Readiness: design/inventory-extraction-readiness.md
       - Payment Extraction Readiness: design/payment-extraction-readiness.md
+      - Wallet Extraction Readiness: design/wallet-extraction-readiness.md
       - API Design: design/api-design.md
       - Data Model: design/data-model.md
       - Module Design: design/module-design.md

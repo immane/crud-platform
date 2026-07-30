@@ -12,7 +12,7 @@
 - Expression-based dynamic query engine (`@filter`, `@sort`, `@dql`)
 - Modular architecture: **Core** (framework), **Common** (CMS), **Promotion** (DSL-driven promotions), **Identity** (auth), **Trade** (commercial orders), **Store** (multi-store operations), **Payment** (invoices), **Wallet** (balances), **Inventory** (stock & reservation), **Wechat** (login + pay), **Storage** (file upload drivers)
 - EasyWeChat 6.x integration (Mini Program, Official Account OAuth, WeChat Pay V3)
-- NelmioApiDoc (Swagger at `/api/doc`), PHPUnit 12.5, Docker Compose (10 services: app, worker, scheduler, Store/Inventory apps, MySQL x3, Redis, Mailpit — FrankenPHP)
+- NelmioApiDoc (Swagger at `/api/doc`), PHPUnit 12.5, Docker Compose (12 services: app, worker, scheduler, Store/Inventory/Payment/Wallet apps, MySQL x4, Redis, Mailpit — FrankenPHP)
 - MkDocs Material + GitHub Pages documentation
 - **i18n**: Symfony Translation with en, zh, zh_Hant, ja — all user-facing messages, entity/field names, and status values translated
 
@@ -31,9 +31,10 @@ governance, not a mass code move or database split. See
 [`docs/design/microservice-transition.md`](../design/microservice-transition.md).
 
 Current boundary risks that must be removed before extraction include shared
-`Identity\Entity\User` Doctrine associations, synchronous Trade/Payment/Wallet
-calls, Payment/Wechat/Wallet plugin contracts that expose Doctrine and Symfony types,
-and PHP-class-based Messenger contracts. `Core` is provided by
+`Identity\Entity\User` Doctrine associations, synchronous Trade/Payment
+calls, Payment/Wechat plugin contracts that expose Doctrine and Symfony types,
+and PHP-class-based Messenger contracts. Wallet's legacy Identity FK and User ORM
+association have been removed; Wallet identity uses `ownerUuid` only. `Core` is provided by
 `packages/platform-kernel`, while
 Promotion and Storage remain in-process plugins/adapters until scalar service
 contracts exist.
@@ -117,9 +118,31 @@ resolver was replaced by a `trade_store_directory` local projection driven by th
 `store.directory.upserted.v1` neutral event (the 10th integration event). Store
 directory changes write to Store Outbox via a Doctrine `onFlush` listener. The
 Store application boots independently as a FrankenPHP container with its own MySQL
-8.4 database, migration baseline, and 19 registered routes. Cutover is deferred:
-the monolith remains the production host until all remaining modules are extracted
-and Gateway routing is ready.
+8.4 database, migration baseline, and 19 registered routes.
+
+`apps/payment` now exists as a fully extracted Symfony application with its own
+`App\Payment\Kernel`, Composer lock, config, migrations, tests, FrankenPHP Docker
+image, route smoke (`401` placeholder auth), and Payment Outbox publisher. It owns
+all Payment source under `apps/payment/src/` including `Invoice`, `PayerDirectory`,
+`PaymentOutboxMessage`, `MockGateway`, `InvoiceService`, and `PaymentGatewayInterface`.
+The monolith loads Payment through `crud-platform/payment-app` path package. Trade
+consumes `payment.invoice.{paid,failed,cancelled,refunded}.v1` neutral carriers via an
+Inbox handler for durable lifecycle integration. Cutover is deferred: the monolith
+remains the production host until all remaining modules are extracted and Gateway
+routing is ready.
+
+`apps/wallet` now exists as a fully extracted Symfony application with its own
+`App\Wallet\Kernel`, Composer lock, config, migrations, tests, and FrankenPHP
+Docker image. It owns all Wallet source under `apps/wallet/src/` — the single
+owner of `App\Wallet\*`. Wallet identity uses `ownerUuid` only; the legacy
+`user_id` FK and Identity ORM association have been removed. The monolith loads
+Wallet through `crud-platform/wallet-app` path package. Trade uses the neutral
+`WalletTransferPortInterface` from `packages/integration-contracts` for wallet
+transfers. Root `App\Bridge\PaymentWallet` adapters (`WalletGateway`,
+`WalletBalanceAdjustmentProvider`) translate between Payment contracts and
+Wallet-owned scalar references. Cutover is deferred: the monolith remains the
+production host until all remaining modules are extracted and Gateway routing
+is ready.
 
 ## 2. Directory Structure
 
@@ -195,16 +218,9 @@ and Gateway routing is ready.
 │       # Current Trade result propagation is synchronous Invoice domain events.
 │       # Planned phase 1: Payment Outbox -> Trade Inbox; Payment Inbox is deferred.
 │
-├── src/Wallet/                   # Wallet module
-│   ├── Entity/                   # Wallet, WalletTransaction, WalletPaymentDeduction
-│   ├── Repository/               # + WalletPaymentDeductionRepository
-│   ├── Service/TransferService.php     # Atomic transfer + deposit
-│   ├── Service/WalletService.php       # verifyBalance() + reconcile()
-│   ├── Service/Payment/WalletGateway.php              # Implements PaymentGatewayInterface
-│   ├── Service/Payment/WalletBalanceAdjustmentProvider.php  # Wallet deduction as Payment adjustment provider
-│   ├── Service/Payment/WalletPaymentDeductionService.php    # Wallet-owned deduction lifecycle
-│   ├── DTO/WalletPaymentDeductionRequest.php
-│   └── Controller/App/ + Manage/       # App list/detail/balance, Manage CRUD/audit/reconcile
+├── src/Bridge/PaymentWallet/     # Root Payment→Wallet composition adapters (transition host only)
+│   ├── WalletGateway.php              # Implements PaymentGatewayInterface, delegates to Wallet-owned services
+│   └── WalletBalanceAdjustmentProvider.php  # Wallet deduction as Payment adjustment provider
 │
 ├── src/Wechat/                   # WeChat module
 │   ├── Entity/WechatUser.php           # OneToOne→User
@@ -232,11 +248,36 @@ and Gateway routing is ready.
 │   ├── Controller/Manage/        # Admin CRUD endpoints
 │   └── Exception/
 │
-├── apps/inventory/               # Independently bootable Inventory application (fully extracted)
-│   ├── src/                      # App\Inventory namespace — single owner of Inventory source
-│   ├── migrations/               # Independent baseline for 9 inventory_* tables
-│   ├── docker/Caddyfile          # FrankenPHP HTTP server config
-│   └── Dockerfile                # Independent FrankenPHP container image
+├── apps/payment/                 # Independently bootable Payment application (fully extracted)
+│   ├── src/                      # App\Payment namespace — single owner of Payment source
+│   │   ├── Kernel.php             # App\Payment\Kernel
+│   │   ├── Entity/                # Invoice, PayerDirectory, PaymentOutboxMessage
+│   │   ├── Repository/            # InvoiceRepository, PayerDirectoryRepository, PaymentOutboxMessageRepository
+│   │   ├── Service/               # InvoiceService, PaymentOutboxService, PayerDirectoryService, PaymentGatewayInterface, MockGateway, Adjustment/*
+│   │   ├── DTO/                   # CreateInvoiceRequest, PaymentResult, PaymentNotifyResult, etc.
+│   │   ├── Event/                 # InvoicePaidEvent, InvoiceRefundedEvent, etc.
+│   │   ├── Command/               # PublishOutboxCommand
+│   │   └── Controller/App/ + Manage/ + Webhook/
+│   ├── config/                    # Payment-owned Symfony/Doctrine/Messenger config
+│   ├── migrations/                # Payment-owned migration baseline (3 tables)
+│   ├── docker/Caddyfile           # FrankenPHP HTTP server config
+│   ├── Dockerfile                 # Independent FrankenPHP container image
+│   └── tests/                     # Payment application regression tests
+│
+├── apps/wallet/                   # Independently bootable Wallet application (fully extracted)
+│   ├── src/                      # App\Wallet namespace — single owner of Wallet source
+│   │   ├── Kernel.php             # App\Wallet\Kernel
+│   │   ├── Entity/                # Wallet, WalletTransaction, WalletPaymentDeduction
+│   │   ├── Repository/            # WalletRepository, WalletTransactionRepository, WalletPaymentDeductionRepository
+│   │   ├── Service/               # WalletService, TransferService, TransactionService, WalletPaymentService, Payment/WalletPaymentDeductionService
+│   │   ├── DTO/                   # WalletPaymentDeductionRequest, WalletPaymentReference
+│   │   ├── Exception/             # InsufficientFundsException, SameWalletTransferException, WalletFrozenException
+│   │   └── Controller/App/ + Manage/
+│   ├── config/                    # Wallet-owned Symfony/Doctrine config
+│   ├── migrations/                # Wallet-owned migration baseline (3 tables)
+│   ├── docker/Caddyfile           # FrankenPHP HTTP server config
+│   ├── Dockerfile                 # Independent FrankenPHP container image
+│   └── tests/                     # Wallet application regression tests
 │
 ├── config/
 │   ├── services.yaml             # Service wiring + imports src/*/Resources/config + exclusions
@@ -262,7 +303,7 @@ and Gateway routing is ready.
 ├── README.zh-hant.md             # Chinese (Traditional) README
 ├── README.ja.md                  # Japanese README
 ├── mkdocs.yml                    # MkDocs Material config
-├── compose.yaml                  # Local dev + production: app, Store/Inventory apps, worker, scheduler, MySQL x3, Redis, Mailpit (FrankenPHP)
+├── compose.yaml                  # Local dev + production: app, Store/Inventory/Payment/Wallet apps, worker, scheduler, MySQL x4, Redis, Mailpit (FrankenPHP)
 ├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports for all apps)
 ├── Dockerfile                    # FrankenPHP 8.4 Alpine with Caddyfile
 ├── .dockerignore                 # Build context exclusions (tests, docs, dev files, vendor dirs)
@@ -272,6 +313,12 @@ and Gateway routing is ready.
 ├── apps/store/
 │   ├── Dockerfile                # Independent Store FrankenPHP image
 │   └── docker/Caddyfile          # Store FrankenPHP HTTP server config
+├── apps/payment/
+│   ├── Dockerfile                # Independent Payment FrankenPHP image
+│   └── docker/Caddyfile          # Payment FrankenPHP HTTP server config
+├── apps/wallet/
+│   ├── Dockerfile                # Independent Wallet FrankenPHP image
+│   └── docker/Caddyfile          # Wallet FrankenPHP HTTP server config
 └── .github/workflows/
     ├── ci.yml                    # CI: PHP 8.4, PHPStan Level 8, 90% coverage, Rector type-rule dry-run
     └── docs.yml                  # GitHub Pages deploy
@@ -489,9 +536,9 @@ Payment defines `PaymentAdjustmentProviderInterface` — a pre-payment hook that
 
 | Gateway | Module | Purpose |
 |---------|--------|---------|
-| `mock` | Payment (`Service/Gateway/MockGateway.php`) | Deterministic test/development gateway |
-| `wallet` | Wallet (`Service/Payment/WalletGateway.php`) | Internal wallet balance payment |
-| `wechat` | Wechat (`Service/Payment/WechatPayGateway.php`) | WeChat Pay V3 adapter |
+| `mock` | Payment (`apps/payment/src/Service/Gateway/MockGateway.php`) | Deterministic test/development gateway |
+| `wallet` | Bridge (`src/Bridge/PaymentWallet/WalletGateway.php`) | Internal wallet balance payment |
+| `wechat` | Wechat (`src/Wechat/Service/Payment/WechatPayGateway.php`) | WeChat Pay V3 adapter |
 
 ### 8.3 Payment Endpoints
 
@@ -765,7 +812,7 @@ Enriches all endpoints (90+):
 
 44+ named schemas across 13 tags (Auth, Products, Orders, Categories, Tags, Contents, Comments, Pages, Media, Settings, Promotions, PromotionTemplates, Wallet, System, Wechat). Each with field-level type, description, enum, and example values. `path_patterns` includes both `^/api` and `^/system`.
 
-## 15. Database Tables (22 monolith + 2 extracted-app baselines)
+## 15. Database Tables (22 monolith + 4 extracted-app baselines)
 
 | Version | Tables |
 |---------|--------|
@@ -785,7 +832,12 @@ Enriches all endpoints (90+):
 | 20260725000000-20260725050000 | Identity User UUID; Store, Store membership/order, Store Outbox/Inbox; Trade Outbox; Specification UUID; Trade order status `VARCHAR(40)` |
 | 20260726000000 | Inventory tables (material, stock, recipe, recipe_line, reservation, reservation_line, ledger_entry, inbox, outbox) + `store_trade_order_cancellation` |
 | 20260729000000 | Outbox correlation/causation trace columns; `trade_store_directory` local projection table for Store directory events |
-| 20260730000000 | Monolith: Store directory projection + correlation metadata (22 total). Store app: independent basline of 6 Store-owned tables (`store`, `store_membership`, `store_order`, `store_outbox_message`, `store_inbox_message`, `store_trade_order_cancellation`) |
+| 20260730000000 | Monolith: Store directory projection + correlation metadata (22 total). Store app: independent baseline of 6 Store-owned tables |
+| 20260730010000 | `payment_payer_directory` (payer UUID directory, consumes Identity events); Payment Outbox (`payment_outbox_message`); `payment_invoice` adds nullable `payer_id` FK |
+| 20260730020000 | Backfill: populate `payment_payer_directory` from `users`, link invoices to payer directory |
+| 20260730030000 | Wallet identity cutover: expand `wallet.owner_uuid` to `VARCHAR(36)`, backfill from `users.uuid` via legacy `wallet.user_id` |
+| 20260730040000 | Remove legacy `wallet.user_id` FK and column; Wallet identity is now `ownerUuid` only |
+| 20260730050000 | Payment app: independent baseline of 3 Payment-owned tables (`payment_invoice`, `payment_payer_directory`, `payment_outbox_message`) |
 
 ## 16. Documentation Assets
 
@@ -870,9 +922,9 @@ Qiniu configuration is intentionally **not** environment-variable based. Configu
 
 ### 19.1 Architecture
 
-10 services in `compose.yaml`: **app** (FrankenPHP), **worker** (Messenger async consumer, CLI-only), **scheduler** (Trade/Store/Inventory Outbox relay), **store-app**, **inventory-app**, **database** (MySQL 8.4 for monolith), **store-database**, **inventory-database**, **redis** (Redis 7 Alpine), **mailer** (Mailpit).
+12 services in `compose.yaml`: **app** (FrankenPHP), **worker** (Messenger async consumer, CLI-only), **scheduler** (Trade/Store/Inventory Outbox relay), **store-app**, **inventory-app**, **payment-app**, **wallet-app**, **database** (MySQL 8.4 for monolith), **store-database**, **inventory-database**, **payment-database**, **wallet-database**, **redis** (Redis 7 Alpine), **mailer** (Mailpit).
 
-Store and Inventory each have a `Dockerfile`, `docker/Caddyfile`, and independent MySQL instance. The monolith runs them through `crud-platform/store-app` and `crud-platform/inventory-app` Composer path packages. Worker and scheduler override `APP_ENV=prod` (DebugBundle not installed in `--no-dev` image) and disable inherited HTTP ports and healthchecks.
+Store, Inventory, Payment, and Wallet each have a `Dockerfile`, `docker/Caddyfile`, and independent MySQL instance. The monolith runs them through `crud-platform/store-app`, `crud-platform/inventory-app`, `crud-platform/payment-app`, and `crud-platform/wallet-app` Composer path packages. Worker and scheduler override `APP_ENV=prod` (DebugBundle not installed in `--no-dev` image) and disable inherited HTTP ports and healthchecks.
 
 ### 19.2 Development (zero-config)
 
@@ -881,10 +933,12 @@ docker compose up -d --build
 docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec store-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec inventory-app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec payment-app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec wallet-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec app php bin/console app:identity:user:create admin@example.com admin 'P@ssw0rd' --admin
 ```
 
-- `compose.override.yaml` auto-loads — sets `APP_ENV=dev`, `APP_DEBUG=1`, source mount for app, store-app, and inventory-app
+- `compose.override.yaml` auto-loads — sets `APP_ENV=dev`, `APP_DEBUG=1`, source mount for app, store-app, inventory-app, payment-app, and wallet-app
 - `docker/app/entrypoint.sh` creates development JWT keys once under mounted `./var/jwt` if missing, and creates an empty `.env` placeholder for Symfony Runtime
 - Root database port is configurable via `MYSQL_PORT` to avoid host-side MySQL collisions
 
@@ -927,7 +981,7 @@ Requires `.env.prod.local` copied from `.env.prod.example` with `APP_SECRET`, `R
 - Promotion strategies auto-tagged `promotion.strategy` via `_instanceof` rule, collected by `#[AutowireIterator]` in the strategy registry
 - `WechatService` explicitly defined in `services_wechat.yaml` with `%env()` parameter bindings
 - `WechatPayGateway` explicitly defined in `services_wechat.yaml` (excluded from global autowiring scan)
-- `WalletGateway` autowired in Wallet via `PaymentGatewayInterface` tag (no explicit exclusion needed)
+- `WalletGateway` autowired in `src/Bridge/PaymentWallet/` via `PaymentGatewayInterface` tag (no explicit exclusion needed)
 
 ## 22. Inventory Module — Stock & Reservation System
 

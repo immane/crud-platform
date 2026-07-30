@@ -110,7 +110,7 @@ final class WalletGatewayIntegrationTest extends IntegrationKernelTestCase
         $user->setPassword('password');
         $user->setRoles(['ROLE_USER']);
 
-        $wallet = new Wallet($user, 'CNY');
+        $wallet = new Wallet($user->getUuid(), 'CNY');
         $this->em->persist($user);
         $this->em->persist($wallet);
         $this->em->flush();

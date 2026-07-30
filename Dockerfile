@@ -17,6 +17,7 @@ COPY packages ./packages
 COPY apps/store ./apps/store
 COPY apps/inventory ./apps/inventory
 COPY apps/payment ./apps/payment
+COPY apps/wallet ./apps/wallet
 RUN composer install --no-dev --no-scripts --no-interaction --no-progress --optimize-autoloader \
     && composer clear-cache
 

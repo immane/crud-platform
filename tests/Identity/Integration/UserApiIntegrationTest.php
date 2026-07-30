@@ -478,7 +478,7 @@ final class UserApiIntegrationTest extends IntegrationWebTestCase
         // Create wallet
         $client->setServerParameter('HTTP_AUTHORIZATION', 'Bearer ' . $adminToken);
         $client->jsonRequest('POST', '/api/v1/manage/wallets', [
-            'user' => $userId,
+            'ownerUuid' => $user->getUuid(),
             'currency' => 'CNY',
             'status' => 'active',
             'label' => 'Deposit test',
@@ -563,7 +563,7 @@ final class UserApiIntegrationTest extends IntegrationWebTestCase
 
         $client->setServerParameter('HTTP_AUTHORIZATION', 'Bearer ' . $adminToken);
         $client->jsonRequest('POST', '/api/v1/manage/wallets', [
-            'user' => $user->getId(), 'currency' => 'CNY', 'status' => 'active',
+            'ownerUuid' => $user->getUuid(), 'currency' => 'CNY', 'status' => 'active',
         ]);
         $wid = $this->decodeJson($client)['data']['id'];
 
@@ -668,11 +668,11 @@ final class UserApiIntegrationTest extends IntegrationWebTestCase
 
         $client->setServerParameter('HTTP_AUTHORIZATION', 'Bearer ' . $adminToken);
         $client->jsonRequest('POST', '/api/v1/manage/wallets', [
-            'user' => $userA->getId(), 'currency' => 'CNY', 'status' => 'active', 'label' => 'A',
+            'ownerUuid' => $userA->getUuid(), 'currency' => 'CNY', 'status' => 'active', 'label' => 'A',
         ]);
         $wa = $this->decodeJson($client)['data']['id'];
         $client->jsonRequest('POST', '/api/v1/manage/wallets', [
-            'user' => $userB->getId(), 'currency' => 'CNY', 'status' => 'active', 'label' => 'B',
+            'ownerUuid' => $userB->getUuid(), 'currency' => 'CNY', 'status' => 'active', 'label' => 'B',
         ]);
         $wb = $this->decodeJson($client)['data']['id'];
 
@@ -714,7 +714,7 @@ final class UserApiIntegrationTest extends IntegrationWebTestCase
 
         $client->setServerParameter('HTTP_AUTHORIZATION', 'Bearer ' . $adminToken);
         $client->jsonRequest('POST', '/api/v1/manage/wallets', [
-            'user' => $user->getId(), 'currency' => 'CNY', 'status' => 'active',
+            'ownerUuid' => $user->getUuid(), 'currency' => 'CNY', 'status' => 'active',
         ]);
         $wid = $this->decodeJson($client)['data']['id'];
 

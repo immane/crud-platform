@@ -64,7 +64,7 @@ final class WalletServiceTest extends TestCase
         $user = new User();
         $user->setEmail('test@example.com')->setUsername('test');
 
-        $wallet = new Wallet($user, 'CNY');
+        $wallet = new Wallet($user->getUuid(), 'CNY');
         $refId = new \ReflectionProperty(Wallet::class, 'id');
         $refId->setValue($wallet, $id);
         $refBal = new \ReflectionProperty(Wallet::class, 'balance');
@@ -227,7 +227,7 @@ final class WalletServiceTest extends TestCase
     public function testReconcileSkipsWalletWithoutId(): void
     {
         $user = new User();
-        $wallet = new Wallet($user, 'CNY');
+        $wallet = new Wallet($user->getUuid(), 'CNY');
         // No id set — constructor defaults to null
         $this->walletRepo->method('findAll')->willReturn([$wallet]);
 
