@@ -11,11 +11,12 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # App
 WORKDIR /var/www/html
 
-# Dependencies first (cache layer). The root requires local packages and Store app.
+# Dependencies first (cache layer). The root requires local packages.
 COPY composer.json composer.lock symfony.lock ./
 COPY packages ./packages
 COPY apps/store ./apps/store
 COPY apps/inventory ./apps/inventory
+COPY apps/payment ./apps/payment
 RUN composer install --no-dev --no-scripts --no-interaction --no-progress --optimize-autoloader \
     && composer clear-cache
 

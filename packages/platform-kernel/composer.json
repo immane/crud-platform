@@ -1,7 +1,7 @@
 {
     "name": "crud-platform/platform-kernel",
     "description": "Shared Symfony platform kernel for CRUD Platform applications",
-    "version": "1.0.1-dev",
+    "version": "1.0.2-dev",
     "type": "library",
     "license": "Apache-2.0",
     "require": {

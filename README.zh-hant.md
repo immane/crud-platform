@@ -37,6 +37,7 @@ docker compose up -d --build
 docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec store-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec inventory-app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec payment-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec app php bin/console app:identity:user:create admin@example.com admin 'P@ssw0rd' --admin
 
 curl -X POST http://localhost:8080/api/auth/login \
@@ -47,6 +48,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 - API：`http://localhost:8080`
 - Store API：`http://localhost:8081`
 - Inventory API：`http://localhost:8082`
+- Payment runtime 冒煙：`http://localhost:8083`（尚未可切流）
 - OpenAPI：`http://localhost:8080/api/doc`
 - worker/scheduler 日誌：`docker compose logs -f worker scheduler`
 
@@ -60,7 +62,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 | Commerce | `Trade`、`Promotion` | 過渡服務候選 |
 | Store Operations | `Store` → `apps/store` | 已提取；單體在過渡期間託管 |
 | Inventory | `Inventory` → `apps/inventory` | 已提取；單體在過渡期間託管，受安全條件限制 |
-| Payments | `Payment`、微信支付介接器 | 須先建立持久化生命週期事件 |
+| Payments | `Payment` → `apps/payment`、微信支付介接器 | 已提取；單體在過渡期間託管 |
 | Wallet/Ledger | `Wallet` | 在 Payment 契約解耦後提取 |
 | Identity & Access | `Identity`、微信登入介接器 | 後期提取 |
 | Content/Media | `Common`、`Storage` | 後期；須先分離 Settings 所有權 |

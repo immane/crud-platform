@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Payment\Entity;
 
 use App\Core\Utils\UUID;
-use App\Identity\Entity\User;
 use App\Payment\Repository\InvoiceRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -79,9 +78,8 @@ class Invoice
     #[ORM\Column(type: 'string', length: 10, options: ['default' => 'CNY'])]
     private string $currency = 'CNY';
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'payer_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
-    private ?User $payer = null;
+    #[ORM\Column(name: 'payer_uuid', type: 'string', length: 36, nullable: true)]
+    private ?string $payerUuid = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $subject = null;
@@ -153,8 +151,8 @@ class Invoice
     public function setRefundedAmount(int $refundedAmount): self { $this->refundedAmount = $refundedAmount; $this->touch(); return $this; }
     public function getCurrency(): string { return $this->currency; }
     public function setCurrency(string $currency): self { $this->currency = strtoupper($currency); $this->touch(); return $this; }
-    public function getPayer(): ?User { return $this->payer; }
-    public function setPayer(?User $payer): self { $this->payer = $payer; $this->touch(); return $this; }
+    public function getPayerUuid(): ?string { return $this->payerUuid; }
+    public function setPayerUuid(?string $payerUuid): self { $this->payerUuid = $payerUuid; $this->touch(); return $this; }
     public function getSubject(): ?string { return $this->subject; }
     public function setSubject(?string $subject): self { $this->subject = $subject; $this->touch(); return $this; }
     public function getDescription(): ?string { return $this->description; }

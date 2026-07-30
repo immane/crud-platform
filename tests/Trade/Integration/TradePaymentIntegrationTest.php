@@ -9,7 +9,10 @@ use App\Payment\Entity\Invoice;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
 use App\Trade\Entity\Order;
+use App\Trade\Entity\TradeConsumedEvent;
+use App\Trade\MessageHandler\PaymentInvoiceLifecycleHandler;
 use App\Wallet\Entity\Wallet;
+use CrudPlatform\IntegrationContracts\Event\V1\PaymentInvoicePaid;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,6 +65,27 @@ final class TradePaymentIntegrationTest extends IntegrationWebTestCase
         self::assertSame(Invoice::STATUS_PAID, $order->getPaymentStatus());
         self::assertNotNull($order->getInvoiceId());
         self::assertNotNull($order->getInvoiceNo());
+
+        $invoice = $this->em->getRepository(Invoice::class)->findOneBy(['uuid' => $order->getInvoiceId()]);
+        self::assertInstanceOf(Invoice::class, $invoice);
+        $this->client->getContainer()->get(PaymentInvoiceLifecycleHandler::class)->handlePaid(new PaymentInvoicePaid([
+            'eventId' => '00000000-0000-4000-8000-000000000099',
+            'type' => 'payment.invoice.paid',
+            'version' => 1,
+            'aggregateType' => 'payment_invoice',
+            'aggregateId' => $invoice->getUuid(),
+            'occurredAt' => $invoice->getPaidAt()?->format(DATE_ATOM),
+            'correlationId' => $invoice->getUuid(),
+            'causationId' => null,
+            'payload' => [
+                'invoiceUuid' => $invoice->getUuid(), 'outTradeNo' => $invoice->getOutTradeNo(),
+                'sourceType' => 'trade_order', 'sourceId' => $order->getUuid(), 'status' => Invoice::STATUS_PAID,
+                'amount' => $invoice->getAmount(), 'refundedAmount' => 0, 'currency' => $invoice->getCurrency(),
+                'payment' => $invoice->getPayment(), 'transactionId' => $invoice->getTransactionId(),
+                'paidAt' => $invoice->getPaidAt()?->format(DATE_ATOM), 'cancelledAt' => null, 'refundedAt' => null,
+            ],
+        ]));
+        self::assertCount(1, $this->em->getRepository(TradeConsumedEvent::class)->findAll());
 
         $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/fulfill", ['trackingNumber' => 'TRACK-1']);
         $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/complete");

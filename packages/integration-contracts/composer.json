@@ -1,7 +1,7 @@
 {
     "name": "crud-platform/integration-contracts",
     "description": "Transport-neutral integration message carriers for CRUD Platform.",
-    "version": "1.1.1-dev",
+    "version": "1.1.2-dev",
     "type": "library",
     "license": "Apache-2.0",
     "require": {

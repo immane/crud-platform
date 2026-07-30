@@ -32,6 +32,8 @@
     >
         <include>
             <directory>apps/store/src</directory>
+            <directory>apps/inventory/src</directory>
+            <directory>apps/payment/src</directory>
             <directory>src</directory>
             <directory>packages/legacy-messenger-compat/src</directory>
             <directory>packages/platform-kernel/src</directory>

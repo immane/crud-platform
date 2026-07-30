@@ -287,7 +287,7 @@ class OrderService extends BaseService implements OrderServiceInterface
                 scene: Invoice::SCENE_ORDER,
                 amount: $order->getTotalAmount(),
                 currency: $order->getCurrency(),
-                payer: $order->getUser(),
+                payerUuid: $order->getUser()?->getUuid(),
                 subject: sprintf('Order #%d', $order->getId() ?? 0),
                 description: $order->getNotes(),
                 extraData: ['orderId' => $order->getId()],

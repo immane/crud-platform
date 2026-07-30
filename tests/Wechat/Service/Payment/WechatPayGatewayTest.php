@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Wechat\Service\Gateway;
 
+use App\Identity\Entity\User;
 use App\Payment\DTO\PaymentNotifyResult;
 use App\Payment\DTO\PaymentRefundResult;
 use App\Payment\DTO\PaymentResult;
@@ -76,7 +77,7 @@ final class WechatPayGatewayTest extends TestCase
         $invoice->method('getSubject')->willReturn('Test');
         $invoice->method('getDescription')->willReturn(null);
         $invoice->method('getOutTradeNo')->willReturn('TXN001');
-        $invoice->method('getPayer')->willReturn(null);
+        $invoice->method('getPayerUuid')->willReturn(null);
 
         self::expectException(\RuntimeException::class);
         self::expectExceptionMessage('WeChat user not found');
@@ -236,7 +237,8 @@ final class WechatPayGatewayTest extends TestCase
         $invoice->method('getSubject')->willReturn('Test JSAPI Order');
         $invoice->method('getDescription')->willReturn(null);
         $invoice->method('getOutTradeNo')->willReturn('TXN_JSAPI');
-        $invoice->method('getPayer')->willReturn($payer);
+        $invoice->method('getPayerUuid')->willReturn($payer->getUuid());
+        $this->wechatUserRepo->method('findByUserUuid')->with($payer->getUuid())->willReturn($wechatUser);
 
         $result = $this->gateway->pay($invoice, 100);
 

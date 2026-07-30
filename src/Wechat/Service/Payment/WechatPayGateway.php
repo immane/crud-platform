@@ -53,11 +53,11 @@ final class WechatPayGateway implements PaymentGatewayInterface
         ];
 
         if ($tradeType === 'jsapi') {
-            $payer = $invoice->getPayer();
-            if ($payer === null) {
+            $payerUuid = $invoice->getPayerUuid();
+            if ($payerUuid === null) {
                 throw new \RuntimeException('WeChat user not found for payer. Login via WeChat first.');
             }
-            $wechatUser = $this->wechatUserRepository->findByUser($payer);
+            $wechatUser = $this->wechatUserRepository->findByUserUuid($payerUuid);
             if ($wechatUser === null) {
                 throw new \RuntimeException('WeChat user not found for payer. Login via WeChat first.');
             }

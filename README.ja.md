@@ -44,6 +44,7 @@ docker compose up -d --build
 docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec store-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec inventory-app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec payment-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec app php bin/console app:identity:user:create admin@example.com admin 'P@ssw0rd' --admin
 
 curl -X POST http://localhost:8080/api/auth/login \
@@ -54,6 +55,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 - API: `http://localhost:8080`
 - Store API: `http://localhost:8081`
 - Inventory API: `http://localhost:8082`
+- Payment runtime smoke: `http://localhost:8083`（トラフィック切替前）
 - OpenAPI: `http://localhost:8080/api/doc`
 - worker/scheduler ログ: `docker compose logs -f worker scheduler`
 
@@ -67,7 +69,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 | Commerce | `Trade`、`Promotion` | 移行中のサービス候補 |
 | Store Operations | `Store` → `apps/store` | 抽出済み。移行中はモノリスがホスト |
 | Inventory | `Inventory` → `apps/inventory` | 抽出済み。移行中はモノリスがホスト。安全条件付き |
-| Payments | `Payment`、WeChat Pay アダプタ | 永続的なライフサイクルイベントが必要 |
+| Payments | `Payment` → `apps/payment`、WeChat Pay アダプタ | 抽出済み。移行中はモノリスがホスト |
 | Wallet/Ledger | `Wallet` | Payment 契約の分離後 |
 | Identity & Access | `Identity`、WeChat ログインアダプタ | 後続の抽出対象 |
 | Content/Media | `Common`、`Storage` | 後続。Settings の所有権分離が先 |

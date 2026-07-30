@@ -1,7 +1,7 @@
 # 快速上手
 
-当前仓库以一个模块化单体应用和独立 Store、Inventory 应用运行。Docker Compose 会启动
-Web 应用（FrankenPHP）、两个已提取应用、共享 Messenger worker 和共享 scheduler；这还
+当前仓库以一个模块化单体应用和独立 Store、Inventory、Payment 应用运行。Docker Compose 会启动
+Web 应用（FrankenPHP）、三个已提取应用、共享 Messenger worker 和共享 scheduler；这还
 不是目标的多服务运行时。
 
 ## Docker
@@ -13,6 +13,7 @@ docker compose up -d --build
 docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec store-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec inventory-app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec payment-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec app php bin/console app:identity:user:create admin@example.com admin 'P@ssw0rd' --admin
 ```
 
@@ -29,17 +30,19 @@ curl -X POST http://localhost:8080/api/auth/login \
 - API：`http://localhost:8080`
 - Store API：`http://localhost:8081`
 - Inventory API：`http://localhost:8082`
+- Payment runtime 冒烟：`http://localhost:8083`（尚未可切流）
 - OpenAPI UI：`http://localhost:8080/api/doc`
 - Mailpit：`http://localhost:8025`
 
 常用命令：
 
 ```bash
-docker compose logs -f app worker scheduler store-app inventory-app
+docker compose logs -f app worker scheduler store-app inventory-app payment-app
 docker compose exec app php bin/console about
 docker compose exec app php bin/console doctrine:migrations:status
 docker compose exec store-app php bin/console doctrine:migrations:status
 docker compose exec inventory-app php bin/console doctrine:migrations:status
+docker compose exec payment-app php bin/console doctrine:migrations:status
 docker compose down
 ```
 

@@ -47,6 +47,10 @@ framework:
             CrudPlatform\IntegrationContracts\Event\V1\InventoryReservationConfirmed: async
             CrudPlatform\IntegrationContracts\Event\V1\InventoryReservationRejected: async
             CrudPlatform\IntegrationContracts\Event\V1\InventoryReservationReleased: async
+            CrudPlatform\IntegrationContracts\Event\V1\PaymentInvoicePaid: async
+            CrudPlatform\IntegrationContracts\Event\V1\PaymentInvoiceFailed: async
+            CrudPlatform\IntegrationContracts\Event\V1\PaymentInvoiceCancelled: async
+            CrudPlatform\IntegrationContracts\Event\V1\PaymentInvoiceRefunded: async
 
             # Route your messages to the transports
             # 'App\Message\YourMessage': async

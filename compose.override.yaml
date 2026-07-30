@@ -29,6 +29,10 @@ services:
     ports:
       - "3309:3306"
 
+  payment-database:
+    ports:
+      - "3310:3306"
+
   mailer:
     ports:
       - "1025:1025"

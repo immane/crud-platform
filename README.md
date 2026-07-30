@@ -44,6 +44,7 @@ docker compose up -d --build
 docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec store-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec inventory-app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec payment-app php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec app php bin/console app:identity:user:create admin@example.com admin 'P@ssw0rd' --admin
 
 curl -X POST http://localhost:8080/api/auth/login \
@@ -54,6 +55,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 - API: `http://localhost:8080`
 - Store API: `http://localhost:8081`
 - Inventory API: `http://localhost:8082`
+- Payment runtime smoke: `http://localhost:8083` (not traffic-ready)
 - OpenAPI: `http://localhost:8080/api/doc`
 - Worker and scheduler logs: `docker compose logs -f worker scheduler`
 
@@ -67,7 +69,7 @@ For troubleshooting and native-PHP notes, see [QUICKSTART.md](QUICKSTART.md).
 | Commerce | `Trade`, `Promotion` | Transitional service candidate |
 | Store Operations | `Store` → `apps/store` | Extracted; monolith hosts during transition |
 | Inventory | `Inventory` → `apps/inventory` | Extracted; monolith hosts during transition; safety-gated |
-| Payments | `Payment`, WeChat Pay adapter | Requires durable lifecycle events |
+| Payments | `Payment` → `apps/payment`, WeChat Pay adapter | Extracted; monolith hosts during transition |
 | Wallet/Ledger | `Wallet` | Follows Payment contract decoupling |
 | Identity & Access | `Identity`, WeChat login adapter | Later extraction |
 | Content/Media | `Common`, `Storage` | Later; settings ownership must be separated |
