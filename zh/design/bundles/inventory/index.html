@@ -485,6 +485,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../payment-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付款提取准备情况
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../api-design/" class="md-nav__link">
         
   
@@ -2588,7 +2616,7 @@
 是允许的，或者其他未来的股票突变。</p>
 <h3 id="25">2.5 本地交易和至少一次交付<a class="headerlink" href="#25" title="Permanent link">&para;</a></h3>
 <p>每个 Inventory 突变都会在一个 SQL 中写入其本地聚合及其传出事件
-交易。收件箱表通过 <code>eventId</code> 至少删除一次传送的重复数据；商业
+交易。收件箱表通过 <code>eventId</code> 至少删除一次传递的重复数据；商业
 记录添加唯一键以实现竞赛安全幂等性。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Inventory transaction:
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  consumed event + reservation + stock changes + ledger entries + outbox event
@@ -3145,7 +3173,7 @@
 取消发布一并实施；它不能默默地保留过期的
 无限期保留。</p>
 <p>库存调节将每个余额与其分类账增量进行比较。任何维修都是
-新的<code>adjustment</code>分类账条目，绝不直接余额覆盖。</p>
+新的 <code>adjustment</code> 分类帐条目，永远不会直接覆盖余额。</p>
 <hr />
 <h2 id="6">6. 收件箱、发件箱和信使<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
 <h3 id="61">6.1 持久化消息记录<a class="headerlink" href="#61" title="Permanent link">&para;</a></h3>
@@ -3324,9 +3352,9 @@ available_at, id)</code> 索引到期未发布的行。</p>
 <a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">  </span><span class="nt">&quot;allowNegativeStock&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
 <a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="p">}</span>
 </code></pre></div>
-<p><code>quantityDelta</code> 已签名。负调整不得驱动现有量低于保留值
+<p><code>quantityDelta</code> 已签名。负调整不得驱动手头低于保留值
 数量，除非 <code>allowNegativeStock=true</code>；否则它已经失效了
-确认预订。对于同一个管理引用，操作是幂等的
+确认预订。对于相同的管理引用，操作是幂等的
 当提供参考时。</p>
 <hr />
 <h2 id="8">8. 文件结构<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>

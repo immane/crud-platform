@@ -485,6 +485,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../payment-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付款提取准备情况
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api-design/" class="md-nav__link">
         
   
@@ -2541,14 +2569,14 @@
 <p>实体为本地 Doctrine 关系、连接和连接保留整数自动增量 <code>id</code>
 存储效率。 UUID 是一个独立的、稳定的身份，用于离开其实体的实体
 有界上下文。</p>
-<p>当实体满足以下任一条件时，它必须具有 UUID：</p>
+<p>当实体属于以下任一情况时，它必须具有 UUID：</p>
 <ul>
 <li>可通过公共 API、URL、Webhook 或第三方集成进行寻址。</li>
 <li>包含在跨模块或跨服务事件负载中。</li>
 <li>域聚合，稍后可能会移动到自己的数据库/服务。</li>
 <li>由幂等性、审计、支付、库存或外部关联流引用。</li>
 </ul>
-<p>纯粹的内部实现记录不需要单独的实体UUID。示例
+<p>纯粹的内部实现记录不需要单独的实体 UUID。示例
 包括私有连接表或已由其唯一标识的收件箱记录
 传入<code>eventId</code>。通过 API 公开的独立管理关系应该
 仍然收到 UUID。</p>

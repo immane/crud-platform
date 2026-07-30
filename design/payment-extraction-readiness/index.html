@@ -10,7 +10,13 @@
       
       
       
+        <link rel="canonical" href="https://immane.github.io/crud-platform/design/payment-extraction-readiness/">
       
+      
+        <link rel="prev" href="../inventory-extraction-readiness/">
+      
+      
+        <link rel="next" href="../api-design/">
       
       
         
@@ -20,19 +26,19 @@
         
       
       
-      <link rel="icon" href="/crud-platform/assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>CRUD Platform</title>
+        <title>Payment Extraction Readiness - CRUD Platform</title>
       
     
     
-      <link rel="stylesheet" href="/crud-platform/assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="/crud-platform/assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -51,7 +57,7 @@
       
     
     
-    <script>__md_scope=new URL("/crud-platform/",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -75,6 +81,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#payment-extraction-readiness" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -87,7 +98,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="/crud-platform/." title="CRUD Platform" class="md-header__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
+    <a href="../.." title="CRUD Platform" class="md-header__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -107,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              Payment Extraction Readiness
             
           </span>
         </div>
@@ -251,7 +262,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="/crud-platform/." title="CRUD Platform" class="md-nav__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
+    <a href="../.." title="CRUD Platform" class="md-nav__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -281,7 +292,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -305,8 +316,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -317,13 +330,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
@@ -344,7 +355,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -362,7 +373,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/system-architecture/" class="md-nav__link">
+      <a href="../system-architecture/" class="md-nav__link">
         
   
   
@@ -390,7 +401,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/microservice-transition/" class="md-nav__link">
+      <a href="../microservice-transition/" class="md-nav__link">
         
   
   
@@ -418,7 +429,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/store-extraction-readiness/" class="md-nav__link">
+      <a href="../store-extraction-readiness/" class="md-nav__link">
         
   
   
@@ -446,7 +457,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/inventory-extraction-readiness/" class="md-nav__link">
+      <a href="../inventory-extraction-readiness/" class="md-nav__link">
         
   
   
@@ -471,10 +482,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="/crud-platform/design/payment-extraction-readiness/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment Extraction Readiness
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -490,6 +528,59 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#completed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Completed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transition-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transition Safety
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remaining-extraction-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remaining Extraction Work
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -502,7 +593,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/api-design/" class="md-nav__link">
+      <a href="../api-design/" class="md-nav__link">
         
   
   
@@ -530,7 +621,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/data-model/" class="md-nav__link">
+      <a href="../data-model/" class="md-nav__link">
         
   
   
@@ -558,7 +649,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/module-design/" class="md-nav__link">
+      <a href="../module-design/" class="md-nav__link">
         
   
   
@@ -586,7 +677,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/controller-design/" class="md-nav__link">
+      <a href="../controller-design/" class="md-nav__link">
         
   
   
@@ -614,7 +705,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/api-documentation/" class="md-nav__link">
+      <a href="../api-documentation/" class="md-nav__link">
         
   
   
@@ -642,7 +733,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/system-contracts/" class="md-nav__link">
+      <a href="../system-contracts/" class="md-nav__link">
         
   
   
@@ -731,7 +822,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/bundles/core/" class="md-nav__link">
+      <a href="../bundles/core/" class="md-nav__link">
         
   
   
@@ -759,7 +850,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/bundles/common/" class="md-nav__link">
+      <a href="../bundles/common/" class="md-nav__link">
         
   
   
@@ -787,7 +878,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/bundles/trade/" class="md-nav__link">
+      <a href="../bundles/trade/" class="md-nav__link">
         
   
   
@@ -815,7 +906,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/bundles/store/" class="md-nav__link">
+      <a href="../bundles/store/" class="md-nav__link">
         
   
   
@@ -843,7 +934,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/bundles/inventory/" class="md-nav__link">
+      <a href="../bundles/inventory/" class="md-nav__link">
         
   
   
@@ -871,7 +962,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/bundles/payment/" class="md-nav__link">
+      <a href="../bundles/payment/" class="md-nav__link">
         
   
   
@@ -899,7 +990,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/bundles/wallet/" class="md-nav__link">
+      <a href="../bundles/wallet/" class="md-nav__link">
         
   
   
@@ -927,7 +1018,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/bundles/identity/" class="md-nav__link">
+      <a href="../bundles/identity/" class="md-nav__link">
         
   
   
@@ -955,7 +1046,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/design/bundles/wechat/" class="md-nav__link">
+      <a href="../bundles/wechat/" class="md-nav__link">
         
   
   
@@ -1044,7 +1135,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/research/easywechat-6.x-usage/" class="md-nav__link">
+      <a href="../../research/easywechat-6.x-usage/" class="md-nav__link">
         
   
   
@@ -1072,7 +1163,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/research/huifu-payment-api/" class="md-nav__link">
+      <a href="../../research/huifu-payment-api/" class="md-nav__link">
         
   
   
@@ -1161,7 +1252,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/issues/architecture-review-2026-06-26/" class="md-nav__link">
+      <a href="../../issues/architecture-review-2026-06-26/" class="md-nav__link">
         
   
   
@@ -1196,7 +1287,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/ai/context/" class="md-nav__link">
+      <a href="../../ai/context/" class="md-nav__link">
         
   
   
@@ -1223,7 +1314,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/crud-platform/openapi/endpoints.yaml" class="md-nav__link">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
         
   
   
@@ -1260,6 +1351,49 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#completed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Completed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transition-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transition Safety
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remaining-extraction-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remaining Extraction Work
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -1272,8 +1406,75 @@
               
               <article class="md-content__inner md-typeset">
                 
-  <h1>404 - Not found</h1>
+                  
 
+
+  
+  
+
+
+<h1 id="payment-extraction-readiness">Payment Extraction Readiness<a class="headerlink" href="#payment-extraction-readiness" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Payment source has been fully extracted.</strong> This document records the
+completed transition-host work and the remaining runtime cutover steps.</p>
+</blockquote>
+<h2 id="completed">Completed<a class="headerlink" href="#completed" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Payment source now lives exclusively in <code>apps/payment/src</code> under
+  <code>App\Payment\*</code> (30 files).</li>
+<li><code>apps/payment</code> has its own Kernel, Composer lock, composer.json (<code>crud-platform/payment-app</code>), configuration, PHPUnit smoke test, FrankenPHP image, and MySQL 8.4 service.</li>
+<li>The monolith temporarily loads Payment through the <code>crud-platform/payment-app</code> Composer path package; root routes, Doctrine mapping, services, PHPStan, Deptrac, and Rector point to that package.</li>
+<li>The Payment baseline migration owns <code>payment_invoice</code>, <code>payment_outbox_message</code>, and <code>payment_payer_directory</code> — three Payment-owned tables with no foreign keys to non-Payment tables.</li>
+<li>Payment invoices use a Payment-owned <code>payer_uuid</code> scalar instead of an ORM association to Identity <code>users</code>. The <code>payment_payer_directory</code> maps legacy numeric Identity IDs to UUIDs during the transition.</li>
+<li>Payment's <code>InvoiceService</code> writes durable outbox rows; <code>app:payment:outbox:publish</code> publishes paid/failed/cancelled/refunded v1 contracts through the root async transport.</li>
+<li>Trade consumes those contracts via an idempotent <code>trade_consumed_event</code> inbox; the synchronous <code>OrderInvoiceListener</code> remains temporarily for observation.</li>
+<li>Wallet uses a Core UUID-to-local-ID contract, and WeChat resolves its own user relation by UUID. Payment no longer imports Identity entities or repositories.</li>
+<li>Root Dockerfile copies <code>apps/payment</code> before <code>composer install</code>, and the root scheduler publishes Payment outbox rows independently.</li>
+<li>The Payment app resolves its own <code>PayerReferenceResolverInterface</code> through <code>PayerDirectoryReferenceResolver</code> in standalone mode; the monolith binds it to the Identity adapter.</li>
+<li>Payment app includes its own <code>invoice</code> workflow state machine.</li>
+</ul>
+<h2 id="transition-safety">Transition Safety<a class="headerlink" href="#transition-safety" title="Permanent link">&para;</a></h2>
+<p>The existing synchronous <code>OrderInvoiceListener</code> remains temporarily enabled.
+It preserves current API behavior while the durable path is observed. The Trade
+Inbox makes the asynchronous copy safe to replay: it records the event ID and
+payload hash, treats an identical retry as a no-op, and rejects an event ID
+reused with a different payload.</p>
+<p>Do not remove the synchronous listener until the following have been observed:</p>
+<ol>
+<li>Payment Outbox publishing and Trade consumer processing are healthy for a
+   bounded production period.</li>
+<li>Paid, failed, cancelled, partial-refund, and full-refund paths have all been
+   exercised through the durable path.</li>
+<li>Failed transport rows and any in-flight events have been replayed.</li>
+<li>The resulting eventual-consistency behavior is accepted by the payment and
+   order API clients.</li>
+</ol>
+<h2 id="remaining-extraction-work">Remaining Extraction Work<a class="headerlink" href="#remaining-extraction-work" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Introduce the shared broker and schema-versioned serializer required for an
+   independent Payment worker and database.</li>
+<li>Disable and remove the synchronous <code>OrderInvoiceListener</code> after the durable
+   path has met the observation criteria.</li>
+<li>Extract Payment source, its baseline schema, and a dedicated
+   <code>apps/payment</code> runtime using the Store and Inventory transition-host pattern.</li>
+<li>Move Payment HTTP traffic, worker, and scheduler behind Gateway shadow
+   routing, then remove the monolith host assembly.</li>
+<li>Extract Wallet only after its Payment gateway and adjustment contracts no
+   longer expose Payment persistence or framework types.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
               </article>
             </div>
           
@@ -1316,10 +1517,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "/crud-platform/", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "/crud-platform/assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="/crud-platform/assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
