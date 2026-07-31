@@ -304,8 +304,29 @@ publication for Trade, Store, Inventory, and Payment, plus inventory expiry rele
 
 ---
 
+## Developer Onboarding
+
+New to the project? Read the [Development Manual](docs/manual/index.md) in this order:
+
+1. [Architecture](docs/manual/architecture.md) — understand the service topology, layers, and patterns
+2. [Getting Started](docs/manual/getting-started.md) — set up Docker and verify it works
+3. [Project Structure](docs/manual/project-structure.md) — learn where everything lives
+4. [Core Framework](docs/manual/core-framework.md) — the framework powering every app: `RestController`, `BaseService`, View mixins, EventListeners, Utils
+5. [Core Usage](docs/manual/core-usage.md) — hands-on recipes: build a controller, service, file upload, custom action
+6. [Query System](docs/manual/query-system.md) — master `@filter`, `@sort`, `@order`, `@dql`, `@select`, `@groupBy`, `@expands`, `@display`, `@transform`
+7. [API Contracts](docs/manual/api-contracts.md) — request/response envelope, auth, pagination, error handling, API docs
+8. [Development Contracts](docs/manual/development-contracts.md) — coding rules, layer boundaries, naming, security
+
+Then explore the remaining guides as needed: [Testing](docs/manual/testing.md),
+[Integration Events](docs/manual/integration-events.md),
+[Database & Migrations](docs/manual/database-and-migrations.md),
+[Deployment](docs/manual/deployment.md),
+[Extracting a Service](docs/manual/extracting-a-service.md),
+[Internationalization](docs/manual/i18n.md).
+
 ## Documentation
 
+- [Development Manual](docs/manual/index.md) — comprehensive developer guide (16 documents)
 - [Microservice Transition Contract](docs/design/microservice-transition.md)
 - [System Architecture](docs/design/system-architecture.md)
 - [System Contracts](docs/design/system-contracts.md)

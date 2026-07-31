@@ -292,8 +292,26 @@ Worker 消费共享 `async` 传输。Scheduler 轮询 Trade、Store、Inventory�
 
 ---
 
+## 开发者入门
+
+新加入项目？按以下顺序阅读[开发手册](docs/manual/index.md)：
+
+1. [架构](docs/manual/architecture.md) — 理解服务拓扑、分层和模式
+2. [快速上手](docs/manual/getting-started.md) — 搭建 Docker 环境并验证
+3. [项目结构](docs/manual/project-structure.md) — 了解代码组织方式
+4. [核心框架](docs/manual/core-framework.md) — `RestController`、`BaseService`、View Mixin、EventListener、Utils
+5. [核心用法](docs/manual/core-usage.md) — 实战：构建 Controller、Service、文件上传、自定义 Action
+6. [查询系统](docs/manual/query-system.md) — 掌握 `@filter`、`@sort`、`@order`、`@dql`、`@select`、`@groupBy`、`@expands`、`@display`、`@transform`
+7. [API 契约](docs/manual/api-contracts.md) — 请求/响应信封、认证、分页、错误处理、API 文档
+8. [开发契约](docs/manual/development-contracts.md) — 编码规则、分层边界、命名、安全
+
+之后按需查阅：[测试](docs/manual/testing.md)、[集成事件](docs/manual/integration-events.md)、
+[数据库与迁移](docs/manual/database-and-migrations.md)、[部署](docs/manual/deployment.md)、
+[提取服务](docs/manual/extracting-a-service.md)、[国际化](docs/manual/i18n.md)。
+
 ## 文档
 
+- [开发手册](docs/manual/index.md) — 完整开发者指南（16 份文档）
 - [微服务迁移契约](docs/design/microservice-transition.md)
 - [系统架构](docs/design/system-architecture.md)
 - [系统契约](docs/design/system-contracts.md)
