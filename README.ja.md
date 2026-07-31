@@ -302,8 +302,26 @@ Inventory、Payment の Outbox 公開と在庫期限切れ予約解放をポー�
 
 ---
 
+## 開発者オンボーディング
+
+プロジェクトに初めて参加する方は、[開発マニュアル](docs/manual/index.md)を以下の順序でお読みください：
+
+1. [アーキテクチャ](docs/manual/architecture.md) — サービストポロジー、レイヤー、パターンを理解
+2. [クイックスタート](docs/manual/getting-started.md) — Docker 環境を構築して動作確認
+3. [プロジェクト構造](docs/manual/project-structure.md) — コードの配置場所を把握
+4. [コアフレームワーク](docs/manual/core-framework.md) — `RestController`、`BaseService`、View Mixin、EventListener、Utils
+5. [コア使用法](docs/manual/core-usage.md) — 実践: Controller、Service、ファイルアップロード、カスタムアクションの構築
+6. [クエリシステム](docs/manual/query-system.md) — `@filter`、`@sort`、`@order`、`@dql`、`@select`、`@groupBy`、`@expands`、`@display`、`@transform` をマスター
+7. [API 契約](docs/manual/api-contracts.md) — リクエスト/レスポンスエンベロープ、認証、ページネーション、エラー処理、API ドキュメント
+8. [開発契約](docs/manual/development-contracts.md) — コーディングルール、レイヤー境界、命名規則、セキュリティ
+
+その後、必要に応じて参照: [テスト](docs/manual/testing.md)、[統合イベント](docs/manual/integration-events.md)、
+[データベースとマイグレーション](docs/manual/database-and-migrations.md)、[デプロイメント](docs/manual/deployment.md)、
+[サービス抽出](docs/manual/extracting-a-service.md)、[国際化](docs/manual/i18n.md)。
+
 ## ドキュメント
 
+- [開発マニュアル](docs/manual/index.md) — 包括的開発者ガイド（16 ドキュメント）
 - [Microservice Transition Contract](docs/design/microservice-transition.md)
 - [System Architecture](docs/design/system-architecture.md)
 - [System Contracts](docs/design/system-contracts.md)
