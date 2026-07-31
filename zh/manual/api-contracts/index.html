@@ -3153,7 +3153,7 @@ URL 约定、分页、错误处理、文档和 Webhook 端点。</p>
 </tbody>
 </table>
 <p><strong>刷新令牌行为</strong>：
-- 不透明字符串，在数据库中经过 HMAC-SHA256 哈希处理
+- 不透明字符串，HMAC-SHA256 在数据库中散列
 - 1 年生存时间
 - 代币轮换：每次使用时更换
 - 重用检测：如果提交了撤销/替换的刷新令牌，则所有用户令牌都将被删除
@@ -3235,7 +3235,7 @@ URL 约定、分页、错误处理、文档和 Webhook 端点。</p>
 </tbody>
 </table>
 <p>特殊的非版本前缀：
-|前缀|目的|
+|前缀 |目的|
 |--------|---------|
 | <code>/api/auth</code> |身份验证端点 |
 | <code>/api/wechat</code> |微信集成端点 |
@@ -3611,7 +3611,7 @@ URL 约定、分页、错误处理、文档和 Webhook 端点。</p>
 <p>Webhook 端点是公共的（不需要 JWT）。身份验证是通过特定于提供商的
 签名验证：
 - 网关验证回调签名/有效负载
-- <code>InvoiceService</code> 应用通知结果</p>
+- <code>InvoiceService</code>应用通知结果</p>
 <h3 id="113">11.3 签名验证<a class="headerlink" href="#113" title="Permanent link">&para;</a></h3>
 <p>支付适配器使用 <code>RsaClient</code> 或特定于提供商的签名来验证 Webhook
 处理前的真实性。无效签名会导致立即拒绝。</p>
