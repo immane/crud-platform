@@ -1401,6 +1401,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../core-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core 框架
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    核心用法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../query-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    查询系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../development-workflow/" class="md-nav__link">
         
   
@@ -1437,6 +1521,62 @@
     
   
     Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API合约
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开发合同
   
 
     
@@ -2698,7 +2838,7 @@
 </tr>
 <tr>
 <td>20250620000000</td>
-<td>交易表（产品、规格、订单、订单项目）</td>
+<td>贸易表（产品、规格、订单、订单项目）</td>
 </tr>
 <tr>
 <td>20250621000000</td>
@@ -2863,7 +3003,7 @@
 </code></pre></div>
 <p><code>event_id</code> 上的 <code>UNIQUE</code> 约束在数据库级别强制执行幂等性。</p>
 <h2 id="10-sqlite">10. 使用 SQLite 进行测试<a class="headerlink" href="#10-sqlite" title="Permanent link">&para;</a></h2>
-<p>所有测试套件都使用路径为 <code>var/test.db</code> 的 SQLite：</p>
+<p>所有测试套件都使用 SQLite 和路径 <code>var/test.db</code>：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># phpunit.xml overrides</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="l l-Scalar l-Scalar-Plain">&lt;env name=&quot;DATABASE_URL&quot; value=&quot;sqlite:///var/test.db&quot;/&gt;</span>
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="l l-Scalar l-Scalar-Plain">&lt;env name=&quot;APP_ENV&quot; value=&quot;test&quot;/&gt;</span>

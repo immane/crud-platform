@@ -2,162 +2,182 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://immane.github.io/crud-platform/zh/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/ai/context/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/api-design/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/api-documentation/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/controller-design/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/data-model/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/inventory-extraction-readiness/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/microservice-transition/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/module-design/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/payment-extraction-readiness/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/security-hardening/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/store-extraction-readiness/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/system-architecture/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/system-contracts/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/bundles/common/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/bundles/core/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/bundles/identity/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/bundles/inventory/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/bundles/payment/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/bundles/promotion/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/bundles/storage/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/bundles/store/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/bundles/trade/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/bundles/wallet/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/design/bundles/wechat/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/issues/architecture-review-2026-06-26/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/manual/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
+    </url>
+    <url>
+         <loc>https://immane.github.io/crud-platform/zh/manual/api-contracts/</loc>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/manual/architecture/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
+    </url>
+    <url>
+         <loc>https://immane.github.io/crud-platform/zh/manual/core-framework/</loc>
+         <lastmod>2026-07-31</lastmod>
+    </url>
+    <url>
+         <loc>https://immane.github.io/crud-platform/zh/manual/core-usage/</loc>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/manual/database-and-migrations/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/manual/deployment/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
+    </url>
+    <url>
+         <loc>https://immane.github.io/crud-platform/zh/manual/development-contracts/</loc>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/manual/development-workflow/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/manual/extracting-a-service/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/manual/getting-started/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/manual/i18n/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/manual/integration-events/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/manual/project-structure/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
+    </url>
+    <url>
+         <loc>https://immane.github.io/crud-platform/zh/manual/query-system/</loc>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/manual/testing/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/openapi/order-payment-flow/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/research/easywechat-6.x-usage/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
     <url>
          <loc>https://immane.github.io/crud-platform/zh/research/huifu-payment-api/</loc>
-         <lastmod>2026-07-30</lastmod>
+         <lastmod>2026-07-31</lastmod>
     </url>
 </urlset>

@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://immane.github.io/crud-platform/zh/manual/integration-events/">
       
       
-        <link rel="prev" href="../testing/">
+        <link rel="prev" href="../development-contracts/">
       
       
         <link rel="next" href="../database-and-migrations/">
@@ -1401,6 +1401,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../core-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core 框架
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    核心用法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../query-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    查询系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../development-workflow/" class="md-nav__link">
         
   
@@ -1437,6 +1521,62 @@
     
   
     Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API合约
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开发合同
   
 
     
@@ -2843,7 +2983,7 @@
 <h3 id="2_2">第2步：在清单中注册<a class="headerlink" href="#2_2" title="Permanent link">&para;</a></h3>
 <p>更新 <code>packages/integration-contracts/manifest.json</code> 中的清单。</p>
 <h3 id="3-producer">步骤 3：在 Producer 中添加发件箱<a class="headerlink" href="#3-producer" title="Permanent link">&para;</a></h3>
-<p>在生产服务中，将发件箱行写入与发件箱行相同的事务中
+<p>在生产服务中，将发件箱行写入与发件箱相同的事务中
 业务状态变化。</p>
 <h3 id="4_1">步骤 4：添加收件箱消费者<a class="headerlink" href="#4_1" title="Permanent link">&para;</a></h3>
 <p>在使用服务中，添加一个 <code>#[AsMessageHandler]</code> 方法：
@@ -2875,7 +3015,7 @@
 <tr>
 <td><code>app:trade:outbox:backfill-correlation</code></td>
 <td>贸易</td>
-<td>在未发布的交易发件箱行上回填 <code>correlation_id</code></td>
+<td>在未发布的贸易发件箱行上回填 <code>correlation_id</code></td>
 </tr>
 <tr>
 <td><code>app:store:outbox:backfill-correlation</code></td>

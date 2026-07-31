@@ -1,0 +1,3680 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A production-oriented Symfony microservices platform evolved from modular monolith architecture, featuring DDD, service isolation, and event-driven communication.">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-platform/manual/api-contracts/">
+      
+      
+        <link rel="prev" href="../testing/">
+      
+      
+        <link rel="next" href="../development-contracts/">
+      
+      
+        
+          <link rel="alternate" href="/crud-platform/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-platform/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>API Contracts - CRUD Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-contracts" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="CRUD Platform" class="md-header__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API Contracts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-platform/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-platform/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CRUD Platform" class="md-nav__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Platform
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/microservice-transition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Microservice Transition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/store-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store Extraction Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/inventory-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory Extraction Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/payment-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment Extraction Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/wallet-extraction-readiness.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet Extraction Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../issues/architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Manual
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development Manual
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../query-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Query System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Contracts
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-requestresponse-envelope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Request/Response Envelope
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Request/Response Envelope">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-success-envelope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Success Envelope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-error-envelope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Error Envelope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-http-status-codes-used" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 HTTP Status Codes Used
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Authentication
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Authentication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-jwt-bearer-token-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 JWT Bearer Token Format
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-token-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Token Lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-public-vs-authenticated-routes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Public vs Authenticated Routes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-url-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. URL Conventions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. URL Conventions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Prefix
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-path-segments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Path Segments
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-restful-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 RESTful Patterns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-pagination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Pagination
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Pagination">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-paginator-response-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Paginator Response Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Error Handling
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Error Handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-exceptioninterceptor-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 ExceptionInterceptor Behavior
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-specific-exception-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Specific Exception Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-adding-custom-exceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Adding Custom Exceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-data-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Data Formats
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Data Formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-json-requestresponse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 JSON Request/Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-multipart-file-uploads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Multipart File Uploads
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-array-vs-single-object-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Array vs Single-Object Input
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-partial-batch-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 @partial Batch Mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-translation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Translation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Translation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-message-key-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Message Key Conventions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-locale-negotiation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Locale Negotiation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-rate-limiting-cors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Rate Limiting / CORS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Rate Limiting / CORS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-current-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Current State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-future-plans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Future Plans
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-api-versioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. API Versioning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. API Versioning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-prefix-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Prefix Strategy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-backward-compatibility-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Backward Compatibility Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-nelmioapidoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. NelmioApiDoc
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. NelmioApiDoc">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-oa-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 #[OA] Attributes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-schema-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Schema Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-tag-auto-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 Tag Auto-Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#104-documenting-new-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4 Documenting New Endpoints
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-webhook-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Webhook Endpoints
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Webhook Endpoints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-notification-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 Notification Patterns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-public-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 Public Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113-signature-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 Signature Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-and-migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Database & Migrations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extracting-a-service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracting a Service
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../i18n/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Internationalization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-requestresponse-envelope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Request/Response Envelope
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Request/Response Envelope">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-success-envelope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Success Envelope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-error-envelope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Error Envelope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-http-status-codes-used" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 HTTP Status Codes Used
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Authentication
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Authentication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-jwt-bearer-token-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 JWT Bearer Token Format
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-token-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Token Lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-public-vs-authenticated-routes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Public vs Authenticated Routes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-url-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. URL Conventions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. URL Conventions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Prefix
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-path-segments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Path Segments
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-restful-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 RESTful Patterns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-pagination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Pagination
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Pagination">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-paginator-response-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Paginator Response Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Error Handling
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Error Handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-exceptioninterceptor-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 ExceptionInterceptor Behavior
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-specific-exception-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Specific Exception Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-adding-custom-exceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Adding Custom Exceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-data-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Data Formats
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Data Formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-json-requestresponse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 JSON Request/Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-multipart-file-uploads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Multipart File Uploads
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-array-vs-single-object-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Array vs Single-Object Input
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-partial-batch-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 @partial Batch Mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-translation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Translation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Translation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-message-key-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Message Key Conventions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-locale-negotiation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Locale Negotiation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-rate-limiting-cors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Rate Limiting / CORS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Rate Limiting / CORS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-current-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Current State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-future-plans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Future Plans
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-api-versioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. API Versioning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. API Versioning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-prefix-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Prefix Strategy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-backward-compatibility-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Backward Compatibility Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-nelmioapidoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. NelmioApiDoc
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. NelmioApiDoc">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-oa-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 #[OA] Attributes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-schema-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Schema Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-tag-auto-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 Tag Auto-Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#104-documenting-new-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4 Documenting New Endpoints
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-webhook-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Webhook Endpoints
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Webhook Endpoints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-notification-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 Notification Patterns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-public-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 Public Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113-signature-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 Signature Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="api-contracts">API Contracts<a class="headerlink" href="#api-contracts" title="Permanent link">&para;</a></h1>
+<p>Complete specification of the REST API surface: request/response formats, authentication,
+URL conventions, pagination, error handling, documentation, and webhook endpoints.</p>
+<hr />
+<h2 id="1-requestresponse-envelope">1. Request/Response Envelope<a class="headerlink" href="#1-requestresponse-envelope" title="Permanent link">&para;</a></h2>
+<h3 id="11-success-envelope">1.1 Success Envelope<a class="headerlink" href="#11-success-envelope" title="Permanent link">&para;</a></h3>
+<p>All successful responses use this structure:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">}</span>
+</code></pre></div>
+<p>With pagination (GET requests with <code>page</code>/<code>limit</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nt">&quot;paginator&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">        </span><span class="nt">&quot;total&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">42</span><span class="p">,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">        </span><span class="nt">&quot;page&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">        </span><span class="nt">&quot;limit&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="nt">&quot;pages&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">        </span><span class="nt">&quot;has_previous&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">        </span><span class="nt">&quot;has_next&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data</code></td>
+<td>mixed</td>
+<td>Response payload (object, array, or empty string for 204)</td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td>int</td>
+<td>Always <code>0</code> for success</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>string</td>
+<td>Success message (default <code>"SUCCESS"</code>)</td>
+</tr>
+<tr>
+<td><code>paginator</code></td>
+<td>object?</td>
+<td>Present only for paginated GET responses</td>
+</tr>
+</tbody>
+</table>
+<p>HTTP status codes for success:
+- <code>200</code> — standard success
+- <code>201</code> — created (POST)
+- <code>204</code> — deleted (no body, <code>Content-Type: application/json</code>)</p>
+<h3 id="12-error-envelope">1.2 Error Envelope<a class="headerlink" href="#12-error-envelope" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">404</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Entity is not found&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">&quot;raw_data&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td>int</td>
+<td>Application error code (typically HTTP status)</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>string</td>
+<td>Translated error message</td>
+</tr>
+<tr>
+<td><code>raw_data</code></td>
+<td>mixed</td>
+<td>Additional error data (debugging)</td>
+</tr>
+</tbody>
+</table>
+<p>ExceptionInterceptor adds a <code>class</code> field for unhandled exceptions:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;An error occurred&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">&quot;class&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RuntimeException&quot;</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="13-http-status-codes-used">1.3 HTTP Status Codes Used<a class="headerlink" href="#13-http-status-codes-used" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>General success; also used for application-level errors (check <code>code</code> field)</td>
+</tr>
+<tr>
+<td>201</td>
+<td>Created</td>
+<td>Successful POST creation</td>
+</tr>
+<tr>
+<td>204</td>
+<td>No Content</td>
+<td>Successful DELETE</td>
+</tr>
+<tr>
+<td>400</td>
+<td>Bad Request</td>
+<td>Validation errors (<code>ValidatorException</code>), invalid JSON</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized</td>
+<td>Missing or invalid JWT</td>
+</tr>
+<tr>
+<td>402</td>
+<td>Payment Required</td>
+<td>Insufficient funds</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden</td>
+<td>Access denied (non-admin accessing admin endpoints)</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found</td>
+<td>Entity not found</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error</td>
+<td>Unhandled exceptions</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-authentication">2. Authentication<a class="headerlink" href="#2-authentication" title="Permanent link">&para;</a></h2>
+<h3 id="21-jwt-bearer-token-format">2.1 JWT Bearer Token Format<a class="headerlink" href="#21-jwt-bearer-token-format" title="Permanent link">&para;</a></h3>
+<p>All authenticated requests include:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Authorization: Bearer &lt;access_token&gt;
+</code></pre></div>
+<p>Token specification:
+- <strong>Algorithm</strong>: RS256 (asymmetric, public/private key pair)
+- <strong>TTL</strong>: 7200 seconds (2 hours)
+- <strong>Payload</strong>: user ID, roles, expiration, JTI (unique token ID)</p>
+<h3 id="22-token-lifecycle">2.2 Token Lifecycle<a class="headerlink" href="#22-token-lifecycle" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Endpoint</th>
+<th>Auth</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Login</td>
+<td><code>POST /api/auth/login</code></td>
+<td>None (public)</td>
+</tr>
+<tr>
+<td>OTP Request</td>
+<td><code>POST /api/auth/otp/request</code></td>
+<td>None (public)</td>
+</tr>
+<tr>
+<td>OTP Verify</td>
+<td><code>POST /api/auth/otp/verify</code></td>
+<td>None (public)</td>
+</tr>
+<tr>
+<td>Token Refresh</td>
+<td><code>POST /api/auth/token/refresh</code></td>
+<td>None (public; uses refresh token in body)</td>
+</tr>
+<tr>
+<td>Token Revoke</td>
+<td><code>POST /api/auth/logout</code></td>
+<td>Authenticated</td>
+</tr>
+<tr>
+<td>WeChat Login</td>
+<td><code>POST /api/wechat/miniapp/login</code></td>
+<td>None (public)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Refresh Token Behavior</strong>:
+- Opaque string, HMAC-SHA256 hashed in the database
+- 1 year TTL
+- Token rotation: replaced on each use
+- Reuse detection: if a revoked/replaced refresh token is submitted, ALL user tokens are
+  revoked</p>
+<p><strong>JWT Blacklist</strong>:
+- On logout or token rotation, the access token's JTI is added to a cache-based blacklist
+- TTL matches the token's natural expiration (no permanent storage)
+- Blacklisted JTIs rejected at authentication step</p>
+<h3 id="23-public-vs-authenticated-routes">2.3 Public vs Authenticated Routes<a class="headerlink" href="#23-public-vs-authenticated-routes" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Route Pattern</th>
+<th>Access</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/api/doc</code>, <code>/api/doc.json</code></td>
+<td>PUBLIC_ACCESS</td>
+</tr>
+<tr>
+<td><code>/api/auth/*</code></td>
+<td>PUBLIC_ACCESS</td>
+</tr>
+<tr>
+<td><code>/api/wechat/*</code></td>
+<td>PUBLIC_ACCESS (WeChat callbacks have signature verification)</td>
+</tr>
+<tr>
+<td><code>/api/v1/app/*</code></td>
+<td>IS_AUTHENTICATED_FULLY</td>
+</tr>
+<tr>
+<td><code>/api/v1/manage/*</code></td>
+<td>ROLE_ADMIN</td>
+</tr>
+<tr>
+<td><code>/api/v1/public/*</code></td>
+<td>PUBLIC_ACCESS</td>
+</tr>
+<tr>
+<td><code>/api/payment/notify/*</code></td>
+<td>PUBLIC_ACCESS (payment provider callbacks)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-url-conventions">3. URL Conventions<a class="headerlink" href="#3-url-conventions" title="Permanent link">&para;</a></h2>
+<h3 id="31-prefix">3.1 Prefix<a class="headerlink" href="#31-prefix" title="Permanent link">&para;</a></h3>
+<p>All API routes are prefixed with <code>/api/v1</code>. Versioning is in the URL path.</p>
+<h3 id="32-path-segments">3.2 Path Segments<a class="headerlink" href="#32-path-segments" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>/api/v1/{scope}/{resource}[/{id}][/{sub-resource}]
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>manage</code></td>
+<td>Admin CRUD operations</td>
+<td><code>/api/v1/manage/categories</code></td>
+</tr>
+<tr>
+<td><code>app</code></td>
+<td>Authenticated user operations</td>
+<td><code>/api/v1/app/orders</code></td>
+</tr>
+<tr>
+<td><code>public</code></td>
+<td>Anonymous read-only access</td>
+<td><code>/api/v1/public/media</code></td>
+</tr>
+</tbody>
+</table>
+<p>Special non-versioned prefixes:
+| Prefix | Purpose |
+|--------|---------|
+| <code>/api/auth</code> | Authentication endpoints |
+| <code>/api/wechat</code> | WeChat integration endpoints |
+| <code>/api/payment/notify</code> | Payment provider webhooks |
+| <code>/api/doc</code> | NelmioApiDoc documentation |
+| <code>/system/entities</code> | Doctrine metadata introspection |
+| <code>/system/router</code> | Route listing |</p>
+<h3 id="33-restful-patterns">3.3 RESTful Patterns<a class="headerlink" href="#33-restful-patterns" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>URL</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/v1/manage/{resource}</code></td>
+<td>List (paginated)</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/v1/manage/{resource}/{id}</code></td>
+<td>Detail (single entity)</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/v1/manage/{resource}</code></td>
+<td>Create (single or batch)</td>
+</tr>
+<tr>
+<td><code>PUT</code></td>
+<td><code>/api/v1/manage/{resource}/{id}</code></td>
+<td>Update (single)</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/v1/manage/{resource}/batch-update</code></td>
+<td>Batch upsert</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/api/v1/manage/{resource}/{id}</code></td>
+<td>Delete</td>
+</tr>
+</tbody>
+</table>
+<p>ID format: accepts both integers (<code>\d+</code>) and UUIDs (<code>[0-9a-fA-F-]{36}</code>).</p>
+<hr />
+<h2 id="4-pagination">4. Pagination<a class="headerlink" href="#4-pagination" title="Permanent link">&para;</a></h2>
+<h3 id="41-parameters">4.1 Parameters<a class="headerlink" href="#41-parameters" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>page</code></td>
+<td><code>1</code></td>
+<td>Page number (1-indexed)</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td><code>100</code></td>
+<td>Items per page</td>
+</tr>
+</tbody>
+</table>
+<p>Example: <code>GET /api/v1/manage/products?page=3&amp;limit=25</code></p>
+<h3 id="42-paginator-response-structure">4.2 Paginator Response Structure<a class="headerlink" href="#42-paginator-response-structure" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="nt">&quot;paginator&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">        </span><span class="nt">&quot;total&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">250</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">        </span><span class="nt">&quot;page&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">        </span><span class="nt">&quot;limit&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">        </span><span class="nt">&quot;pages&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">        </span><span class="nt">&quot;has_previous&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">        </span><span class="nt">&quot;has_next&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>total</code></td>
+<td>int</td>
+<td>Total number of items in the collection</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>int</td>
+<td>Current page number</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>int</td>
+<td>Items per page</td>
+</tr>
+<tr>
+<td><code>pages</code></td>
+<td>int</td>
+<td>Total number of pages</td>
+</tr>
+<tr>
+<td><code>has_previous</code></td>
+<td>bool</td>
+<td><code>true</code> if page &gt; 1</td>
+</tr>
+<tr>
+<td><code>has_next</code></td>
+<td>bool</td>
+<td><code>true</code> if page &lt; pages</td>
+</tr>
+</tbody>
+</table>
+<p>Paginator is absent for non-GET requests. <code>RestController::pagination()</code> checks
+<code>$request-&gt;getMethod() !== 'GET'</code>.</p>
+<hr />
+<h2 id="5-error-handling">5. Error Handling<a class="headerlink" href="#5-error-handling" title="Permanent link">&para;</a></h2>
+<h3 id="51-exceptioninterceptor-behavior">5.1 ExceptionInterceptor Behavior<a class="headerlink" href="#51-exceptioninterceptor-behavior" title="Permanent link">&para;</a></h3>
+<p>Intercepts unhandled exceptions on <code>/api/*</code> routes:
+1. Logs exception (class, message, trace)
+2. In dev: lets Symfony's default error page handle it
+3. In production: returns JSON <code>{code, message, class}</code> with appropriate HTTP status</p>
+<h3 id="52-specific-exception-handling">5.2 Specific Exception Handling<a class="headerlink" href="#52-specific-exception-handling" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Exception</th>
+<th>HTTP Status</th>
+<th>JSON <code>code</code></th>
+<th>Beacon</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ValidatorException</code></td>
+<td>400</td>
+<td>400</td>
+<td>Validation failures</td>
+</tr>
+<tr>
+<td><code>NotFoundHttpException</code></td>
+<td>404</td>
+<td>404</td>
+<td>Entity not found</td>
+</tr>
+<tr>
+<td><code>AccessDeniedHttpException</code></td>
+<td>403</td>
+<td>403</td>
+<td>Permission denied</td>
+</tr>
+<tr>
+<td><code>InsufficientFundsException</code></td>
+<td>402</td>
+<td>402</td>
+<td>Wallet balance too low</td>
+</tr>
+<tr>
+<td>Generic <code>\Exception</code></td>
+<td>500</td>
+<td>500</td>
+<td>Unexpected errors</td>
+</tr>
+</tbody>
+</table>
+<h3 id="53-adding-custom-exceptions">5.3 Adding Custom Exceptions<a class="headerlink" href="#53-adding-custom-exceptions" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Extend <code>\RuntimeException</code> in your module's <code>Exception/</code> directory</li>
+<li>Throw from the service layer</li>
+<li>Catch in the controller and convert to <code>warning()</code>:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="x">catch (InsufficientFundsException $e) {</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="x">    return $this-&gt;warning($e-&gt;getMessage(), 402, &#39;&#39;, 402);</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="x">}</span>
+</code></pre></div>
+<hr />
+<h2 id="6-data-formats">6. Data Formats<a class="headerlink" href="#6-data-formats" title="Permanent link">&para;</a></h2>
+<h3 id="61-json-requestresponse">6.1 JSON Request/Response<a class="headerlink" href="#61-json-requestresponse" title="Permanent link">&para;</a></h3>
+<p>All requests and responses use <code>application/json</code>. The <code>RestController::success()</code> and
+<code>warning()</code> methods call <code>$this-&gt;getSerializer()-&gt;serialize($response, 'json')</code>.</p>
+<h3 id="62-multipart-file-uploads">6.2 Multipart File Uploads<a class="headerlink" href="#62-multipart-file-uploads" title="Permanent link">&para;</a></h3>
+<p>Media upload endpoints use <code>multipart/form-data</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>POST /api/v1/app/media/upload
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>Content-Type: multipart/form-data
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>file: [binary]
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>storage: &quot;local&quot;
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>category: 3
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>alt: &quot;My photo&quot;
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>title: &quot;Vacation 2024&quot;
+</code></pre></div>
+<h3 id="63-array-vs-single-object-input">6.3 Array vs Single-Object Input<a class="headerlink" href="#63-array-vs-single-object-input" title="Permanent link">&para;</a></h3>
+<p>Create endpoints accept both:
+- <strong>Single object</strong> <code>{}</code> → creates one entity, returns entity directly
+- <strong>Array</strong> <code>[{}, {}, {}]</code> → batch create, wraps in transaction, returns array</p>
+<p>Detected by <code>FixJSON::getJSONType($content)</code>.</p>
+<h3 id="64-partial-batch-mode">6.4 @partial Batch Mode<a class="headerlink" href="#64-partial-batch-mode" title="Permanent link">&para;</a></h3>
+<p><code>POST /api/v1/manage/products?@partial=true</code></p>
+<p>When <code>@partial=true</code>:
+- Batch creates/updates skip transaction wrapping
+- Failed items are silently skipped
+- Successful items are returned</p>
+<p>When <code>@partial=false</code> (default):
+- All items in a single transaction
+- Any failure rolls back all items</p>
+<hr />
+<h2 id="7-translation">7. Translation<a class="headerlink" href="#7-translation" title="Permanent link">&para;</a></h2>
+<h3 id="71-message-key-conventions">7.1 Message Key Conventions<a class="headerlink" href="#71-message-key-conventions" title="Permanent link">&para;</a></h3>
+<p>Error messages use human-readable English as translation keys. The <code>warning()</code> method
+routes messages through <code>$this-&gt;getTranslator()-&gt;trans($error_msg)</code>.</p>
+<h3 id="72-locale-negotiation">7.2 Locale Negotiation<a class="headerlink" href="#72-locale-negotiation" title="Permanent link">&para;</a></h3>
+<p>The <code>LocaleListener</code> on <code>kernel.request</code> detects locale in this priority:</p>
+<ol>
+<li><code>?_locale=zh-CN</code> query parameter</li>
+<li><code>Accept-Language</code> header with quality weights</li>
+</ol>
+<p>Supported locales: <code>en</code>, <code>zh</code>, <code>zh_Hant</code>, <code>ja</code>. Unsupported locales fall back to <code>en</code>.</p>
+<hr />
+<h2 id="8-rate-limiting-cors">8. Rate Limiting / CORS<a class="headerlink" href="#8-rate-limiting-cors" title="Permanent link">&para;</a></h2>
+<h3 id="81-current-state">8.1 Current State<a class="headerlink" href="#81-current-state" title="Permanent link">&para;</a></h3>
+<p>No system-wide rate limiting or CORS headers are implemented at the framework level.
+Specific limits:</p>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Limit</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OTP request</td>
+<td>1 per 60s per phone</td>
+<td>Application-level (Redis/cache)</td>
+</tr>
+<tr>
+<td>OTP verify</td>
+<td>5 attempts per phone</td>
+<td>Application-level (Redis/cache)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="82-future-plans">8.2 Future Plans<a class="headerlink" href="#82-future-plans" title="Permanent link">&para;</a></h3>
+<p>Rate limiting and CORS handling are planned for the API gateway layer during the
+microservice transition.</p>
+<hr />
+<h2 id="9-api-versioning">9. API Versioning<a class="headerlink" href="#9-api-versioning" title="Permanent link">&para;</a></h2>
+<h3 id="91-prefix-strategy">9.1 Prefix Strategy<a class="headerlink" href="#91-prefix-strategy" title="Permanent link">&para;</a></h3>
+<p>All versioned endpoints use <code>/api/v1</code> prefix. The version is in the URL path, not in
+headers or content negotiation.</p>
+<h3 id="92-backward-compatibility-rules">9.2 Backward Compatibility Rules<a class="headerlink" href="#92-backward-compatibility-rules" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Change</th>
+<th>Allowed</th>
+<th>Requires</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Add new endpoint</td>
+<td>Yes</td>
+<td>Documentation</td>
+</tr>
+<tr>
+<td>Add optional query parameter</td>
+<td>Yes</td>
+<td>Backward compatible</td>
+</tr>
+<tr>
+<td>Add field to response</td>
+<td>Yes</td>
+<td>Backward compatible</td>
+</tr>
+<tr>
+<td>Change field type in response</td>
+<td><strong>No</strong></td>
+<td>Major version bump</td>
+</tr>
+<tr>
+<td>Remove field from response</td>
+<td><strong>No</strong></td>
+<td>Deprecation notice + major version bump</td>
+</tr>
+<tr>
+<td>Change response envelope format</td>
+<td><strong>No</strong></td>
+<td>Major version bump</td>
+</tr>
+<tr>
+<td>Remove endpoint</td>
+<td><strong>No</strong></td>
+<td>Deprecation notice + major version bump</td>
+</tr>
+<tr>
+<td>Change authentication requirements</td>
+<td><strong>No</strong></td>
+<td>Major version bump</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="10-nelmioapidoc">10. NelmioApiDoc<a class="headerlink" href="#10-nelmioapidoc" title="Permanent link">&para;</a></h2>
+<h3 id="101-oa-attributes">10.1 #[OA] Attributes<a class="headerlink" href="#101-oa-attributes" title="Permanent link">&para;</a></h3>
+<p>All endpoints are documented via PHP 8 attributes. View mixins provide default OA
+attributes for standard CRUD operations:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="x">#[OA\Get(</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="x">    tags: [&#39;List&#39;],</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="x">    parameters: [</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="x">        new OA\Parameter(name: &#39;page&#39;, in: &#39;query&#39;, schema: new OA\Schema(type: &#39;string&#39;)),</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="x">        new OA\Parameter(name: &#39;limit&#39;, in: &#39;query&#39;, schema: new OA\Schema(type: &#39;string&#39;)),</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="x">        // ...</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="x">    ],</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="x">    responses: [</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="x">        new OA\Response(response: 200, description: &#39;Api list view&#39;),</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="x">    ]</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="x">)]</span>
+</code></pre></div>
+<h3 id="102-schema-configuration">10.2 Schema Configuration<a class="headerlink" href="#102-schema-configuration" title="Permanent link">&para;</a></h3>
+<p>Schema is configured in <code>config/routes.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">app.swagger_ui</span><span class="p">:</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/api/doc</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="nt">controller</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nelmio_api_doc.controller.swagger_ui</span>
+</code></pre></div>
+<p>JSON schema available at <code>/api/doc.json</code>.</p>
+<h3 id="103-tag-auto-detection">10.3 Tag Auto-Detection<a class="headerlink" href="#103-tag-auto-detection" title="Permanent link">&para;</a></h3>
+<p>The <code>OpenApiEnricherListener</code> post-processes OpenAPI output:
+- Extracts resource name from <code>operationId</code> (route name)
+- Maps to display tags: Products, Orders, Categories, Tags, Contents, Comments, Pages,
+  Media, Settings, Payment, Wallet, System, Wechat, Store, Auth
+- Removes generic operation-type tags (<code>List</code>, <code>Detail</code>, <code>Create</code>, <code>Update</code>, <code>Delete</code>,
+  <code>Workflow</code>)
+- Adds summaries/descriptions for key endpoints</p>
+<h3 id="104-documenting-new-endpoints">10.4 Documenting New Endpoints<a class="headerlink" href="#104-documenting-new-endpoints" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Add <code>#[OA\*]</code> attributes on the controller action</li>
+<li>Set <code>tags</code> to match the module's tag name</li>
+<li>Route name must follow <code>{scope}-{resource}-{action}</code> convention for auto-detection:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="x">#[OA\Get(</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="x">    tags: [&#39;MyModule&#39;],</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="x">    parameters: [],</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="x">    responses: [new OA\Response(response: 200, description: &#39;...&#39;)]</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="x">)]</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="x">#[Route(&#39;/custom-action&#39;, name: &#39;manage-myresource-custom-action&#39;, methods: [&#39;GET&#39;])]</span>
+</code></pre></div>
+<hr />
+<h2 id="11-webhook-endpoints">11. Webhook Endpoints<a class="headerlink" href="#11-webhook-endpoints" title="Permanent link">&para;</a></h2>
+<h3 id="111-notification-patterns">11.1 Notification Patterns<a class="headerlink" href="#111-notification-patterns" title="Permanent link">&para;</a></h3>
+<p>Payment gateways and third-party services call back to public webhook endpoints:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>POST /api/payment/notify/{payment}
+</code></pre></div>
+<p>Where <code>{payment}</code> selects the registered payment gateway (e.g., <code>wechat</code>, <code>wallet</code>,
+<code>mock</code>).</p>
+<h3 id="112-public-access">11.2 Public Access<a class="headerlink" href="#112-public-access" title="Permanent link">&para;</a></h3>
+<p>Webhook endpoints are public (no JWT required). Authentication is via provider-specific
+signature verification:
+- The gateway verifies the callback signature/payload
+- <code>InvoiceService</code> applies the notification result</p>
+<h3 id="113-signature-verification">11.3 Signature Verification<a class="headerlink" href="#113-signature-verification" title="Permanent link">&para;</a></h3>
+<p>Payment adapters use <code>RsaClient</code> or provider-specific signing to verify webhook
+authenticity before processing. Invalid signatures result in immediate rejection.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

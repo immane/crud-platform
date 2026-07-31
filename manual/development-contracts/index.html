@@ -1,0 +1,3664 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A production-oriented Symfony microservices platform evolved from modular monolith architecture, featuring DDD, service isolation, and event-driven communication.">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-platform/manual/development-contracts/">
+      
+      
+        <link rel="prev" href="../api-contracts/">
+      
+      
+        <link rel="next" href="../integration-events/">
+      
+      
+        
+          <link rel="alternate" href="/crud-platform/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-platform/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Development Contracts - CRUD Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#development-contracts" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="CRUD Platform" class="md-header__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Development Contracts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-platform/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-platform/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CRUD Platform" class="md-nav__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Platform
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/microservice-transition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Microservice Transition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/store-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store Extraction Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/inventory-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory Extraction Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/payment-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment Extraction Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/wallet-extraction-readiness.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet Extraction Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../issues/architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Manual
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development Manual
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../query-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Query System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Contracts
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-layer-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Layer Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-cross-module-communication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Cross-Module Communication
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Cross-Module Communication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-allowed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Allowed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-forbidden" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Forbidden
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-cross-boundary-identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Cross-Boundary Identity
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-service-boundary-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Service Boundary Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-namespace-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Namespace Conventions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-file-naming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. File Naming
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-class-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Class Conventions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Class Conventions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Required
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-phpdoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 PHPDoc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-visibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Visibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-code-style" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Code Style
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Code Style">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-psr-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 PSR-12
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-phpstan-level-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 PHPStan Level 8
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-deptrac-architecture-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Deptrac Architecture Boundaries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-rector-type-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Rector Type Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-naming-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 Naming Conventions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-testing-contracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Testing Contracts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Testing Contracts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-unit-vs-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Unit vs Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-test-naming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Test Naming
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-coverage-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Coverage Requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-test-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 Test Database
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-git-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Git Workflow
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Git Workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-feature-branches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Feature Branches
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-conventional-commits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Conventional Commits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-pr-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 PR Template
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-review-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 Review Requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-breaking-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Breaking Changes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Breaking Changes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-what-constitutes-a-breaking-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 What Constitutes a Breaking Change
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-migration-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Migration Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-documentation-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Documentation Requirements
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Documentation Requirements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-when-adding-a-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 When Adding a Module
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-when-adding-a-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 When Adding a Service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113-when-adding-an-endpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 When Adding an Endpoint
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-performance-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Performance Guidelines
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Performance Guidelines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121-n1-prevention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1 N+1 Prevention
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#122-query-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2 Query Optimization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#123-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.3 Caching
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-security-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Security Rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. Security Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-safe-select" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1 Safe Select
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132-privileged-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2 Privileged Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#133-commonfilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3 commonFilter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#134-csrf-xss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4 CSRF / XSS
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-and-migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Database & Migrations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extracting-a-service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracting a Service
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../i18n/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Internationalization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-layer-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Layer Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-cross-module-communication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Cross-Module Communication
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Cross-Module Communication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-allowed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Allowed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-forbidden" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Forbidden
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-cross-boundary-identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Cross-Boundary Identity
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-service-boundary-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Service Boundary Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-namespace-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Namespace Conventions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-file-naming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. File Naming
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-class-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Class Conventions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Class Conventions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Required
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-phpdoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 PHPDoc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-visibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Visibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-code-style" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Code Style
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Code Style">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-psr-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 PSR-12
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-phpstan-level-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 PHPStan Level 8
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-deptrac-architecture-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Deptrac Architecture Boundaries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-rector-type-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Rector Type Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-naming-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 Naming Conventions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-testing-contracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Testing Contracts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Testing Contracts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-unit-vs-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Unit vs Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-test-naming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Test Naming
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-coverage-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Coverage Requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-test-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 Test Database
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-git-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Git Workflow
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Git Workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-feature-branches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Feature Branches
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-conventional-commits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Conventional Commits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-pr-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 PR Template
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-review-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 Review Requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-breaking-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Breaking Changes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Breaking Changes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-what-constitutes-a-breaking-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 What Constitutes a Breaking Change
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-migration-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Migration Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-documentation-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Documentation Requirements
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Documentation Requirements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-when-adding-a-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 When Adding a Module
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-when-adding-a-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 When Adding a Service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113-when-adding-an-endpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 When Adding an Endpoint
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-performance-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Performance Guidelines
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Performance Guidelines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121-n1-prevention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1 N+1 Prevention
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#122-query-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2 Query Optimization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#123-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.3 Caching
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-security-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Security Rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. Security Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-safe-select" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1 Safe Select
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132-privileged-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2 Privileged Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#133-commonfilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3 commonFilter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#134-csrf-xss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4 CSRF / XSS
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="development-contracts">Development Contracts<a class="headerlink" href="#development-contracts" title="Permanent link">&para;</a></h1>
+<p>Development rules, conventions, and quality gates that all contributors MUST follow.
+Derived from <code>docs/design/system-architecture.md</code>, <code>docs/design/system-contracts.md</code>,
+and the actual codebase patterns.</p>
+<hr />
+<h2 id="1-layer-rules">1. Layer Rules<a class="headerlink" href="#1-layer-rules" title="Permanent link">&para;</a></h2>
+<p>Layer dependency table from <code>docs/design/system-architecture.md</code> section 1.1:</p>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>From</th>
+<th>To</th>
+<th>Allowed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R1</td>
+<td>Controller</td>
+<td>Service</td>
+<td><strong>YES</strong></td>
+</tr>
+<tr>
+<td>R2</td>
+<td>Controller</td>
+<td>Entity</td>
+<td><strong>YES</strong> (type hints/returns only)</td>
+</tr>
+<tr>
+<td>R3</td>
+<td>Controller</td>
+<td>Repository</td>
+<td><strong>NO</strong> — go through Service</td>
+</tr>
+<tr>
+<td>R4</td>
+<td>Controller</td>
+<td>EntityManager</td>
+<td><strong>NO</strong> — go through Service</td>
+</tr>
+<tr>
+<td>R5</td>
+<td>Service</td>
+<td>Repository</td>
+<td><strong>YES</strong></td>
+</tr>
+<tr>
+<td>R6</td>
+<td>Service</td>
+<td>Entity</td>
+<td><strong>YES</strong></td>
+</tr>
+<tr>
+<td>R7</td>
+<td>Service</td>
+<td>EntityManager</td>
+<td><strong>YES</strong></td>
+</tr>
+<tr>
+<td>R8</td>
+<td>Service</td>
+<td>Other Services</td>
+<td><strong>YES</strong> (via DI)</td>
+</tr>
+<tr>
+<td>R9</td>
+<td>Entity</td>
+<td>Repository</td>
+<td><strong>NO</strong></td>
+</tr>
+<tr>
+<td>R10</td>
+<td>Entity</td>
+<td>Service</td>
+<td><strong>NO</strong></td>
+</tr>
+<tr>
+<td>R11</td>
+<td>Entity</td>
+<td>EntityManager</td>
+<td><strong>NO</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Controllers MUST NOT</strong>:
+- Inject <code>EntityManager</code>
+- Call <code>beginTransaction()</code>, <code>commit()</code>, <code>rollback()</code>
+- Call Repository directly
+- Use <code>$_GET</code>, <code>$_POST</code>, <code>$_REQUEST</code> superglobals
+- Contain business logic (delegate to services)</p>
+<p><strong>Services MUST</strong>:
+- Own all business logic, transactions, validation
+- Use <code>wrapInTransaction()</code> for multi-entity mutations
+- Return entities or DTOs (never raw database results to controllers)</p>
+<hr />
+<h2 id="2-cross-module-communication">2. Cross-Module Communication<a class="headerlink" href="#2-cross-module-communication" title="Permanent link">&para;</a></h2>
+<h3 id="21-allowed">2.1 Allowed<a class="headerlink" href="#21-allowed" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+<th>Mechanism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Any Business Module</td>
+<td>Core</td>
+<td>DI (autowire Core services)</td>
+</tr>
+<tr>
+<td>Business Module A</td>
+<td>Business Module B</td>
+<td>DI (autowire B's service <strong>interface</strong>)</td>
+</tr>
+<tr>
+<td>Any Module</td>
+<td>Identity</td>
+<td>Current principal abstraction or exported service</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-forbidden">2.2 Forbidden<a class="headerlink" href="#22-forbidden" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Direct cross-module Entity access</td>
+<td>Use explicit module API or scalar reference/snapshot</td>
+</tr>
+<tr>
+<td>Direct cross-module Repository access</td>
+<td>Use service interface</td>
+</tr>
+<tr>
+<td>Circular module dependencies</td>
+<td>Violates layer architecture</td>
+</tr>
+<tr>
+<td>Core importing business modules</td>
+<td>Core is foundational</td>
+</tr>
+</tbody>
+</table>
+<h3 id="23-cross-boundary-identity">2.3 Cross-Boundary Identity<a class="headerlink" href="#23-cross-boundary-identity" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Context</th>
+<th>Identifier</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Local Doctrine relation inside one module</td>
+<td>Integer <code>id</code> is allowed</td>
+</tr>
+<tr>
+<td>Public API route/response</td>
+<td>UUID</td>
+</tr>
+<tr>
+<td>Service interface crossing module boundary</td>
+<td>UUID or documented immutable business key</td>
+</tr>
+<tr>
+<td>Integration event aggregate/source/correlation id</td>
+<td>UUID</td>
+</tr>
+<tr>
+<td>Future service database relation</td>
+<td>UUID/business key only; no cross-service FK</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-service-boundary-rules">3. Service Boundary Rules<a class="headerlink" href="#3-service-boundary-rules" title="Permanent link">&para;</a></h2>
+<p>From <code>docs/design/microservice-transition.md</code>, the 7 rules before extraction:</p>
+<ol>
+<li>A service owns its database and has no cross-service Doctrine association, foreign key,
+   repository access, or transaction.</li>
+<li>Durable cross-service references use UUIDs or documented immutable business keys, never
+   another service's local integer primary key.</li>
+<li>A service boundary accepts scalar commands/queries and emits scalar snapshots. It never
+   exposes Doctrine entities, repositories, EntityManagers, Symfony requests/responses, or
+   mutable in-process contexts.</li>
+<li>A state-changing integration event is written to an Outbox in the producer's local
+   transaction. Consumers use a durable Inbox keyed by <code>eventId</code>.</li>
+<li>Each consumer owns its queue, retry policy, dead-letter handling, worker, and scheduled
+   jobs. A shared Doctrine Messenger queue is not a service boundary.</li>
+<li>Shared packages may provide framework utilities, schemas, and test support. They MUST NOT
+   contain business entities, repositories, or service-specific application logic.</li>
+<li>Public routes remain stable through an API gateway or routing layer while ownership moves
+   between services.</li>
+</ol>
+<p><strong>Pre-Extraction Checklist</strong>:
+- [ ] All cross-module references use UUIDs or immutable business keys
+- [ ] No shared Doctrine associations or cross-module FK
+- [ ] Integration events use Outbox/Inbox pattern
+- [ ] Service has its own <code>composer.json</code>, <code>Kernel.php</code>, <code>config/</code>, <code>migrations/</code>, <code>public/</code>,
+  <code>bin/</code>, <code>tests/</code>, Docker definition
+- [ ] Architecture checks (deptrac) pass without new baseline entries
+- [ ] Legacy test suite remains green</p>
+<hr />
+<h2 id="4-namespace-conventions">4. Namespace Conventions<a class="headerlink" href="#4-namespace-conventions" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Namespace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core Framework</td>
+<td><code>App\Core\*</code> (in <code>packages/platform-kernel/src/</code>)</td>
+</tr>
+<tr>
+<td>Module Controllers</td>
+<td><code>App\{Module}\Controller\Manage\</code> or <code>App\{Module}\Controller\App\</code></td>
+</tr>
+<tr>
+<td>Module Entities</td>
+<td><code>App\{Module}\Entity\</code></td>
+</tr>
+<tr>
+<td>Module Repositories</td>
+<td><code>App\{Module}\Repository\</code></td>
+</tr>
+<tr>
+<td>Module Services</td>
+<td><code>App\{Module}\Service\</code></td>
+</tr>
+<tr>
+<td>Module Exceptions</td>
+<td><code>App\{Module}\Exception\</code></td>
+</tr>
+<tr>
+<td>Module Event Listeners</td>
+<td><code>App\{Module}\EventListener\</code></td>
+</tr>
+<tr>
+<td>Module Commands</td>
+<td><code>App\{Module}\Command\</code></td>
+</tr>
+<tr>
+<td>Bridge Adapters</td>
+<td><code>App\Bridge\{Module}\</code></td>
+</tr>
+<tr>
+<td>Integration Contracts</td>
+<td><code>App\Contracts\Integration\</code></td>
+</tr>
+</tbody>
+</table>
+<p>Route naming: <code>{scope}-{resource}-{action}</code> (e.g., <code>manage-categories-list</code>,
+<code>app-orders-create</code>, <code>system-router-list</code>).</p>
+<hr />
+<h2 id="5-file-naming">5. File Naming<a class="headerlink" href="#5-file-naming" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One class per file</td>
+<td>No exceptions</td>
+</tr>
+<tr>
+<td>File name = class name</td>
+<td><code>CategoryService.php</code> contains <code>class CategoryService</code></td>
+</tr>
+<tr>
+<td>Trait files</td>
+<td>Same name as trait</td>
+</tr>
+<tr>
+<td>Interface files</td>
+<td>Same name as interface</td>
+</tr>
+<tr>
+<td>Tests</td>
+<td><code>{Class}Test.php</code></td>
+</tr>
+<tr>
+<td>PSR-4 autoloading</td>
+<td>Directory mirrors namespace, case-sensitive</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-class-conventions">6. Class Conventions<a class="headerlink" href="#6-class-conventions" title="Permanent link">&para;</a></h2>
+<h3 id="61-required">6.1 Required<a class="headerlink" href="#61-required" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp">&lt;?php</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">declare</span><span class="p">(</span><span class="nx">strict_types</span><span class="o">=</span><span class="mi">1</span><span class="p">);</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="k">namespace</span> <span class="nx">App\Common\Service</span><span class="p">;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="k">use</span> <span class="nx">App\Common\Entity\Category</span><span class="p">;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">use</span> <span class="nx">App\Core\Service\BaseService</span><span class="p">;</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="sd">/** @extends BaseService&lt;\App\Common\Entity\Category&gt; */</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="k">class</span> <span class="nc">CategoryService</span> <span class="k">extends</span> <span class="nx">BaseService</span> <span class="k">implements</span> <span class="nx">CategoryServiceInterface</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">{</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="cm">/* ... */</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><code>declare(strict_types=1)</code> at the top of every PHP file</li>
+<li><code>final</code> where applicable (prevent unintended extension)</li>
+<li><code>readonly</code> for constructor-injected dependencies where possible</li>
+<li><code>#[ORM\*]</code> PHP attributes for Doctrine mapping (not annotations)</li>
+<li><code>#[OA\*]</code> PHP attributes for OpenAPI documentation</li>
+</ul>
+<h3 id="62-phpdoc">6.2 PHPDoc<a class="headerlink" href="#62-phpdoc" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Required on interfaces and abstract methods (contract documentation)</li>
+<li><code>@extends</code> / <code>@implements</code> for generic types on BaseService subclasses</li>
+<li><code>@param</code> / <code>@return</code> only when types cannot be expressed in native PHP</li>
+<li>No comments on self-documenting code (well-named methods/variables)</li>
+</ul>
+<h3 id="63-visibility">6.3 Visibility<a class="headerlink" href="#63-visibility" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Constructor-injected services: <code>protected readonly</code></li>
+<li>Internal state properties: <code>private</code></li>
+<li>Hook methods: <code>protected</code> (overridable)</li>
+<li>Public methods: only on interfaces and action methods</li>
+</ul>
+<hr />
+<h2 id="7-code-style">7. Code Style<a class="headerlink" href="#7-code-style" title="Permanent link">&para;</a></h2>
+<h3 id="71-psr-12">7.1 PSR-12<a class="headerlink" href="#71-psr-12" title="Permanent link">&para;</a></h3>
+<p>Standard code style. Enforced by convention.</p>
+<h3 id="72-phpstan-level-8">7.2 PHPStan Level 8<a class="headerlink" href="#72-phpstan-level-8" title="Permanent link">&para;</a></h3>
+<p>Run <code>composer phpstan</code>. Configured over <code>src/</code> scope. Level 8 is the strictest level
+(excluding Level 9's <code>mixed</code> checks for now).</p>
+<h3 id="73-deptrac-architecture-boundaries">7.3 Deptrac Architecture Boundaries<a class="headerlink" href="#73-deptrac-architecture-boundaries" title="Permanent link">&para;</a></h3>
+<p>Run <code>composer deptrac</code>. Enforces:
+- Core MUST NOT depend on a business module
+- A module MUST NOT add a dependency on another module's <code>Entity</code> or <code>Repository</code></p>
+<p>The <code>deptrac-baseline.yaml</code> contains reviewed historical violations. New entries require an
+explicit architecture decision.</p>
+<h3 id="74-rector-type-rules">7.4 Rector Type Rules<a class="headerlink" href="#74-rector-type-rules" title="Permanent link">&para;</a></h3>
+<p>Run <code>composer rector:types:check</code> (CI dry-run). Enforces Doctrine <code>Collection</code> /
+<code>Repository</code> PHPDoc generics. Broader Rector (<code>composer rector</code>) is opt-in and must be
+reviewed.</p>
+<h3 id="75-naming-conventions">7.5 Naming Conventions<a class="headerlink" href="#75-naming-conventions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Convention</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Classes</td>
+<td>PascalCase</td>
+<td><code>CategoryService</code></td>
+</tr>
+<tr>
+<td>Methods</td>
+<td>camelCase</td>
+<td><code>getEnabledCategories()</code></td>
+</tr>
+<tr>
+<td>Properties</td>
+<td>camelCase</td>
+<td><code>$serviceClass</code></td>
+</tr>
+<tr>
+<td>Constants</td>
+<td>UPPER_SNAKE</td>
+<td><code>UNKNOWN_ERROR</code></td>
+</tr>
+<tr>
+<td>Interfaces</td>
+<td><code>*Interface</code> suffix</td>
+<td><code>BaseServiceInterface</code></td>
+</tr>
+<tr>
+<td>Abstract classes</td>
+<td><code>Abstract*</code> or <code>Base*</code> prefix</td>
+<td><code>BaseService</code></td>
+</tr>
+<tr>
+<td>Traits</td>
+<td><code>*Trait</code> suffix or descriptive</td>
+<td><code>ListApiViewMixin</code></td>
+</tr>
+<tr>
+<td>Tests</td>
+<td><code>*Test</code> suffix</td>
+<td><code>CategoryTest</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-testing-contracts">8. Testing Contracts<a class="headerlink" href="#8-testing-contracts" title="Permanent link">&para;</a></h2>
+<h3 id="81-unit-vs-integration">8.1 Unit vs Integration<a class="headerlink" href="#81-unit-vs-integration" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Extends</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unit</td>
+<td><code>PHPUnit\Framework\TestCase</code></td>
+<td>Isolated logic (entities, utils, calculators)</td>
+</tr>
+<tr>
+<td>Kernel</td>
+<td><code>IntegrationKernelTestCase</code></td>
+<td>With booted kernel, service access, DB</td>
+</tr>
+<tr>
+<td>Web</td>
+<td><code>IntegrationWebTestCase</code></td>
+<td>Full HTTP request/response cycle</td>
+</tr>
+<tr>
+<td>Regression</td>
+<td>Varies</td>
+<td>API contract stability</td>
+</tr>
+</tbody>
+</table>
+<h3 id="82-test-naming">8.2 Test Naming<a class="headerlink" href="#82-test-naming" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{Class}Test</code></td>
+<td><code>CategoryTest.php</code>, <code>OrderServiceTest.php</code></td>
+</tr>
+<tr>
+<td><code>{Module}ApiRegressionTest</code></td>
+<td><code>CommonModulesApiRegressionTest.php</code></td>
+</tr>
+<tr>
+<td><code>{Module}IntegrationTest</code></td>
+<td><code>WalletApiIntegrationTest.php</code></td>
+</tr>
+</tbody>
+</table>
+<p>Tests in <code>tests/{Module}/</code> mirror the <code>src/{Module}/</code> structure.</p>
+<h3 id="83-coverage-requirements">8.3 Coverage Requirements<a class="headerlink" href="#83-coverage-requirements" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Minimum</strong>: 90% line coverage (enforced in CI via PHPUnit)</li>
+<li><strong>Test environment</strong>: <code>APP_ENV=test</code>, SQLite database</li>
+<li>Each test method starts with a clean schema (Doctrine schema tool, not migrations)</li>
+<li>Transactions are wrapped per test and rolled back</li>
+</ul>
+<h3 id="84-test-database">8.4 Test Database<a class="headerlink" href="#84-test-database" title="Permanent link">&para;</a></h3>
+<p>The test database schema is created from Doctrine schema tool — not from migrations.
+<code>DatabaseBootstrapTrait</code> handles schema setup. Each test starts with a clean schema.</p>
+<hr />
+<h2 id="9-git-workflow">9. Git Workflow<a class="headerlink" href="#9-git-workflow" title="Permanent link">&para;</a></h2>
+<h3 id="91-feature-branches">9.1 Feature Branches<a class="headerlink" href="#91-feature-branches" title="Permanent link">&para;</a></h3>
+<p>Branch naming: <code>feature/{description}</code>, <code>fix/{description}</code>, <code>refactor/{description}</code>.</p>
+<h3 id="92-conventional-commits">9.2 Conventional Commits<a class="headerlink" href="#92-conventional-commits" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>type(scope): description
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>feat(identity): add phone verification OTP flow
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>fix(order): prevent double-submission of payments
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>refactor(core): extract QueryBuilderFactory from BaseService
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>docs(manual): add API contracts documentation
+</code></pre></div>
+<p>Types: <code>feat</code>, <code>fix</code>, <code>refactor</code>, <code>docs</code>, <code>test</code>, <code>ci</code>, <code>chore</code>.</p>
+<h3 id="93-pr-template">9.3 PR Template<a class="headerlink" href="#93-pr-template" title="Permanent link">&para;</a></h3>
+<p>Available in <code>.github/pull_request_template.md</code>. Must include:
+- Summary of changes
+- Testing performed
+- Breaking changes (if any)
+- Checklist (tests pass, static analysis passes, documentation updated)</p>
+<h3 id="94-review-requirements">9.4 Review Requirements<a class="headerlink" href="#94-review-requirements" title="Permanent link">&para;</a></h3>
+<ul>
+<li>CI must pass (PHPStan Level 8, Rector dry-run, PHPUnit with 90%+ coverage)</li>
+<li>At least one approving review for changes to shared Core classes</li>
+<li>Migration files require explicit review for rollback compatibility</li>
+</ul>
+<hr />
+<h2 id="10-breaking-changes">10. Breaking Changes<a class="headerlink" href="#10-breaking-changes" title="Permanent link">&para;</a></h2>
+<h3 id="101-what-constitutes-a-breaking-change">10.1 What Constitutes a Breaking Change<a class="headerlink" href="#101-what-constitutes-a-breaking-change" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Change</th>
+<th>Breaking?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Change hook method signature</td>
+<td><strong>Yes</strong> — major version bump</td>
+</tr>
+<tr>
+<td>Remove mixin method</td>
+<td><strong>Yes</strong> — major version bump</td>
+</tr>
+<tr>
+<td>Change response envelope format</td>
+<td><strong>Yes</strong> — major version bump</td>
+</tr>
+<tr>
+<td>Remove supported query parameter</td>
+<td><strong>Yes</strong> — deprecation notice + major version bump</td>
+</tr>
+<tr>
+<td>Change <code>BaseServiceInterface</code></td>
+<td><strong>Yes</strong> — cross-module impact assessment</td>
+</tr>
+<tr>
+<td>Change entity field type</td>
+<td><strong>Yes</strong> — migration required</td>
+</tr>
+<tr>
+<td>Add new mixin trait</td>
+<td><strong>No</strong> — documentation only</td>
+</tr>
+<tr>
+<td>Add new hook method with default impl</td>
+<td><strong>No</strong> — documentation only</td>
+</tr>
+<tr>
+<td>Add query parameter</td>
+<td><strong>No</strong> — backward compatible</td>
+</tr>
+<tr>
+<td>Add new module</td>
+<td><strong>No</strong> — follow module contract</td>
+</tr>
+</tbody>
+</table>
+<h3 id="102-migration-compatibility">10.2 Migration Compatibility<a class="headerlink" href="#102-migration-compatibility" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Schema changes require a backward-compatible migration (old code reads with new schema)</li>
+<li>Irreversible migrations (e.g., column drops) are prohibited without explicit approval</li>
+<li>Migrations organize by module — one migration file per module change set</li>
+</ul>
+<hr />
+<h2 id="11-documentation-requirements">11. Documentation Requirements<a class="headerlink" href="#11-documentation-requirements" title="Permanent link">&para;</a></h2>
+<h3 id="111-when-adding-a-module">11.1 When Adding a Module<a class="headerlink" href="#111-when-adding-a-module" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Required Document</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Design doc (<code>docs/design/{module}.md</code>)</td>
+<td>Business flow, API design, data model sketch</td>
+</tr>
+<tr>
+<td>Bundle doc (<code>docs/design/bundles/{module}.md</code>)</td>
+<td>Module scope, dependencies, exported interfaces</td>
+</tr>
+<tr>
+<td>OpenAPI spec (code <code>#[OA\*]</code>)</td>
+<td>Auto-generated at <code>/api/doc</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="112-when-adding-a-service">11.2 When Adding a Service<a class="headerlink" href="#112-when-adding-a-service" title="Permanent link">&para;</a></h3>
+<ul>
+<li>PHPDoc <code>@extends BaseService&lt;EntityClass&gt;</code> on the service class</li>
+<li>Service interface in the same namespace</li>
+<li>Register in module's service configuration if not autowired</li>
+</ul>
+<h3 id="113-when-adding-an-endpoint">11.3 When Adding an Endpoint<a class="headerlink" href="#113-when-adding-an-endpoint" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>#[Route]</code> attribute with proper <code>name</code> following <code>{scope}-{resource}-{action}</code> convention</li>
+<li><code>#[OA\*]</code> attributes for NelmioApiDoc</li>
+<li><code>#[IsGranted]</code> for authorization</li>
+<li>Update <code>OpenApiEnricherListener::META</code> if endpoint needs custom summary/description</li>
+</ul>
+<hr />
+<h2 id="12-performance-guidelines">12. Performance Guidelines<a class="headerlink" href="#12-performance-guidelines" title="Permanent link">&para;</a></h2>
+<h3 id="121-n1-prevention">12.1 N+1 Prevention<a class="headerlink" href="#121-n1-prevention" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Use <code>@expands</code> to eager-load relations in list endpoints</li>
+<li>Use <code>detailProcessor()</code> to call <code>$entity-&gt;getItems()-&gt;toArray()</code> for detail views</li>
+<li>Avoid <code>@sort</code> (in-memory) — prefer <code>@order</code> (DQL)</li>
+</ul>
+<h3 id="122-query-optimization">12.2 Query Optimization<a class="headerlink" href="#122-query-optimization" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Use <code>@select</code> to project only needed fields</li>
+<li>Use <code>@filter</code> to push filtering to the database</li>
+<li>Avoid <code>@dql</code> subqueries unless necessary (use <code>@filter</code> instead)</li>
+<li>Use Doctrine's <code>indexBy</code> in repositories for eager loading</li>
+</ul>
+<h3 id="123-caching">12.3 Caching<a class="headerlink" href="#123-caching" title="Permanent link">&para;</a></h3>
+<ul>
+<li>ExpressionService can use a PSR-16 cache to avoid re-parsing filters</li>
+<li><code>cache.app</code> is available for application-level caching</li>
+<li>JWT blacklist uses cache (TTL-based)</li>
+</ul>
+<hr />
+<h2 id="13-security-rules">13. Security Rules<a class="headerlink" href="#13-security-rules" title="Permanent link">&para;</a></h2>
+<h3 id="131-safe-select">13.1 Safe Select<a class="headerlink" href="#131-safe-select" title="Permanent link">&para;</a></h3>
+<p><code>@select</code> is block-listed for identity-sensitive fields (<code>user</code>, <code>profile</code>, <code>password</code>,
+<code>roles</code>, <code>email</code>, <code>phone</code>, <code>phoneVerified</code>, <code>refreshToken</code>, <code>sessionKey</code>, <code>rawData</code>) and
+for any query targeting <code>App\Identity\*</code> entities.</p>
+<h3 id="132-privileged-parameters">13.2 Privileged Parameters<a class="headerlink" href="#132-privileged-parameters" title="Permanent link">&para;</a></h3>
+<p><code>@dql</code>, <code>@sort</code>, <code>@hints</code> are restricted to <code>ROLE_ADMIN</code>. <code>@showDQL</code> requires <code>dev</code>
+environment.</p>
+<h3 id="133-commonfilter">13.3 commonFilter<a class="headerlink" href="#133-commonfilter" title="Permanent link">&para;</a></h3>
+<p>Every controller with list/detail mixins MUST override <code>commonFilter()</code> to enforce
+ownership and visibility. For user-scoped endpoints, always return <code>['id' =&gt; -1]</code> as a
+fallback when the user is not authenticated.</p>
+<h3 id="134-csrf-xss">13.4 CSRF / XSS<a class="headerlink" href="#134-csrf-xss" title="Permanent link">&para;</a></h3>
+<ul>
+<li>All API authentication uses JWT Bearer tokens (no session, no cookies)</li>
+<li>JSON responses use <code>Content-Type: application/json</code></li>
+<li>No HTML rendering from API endpoints</li>
+<li>Input sanitization is not performed at the framework level; rely on Doctrine parameter
+  binding for SQL injection prevention</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

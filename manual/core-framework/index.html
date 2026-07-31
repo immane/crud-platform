@@ -1,0 +1,4418 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A production-oriented Symfony microservices platform evolved from modular monolith architecture, featuring DDD, service isolation, and event-driven communication.">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-platform/manual/core-framework/">
+      
+      
+        <link rel="prev" href="../project-structure/">
+      
+      
+        <link rel="next" href="../core-usage/">
+      
+      
+        
+          <link rel="alternate" href="/crud-platform/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-platform/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Core Framework - CRUD Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#core-framework-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="CRUD Platform" class="md-header__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Core Framework
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-platform/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-platform/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CRUD Platform" class="md-nav__button md-logo" aria-label="CRUD Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Platform
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/microservice-transition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Microservice Transition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/store-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store Extraction Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/inventory-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory Extraction Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/payment-extraction-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment Extraction Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/wallet-extraction-readiness.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet Extraction Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../issues/architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Manual
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development Manual
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-restcontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. RestController
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. RestController">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-constructor-setter-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Constructor &amp; Setter Injection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-success" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 success()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-warning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 warning()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-pagination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 pagination()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-expands-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 @expands Processing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-display-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 @display Processing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-getservice-resolveservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 getService() / resolveService()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-baseservice-traits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. BaseService &amp; Traits
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. BaseService &amp; Traits">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-baseservice-constructor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 BaseService Constructor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-baseserviceinfrastructuretrait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 BaseServiceInfrastructureTrait
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-baseservicereadlisttrait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 BaseServiceReadListTrait
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.3 BaseServiceReadListTrait">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-baseservicemutationtrait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 BaseServiceMutationTrait
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.4 BaseServiceMutationTrait">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        new()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        update()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-view-mixins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. View Mixins
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. View Mixins">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-apiview-mandatory-base-trait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 ApiView (Mandatory Base Trait)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-listapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 ListApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-detailapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 DetailApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-createapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 CreateApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-updateapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 UpdateApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-deleteapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 DeleteApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37-workflowapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.7 WorkflowApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#38-singlecreateandupdateapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.8 SingleCreateAndUpdateApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#39-scopeddetailapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.9 ScopedDetailApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#310-scopedlistapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.10 ScopedListApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#311-singledetailapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.11 SingleDetailApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#312-transformcontent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.12 TransformContent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#313-apiviewmessages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.13 ApiViewMessages
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-eventlisteners" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. EventListeners
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. EventListeners">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-exceptioninterceptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 ExceptionInterceptor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-controllerlistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 ControllerListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-localelistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 LocaleListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-accessloglistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 AccessLogListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-openapienricherlistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 OpenApiEnricherListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-serializer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Serializer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Serializer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-flatnormalizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 FlatNormalizer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-circularreferencehandler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 CircularReferenceHandler
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-objectcallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 ObjectCallback
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-serializercontextfactory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 SerializerContextFactory
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-security-interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Security Interfaces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Security Interfaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-useruuidresolverinterface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 UserUuidResolverInterface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-useruuidprincipalinterface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 UserUuidPrincipalInterface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-identityprofileprincipalinterface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 IdentityProfilePrincipalInterface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-identityuseridresolverinterface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 IdentityUserIdResolverInterface
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-system-controllers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. System Controllers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. System Controllers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-entitycontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 EntityController
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-routercontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 RouterController
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-utils" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Utils
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Utils">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-uuid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 UUID
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-math" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Math
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-rsa-rsaclient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 RSA (RsaClient)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-inflect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 Inflect
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-arraycommon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 ArrayCommon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86-filterdatetime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6 FilterDateTime
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-corebundle-di" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. CoreBundle &amp; DI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. CoreBundle &amp; DI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-corebundle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 CoreBundle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-coreextension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 CoreExtension
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../query-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Query System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-and-migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Database & Migrations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extracting-a-service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracting a Service
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../i18n/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Internationalization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-restcontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. RestController
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. RestController">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-constructor-setter-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Constructor &amp; Setter Injection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-success" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 success()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-warning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 warning()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-pagination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 pagination()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-expands-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 @expands Processing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-display-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 @display Processing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-getservice-resolveservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 getService() / resolveService()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-baseservice-traits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. BaseService &amp; Traits
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. BaseService &amp; Traits">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-baseservice-constructor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 BaseService Constructor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-baseserviceinfrastructuretrait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 BaseServiceInfrastructureTrait
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-baseservicereadlisttrait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 BaseServiceReadListTrait
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.3 BaseServiceReadListTrait">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-baseservicemutationtrait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 BaseServiceMutationTrait
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.4 BaseServiceMutationTrait">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        new()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        update()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-view-mixins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. View Mixins
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. View Mixins">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-apiview-mandatory-base-trait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 ApiView (Mandatory Base Trait)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-listapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 ListApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-detailapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 DetailApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-createapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 CreateApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-updateapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 UpdateApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-deleteapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 DeleteApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37-workflowapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.7 WorkflowApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#38-singlecreateandupdateapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.8 SingleCreateAndUpdateApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#39-scopeddetailapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.9 ScopedDetailApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#310-scopedlistapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.10 ScopedListApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#311-singledetailapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.11 SingleDetailApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#312-transformcontent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.12 TransformContent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#313-apiviewmessages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.13 ApiViewMessages
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-eventlisteners" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. EventListeners
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. EventListeners">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-exceptioninterceptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 ExceptionInterceptor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-controllerlistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 ControllerListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-localelistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 LocaleListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-accessloglistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 AccessLogListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-openapienricherlistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 OpenApiEnricherListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-serializer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Serializer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Serializer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-flatnormalizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 FlatNormalizer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-circularreferencehandler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 CircularReferenceHandler
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-objectcallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 ObjectCallback
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-serializercontextfactory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 SerializerContextFactory
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-security-interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Security Interfaces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Security Interfaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-useruuidresolverinterface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 UserUuidResolverInterface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-useruuidprincipalinterface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 UserUuidPrincipalInterface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-identityprofileprincipalinterface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 IdentityProfilePrincipalInterface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-identityuseridresolverinterface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 IdentityUserIdResolverInterface
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-system-controllers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. System Controllers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. System Controllers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-entitycontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 EntityController
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-routercontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 RouterController
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-utils" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Utils
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Utils">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-uuid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 UUID
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-math" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Math
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-rsa-rsaclient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 RSA (RsaClient)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-inflect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 Inflect
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-arraycommon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 ArrayCommon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86-filterdatetime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6 FilterDateTime
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-corebundle-di" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. CoreBundle &amp; DI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. CoreBundle &amp; DI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-corebundle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 CoreBundle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-coreextension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 CoreExtension
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="core-framework-reference">Core Framework Reference<a class="headerlink" href="#core-framework-reference" title="Permanent link">&para;</a></h1>
+<p>Deep-dive into <code>packages/platform-kernel/src/</code>. This is the foundation shared library — it
+MUST NOT depend on any business module.</p>
+<hr />
+<h2 id="1-restcontroller">1. RestController<a class="headerlink" href="#1-restcontroller" title="Permanent link">&para;</a></h2>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/Controller/RestController.php</code>
+<strong>Extends</strong>: <code>Symfony\Bundle\FrameworkBundle\Controller\AbstractController</code></p>
+<p>Every controller in the platform extends <code>RestController</code>. It provides JSON response helpers,
+pagination, request processing, service resolution, and setter-injected dependencies.</p>
+<h3 id="11-constructor-setter-injection">1.1 Constructor &amp; Setter Injection<a class="headerlink" href="#11-constructor-setter-injection" title="Permanent link">&para;</a></h3>
+<p>The constructor accepts optional dependencies. <code>#[Required]</code> setters guarantee production
+injection while allowing subclasses to omit explicit <code>parent::__construct()</code> calls.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">class RestController extends AbstractController</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">{</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">    private ?RequestStack $requestStack = null;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="x">    private ?SerializerInterface $serializer = null;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="x">    private ?TranslatorInterface $translator = null;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="x">    private ?ContainerInterface $serviceContainer = null;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="x">    public function __construct(</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="x">        ?RequestStack $requestStack = null,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="x">        ?SerializerInterface $serializer = null,</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="x">        ?TranslatorInterface $translator = null</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="x">    ) { /* ... */ }</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="x">    #[Required] public function setRequestStack(RequestStack $requestStack): void { /* ... */ }</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="x">    #[Required] public function setSerializer(SerializerInterface $serializer): void { /* ... */ }</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="x">    #[Required] public function setTranslator(TranslatorInterface $translator): void { /* ... */ }</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="x">    #[Required] public function setServiceContainer(ContainerInterface $serviceContainer): void { /* ... */ }</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="x">}</span>
+</code></pre></div>
+<p>All four <code>#[Required]</code> setters:</p>
+<table>
+<thead>
+<tr>
+<th>Setter</th>
+<th>Dependency</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>setRequestStack()</code></td>
+<td><code>RequestStack</code></td>
+<td>Access current request, query params</td>
+</tr>
+<tr>
+<td><code>setSerializer()</code></td>
+<td><code>SerializerInterface</code></td>
+<td>JSON serialization of responses</td>
+</tr>
+<tr>
+<td><code>setTranslator()</code></td>
+<td><code>TranslatorInterface</code></td>
+<td>Locale-aware message translation</td>
+</tr>
+<tr>
+<td><code>setServiceContainer()</code></td>
+<td><code>ContainerInterface</code></td>
+<td>Lazy service resolution (<code>resolveService()</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-success">1.2 success()<a class="headerlink" href="#12-success" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">protected function success(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">    mixed $content = &#39;&#39;,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="x">    string $addition_message = &#39;SUCCESS&#39;,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="x">    int $status = 200</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="x">): Response</span>
+</code></pre></div>
+<p>The success path runs through: <code>pagination(content)</code> → <code>requestProcess(items)</code> → serialize &amp; return.</p>
+<p><strong>JSON envelope</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">}</span>
+</code></pre></div>
+<p>When paginated (GET request with <code>page</code>/<code>limit</code>), the <code>paginator</code> key is added:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="nt">&quot;paginator&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">        </span><span class="nt">&quot;total&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">42</span><span class="p">,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">        </span><span class="nt">&quot;page&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span><span class="nt">&quot;limit&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">        </span><span class="nt">&quot;pages&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">        </span><span class="nt">&quot;has_previous&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">        </span><span class="nt">&quot;has_next&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="p">}</span>
+</code></pre></div>
+<p>If <code>status === 204</code>, returns an empty response (used by DeleteApiViewMixin).</p>
+<h3 id="13-warning">1.3 warning()<a class="headerlink" href="#13-warning" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">protected function warning(</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">    string $error_msg = self::UNKNOWN_ERROR,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">    int $error_code = -1,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="x">    mixed $raw_data = &#39;&#39;,</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="x">    int $status = 200</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="x">): Response</span>
+</code></pre></div>
+<p>Returns an error envelope. The message goes through <code>getTranslator()-&gt;trans()</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">404</span><span class="p">,</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Entity is not found&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">&quot;raw_data&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">}</span>
+</code></pre></div>
+<p>Default status is 200 so the client sees both an HTTP 200 and an application-level error
+code. Controllers may override <code>$status</code> (e.g., <code>400</code>, <code>404</code>, <code>500</code>).</p>
+<h3 id="14-pagination">1.4 pagination()<a class="headerlink" href="#14-pagination" title="Permanent link">&para;</a></h3>
+<p>Accepts a <code>QueryBuilder</code>, <code>array</code>, or <code>ArrayCollection</code>. For QueryBuilders, uses
+<code>DoctrinePaginator</code> to calculate <code>$total</code> before setting <code>setFirstResult()</code>/<code>setMaxResults()</code>.
+For arrays/collections, uses <code>array_slice()</code>.</p>
+<p>Default page limit is 100. Paginator metadata: <code>total</code>, <code>page</code>, <code>limit</code>, <code>pages</code>,
+<code>has_previous</code>, <code>has_next</code>.</p>
+<h3 id="15-expands-processing">1.5 @expands Processing<a class="headerlink" href="#15-expands-processing" title="Permanent link">&para;</a></h3>
+<p>The <code>requestProcess()</code> method reads <code>?@expands=['entity.category', 'entity.tags']</code> from the
+query string. For each dot-path, it traverses getters and injects <code>__metadata</code> on related
+objects so the serializer can include nested data.</p>
+<h3 id="16-display-processing">1.6 @display Processing<a class="headerlink" href="#16-display-processing" title="Permanent link">&para;</a></h3>
+<p>Also in <code>requestProcess()</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>complex</code> (default)</td>
+<td>Return the collection as-is (serializer handles it)</td>
+</tr>
+<tr>
+<td><code>reduce</code></td>
+<td>Map each entity to <code>{id, __toString}</code></td>
+</tr>
+<tr>
+<td><code>["name", "slug"]</code> (JSON array)</td>
+<td>Extract named fields from each entity</td>
+</tr>
+<tr>
+<td><code>{"name": "entity.getName()", "count": "Math.sqrt(16)"}</code> (JSON object)</td>
+<td>Evaluate expressions per entity with <code>entity</code>, <code>Math</code>, <code>ArrayCommon</code> in scope</td>
+</tr>
+</tbody>
+</table>
+<h3 id="17-getservice-resolveservice">1.7 getService() / resolveService()<a class="headerlink" href="#17-getservice-resolveservice" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>getService()</code></strong>: Reads <code>$this-&gt;service</code> property via reflection, throws if not an object.</li>
+<li><strong><code>resolveService(string $id)</code></strong>: Fetches from <code>$this-&gt;serviceContainer</code>, throws if unavailable.
+  Used by <code>TransformContent</code> to resolve related entity services.</li>
+</ul>
+<hr />
+<h2 id="2-baseservice-traits">2. BaseService &amp; Traits<a class="headerlink" href="#2-baseservice-traits" title="Permanent link">&para;</a></h2>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/Service/BaseService.php</code>
+<strong>Implements</strong>: <code>BaseServiceInterface</code>
+<strong>Template</strong>: <code>@template TEntity of object</code></p>
+<h3 id="21-baseservice-constructor">2.1 BaseService Constructor<a class="headerlink" href="#21-baseservice-constructor" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="x">public function __construct(</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">    ContainerInterface $container,</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="x">    string $entityClass,                         // e.g., Category::class</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="x">    ?ServiceLocatorInterface $locator = null,</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="x">    ?ExpressionServiceInterface $expressionService = null,</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="x">    ?LegacyEvaluator $legacyEvaluator = null</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="x">)</span>
+</code></pre></div>
+<p>On construction:
+1. Resolves <code>EntityManager</code> and repository via <code>ServiceLocatorInterface</code>
+2. Sets <code>$this-&gt;user</code> from <code>TokenStorage</code> (null for unauthenticated requests)
+3. Stores optional <code>ExpressionService</code> / <code>LegacyEvaluator</code> references</p>
+<p>Properties:
+- <code>$container</code> — Symfony DI container
+- <code>$em</code> — EntityManager
+- <code>$rep</code> — Doctrine repository for <code>$entityClass</code>
+- <code>$entityClass</code> — The managed entity FQCN
+- <code>$logger</code> — PSR logger
+- <code>$user</code> — Current authenticated user or null</p>
+<h3 id="22-baseserviceinfrastructuretrait">2.2 BaseServiceInfrastructureTrait<a class="headerlink" href="#22-baseserviceinfrastructuretrait" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/Service/Concern/BaseServiceInfrastructureTrait.php</code></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wrapInTransaction(callable $fn)</code></td>
+<td>Begin Tx → execute → flush → commit. On <code>\Throwable</code>: rollback + re-throw. Falls back to plain execution if EM lacks transaction methods (test fakes).</td>
+</tr>
+<tr>
+<td><code>getEntityManager()</code></td>
+<td>Lazy resolve from <code>$this-&gt;em</code> or <code>$this-&gt;container</code></td>
+</tr>
+<tr>
+<td><code>getRepository(?string $class)</code></td>
+<td>Returns <code>EntityManager::getRepository($class)</code></td>
+</tr>
+<tr>
+<td><code>getLogger()</code></td>
+<td>Lazy resolve, returns <code>NullLogger</code> if unavailable</td>
+</tr>
+<tr>
+<td><code>getSerializer()</code></td>
+<td>Lazy resolve from <code>ServiceLocator</code>, then <code>$this-&gt;container</code>, then creates a plain <code>ObjectNormalizer</code>+<code>JsonEncoder</code></td>
+</tr>
+<tr>
+<td><code>getValidator()</code></td>
+<td>Returns Symfony validator if available</td>
+</tr>
+<tr>
+<td><code>getRequestStack()</code> / <code>getCurrentRequest()</code></td>
+<td>Access current HTTP request</td>
+</tr>
+<tr>
+<td><code>getQueryBuilderFactory()</code></td>
+<td>Creates <code>QueryBuilderFactory</code> on demand</td>
+</tr>
+<tr>
+<td><code>getExpressionService()</code></td>
+<td>Creates <code>ExpressionService</code> on demand</td>
+</tr>
+<tr>
+<td><code>getLegacyEvaluator()</code></td>
+<td>Creates <code>LegacyEvaluator</code> on demand</td>
+</tr>
+<tr>
+<td><code>externalExpressionValues()</code></td>
+<td>Returns <code>['math' =&gt; Math, 'datetime' =&gt; FilterDateTime, 'Math' =&gt; Math, 'Datetime' =&gt; FilterDateTime, 'ArrayCommon' =&gt; ArrayCommon]</code></td>
+</tr>
+<tr>
+<td><code>listResultToCollection()</code></td>
+<td>Converts <code>QueryBuilder</code> or <code>array</code> to <code>ArrayCollection</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="23-baseservicereadlisttrait">2.3 BaseServiceReadListTrait<a class="headerlink" href="#23-baseservicereadlisttrait" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/Service/Concern/BaseServiceReadListTrait.php</code></p>
+<h4 id="get">get()<a class="headerlink" href="#get" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="x">public function get(mixed $object, bool $directly = false)</span>
+</code></pre></div>
+<p>Resolution logic:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>- null                     → null
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>- QueryBuilder             → getSingleResult()
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>- object with getId()      → $this-&gt;rep-&gt;find($entityId)
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>- array&lt;string, mixed&gt;     → $this-&gt;rep-&gt;findOneBy($array)
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>- string (valid UUID)      → $this-&gt;rep-&gt;findOneBy([&#39;uuid&#39; =&gt; $string]) if entity has UUID field
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>- int|string (fallback)    → $this-&gt;rep-&gt;find($object)
+</code></pre></div></p>
+<h4 id="list">list()<a class="headerlink" href="#list" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="x">public function list(mixed $object = null, mixed $order = null, bool $disableRequest = true): mixed</span>
+</code></pre></div>
+<p>When <code>$disableRequest</code> is <code>false</code>, the method processes these query parameters from the
+current request:</p>
+<ul>
+<li><strong><code>@filter</code></strong>: Parsed via <code>ExpressionService::buildFilter()</code> → DQL subquery → <code>EXISTS</code> in clause.
+  On parse failure: if admin, falls back to in-memory filtering + usort; if non-admin, throws
+  <code>AccessDeniedHttpException</code>.</li>
+<li><strong><code>@dql</code></strong>: Raw DQL injected as <code>IN</code> sub-query. Admin-only (guarded by
+  <code>assertPrivilegedQueryParameters()</code>).</li>
+<li><strong><code>@order</code></strong>: Syntax <code>field|ASC, field2|DESC</code>. Converts dot-paths to join aliases
+  automatically.</li>
+<li><strong><code>@select</code></strong>: DQL SELECT projection. Blocked if it touches <code>user|profile|password|roles|email|phone|phoneVerified|refreshToken|sessionKey|rawData</code>
+  or targets <code>App\Identity\*</code> entities.</li>
+<li><strong><code>@groupBy</code></strong>: DQL GROUP BY clause.</li>
+<li><strong><code>@hints</code></strong>: JSON-decoded Doctrine query hints. Admin-only.</li>
+<li><strong><code>@sort</code></strong>: Expression-based <code>usort()</code> with <code>x</code> and <code>y</code> objects. Triggers fallback to
+  in-memory mode. Admin-only.</li>
+<li><strong><code>@showDQL</code></strong>: Dev-only. Throws <code>ValidatorException</code> containing compiled DQL.</li>
+</ul>
+<p><strong>Safe Select Guard</strong>: <code>assertSafeSelect()</code> blocks projections that access identity fields
+(see <code>$identityFields</code> regex). Any <code>@select</code> targeting <code>App\Identity\*</code> entities is denied.</p>
+<p><strong>Privileged Parameter Guard</strong>: <code>assertPrivilegedQueryParameters()</code> restricts <code>@dql</code>, <code>@sort</code>,
+<code>@hints</code> to <code>ROLE_ADMIN</code>. <code>@showDQL</code> requires <code>dev</code> environment.</p>
+<h3 id="24-baseservicemutationtrait">2.4 BaseServiceMutationTrait<a class="headerlink" href="#24-baseservicemutationtrait" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/Service/Concern/BaseServiceMutationTrait.php</code></p>
+<h4 id="new">new()<a class="headerlink" href="#new" title="Permanent link">&para;</a></h4>
+<p>Creates a new instance of <code>$this-&gt;entityClass</code>. If the constructor has no required params,
+uses <code>newInstance()</code>. Otherwise, uses <code>newInstanceWithoutConstructor()</code>.</p>
+<h4 id="update">update()<a class="headerlink" href="#update" title="Permanent link">&para;</a></h4>
+<p><strong>Pipeline</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>1. Validate object not null
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>2. Re-fetch from DB if entity has an ID (prevents detached-entity issues)
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>3. For each key in $data:
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>   a. Check property exists
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>   b. If #[ManyToOne]/#[OneToOne]: resolve target entity, call setter, unset from $data
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>   c. If #[ManyToMany]/#[OneToMany]: diff current vs new IDs, call add*/remove* (using Inflect::singularize), unset
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>   d. If date-like mapping (ORM type datetime/date/time or property type \DateTimeInterface): create DateTime, call setter, unset
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>4. Deserialize remaining $data onto the object (using Serializer with object_to_populate)
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>5. Validate the entity (Symfony Validator)
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>6. Persist + flush
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>7. Return the entity (or false on reflection error)
+</code></pre></div>
+<p><strong>Relationship Handling</strong>: ManyToOne/OneToOne sets the other entity via repository find.
+ManyToMany/OneToMany computes diffs (added vs removed IDs) and calls the adder/remover.</p>
+<p><strong>DateTime Conversion</strong>: Detected via either ORM attribute <code>type</code> or property PHP type
+<code>\DateTimeInterface</code>. Converts scalar values to <code>new \DateTime($val)</code>.</p>
+<p><strong>remove()</strong>: Calls <code>get()</code> to resolve, then <code>$em-&gt;remove()</code> + <code>$em-&gt;flush()</code>. Returns bool.</p>
+<hr />
+<h2 id="3-view-mixins">3. View Mixins<a class="headerlink" href="#3-view-mixins" title="Permanent link">&para;</a></h2>
+<p>All mixins live in <code>packages/platform-kernel/src/View/</code>. They compose controllers via
+<code>trait</code> usage rather than deep class hierarchies.</p>
+<h3 id="31-apiview-mandatory-base-trait">3.1 ApiView (Mandatory Base Trait)<a class="headerlink" href="#31-apiview-mandatory-base-trait" title="Permanent link">&para;</a></h3>
+<p><strong>Trait</strong>: <code>App\Core\View\ApiView</code></p>
+<p>Every controller <strong>MUST</strong> <code>use ApiView</code>. It provides:</p>
+<table>
+<thead>
+<tr>
+<th>Property/Method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$serviceClass</code></td>
+<td>The FQCN of the corresponding service</td>
+</tr>
+<tr>
+<td><code>commonFilter()</code></td>
+<td>Override to apply ownership/scoping filters. Returns <code>array</code> or <code>QueryBuilder</code></td>
+</tr>
+<tr>
+<td><code>mixIdToCommonFilter($id)</code></td>
+<td>Prepends <code>['id' =&gt; $id]</code> (or <code>['uuid' =&gt; $id]</code>) to commonFilter</td>
+</tr>
+<tr>
+<td><code>mixToCommonFilter($data)</code></td>
+<td>Merges <code>$data</code> into commonFilter result</td>
+</tr>
+<tr>
+<td><code>entityNotFoundMessage()</code></td>
+<td>Returns 'Entity not found' (can be overridden)</td>
+</tr>
+</tbody>
+</table>
+<p><code>commonFilter()</code> scoping patterns:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="x">// User-scoped: only user&#39;s own data</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="x">protected function commonFilter(): array { return [&#39;ownerUuid&#39; =&gt; $this-&gt;getUser()-&gt;getUuid()]; }</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="x">// Admin: no filter (everything visible)</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="x">protected function commonFilter(): array { return []; }</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="x">// Block-all: prevents access (used when controller should only expose custom actions)</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="x">protected function commonFilter(): array { return [&#39;id&#39; =&gt; -1]; }</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="x">// Public: filter for published/enabled items</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="x">protected function commonFilter(): array { return [&#39;enabled&#39; =&gt; true]; }</span>
+</code></pre></div></p>
+<h3 id="32-listapiviewmixin">3.2 ListApiViewMixin<a class="headerlink" href="#32-listapiviewmixin" title="Permanent link">&para;</a></h3>
+<p><strong>Route</strong>: <code>GET /</code> → <code>listAction()</code></p>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>When Called</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>listFilter($filter)</code></td>
+<td>Before <code>service.list()</code></td>
+<td>Modify filter criteria</td>
+</tr>
+<tr>
+<td><code>listProcessor($entities)</code></td>
+<td>After <code>service.list()</code></td>
+<td>Transform result set</td>
+</tr>
+<tr>
+<td><code>listResponses($entities)</code></td>
+<td>Before serialization</td>
+<td>Final response shaping</td>
+</tr>
+</tbody>
+</table>
+<p>OpenAPI parameters documented: <code>page</code>, <code>limit</code>, <code>@order</code>, <code>@dql</code>, <code>@select</code>, <code>@groupBy</code>,
+<code>@hints</code>, <code>@filter</code>, <code>@sort</code>, <code>@expands</code>, <code>@display</code>, <code>@showDQL</code>.</p>
+<h3 id="33-detailapiviewmixin">3.3 DetailApiViewMixin<a class="headerlink" href="#33-detailapiviewmixin" title="Permanent link">&para;</a></h3>
+<p><strong>Route</strong>: <code>GET /{id}</code> (supports <code>\d+</code> and UUID <code>[0-9a-fA-F-]{36}</code>)</p>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>When Called</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detailFilter($filter)</code></td>
+<td>After <code>mixIdToCommonFilter</code>, before <code>get()</code></td>
+<td>Modify lookup criteria</td>
+</tr>
+<tr>
+<td><code>detailProcessor($entity)</code></td>
+<td>After <code>service.get()</code></td>
+<td>Transform entity</td>
+</tr>
+<tr>
+<td><code>detailResponse($entity)</code></td>
+<td>Before serialization</td>
+<td>Response shaping</td>
+</tr>
+</tbody>
+</table>
+<h3 id="34-createapiviewmixin">3.4 CreateApiViewMixin<a class="headerlink" href="#34-createapiviewmixin" title="Permanent link">&para;</a></h3>
+<p><strong>Route</strong>: <code>POST /</code> → <code>createAction()</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$requiredCreateProperties</code></td>
+<td><code>string[]</code></td>
+<td>Fields that MUST be present</td>
+</tr>
+<tr>
+<td><code>$acceptedCreateProperties</code></td>
+<td><code>string[]</code></td>
+<td>Fields that MAY be present</td>
+</tr>
+</tbody>
+</table>
+<p>Query params: <code>@partial</code> (skip transaction), <code>@transform</code> (expression transformer).</p>
+<p>Input modes:
+- <code>{}</code> (object): single create, returns entity directly
+- <code>[{}, {}]</code> (array): batch create, wrapped in transaction (unless <code>@partial=true</code>)</p>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>When Called</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>defaultCreateValues()</code></td>
+<td>Before processing</td>
+</tr>
+<tr>
+<td><code>processCreateContent(array $content, $entity)</code></td>
+<td>After transform, before save</td>
+</tr>
+<tr>
+<td><code>processEntity($content, $entity)</code></td>
+<td>After <code>new()</code>, before <code>update()</code></td>
+</tr>
+<tr>
+<td><code>afterCreated($entity)</code></td>
+<td>After successful save</td>
+</tr>
+</tbody>
+</table>
+<h3 id="35-updateapiviewmixin">3.5 UpdateApiViewMixin<a class="headerlink" href="#35-updateapiviewmixin" title="Permanent link">&para;</a></h3>
+<p><strong>Routes</strong>:
+- <code>PUT /{id}</code> → <code>updateAction()</code>
+- <code>POST /batch-update</code> → <code>batchUpdateAction()</code></p>
+<p>Query params: <code>@mode=mixed|strict</code>, <code>@basis=field1,field2</code>, <code>@partial</code>, <code>@transform</code>.</p>
+<p>Batch upsert with <code>@mode=mixed</code>: attempts to find entity by <code>@basis</code> fields. If found →
+update; if not found → create.</p>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>When Called</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>defaultUpdateValues()</code></td>
+<td>Before processing</td>
+</tr>
+<tr>
+<td><code>processUpdateContent(array $content, $entity)</code></td>
+<td>After transform, before save</td>
+</tr>
+<tr>
+<td><code>afterUpdated($entity)</code></td>
+<td>After successful save</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Compatibility Hooks</strong> (default to update path, override for divergent behavior):
+- <code>defaultValues()</code> → <code>defaultUpdateValues()</code>
+- <code>processContent($content, $entity)</code> → <code>processUpdateContent()</code>
+- <code>after($entity)</code> → <code>afterUpdated()</code></p>
+<h3 id="36-deleteapiviewmixin">3.6 DeleteApiViewMixin<a class="headerlink" href="#36-deleteapiviewmixin" title="Permanent link">&para;</a></h3>
+<p><strong>Route</strong>: <code>DELETE /{id}</code> → <code>deleteAction()</code></p>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>When Called</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deletionFilter($filter)</code></td>
+<td>Before lookup</td>
+</tr>
+</tbody>
+</table>
+<p>Returns 204 (empty body) on success, 404 on failure.</p>
+<h3 id="37-workflowapiviewmixin">3.7 WorkflowApiViewMixin<a class="headerlink" href="#37-workflowapiviewmixin" title="Permanent link">&para;</a></h3>
+<p>For entities governed by Symfony Workflow state machines. <strong>Requires</strong> <code>protected $workflow;</code>
+set to the workflow service ID.</p>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /todo</code></td>
+<td>List entities with available transitions</td>
+</tr>
+<tr>
+<td><code>GET /{id}/transitions</code></td>
+<td>Get enabled transitions for entity</td>
+</tr>
+<tr>
+<td><code>POST /{id}/do/{transition}</code></td>
+<td>Execute a workflow transition (wrapped in <code>wrapInTransaction</code>)</td>
+</tr>
+<tr>
+<td><code>PUT /{id}/status-reset</code></td>
+<td>Reset marking (ROLE_ADMIN only)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="38-singlecreateandupdateapiviewmixin">3.8 SingleCreateAndUpdateApiViewMixin<a class="headerlink" href="#38-singlecreateandupdateapiviewmixin" title="Permanent link">&para;</a></h3>
+<p><strong>Route</strong>: <code>PUT /</code> → <code>updateAction()</code></p>
+<p>For resources with exactly one row per scope (e.g., user settings). If the entity exists
+(via <code>commonFilter</code>), it updates. If not, it creates.</p>
+<p>Declares both <code>$requiredCreateProperties</code> / <code>$acceptedCreateProperties</code> and
+<code>$requiredUpdateProperties</code> / <code>$acceptedUpdateProperties</code>, each filtered separately via
+<code>filterCreateProperties()</code> / <code>filterUpdateProperties()</code>.</p>
+<h3 id="39-scopeddetailapiviewmixin">3.9 ScopedDetailApiViewMixin<a class="headerlink" href="#39-scopeddetailapiviewmixin" title="Permanent link">&para;</a></h3>
+<p><strong>Route</strong>: <code>GET /{id}</code></p>
+<p>Abstract mixin. Controller must implement:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="x">abstract protected function scopedDetailFilter(string $scopeId, string $id): array|QueryBuilder;</span>
+</code></pre></div>
+<p>The <code>$scopeId</code> comes from the URL prefix (e.g., <code>/{productId}/specifications/{id}</code>).</p>
+<h3 id="310-scopedlistapiviewmixin">3.10 ScopedListApiViewMixin<a class="headerlink" href="#310-scopedlistapiviewmixin" title="Permanent link">&para;</a></h3>
+<p><strong>Route</strong>: <code>GET /</code></p>
+<p>Abstract mixin. Controller must implement:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="x">abstract protected function scopedListFilter(string $scopeId): array|QueryBuilder;</span>
+</code></pre></div>
+<h3 id="311-singledetailapiviewmixin">3.11 SingleDetailApiViewMixin<a class="headerlink" href="#311-singledetailapiviewmixin" title="Permanent link">&para;</a></h3>
+<p><strong>Route</strong>: <code>GET /</code></p>
+<p>Fetches a single resource via <code>commonFilter()</code> (no ID in URL).</p>
+<h3 id="312-transformcontent">3.12 TransformContent<a class="headerlink" href="#312-transformcontent" title="Permanent link">&para;</a></h3>
+<p><strong>Trait</strong>: <code>App\Core\View\TransformContent</code><br />
+<strong>Used by</strong>: <code>ApiView</code></p>
+<p>Evaluates <code>@transform</code> expressions to resolve field values before save. Example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>POST /api/contents with data: {&quot;title&quot;: &quot;Hello&quot;, &quot;category&quot;: &quot;Test&quot;}
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>@transform: {&quot;category&quot;: &quot;Service.get({&#39;name&#39;: &#39;:value&#39;}).getId()&quot;}
+</code></pre></div>
+<ul>
+<li><code>:value</code> is replaced with the raw field value from the request body</li>
+<li><code>Service</code> provides <code>.get($criteria)</code> and <code>.list($criteria)</code> gateways to the related entity's service</li>
+<li><code>Service.get()</code> returns an identity wrapper with <code>.getId()</code> → resolves foreign key</li>
+<li><code>entity</code> is the current entity wrapped in an identity gateway with <code>.getId()</code></li>
+<li><code>Math</code> and <code>ArrayCommon</code> are available as expression variables</li>
+</ul>
+<p>The transformer detects the related service FQCN by replacing <code>Entity</code> with <code>Service</code> in
+the target entity's namespace, then calls <code>resolveService()</code>.</p>
+<h3 id="313-apiviewmessages">3.13 ApiViewMessages<a class="headerlink" href="#313-apiviewmessages" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>platform-kernel/src/View/ApiViewMessages.php</code></p>
+<p>Centralized message constants used by all mixins:</p>
+<table>
+<thead>
+<tr>
+<th>Constant / Method</th>
+<th>Value / Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SUCCESS</code></td>
+<td><code>'SUCCESS'</code></td>
+</tr>
+<tr>
+<td><code>ENTITY_NOT_FOUND</code></td>
+<td><code>'Entity is not found'</code></td>
+</tr>
+<tr>
+<td><code>INVALID_JSON</code></td>
+<td><code>'Invalid JSON'</code></td>
+</tr>
+<tr>
+<td><code>CREATE_FAILED</code></td>
+<td><code>'Create failed'</code></td>
+</tr>
+<tr>
+<td><code>BATCH_UPDATE_ERROR</code></td>
+<td><code>'Batch update error'</code></td>
+</tr>
+<tr>
+<td><code>CONTENT_TYPE_ERROR</code></td>
+<td><code>'Content type error.'</code></td>
+</tr>
+<tr>
+<td><code>TRANSITION_CANNOT_APPLY</code></td>
+<td><code>'Current transition cannot be applied.'</code></td>
+</tr>
+<tr>
+<td><code>propertyRequired($prop)</code></td>
+<td><code>'Ucfirst($prop) is required'</code></td>
+</tr>
+<tr>
+<td><code>propertyCannotBeEmpty($prop)</code></td>
+<td><code>'Ucfirst($prop) cannot be empty.'</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-eventlisteners">4. EventListeners<a class="headerlink" href="#4-eventlisteners" title="Permanent link">&para;</a></h2>
+<h3 id="41-exceptioninterceptor">4.1 ExceptionInterceptor<a class="headerlink" href="#41-exceptioninterceptor" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/EventListener/ExceptionInterceptor.php</code>
+<strong>Event</strong>: <code>kernel.exception</code></p>
+<p>Intercepts exceptions on <code>/api/*</code> routes (regex: <code>/^\/(api)\/.*$/</code>).</p>
+<p>Behavior:
+- Logs exception (message + class)
+- In <code>dev.disabled</code> env: lets Symfony's default error handler handle it
+- In production: returns JSON <code>{code: statusCode, message: translated(message), class: FQCN}</code>
+- Status code: uses <code>HttpExceptionInterface::getStatusCode()</code> if available, then falls back
+  to <code>$exception-&gt;getCode()</code> if 400-599, then 500</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">{</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Api error occurred&quot;</span><span class="p">,</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">    </span><span class="nt">&quot;class&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RuntimeException&quot;</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="42-controllerlistener">4.2 ControllerListener<a class="headerlink" href="#42-controllerlistener" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/EventListener/ControllerListener.php</code>
+<strong>Event</strong>: <code>kernel.controller</code></p>
+<p>Logs PUT/POST request bodies (truncated at 1KB) with the authenticated user ID:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>&quot;User [#42] Requests PUT /api/v1/manage/categories/1: {...body...}&quot;
+</code></pre></div>
+<h3 id="43-localelistener">4.3 LocaleListener<a class="headerlink" href="#43-localelistener" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/EventListener/LocaleListener.php</code>
+<strong>Event</strong>: <code>kernel.request</code></p>
+<p><strong>Detection Priority</strong>:</p>
+<ol>
+<li><code>?_locale=zh-CN</code> query parameter (takes precedence)</li>
+<li><code>Accept-Language</code> header, parsed with quality weights (<code>q=</code>)</li>
+</ol>
+<p><strong>Supported locales</strong>: <code>en</code>, <code>zh</code>, <code>zh_Hant</code>, <code>ja</code></p>
+<p><strong>Locale Map</strong> (verbose → canonical):</p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>zh-CN</code>, <code>zh-Hans</code></td>
+<td><code>zh</code></td>
+</tr>
+<tr>
+<td><code>zh-HK</code>, <code>zh-TW</code>, <code>zh-Hant</code>, <code>zh-Hant-TW</code></td>
+<td><code>zh_Hant</code></td>
+</tr>
+<tr>
+<td><code>en-US</code>, <code>en-GB</code></td>
+<td><code>en</code></td>
+</tr>
+<tr>
+<td><code>ja-JP</code>, <code>ja_JP</code></td>
+<td><code>ja</code></td>
+</tr>
+</tbody>
+</table>
+<p>Unsupported locales are dropped; Symfony's <code>default_locale</code> (<code>en</code>) takes effect.</p>
+<h3 id="44-accessloglistener">4.4 AccessLogListener<a class="headerlink" href="#44-accessloglistener" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/EventListener/AccessLogListener.php</code>
+<strong>Event</strong>: <code>kernel.response</code></p>
+<p>Logs full request/response bodies for POST, PUT, DELETE methods to the <code>access</code> log channel
+(<code>monolog.logger.access</code>).</p>
+<ul>
+<li>Auth paths (<code>/api/auth</code>, <code>/api/wechat</code>) have bodies hidden</li>
+<li>Non-auth paths: bodies truncated at 4096 characters</li>
+<li>Format: <code>@username PUT /api/v1/... | 200 | REQ: {...} | RES: {...}</code></li>
+</ul>
+<h3 id="45-openapienricherlistener">4.5 OpenApiEnricherListener<a class="headerlink" href="#45-openapienricherlistener" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/EventListener/OpenApiEnricherListener.php</code>
+<strong>Event</strong>: <code>kernel.response</code></p>
+<p>Post-processes <code>/api/doc.json</code> and <code>/api/doc</code> responses:</p>
+<ul>
+<li>Injects module-specific tags (Products, Orders, Categories, etc.) by parsing <code>operationId</code>
+  from route names (e.g., <code>manage-categories-list</code> → <code>Categories</code>)</li>
+<li>Removes generic operation-type tags (<code>List</code>, <code>Detail</code>, <code>Create</code>, <code>Update</code>, <code>Delete</code>,
+  <code>Workflow</code>) that come from View mixin OA attributes</li>
+<li>Adds summaries/descriptions from the <code>META</code> constant for important endpoints</li>
+<li>Injects <code>multipart/form-data</code> request body schema for media upload endpoints</li>
+</ul>
+<p><strong>Tag Detection Logic</strong>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>operationId → parse {scope}-{resource}-{action}
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>  → map known resources (product→Products, order→Orders, etc.)
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>  → auto-title-case for unknown resources
+</code></pre></div></p>
+<hr />
+<h2 id="5-serializer">5. Serializer<a class="headerlink" href="#5-serializer" title="Permanent link">&para;</a></h2>
+<h3 id="51-flatnormalizer">5.1 FlatNormalizer<a class="headerlink" href="#51-flatnormalizer" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/Serializer/Normalizer/FlatNormalizer.php</code>
+<strong>Implements</strong>: <code>NormalizerInterface</code>, <code>DenormalizerInterface</code>, <code>NormalizerAwareInterface</code>,
+<code>SerializerAwareInterface</code></p>
+<p>Decorates Symfony's <code>ObjectNormalizer</code>. Key transformations:</p>
+<ol>
+<li><strong>Doctrine internals</strong> → <code>__toString()</code> if available, else class name</li>
+<li><strong><code>__toString</code></strong> added to every serialized entity at top level</li>
+<li><strong>Related entities</strong> (objects with <code>getId()</code>) → collapsed to <code>{id, __toString, __metadata}</code></li>
+<li><strong>Collections</strong> (<code>Traversable</code>) → array of reduced relation objects</li>
+<li><strong>JSON strings</strong> in fields → auto-parsed to arrays/objects</li>
+<li>Falls back to minimal representation on normalization failure: <code>{id, __toString}</code> or
+   <code>{__class: FQCN}</code></li>
+</ol>
+<p><strong>Denormalization</strong>: Delegates to decorated normalizer.</p>
+<h3 id="52-circularreferencehandler">5.2 CircularReferenceHandler<a class="headerlink" href="#52-circularreferencehandler" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/Serializer/CircularReferenceHandler.php</code></p>
+<p>Static handler referenced from serializer config. Returns entity ID if available, otherwise
+<code>spl_object_hash()</code>.</p>
+<h3 id="53-objectcallback">5.3 ObjectCallback<a class="headerlink" href="#53-objectcallback" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/Serializer/Callbacks/ObjectCallback.php</code></p>
+<p>Simple callback: calls <code>getId()</code> on any object, returns <code>null</code> if unavailable.</p>
+<h3 id="54-serializercontextfactory">5.4 SerializerContextFactory<a class="headerlink" href="#54-serializercontextfactory" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/Serializer/SerializerContextFactory.php</code></p>
+<p>Builds serializer contexts from options:
+- <code>groups</code> → <code>array</code>
+- <code>max_depth</code> → <code>int</code> with <code>enable_max_depth</code> auto-set to <code>true</code></p>
+<hr />
+<h2 id="6-security-interfaces">6. Security Interfaces<a class="headerlink" href="#6-security-interfaces" title="Permanent link">&para;</a></h2>
+<h3 id="61-useruuidresolverinterface">6.1 UserUuidResolverInterface<a class="headerlink" href="#61-useruuidresolverinterface" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="x">interface UserUuidResolverInterface {</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="x">    public function resolveUserUuid(int $userId): ?string;</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="x">}</span>
+</code></pre></div>
+<p>Resolves a user's UUID from their local integer ID. Production implementation in
+<code>App\Bridge\Identity\IdentityUserUuidResolver</code>.</p>
+<h3 id="62-useruuidprincipalinterface">6.2 UserUuidPrincipalInterface<a class="headerlink" href="#62-useruuidprincipalinterface" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="x">interface UserUuidPrincipalInterface {</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="x">    public function getUuid(): string;</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="x">}</span>
+</code></pre></div>
+<p>Implemented by the authenticated user entity. Controllers use this to get the current
+user's UUID for ownership filtering:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="x">$user = $this-&gt;getUser();</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="x">if ($user instanceof UserUuidPrincipalInterface) {</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="x">    $uuid = $user-&gt;getUuid(); // for commonFilter() ownership scoping</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="x">}</span>
+</code></pre></div>
+<h3 id="63-identityprofileprincipalinterface">6.3 IdentityProfilePrincipalInterface<a class="headerlink" href="#63-identityprofileprincipalinterface" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="x">interface IdentityProfilePrincipalInterface {</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="x">    public function getId(): ?int;</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="x">    public function getProfileLevel(): ?string;</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="x">}</span>
+</code></pre></div>
+<p>Exposes the user's ID and profile level. Used for authorization decisions.</p>
+<h3 id="64-identityuseridresolverinterface">6.4 IdentityUserIdResolverInterface<a class="headerlink" href="#64-identityuseridresolverinterface" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="x">interface IdentityUserIdResolverInterface {</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="x">    public function resolveIdentityUserId(string $userUuid): ?int;</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="x">}</span>
+</code></pre></div>
+<p>Resolves a local integer user ID from a UUID. Reverse of <code>UserUuidResolverInterface</code>.
+Production implementation in <code>App\Bridge\Identity\IdentityUserIdResolver</code>.</p>
+<hr />
+<h2 id="7-system-controllers">7. System Controllers<a class="headerlink" href="#7-system-controllers" title="Permanent link">&para;</a></h2>
+<h3 id="71-entitycontroller">7.1 EntityController<a class="headerlink" href="#71-entitycontroller" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/Controller/System/EntityController.php</code>
+<strong>Route prefix</strong>: <code>/system/entities</code></p>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /system/entities</code></td>
+<td>List all registered Doctrine entity FQCNs</td>
+</tr>
+<tr>
+<td><code>GET /system/entities/{entityName}</code></td>
+<td>Field/association metadata for an entity. FQCN with slashes (e.g., <code>App/Common/Entity/Category</code>). Returns field mappings (type, nullable, length, etc.), association mappings (type, targetEntity), and auto-generated <code>plantext</code>/<code>translation</code> per property.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="72-routercontroller">7.2 RouterController<a class="headerlink" href="#72-routercontroller" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/Controller/System/RouterController.php</code>
+<strong>Route prefix</strong>: <code>/system/router</code></p>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /system/router</code></td>
+<td>List all registered Symfony routes (from <code>RouterInterface::getRouteCollection()</code>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-utils">8. Utils<a class="headerlink" href="#8-utils" title="Permanent link">&para;</a></h2>
+<h3 id="81-uuid">8.1 UUID<a class="headerlink" href="#81-uuid" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/Utils/UUID.php</code></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>v3($namespace, $name)</code></td>
+<td><code>(string, string): string\|false</code></td>
+<td>MD5-based name-based UUID</td>
+</tr>
+<tr>
+<td><code>v4()</code></td>
+<td><code>(): string</code></td>
+<td>Random UUID (<code>mt_rand</code>-based)</td>
+</tr>
+<tr>
+<td><code>v4c()</code></td>
+<td><code>(): string</code></td>
+<td>Compact v4 (no dashes)</td>
+</tr>
+<tr>
+<td><code>v5($namespace, $name)</code></td>
+<td><code>(string, string): string\|false</code></td>
+<td>SHA1-based name-based UUID</td>
+</tr>
+<tr>
+<td><code>is_valid($uuid)</code></td>
+<td><code>(string): bool</code></td>
+<td>Regex match for UUID format (with/without dashes/braces)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="82-math">8.2 Math<a class="headerlink" href="#82-math" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/Utils/Math.php</code></p>
+<p>Full method list: <code>abs</code>, <code>acos</code>, <code>acosh</code>, <code>asin</code>, <code>asinh</code>, <code>atan</code>, <code>atan2</code>, <code>atanh</code>,
+<code>base_convert</code>, <code>bindec</code>, <code>ceil</code>, <code>cos</code>, <code>cosh</code>, <code>decbin</code>, <code>dechex</code>, <code>decoct</code>, <code>deg2rad</code>,
+<code>exp</code>, <code>expm1</code>, <code>floor</code>, <code>fmod</code>, <code>getrandmax</code>, <code>hexdec</code>, <code>hypot</code>, <code>is_finite</code>,
+<code>is_infinite</code>, <code>is_nan</code>, <code>lcg_value</code>, <code>log</code>, <code>log10</code>, <code>log1p</code>, <code>max</code>, <code>min</code>,
+<code>mt_getrandmax</code>, <code>mt_rand</code>, <code>mt_srand</code>, <code>octdec</code>, <code>pi</code>, <code>pow</code>, <code>rad2deg</code>, <code>rand</code>, <code>round</code>,
+<code>sin</code>, <code>sinh</code>, <code>sqrt</code>, <code>srand</code>, <code>tan</code>, <code>tanh</code>, <code>random(min, max)</code>, <code>locationDistance(lng1, lat1, lng2, lat2)</code>.</p>
+<p>Math constants: <code>M_E</code>, <code>M_EULER</code>, <code>M_LNPI</code>, <code>M_LN2</code>, <code>M_LN10</code>, <code>M_LOG2E</code>, <code>M_LOG10E</code>,
+<code>M_PI</code>, <code>M_PI_2</code>, <code>M_PI_4</code>, <code>M_1_PI</code>, <code>M_2_PI</code>, <code>M_SQRTPI</code>, <code>M_2_SQRTPI</code>, <code>M_SQRT1_2</code>,
+<code>M_SQRT2</code>, <code>M_SQRT3</code>.</p>
+<h3 id="83-rsa-rsaclient">8.3 RSA (RsaClient)<a class="headerlink" href="#83-rsa-rsaclient" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/Utils/RsaClient.php</code></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sign($data)</code></td>
+<td>Sign data with private key (OPENSSL_ALGO_MD5, base64-encoded)</td>
+</tr>
+<tr>
+<td><code>verifySign($data, $sign)</code></td>
+<td>Verify signature with public key</td>
+</tr>
+<tr>
+<td><code>rsaSign($params)</code></td>
+<td>Sign sorted key-value parameter pairs</td>
+</tr>
+<tr>
+<td><code>rsaVerifySign($params, $sign)</code></td>
+<td>Verify parameter signature</td>
+</tr>
+<tr>
+<td><code>privateEncryptRsa($data)</code></td>
+<td>Encrypt with private key (PKCS1 padding, chunked)</td>
+</tr>
+<tr>
+<td><code>publicEncryptRsa($data)</code></td>
+<td>Encrypt with public key (PKCS1 padding, chunked)</td>
+</tr>
+<tr>
+<td><code>privateDecryptRsa($data)</code></td>
+<td>Decrypt with private key</td>
+</tr>
+<tr>
+<td><code>publicDecryptRsa($data)</code></td>
+<td>Decrypt with public key</td>
+</tr>
+<tr>
+<td><code>getPrivateKenLen()</code> / <code>getPublicKenLen()</code></td>
+<td>Key length in bits</td>
+</tr>
+</tbody>
+</table>
+<p>Key sources: raw PEM strings (<code>$rsaPrivateKey</code>, <code>$rsaPublicKey</code>) or file paths
+(<code>$rsaPrivateKeyFilePath</code>, <code>$rsaPublicKeyFilePath</code>).</p>
+<h3 id="84-inflect">8.4 Inflect<a class="headerlink" href="#84-inflect" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/Utils/Inflect.php</code></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pluralize(string $string): string</code></td>
+<td>Convert singular to plural (handles irregulars)</td>
+</tr>
+<tr>
+<td><code>singularize(string $string): string</code></td>
+<td>Convert plural to singular</td>
+</tr>
+<tr>
+<td><code>pluralize_if($count, string $string): string</code></td>
+<td>"1 item" or "5 items"</td>
+</tr>
+</tbody>
+</table>
+<p>Used internally by <code>BaseServiceMutationTrait::update()</code> to derive <code>addItem</code>/<code>removeItem</code>
+from <code>items</code>.</p>
+<h3 id="85-arraycommon">8.5 ArrayCommon<a class="headerlink" href="#85-arraycommon" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/Utils/ArrayCommon.php</code></p>
+<p>Expression-available array utility:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>in_array($needle, $array)</code></td>
+<td>Value exists in array</td>
+</tr>
+<tr>
+<td><code>count($array)</code></td>
+<td>Array element count</td>
+</tr>
+<tr>
+<td><code>merge(...$arrays)</code></td>
+<td>Merge arrays</td>
+</tr>
+<tr>
+<td><code>push($array, $item)</code></td>
+<td>Append item</td>
+</tr>
+<tr>
+<td><code>key_exist($key, $array)</code></td>
+<td>Key exists in array</td>
+</tr>
+<tr>
+<td><code>filter($array, $expression, $external)</code></td>
+<td>Filter via expression (<code>value</code> + external vars)</td>
+</tr>
+<tr>
+<td><code>map($array, $expression, $external)</code></td>
+<td>Map via expression (<code>item</code> + external vars)</td>
+</tr>
+<tr>
+<td><code>reduce($array, $expression, $initial, $external)</code></td>
+<td>Reduce via expression (<code>item</code> + <code>carry</code> + external vars)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="86-filterdatetime">8.6 FilterDateTime<a class="headerlink" href="#86-filterdatetime" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/Utils/FilterDateTime.php</code></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get($time = 'now', $timezone = null)</code></td>
+<td>Create <code>\DateTime</code> from string</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="9-corebundle-di">9. CoreBundle &amp; DI<a class="headerlink" href="#9-corebundle-di" title="Permanent link">&para;</a></h2>
+<h3 id="91-corebundle">9.1 CoreBundle<a class="headerlink" href="#91-corebundle" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/CoreBundle.php</code></p>
+<p>Standard Symfony bundle class (empty). Registered in the consuming app's <code>config/bundles.php</code>.</p>
+<h3 id="92-coreextension">9.2 CoreExtension<a class="headerlink" href="#92-coreextension" title="Permanent link">&para;</a></h3>
+<p><strong>File</strong>: <code>packages/platform-kernel/src/DependencyInjection/CoreExtension.php</code></p>
+<p>Loads <code>packages/platform-kernel/src/Resources/config/services.yaml</code> via YamlFileLoader.
+consuming apps extend this with their own extensions.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
